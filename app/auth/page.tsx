@@ -84,7 +84,10 @@ export default function AuthPage() {
       setUser(result.user);
       setTokens(result.tokens.access, result.tokens.refresh);
       setStage('success');
-      setTimeout(() => router.push(nextPath), 1200);
+      // Marketplace admin → admin panel automatically.
+      // Regular users → the next path requested (defaults to /dashboard).
+      const target = result.user.is_admin ? '/admin' : nextPath;
+      setTimeout(() => router.push(target), 1200);
     } catch (err: unknown) {
       // Verify-time cooldown branch: the backend may answer the
       // verify with a 429 if the issuance pipeline rate-limited.
