@@ -48,11 +48,6 @@ export default function AuthPage() {
 
   const [stage, setStage] = useState<Stage>('open-bot');
   const [code, setCode] = useState('');
-  // Phone is hoisted to the parent so `EnterCodeStage` can call
-  // `authApi.requestCode({ phone })` for the resend control. The
-  // open-bot stage does not capture it today, so the resend control
-  // exposes a small inline phone field (Task 3.5).
-  const [phone, setPhone] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -150,8 +145,6 @@ export default function AuthPage() {
                     setCode(v);
                     if (errorMessage) setErrorMessage(null);
                   }}
-                  phone={phone}
-                  setPhone={setPhone}
                   submitting={submitting}
                   errorMessage={errorMessage}
                   setErrorMessage={setErrorMessage}
@@ -227,8 +220,6 @@ function OpenBotStage({ onContinue }: { onContinue: () => void }) {
 function EnterCodeStage({
   code,
   setCode,
-  phone,
-  setPhone,
   submitting,
   errorMessage,
   setErrorMessage,
@@ -241,8 +232,6 @@ function EnterCodeStage({
 }: {
   code: string;
   setCode: (v: string) => void;
-  phone: string;
-  setPhone: (v: string) => void;
   submitting: boolean;
   errorMessage: string | null;
   setErrorMessage: (v: string | null) => void;
@@ -281,53 +270,19 @@ function EnterCodeStage({
   );
   const expired = now - issuedAt > EXPIRED_MS;
 
-  // Resend bookkeeping is local — it's purely a UX concern.
-  const [resending, setResending] = useState(false);
-
-  const handleResend = async () => {
-    if (resending || submitting || secondsRemaining > 0) return;
-    if (!phone || phone.trim().length < 4) {
-      setErrorMessage(t('auth.errorPhoneNotSupported'));
-      return;
-    }
-
-    setResending(true);
+  // Resend = re-open the Telegram bot (matches mobile UX contract).
+  // No phone re-entry, no requestCode REST call. The bot itself issues
+  // a fresh OTP via the "Get code" button and respects backend cooldown.
+  const handleResend = () => {
+    if (submitting || secondsRemaining > 0) return;
+    const url = `https://t.me/${TG_BOT}?start=auth`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+    // Reset the issuance moment so the 60s cooldown UI restarts.
+    setIssuedAt(Date.now());
     setErrorMessage(null);
-    try {
-      await authApi.requestCode({ phone: phone.trim() });
-      // Successful resend → reset the issuance moment so the
-      // 60-second cooldown and 10-minute expiry are both anchored
-      // to the new request.
-      setIssuedAt(Date.now());
-    } catch (err: unknown) {
-      if (err instanceof AuthApiError) {
-        if (
-          err.message === 'otp_cooldown' &&
-          typeof err.data?.retry_after === 'number'
-        ) {
-          const retryAfter = err.data.retry_after as number;
-          setIssuedAt(Date.now() - (COOLDOWN_MS - retryAfter * 1000));
-          setErrorMessage(
-            t('auth.requestCooldown', { time: formatMSS(retryAfter) }),
-          );
-        } else if (err.message === 'phone_not_supported') {
-          setErrorMessage(t('auth.errorPhoneNotSupported'));
-        } else if (err.message === 'otp_locked' && typeof err.data?.retry_after === 'number') {
-          setLockRetryAfter(err.data.retry_after as number);
-        } else if (err.status === 429) {
-          setErrorMessage(t('auth.errorRateLimited'));
-        } else {
-          setErrorMessage(t('auth.errorInvalidCode'));
-        }
-      } else {
-        setErrorMessage(t('auth.errorInvalidCode'));
-      }
-    } finally {
-      setResending(false);
-    }
   };
 
-  const resendDisabled = submitting || resending || secondsRemaining > 0;
+  const resendDisabled = submitting || secondsRemaining > 0;
   const verifyDisabled = code.length !== 5 || submitting || expired || lockRetryAfter > 0;
 
   return (
@@ -413,25 +368,6 @@ function EnterCodeStage({
           autoFocus
         />
 
-        {/* Optional phone field used by the resend control. The
-            open-bot stage does not capture a phone today, so we
-            collect it here so `requestCode({ phone })` has the
-            value it needs. Hidden on the success path, irrelevant
-            during the initial verify. */}
-        <div className="mt-4">
-          <input
-            type="tel"
-            inputMode="tel"
-            autoComplete="tel"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="+998 ..."
-            className="input-base"
-            aria-label="Phone"
-            disabled={submitting}
-          />
-        </div>
-
         <AnimatePresence>
           {errorMessage && (
             <motion.div
@@ -486,11 +422,6 @@ function EnterCodeStage({
             <>
               <Timer className="h-3.5 w-3.5" strokeWidth={2.25} />
               {t('auth.resendIn', { time: formatMSS(secondsRemaining) })}
-            </>
-          ) : resending ? (
-            <>
-              <Loader2 className="h-3.5 w-3.5 animate-spin" strokeWidth={2.25} />
-              {t('auth.resendCode')}
             </>
           ) : (
             <>
