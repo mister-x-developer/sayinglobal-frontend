@@ -1,0 +1,421 @@
+'use client';
+
+import { useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
+import {
+  Save,
+  Loader2,
+  CheckCircle2,
+  ArrowLeft,
+  Image as ImageIcon,
+  X,
+} from 'lucide-react';
+
+import { AppNav } from '@/components/layout/AppNav';
+import { AgeInput, type AnimalAge } from '@/components/listings/AgeInput';
+import { CategorySelector, BreedSelector } from '@/components/shared/CategorySelector';
+import { LocationSelector } from '@/components/shared/LocationSelector';
+import { toast } from '@/components/ui/Toast';
+import { listingsApi } from '@/lib/api/listings';
+
+const GENDERS = [
+  { value: 'male', key: 'animal.male' },
+  { value: 'female', key: 'animal.female' },
+] as const;
+
+const HEALTH_KEYS = ['animal.healthExcellent', 'animal.healthGood', 'animal.healthAverage'] as const;
+const VACCINATION_KEYS = ['animal.vaccinatedYes', 'animal.vaccinatedPartial', 'animal.vaccinatedNo'] as const;
+
+interface ImagePreview {
+  id: string;
+  preview: string;
+  file: File;
+  isPrimary: boolean;
+}
+
+export default function NewListingPage() {
+  const t = useTranslations();
+  const router = useRouter();
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [images, setImages] = useState<ImagePreview[]>([]);
+
+  const [form, setForm] = useState({
+    category: '',
+    title: '',
+    description: '',
+    price: '',
+    currency: 'UZS',
+    is_negotiable: true,
+    weight_kg: '',
+    gender: '',
+    breed: '',
+    health_status: '',
+    vaccination_status: '',
+    region: '',
+    region_name: '',
+    district: '',
+    district_name: '',
+    location: '',
+  });
+
+  const [age, setAge] = useState<AnimalAge>({ years: undefined, months: undefined, days: undefined });
+
+  const set = (field: string, value: unknown) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+    if (errors[field]) setErrors((prev) => { const e = { ...prev }; delete e[field]; return e; });
+  };
+
+  const validate = (): boolean => {
+    const e: Record<string, string> = {};
+    if (!form.category) e.category = t('errors.required');
+    if (!form.title.trim()) e.title = t('errors.required');
+    if (!form.description.trim()) e.description = t('errors.required');
+    if (!form.price || isNaN(Number(form.price)) || Number(form.price) <= 0) e.price = t('errors.required');
+    if (!form.region) e.region = t('errors.required');
+    if (!form.location.trim()) e.location = t('errors.required');
+    if (!age.years && !age.months && !age.days) e.age = t('validation.atLeastOneFieldRequired');
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
+
+  const handleImages = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []);
+    const remaining = 10 - images.length;
+    const toAdd = files.slice(0, remaining);
+    const previews: ImagePreview[] = toAdd.map((file, i) => ({
+      id: `${Date.now()}-${i}`,
+      preview: URL.createObjectURL(file),
+      file,
+      isPrimary: images.length === 0 && i === 0,
+    }));
+    setImages((prev) => [...prev, ...previews]);
+    e.target.value = '';
+  };
+
+  const removeImage = (id: string) => {
+    setImages((prev) => {
+      const next = prev.filter((img) => img.id !== id);
+      if (next.length > 0 && !next.some((img) => img.isPrimary)) next[0].isPrimary = true;
+      return next;
+    });
+  };
+
+  const setPrimary = (id: string) => {
+    setImages((prev) => prev.map((img) => ({ ...img, isPrimary: img.id === id })));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validate()) return;
+    setSaving(true);
+    try {
+      const payload = {
+        category: form.category,
+        title: form.title.trim(),
+        description: form.description.trim(),
+        price: Number(form.price),
+        currency: form.currency,
+        is_negotiable: form.is_negotiable,
+        age_years: age.years ?? 0,
+        age_months: age.months ?? 0,
+        weight_kg: form.weight_kg ? Number(form.weight_kg) : undefined,
+        gender: form.gender || undefined,
+        breed: form.breed.trim() || undefined,
+        health_status: form.health_status || undefined,
+        vaccination_status: form.vaccination_status || undefined,
+        region: form.region_name || form.region,
+        district: form.district_name || form.district || undefined,
+        location: form.location.trim(),
+      };
+      const listing = await listingsApi.create(payload as any);
+      for (const img of images) {
+        try { await listingsApi.uploadImage(String(listing.public_id), img.file, img.isPrimary); } catch {}
+      }
+      setSaved(true);
+      toast.success(t('create.publishSuccess'));
+      setTimeout(() => router.push(`/listings/${listing.public_id}`), 1000);
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : t('errors.saveFailed'));
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col">
+      <AppNav />
+      <main className="flex-1">
+        <div className="container-page py-8 sm:py-10">
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45 }}
+            className="mx-auto max-w-2xl"
+          >
+            <button type="button" onClick={() => router.back()} className="btn btn-ghost btn-sm -ml-2 mb-4">
+              <ArrowLeft className="h-4 w-4" strokeWidth={2} />
+              {t('common.back')}
+            </button>
+            <p className="text-eyebrow">{t('listings.title')}</p>
+            <h1 className="display-md mt-2">{t('create.title')}</h1>
+
+            <form onSubmit={handleSubmit} className="mt-8 space-y-5" noValidate>
+              {/* Category — backend-driven */}
+              <div className="surface-elevated p-6">
+                <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
+                  {t('create.stepCategory')}
+                </h2>
+                <CategorySelector
+                  value={form.category}
+                  onChange={(slug) => set('category', slug)}
+                  error={errors.category}
+                  required
+                />
+              </div>
+
+              {/* Details */}
+              <div className="surface-elevated p-6">
+                <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
+                  {t('create.stepDetails')}
+                </h2>
+                <div className="space-y-4">
+                  <div>
+                    <label className="mb-1.5 block text-sm font-medium text-fg">
+                      {t('listings.title2')} <span className="text-danger">*</span>
+                    </label>
+                    <input
+                      value={form.title}
+                      onChange={(e) => set('title', e.target.value)}
+                      placeholder={t('create.titlePlaceholder')}
+                      className="input-base w-full"
+                    />
+                    {errors.title && <p className="mt-1 text-xs text-danger">{errors.title}</p>}
+                  </div>
+
+                  <div>
+                    <label className="mb-1.5 block text-sm font-medium text-fg">
+                      {t('listings.description')} <span className="text-danger">*</span>
+                    </label>
+                    <textarea
+                      value={form.description}
+                      onChange={(e) => set('description', e.target.value)}
+                      placeholder={t('create.descriptionPlaceholder')}
+                      rows={5}
+                      className="input-base w-full resize-none py-3"
+                    />
+                    {errors.description && <p className="mt-1 text-xs text-danger">{errors.description}</p>}
+                  </div>
+
+                  {/* Structured age */}
+                  <AgeInput value={age} onChange={setAge} error={errors.age} required />
+
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div>
+                      <label className="mb-1.5 block text-sm font-medium text-fg">
+                        {t('animal.weight')} ({t('animal.kg')})
+                      </label>
+                      <input
+                        type="number"
+                        min={0}
+                        value={form.weight_kg}
+                        onChange={(e) => set('weight_kg', e.target.value)}
+                        placeholder="0"
+                        className="input-base w-full"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-sm font-medium text-fg">
+                        {t('animal.gender')}
+                      </label>
+                      <select
+                        value={form.gender}
+                        onChange={(e) => set('gender', e.target.value)}
+                        className="input-base w-full cursor-pointer"
+                      >
+                        <option value="">—</option>
+                        {GENDERS.map((g) => (
+                          <option key={g.value} value={g.value}>{t(g.key as any)}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Breed — backend-driven, depends on category */}
+                  <div>
+                    <label className="mb-1.5 block text-sm font-medium text-fg">
+                      {t('animal.breed')}
+                    </label>
+                    <BreedSelector
+                      categorySlug={form.category}
+                      value={form.breed}
+                      onChange={(v) => set('breed', v)}
+                      placeholder={t('animal.breed')}
+                    />
+                  </div>
+
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div>
+                      <label className="mb-1.5 block text-sm font-medium text-fg">
+                        {t('animal.health')}
+                      </label>
+                      <select
+                        value={form.health_status}
+                        onChange={(e) => set('health_status', e.target.value)}
+                        className="input-base w-full cursor-pointer"
+                      >
+                        <option value="">—</option>
+                        {HEALTH_KEYS.map((k) => (
+                          <option key={k} value={t(k as any)}>{t(k as any)}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-sm font-medium text-fg">
+                        {t('animal.vaccination')}
+                      </label>
+                      <select
+                        value={form.vaccination_status}
+                        onChange={(e) => set('vaccination_status', e.target.value)}
+                        className="input-base w-full cursor-pointer"
+                      >
+                        <option value="">—</option>
+                        {VACCINATION_KEYS.map((k) => (
+                          <option key={k} value={t(k as any)}>{t(k as any)}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Photos */}
+              <div className="surface-elevated p-6">
+                <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
+                  {t('create.stepPhotos')}
+                </h2>
+                {images.length > 0 && (
+                  <div className="mb-4 grid grid-cols-3 gap-2 sm:grid-cols-5">
+                    {images.map((img) => (
+                      <div key={img.id} className="group relative aspect-square overflow-hidden rounded-xl border-2 border-border">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={img.preview} alt="" className="h-full w-full object-cover" />
+                        {img.isPrimary && (
+                          <div className="absolute bottom-1 left-1 rounded-md bg-brand-primary px-1.5 py-0.5 text-[10px] font-bold text-white">
+                            {t('listings.primaryPhoto')}
+                          </div>
+                        )}
+                        <div className="absolute inset-0 flex items-center justify-center gap-1 bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
+                          {!img.isPrimary && (
+                            <button type="button" onClick={() => setPrimary(img.id)} className="rounded-lg bg-white/90 px-2 py-1 text-[10px] font-bold text-fg">
+                              {t('listings.setPrimary')}
+                            </button>
+                          )}
+                          <button type="button" onClick={() => removeImage(img.id)} className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-danger text-white">
+                            <X className="h-3.5 w-3.5" strokeWidth={2.5} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {images.length < 10 && (
+                  <button
+                    type="button"
+                    onClick={() => fileRef.current?.click()}
+                    className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border bg-bg-subtle py-8 text-fg-muted transition-colors hover:border-brand-primary hover:bg-brand-primary/4 hover:text-brand-primary"
+                  >
+                    <ImageIcon className="h-8 w-8" strokeWidth={1.5} />
+                    <span className="text-sm font-medium">{t('create.uploadPhotos')}</span>
+                    <span className="text-xs">{t('create.photosHint')}</span>
+                  </button>
+                )}
+                <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={handleImages} className="hidden" />
+                <p className="mt-2 text-xs text-fg-subtle">{images.length}/10 · {t('create.maxPhotos')}</p>
+              </div>
+
+              {/* Location — backend-driven dependent selector */}
+              <div className="surface-elevated p-6">
+                <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
+                  {t('create.stepLocation')}
+                </h2>
+                <LocationSelector
+                  regionValue={form.region}
+                  districtValue={form.district}
+                  locationValue={form.location}
+                  onRegionChange={(slug, name) => setForm((p) => ({ ...p, region: slug, region_name: name, district: '', district_name: '' }))}
+                  onDistrictChange={(slug, name) => setForm((p) => ({ ...p, district: slug, district_name: name }))}
+                  onLocationChange={(v) => set('location', v)}
+                  errors={errors}
+                  required
+                />
+              </div>
+
+              {/* Price */}
+              <div className="surface-elevated p-6">
+                <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
+                  {t('create.stepPrice')}
+                </h2>
+                <div className="space-y-4">
+                  <div className="flex gap-3">
+                    <div className="flex-1">
+                      <label className="mb-1.5 block text-sm font-medium text-fg">
+                        {t('listings.price')} <span className="text-danger">*</span>
+                      </label>
+                      <input
+                        type="number"
+                        min={0}
+                        value={form.price}
+                        onChange={(e) => set('price', e.target.value)}
+                        placeholder={t('create.pricePlaceholder')}
+                        className="input-base w-full"
+                      />
+                      {errors.price && <p className="mt-1 text-xs text-danger">{errors.price}</p>}
+                    </div>
+                    <div className="w-28">
+                      <label className="mb-1.5 block text-sm font-medium text-fg">{t('listings.currency')}</label>
+                      <select value={form.currency} onChange={(e) => set('currency', e.target.value)} className="input-base w-full cursor-pointer">
+                        <option value="UZS">UZS</option>
+                        <option value="USD">USD</option>
+                      </select>
+                    </div>
+                  </div>
+                  <label className="flex cursor-pointer items-center gap-3">
+                    <div
+                      role="switch"
+                      aria-checked={form.is_negotiable}
+                      onClick={() => set('is_negotiable', !form.is_negotiable)}
+                      className={`relative inline-flex h-6 w-11 flex-shrink-0 rounded-full transition-colors ${form.is_negotiable ? 'bg-brand-primary' : 'bg-border-strong'}`}
+                    >
+                      <span className={`pointer-events-none inline-block h-5 w-5 translate-y-0.5 rounded-full bg-white shadow-sm transition-transform ${form.is_negotiable ? 'translate-x-5' : 'translate-x-0.5'}`} />
+                    </div>
+                    <span className="text-sm font-medium text-fg">{t('listings.negotiable')}</span>
+                  </label>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <button type="button" onClick={() => router.back()} disabled={saving} className="btn btn-secondary flex-1">
+                  {t('common.cancel')}
+                </button>
+                <button type="submit" disabled={saving || saved} className="btn btn-primary flex-1">
+                  {saved ? (
+                    <><CheckCircle2 className="h-4 w-4" strokeWidth={2.25} />{t('success.created')}</>
+                  ) : saving ? (
+                    <><Loader2 className="h-4 w-4 animate-spin" strokeWidth={2.25} />{t('create.publishing')}</>
+                  ) : (
+                    <><Save className="h-4 w-4" strokeWidth={1.75} />{t('create.publishListing')}</>
+                  )}
+                </button>
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      </main>
+    </div>
+  );
+}

@@ -1,0 +1,206 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
+import {
+  ArrowRight,
+  Plus,
+  Search as SearchIcon,
+  Heart,
+  MessageSquareText,
+  Users,
+  ShieldCheck,
+  LayoutGrid,
+  Sparkles,
+} from 'lucide-react';
+
+import { AppNav } from '@/components/layout/AppNav';
+import { ListingGrid } from '@/components/listings/ListingGrid';
+import { CategoryIcon } from '@/components/shared/CategoryIcon';
+import { ListingGridSkeleton } from '@/components/shared/LoadingStates';
+import { useAuthStore } from '@/lib/store/auth';
+import { listingsApi } from '@/lib/api/listings';
+import type { Listing } from '@/lib/api/listings';
+
+const CATEGORIES = ['cattle', 'sheep', 'goats', 'horses', 'camels', 'poultry'] as const;
+
+export default function DashboardPage() {
+  const t = useTranslations();
+  const router = useRouter();
+  const { user, isAuthenticated } = useAuthStore();
+  const [hydrated, setHydrated] = useState(false);
+  const [feed, setFeed] = useState<Listing[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => setHydrated(true), []);
+
+  useEffect(() => {
+    if (hydrated && !isAuthenticated) {
+      router.replace('/auth');
+    }
+  }, [hydrated, isAuthenticated, router]);
+
+  useEffect(() => {
+    let alive = true;
+    listingsApi
+      .list({ page_size: 8 })
+      .then((res) => {
+        if (!alive) return;
+        setFeed(res.results ?? []);
+      })
+      .catch(() => alive && setFeed([]))
+      .finally(() => alive && setLoading(false));
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  return (
+    <div className="min-h-screen flex flex-col">
+      <AppNav />
+
+      <main className="flex-1">
+        <div className="container-page py-8 sm:py-10">
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
+          >
+            <div>
+              <p className="text-eyebrow">{t('common.welcome')}</p>
+              <h1 className="display-md mt-2">
+                {user?.full_name?.split(' ')[0] ?? t('common.welcome')}
+              </h1>
+              <p className="mt-2 text-fg-muted">{t('marketplace.feed')}</p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <Link href="/search" className="btn btn-secondary btn-sm">
+                <SearchIcon className="h-4 w-4" strokeWidth={1.75} />
+                {t('common.search')}
+              </Link>
+              <Link href="/listings/new" className="btn btn-primary btn-sm">
+                <Plus className="h-4 w-4" strokeWidth={2.25} />
+                {t('nav.createListing')}
+              </Link>
+            </div>
+          </motion.div>
+
+          {/* Quick links */}
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                href: '/listings',
+                icon: LayoutGrid,
+                label: t('nav.listings'),
+                tone: 'bg-brand-primary/10 text-brand-primary',
+              },
+              {
+                href: '/sellers',
+                icon: ShieldCheck,
+                label: t('nav.sellers'),
+                tone: 'bg-brand-accent/12 text-brand-accent',
+              },
+              {
+                href: '/profile/favorites',
+                icon: Heart,
+                label: t('nav.favorites'),
+                tone: 'bg-warning/12 text-warning',
+              },
+              {
+                href: '/chat',
+                icon: MessageSquareText,
+                label: t('nav.chat'),
+                tone: 'bg-info/12 text-info',
+              },
+            ].map((q, i) => {
+              const Icon = q.icon;
+              return (
+                <motion.div
+                  key={q.href}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, delay: 0.05 * i, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <Link
+                    href={q.href}
+                    className="surface-elevated group flex h-full items-center justify-between p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`inline-flex h-11 w-11 items-center justify-center rounded-xl ${q.tone}`}>
+                        <Icon className="h-5 w-5" strokeWidth={1.75} />
+                      </div>
+                      <span className="font-semibold text-fg">{q.label}</span>
+                    </div>
+                    <ArrowRight
+                      className="h-4 w-4 text-fg-subtle transition-transform group-hover:translate-x-0.5"
+                      strokeWidth={2}
+                    />
+                  </Link>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Categories */}
+          <div className="mt-12">
+            <div className="flex items-end justify-between">
+              <h2 className="display-sm">{t('landing.categoriesTitle')}</h2>
+              <Link href="/listings" className="text-sm font-semibold text-brand-primary hover:underline">
+                {t('common.showAll')}
+              </Link>
+            </div>
+
+            <div className="mt-5 grid grid-cols-3 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+              {CATEGORIES.map((cat, i) => (
+                <motion.div
+                  key={cat}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: i * 0.04 }}
+                >
+                  <Link
+                    href={`/listings?category=${cat}`}
+                    className="surface-elevated group flex aspect-square flex-col items-center justify-center p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift"
+                  >
+                    <span className="text-brand-primary transition-transform group-hover:scale-110">
+                      <CategoryIcon name={cat} className="h-7 w-7 sm:h-8 sm:w-8" />
+                    </span>
+                    <span className="mt-2 text-center text-[13px] font-semibold text-fg">
+                      {t(`categories.${cat}`)}
+                    </span>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Feed */}
+          <div className="mt-14">
+            <div className="flex items-end justify-between">
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-brand-accent" strokeWidth={1.75} />
+                <h2 className="display-sm">{t('marketplace.recommended')}</h2>
+              </div>
+              <Link href="/listings" className="text-sm font-semibold text-brand-primary hover:underline">
+                {t('common.showAll')}
+              </Link>
+            </div>
+
+            <div className="mt-5">
+              {loading ? (
+                <ListingGridSkeleton count={4} />
+              ) : (
+                <ListingGrid listings={feed as any} />
+              )}
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
