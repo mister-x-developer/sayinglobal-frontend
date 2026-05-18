@@ -77,6 +77,10 @@ export const useAuthStore = create<AuthState>()(
           try {
             localStorage.removeItem('access_token');
             localStorage.removeItem('refresh_token');
+            // F-33: clear sibling persisted stores so the next sign-in cannot
+            // see the previous user's cached data.
+            localStorage.removeItem('sayin-follow');
+            localStorage.removeItem('sayin-auth');
             // Clear auth cookie so middleware redirects to /auth
             document.cookie = 'sayin-auth=; path=/; max-age=0; samesite=lax';
           } catch {}

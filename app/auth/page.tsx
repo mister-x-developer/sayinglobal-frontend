@@ -110,6 +110,11 @@ export default function AuthPage() {
           );
         } else if (err.message === 'invalid_or_expired_code') {
           setErrorMessage(t('auth.errorInvalidOrExpiredCode'));
+        } else if (err.message === 'admin_blocked' || err.status === 403) {
+          // F-31/F-32: admin attempts to use the user app — show ONLY the
+          // localized "This application is for marketplace users." line.
+          // No tokens persisted (this branch is reached BEFORE setUser/setTokens).
+          setErrorMessage(t('auth.errorAdminBlocked'));
         } else if (err.message === 'otp_locked' && typeof err.data?.retry_after === 'number') {
           setLockRetryAfter(err.data.retry_after as number);
         } else if (err.message === 'phone_not_supported') {

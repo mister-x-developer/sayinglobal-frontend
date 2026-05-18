@@ -88,6 +88,7 @@
     "successTitle": "Muvaffaqiyatli kirdingiz",
     "successDescription": "Sizni boshqaruv paneliga yoʻnaltirmoqdamiz",
     "errorInvalidCode": "Notoʻgʻri kod. Iltimos, qaytadan urinib koʻring.",
+    "errorAdminBlocked": "Ushbu ilova bozor foydalanuvchilari uchun.",
     "errorExpiredCode": "Kod muddati tugagan. Yangi kod oling.",
     "errorInvalidOrExpiredCode": "Kod topilmadi yoki muddati tugagan. Telegram botdan yangi kod oling.",
     "errorPhoneNotSupported": "Bu telefon raqami qoʻllab-quvvatlanmaydi.",

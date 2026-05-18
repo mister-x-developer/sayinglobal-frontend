@@ -88,6 +88,7 @@
     "successTitle": "Вход выполнен",
     "successDescription": "Перенаправляем вас в личный кабинет",
     "errorInvalidCode": "Неверный код. Пожалуйста, попробуйте снова.",
+    "errorAdminBlocked": "Это приложение для пользователей маркетплейса.",
     "errorExpiredCode": "Код истёк. Получите новый код.",
     "errorInvalidOrExpiredCode": "Код не найден или истёк. Получите новый код в Telegram-боте.",
     "errorPhoneNotSupported": "Этот номер телефона не поддерживается.",

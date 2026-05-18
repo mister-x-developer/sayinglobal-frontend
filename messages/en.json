@@ -88,6 +88,7 @@
     "successTitle": "Signed in",
     "successDescription": "Taking you to your dashboard",
     "errorInvalidCode": "Invalid code. Please try again.",
+    "errorAdminBlocked": "This application is for marketplace users.",
     "errorExpiredCode": "Code expired. Request a new one.",
     "errorInvalidOrExpiredCode": "Code not found or expired. Please get a new code from the Telegram bot.",
     "errorPhoneNotSupported": "This phone number is not supported.",

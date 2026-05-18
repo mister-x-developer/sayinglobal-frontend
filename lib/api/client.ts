@@ -16,14 +16,35 @@ export const apiClient = axios.create({
   timeout: 30000,
 });
 
-// ── Token refresh lock ──────────────────────────────────────────────────────
-// Prevents multiple concurrent 401s from each triggering a refresh.
-let isRefreshing = false;
-let refreshQueue: Array<(token: string) => void> = [];
+// ── Token refresh single-flight (F-29 + F-30) ───────────────────────────────
+// Replaces the old `isRefreshing` flag + `refreshQueue` array with a single
+// Promise<string> mutex. All concurrent 401s share the same refresh future,
+// so:
+//   - exactly one POST hits /auth/token/refresh/ per burst
+//   - failure rejects every waiter (no leaked promises)
+//   - success awaits the same access token everywhere
+// F-30: reads BOTH `access` and `refresh` from the response and persists the
+// new refresh — required after backend F-12 rotation. The `?? refreshToken`
+// fallback keeps pre-rotation backends working.
+let refreshInFlight: Promise<string> | null = null;
 
-function processQueue(token: string) {
-  refreshQueue.forEach((cb) => cb(token));
-  refreshQueue = [];
+async function refreshAccessToken(): Promise<string> {
+  if (refreshInFlight) return refreshInFlight;
+  refreshInFlight = (async () => {
+    try {
+      const refreshToken = useAuthStore.getState().refreshToken;
+      if (!refreshToken) throw new Error('no_refresh');
+      const res = await axios.post(`${API_URL}/api/users/auth/token/refresh/`, {
+        refresh: refreshToken,
+      });
+      const { access, refresh: newRefresh } = res.data;
+      useAuthStore.getState().setTokens(access, newRefresh ?? refreshToken);
+      return access;
+    } finally {
+      refreshInFlight = null;
+    }
+  })();
+  return refreshInFlight;
 }
 
 // ── Request interceptor ─────────────────────────────────────────────────────
@@ -57,34 +78,15 @@ apiClient.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // If already refreshing, queue this request
-    if (isRefreshing) {
-      return new Promise<string>((resolve) => {
-        refreshQueue.push(resolve);
-      }).then((newToken) => {
-        if (original.headers) original.headers.Authorization = `Bearer ${newToken}`;
-        return apiClient(original);
-      });
-    }
-
-    isRefreshing = true;
-
     try {
-      const res = await axios.post(`${API_URL}/api/users/auth/token/refresh/`, {
-        refresh: refreshToken,
-      });
-      const { access } = res.data;
-      useAuthStore.getState().setTokens(access, refreshToken);
-      processQueue(access);
-      if (original.headers) original.headers.Authorization = `Bearer ${access}`;
+      // F-29 single-flight: every concurrent 401 awaits the same Promise.
+      const newToken = await refreshAccessToken();
+      if (original.headers) original.headers.Authorization = `Bearer ${newToken}`;
       return apiClient(original);
     } catch (refreshError) {
-      refreshQueue = [];
       useAuthStore.getState().logout();
       if (typeof window !== 'undefined') window.location.href = '/auth';
       return Promise.reject(refreshError);
-    } finally {
-      isRefreshing = false;
     }
   }
 );
