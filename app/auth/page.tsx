@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
@@ -14,7 +14,6 @@ import {
   Loader2,
   RefreshCw,
   ShieldCheck,
-  Timer,
 } from 'lucide-react';
 
 import { LandingNav } from '@/components/layout/LandingNav';
@@ -25,16 +24,6 @@ import { authApi, AuthApiError } from '@/lib/api/auth';
 import { useAuthStore } from '@/lib/store/auth';
 
 const TG_BOT = process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || 'sayinglobal_bot';
-
-const COOLDOWN_MS = 60_000;
-const EXPIRED_MS = 10 * 60_000;
-
-function formatMSS(totalSeconds: number): string {
-  const safe = Math.max(0, Math.floor(totalSeconds));
-  const m = Math.floor(safe / 60);
-  const s = safe % 60;
-  return `${m}:${s.toString().padStart(2, '0')}`;
-}
 
 type Stage = 'open-bot' | 'enter-code' | 'success';
 
@@ -50,20 +39,11 @@ export default function AuthPage() {
   const [code, setCode] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  // `issuedAt` is hoisted to the parent so a verify-time cooldown
-  // response (`error: 'otp_cooldown'` + `retry_after`) can re-align
-  // the local countdown by mutating `issuedAt` from the verify
-  // handler that lives here.
-  const [issuedAt, setIssuedAt] = useState<number | null>(null);
-  // `lockRetryAfter` is hoisted so the parent `handleVerify` can set
-  // it when the backend returns `otp_locked`.
   const [lockRetryAfter, setLockRetryAfter] = useState(0);
 
   const openTelegramBot = () => {
     const url = `https://t.me/${TG_BOT}?start=auth`;
     window.open(url, '_blank', 'noopener,noreferrer');
-    setIssuedAt(Date.now());
     setStage('enter-code');
   };
 
@@ -76,49 +56,20 @@ export default function AuthPage() {
     setErrorMessage(null);
 
     try {
-      const result = await authApi.verifyCode({
-        code,
-        // Do NOT send phone as fallback — the backend uses code-only lookup.
-        // Sending phone: code was causing "not found" errors.
-      });
+      const result = await authApi.verifyCode({ code });
       setUser(result.user);
       setTokens(result.tokens.access, result.tokens.refresh);
       setStage('success');
-      // Marketplace admin → admin panel automatically.
-      // Regular users → the next path requested (defaults to /dashboard).
       const target = result.user.is_admin ? '/admin' : nextPath;
       setTimeout(() => router.push(target), 1200);
     } catch (err: unknown) {
-      // Verify-time cooldown branch: the backend may answer the
-      // verify with a 429 if the issuance pipeline rate-limited.
-      // Re-align the local countdown with the server's remaining
-      // cooldown and surface the dedicated `auth.requestCooldown`
-      // copy instead of a generic invalid-code message.
       if (err instanceof AuthApiError) {
-        if (
-          err.message === 'otp_cooldown' &&
-          typeof err.data?.retry_after === 'number'
-        ) {
-          const retryAfter = err.data.retry_after as number;
-          // Place `issuedAt` so that the derived `secondsRemaining`
-          // equals `retryAfter` on the next tick:
-          //   secondsRemaining = ceil((issuedAt + 60_000 - now) / 1000)
-          //   ⇒ issuedAt = now - (60_000 - retryAfter * 1000)
-          setIssuedAt(Date.now() - (COOLDOWN_MS - retryAfter * 1000));
-          setErrorMessage(
-            t('auth.requestCooldown', { time: formatMSS(retryAfter) }),
-          );
-        } else if (err.message === 'invalid_or_expired_code') {
+        if (err.message === 'invalid_or_expired_code' || err.status === 400) {
           setErrorMessage(t('auth.errorInvalidOrExpiredCode'));
         } else if (err.message === 'admin_blocked' || err.status === 403) {
-          // F-31/F-32: admin attempts to use the user app — show ONLY the
-          // localized "This application is for marketplace users." line.
-          // No tokens persisted (this branch is reached BEFORE setUser/setTokens).
           setErrorMessage(t('auth.errorAdminBlocked'));
         } else if (err.message === 'otp_locked' && typeof err.data?.retry_after === 'number') {
           setLockRetryAfter(err.data.retry_after as number);
-        } else if (err.message === 'phone_not_supported') {
-          setErrorMessage(t('auth.errorPhoneNotSupported'));
         } else if (err.status === 429) {
           setErrorMessage(t('auth.errorRateLimited'));
         } else {
@@ -155,13 +106,15 @@ export default function AuthPage() {
                   }}
                   submitting={submitting}
                   errorMessage={errorMessage}
-                  setErrorMessage={setErrorMessage}
-                  issuedAt={issuedAt ?? Date.now()}
-                  setIssuedAt={setIssuedAt}
                   lockRetryAfter={lockRetryAfter}
-                  setLockRetryAfter={setLockRetryAfter}
                   onSubmit={handleVerify}
-                  onBack={() => setStage('open-bot')}
+                  onBack={() => {
+                    setStage('open-bot');
+                    setCode('');
+                    setErrorMessage(null);
+                    setLockRetryAfter(0);
+                  }}
+                  onResend={openTelegramBot}
                 />
               )}
 
@@ -230,68 +183,23 @@ function EnterCodeStage({
   setCode,
   submitting,
   errorMessage,
-  setErrorMessage,
-  issuedAt,
-  setIssuedAt,
   lockRetryAfter,
-  setLockRetryAfter,
   onSubmit,
   onBack,
+  onResend,
 }: {
   code: string;
   setCode: (v: string) => void;
   submitting: boolean;
   errorMessage: string | null;
-  setErrorMessage: (v: string | null) => void;
-  issuedAt: number;
-  setIssuedAt: (v: number) => void;
   lockRetryAfter: number;
-  setLockRetryAfter: (v: number) => void;
   onSubmit: () => void;
   onBack: () => void;
+  onResend: () => void;
 }) {
   const t = useTranslations();
 
-  // 1-second tick drives the live countdown and the 10-minute
-  // expired-banner cross-over. We avoid heavyweight effects — a
-  // single setInterval is fine and is cleaned up on unmount.
-  const [now, setNow] = useState<number>(() => Date.now());
-  useEffect(() => {
-    const id = setInterval(() => {
-      setNow(Date.now());
-    }, 1000);
-    return () => clearInterval(id);
-  }, []);
-
-  // Decrement the OTP lock countdown every second while active.
-  useEffect(() => {
-    if (lockRetryAfter <= 0) return;
-    const id = setInterval(() => {
-      setLockRetryAfter(Math.max(0, lockRetryAfter - 1));
-    }, 1000);
-    return () => clearInterval(id);
-  }, [lockRetryAfter, setLockRetryAfter]);
-
-  const secondsRemaining = Math.max(
-    0,
-    Math.ceil((issuedAt + COOLDOWN_MS - now) / 1000),
-  );
-  const expired = now - issuedAt > EXPIRED_MS;
-
-  // Resend = re-open the Telegram bot (matches mobile UX contract).
-  // No phone re-entry, no requestCode REST call. The bot itself issues
-  // a fresh OTP via the "Get code" button and respects backend cooldown.
-  const handleResend = () => {
-    if (submitting || secondsRemaining > 0) return;
-    const url = `https://t.me/${TG_BOT}?start=auth`;
-    window.open(url, '_blank', 'noopener,noreferrer');
-    // Reset the issuance moment so the 60s cooldown UI restarts.
-    setIssuedAt(Date.now());
-    setErrorMessage(null);
-  };
-
-  const resendDisabled = submitting || secondsRemaining > 0;
-  const verifyDisabled = code.length !== 5 || submitting || expired || lockRetryAfter > 0;
+  const verifyDisabled = code.length !== 5 || submitting || lockRetryAfter > 0;
 
   return (
     <motion.div
@@ -321,9 +229,7 @@ function EnterCodeStage({
       </div>
 
       <div className="mt-8">
-        {/* OTP lock banner — shown when the backend returns otp_locked.
-            Countdown decrements every second; verify button is disabled
-            while lockRetryAfter > 0. */}
+        {/* OTP brute-force lock banner */}
         <AnimatePresence>
           {lockRetryAfter > 0 && (
             <motion.div
@@ -339,30 +245,8 @@ function EnterCodeStage({
                 strokeWidth={2.25}
               />
               <span className="font-semibold">
-                {t('auth.otpLocked', { time: formatMSS(lockRetryAfter) })}
+                {t('auth.otpLocked')}
               </span>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* 10-minute expired banner — shown above CodeInput per
-            design.md change #16. The verify button is disabled while
-            this banner is visible. Lucide AlertTriangle, no emoji. */}
-        <AnimatePresence>
-          {expired && (
-            <motion.div
-              initial={{ opacity: 0, y: -6, height: 0 }}
-              animate={{ opacity: 1, y: 0, height: 'auto' }}
-              exit={{ opacity: 0, y: -6, height: 0 }}
-              transition={{ duration: 0.22 }}
-              className="mb-4 flex items-start gap-2 rounded-xl border border-warning/30 bg-warning/10 px-3.5 py-2.5 text-sm text-warning"
-              role="alert"
-            >
-              <AlertTriangle
-                className="mt-0.5 h-4 w-4 flex-shrink-0"
-                strokeWidth={2.25}
-              />
-              <span className="font-semibold">{t('auth.codeExpired')}</span>
             </motion.div>
           )}
         </AnimatePresence>
@@ -371,7 +255,7 @@ function EnterCodeStage({
           value={code}
           onChange={setCode}
           length={5}
-          disabled={submitting || expired}
+          disabled={submitting}
           hasError={!!errorMessage}
           autoFocus
         />
@@ -413,30 +297,20 @@ function EnterCodeStage({
         )}
       </button>
 
+      {/* Resend — always active, just reopens the Telegram bot.
+          No countdown timer. OTP validity is 10 minutes and the
+          backend enforces a 60s cooldown; the bot itself notifies
+          the user when cooldown is active. */}
       <div className="mt-5 flex flex-col items-center gap-1.5 text-center text-sm">
         <span className="text-fg-muted">{t('auth.didntReceiveCode')}</span>
         <button
-          onClick={handleResend}
+          onClick={onResend}
           type="button"
-          disabled={resendDisabled}
-          className={`inline-flex items-center gap-1.5 font-semibold transition-opacity ${
-            resendDisabled
-              ? 'cursor-not-allowed text-fg-muted opacity-70'
-              : 'text-brand-primary hover:underline'
-          }`}
-          aria-disabled={resendDisabled}
+          disabled={submitting}
+          className="inline-flex items-center gap-1.5 font-semibold text-brand-primary transition-opacity hover:underline disabled:opacity-50"
         >
-          {secondsRemaining > 0 ? (
-            <>
-              <Timer className="h-3.5 w-3.5" strokeWidth={2.25} />
-              {t('auth.resendIn', { time: formatMSS(secondsRemaining) })}
-            </>
-          ) : (
-            <>
-              <RefreshCw className="h-3.5 w-3.5" strokeWidth={2.25} />
-              {t('auth.resendCode')}
-            </>
-          )}
+          <RefreshCw className="h-3.5 w-3.5" strokeWidth={2.25} />
+          {t('auth.resendCode')}
         </button>
       </div>
     </motion.div>

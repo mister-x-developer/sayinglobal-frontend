@@ -50,9 +50,14 @@ async function refreshAccessToken(): Promise<string> {
 // ── Request interceptor ─────────────────────────────────────────────────────
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const token = useAuthStore.getState().accessToken;
-    if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`;
+    // Do NOT attach a stale Bearer token to OTP/auth endpoints.
+    // These are AllowAny — sending a revoked token could block them.
+    const isOtpEndpoint = config.url?.includes('/auth/');
+    if (!isOtpEndpoint) {
+      const token = useAuthStore.getState().accessToken;
+      if (token && config.headers) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     }
     return config;
   },
