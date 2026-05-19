@@ -60,10 +60,9 @@ export default function AuthPage() {
       setUser(result.user);
       setTokens(result.tokens.access, result.tokens.refresh);
       setStage('success');
-      // Admin users can use the marketplace app too — redirect to dashboard.
-      // The Django admin panel is at a separate URL on the backend.
-      // Do NOT redirect to /admin (that route doesn't exist on the Next.js frontend).
-      const target = nextPath;
+      // Route to dashboard — no admin-specific redirect.
+      // Admin panel is the backend Django admin at /admin/ (Railway URL).
+      const target = nextPath || '/dashboard';
       setTimeout(() => router.push(target), 1200);
     } catch (err: unknown) {
       if (err instanceof AuthApiError) {
