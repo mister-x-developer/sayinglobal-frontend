@@ -67,11 +67,11 @@ const nextConfig = {
           // Styles
           "style-src 'self' 'unsafe-inline'",
           // Images — self + our S3/Railway backend
-          "img-src 'self' data: blob: https://*.amazonaws.com https://*.idrivee2.com https://*.idrivee2-21.com https://sayinglobal-backend-production.up.railway.app",
+          "img-src 'self' data: blob: https://*.amazonaws.com https://*.idrivee2.com https://*.idrivee2-21.com https://sayinglobal.up.railway.app https://sayinglobal-backend-production.up.railway.app",
           // Fonts
           "font-src 'self' data:",
-          // API/WS connections
-          "connect-src 'self' https://sayinglobal-backend-production.up.railway.app wss://sayinglobal-backend-production.up.railway.app https://sentry.io https://o4504523.ingest.sentry.io",
+          // API/WS connections — production backend lives at sayinglobal.up.railway.app
+          "connect-src 'self' https://sayinglobal.up.railway.app wss://sayinglobal.up.railway.app https://sayinglobal-backend-production.up.railway.app wss://sayinglobal-backend-production.up.railway.app https://sentry.io https://o4504523.ingest.sentry.io",
           // No frames
           "frame-ancestors 'none'",
           // Workers for Next.js

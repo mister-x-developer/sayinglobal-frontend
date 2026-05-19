@@ -108,6 +108,7 @@
     "termsConfirm": "qabul qilasiz",
     "codeExpired": "Kod muddati tugadi. Telegram botdan yangi kod oling.",
     "errorRateLimited": "Juda ko'p so'rov. Iltimos, keyinroq urinib ko'ring.",
+    "errorNetwork": "Tarmoq xatosi. Internet ulanishini tekshiring va qayta urining.",
     "requestCooldown": "Yangi kod so'rashdan oldin {time} kuting.",
     "resendIn": "{time} dan keyin qayta yuborish",
     "otpLocked": "Juda koʻp urinish. {time} dan keyin qayta urinib koʻring.",

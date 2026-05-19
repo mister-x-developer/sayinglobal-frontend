@@ -74,11 +74,16 @@ export default function AuthPage() {
           setLockRetryAfter(err.data.retry_after as number);
         } else if (err.status === 429) {
           setErrorMessage(t('auth.errorRateLimited'));
+        } else if (err.status === null) {
+          // No HTTP response received — CSP block, network failure, CORS, etc.
+          // Surface a network-error message instead of "Invalid code", which
+          // mis-attributes the failure to the OTP value the user just typed.
+          setErrorMessage(t('auth.errorNetwork'));
         } else {
           setErrorMessage(t('auth.errorInvalidCode'));
         }
       } else {
-        setErrorMessage(t('auth.errorInvalidCode'));
+        setErrorMessage(t('auth.errorNetwork'));
       }
       setSubmitting(false);
     }

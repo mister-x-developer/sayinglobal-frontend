@@ -108,6 +108,7 @@
     "termsConfirm": "",
     "codeExpired": "Code expired. Please request a new one from the Telegram bot.",
     "errorRateLimited": "Too many requests. Please try again later.",
+    "errorNetwork": "Network error. Check your internet connection and try again.",
     "requestCooldown": "Please wait {time} before requesting a new code.",
     "resendIn": "Resend in {time}",
     "otpLocked": "Too many attempts. Try again in {time}",
