@@ -93,7 +93,7 @@
     "errorInvalidOrExpiredCode": "Kod topilmadi yoki muddati tugagan. Telegram botdan yangi kod oling.",
     "errorPhoneNotSupported": "Bu telefon raqami qoʻllab-quvvatlanmaydi.",
     "errorNotRegistered": "Siz hali roʻyxatdan oʻtmagansiz. Telegram botga kiring va telefon raqamingizni ulashing.",
-    "errorNetwork": "Tarmoq xatosi. Iltimos, qaytadan urinib koʻring.",
+    "errorNetwork": "Tarmoq xatosi. Internet ulanishini tekshiring va qayta urining.",
     "errorPrefix": "Telefon raqamingiz qoʻllab-quvvatlanmaydi",
     "didntReceiveCode": "Kodni olmadingizmi?",
     "resendCode": "Qayta yuborish",
@@ -108,7 +108,6 @@
     "termsConfirm": "qabul qilasiz",
     "codeExpired": "Kod muddati tugadi. Telegram botdan yangi kod oling.",
     "errorRateLimited": "Juda ko'p so'rov. Iltimos, keyinroq urinib ko'ring.",
-    "errorNetwork": "Tarmoq xatosi. Internet ulanishini tekshiring va qayta urining.",
     "requestCooldown": "Yangi kod so'rashdan oldin {time} kuting.",
     "resendIn": "{time} dan keyin qayta yuborish",
     "otpLocked": "Juda koʻp urinish. {time} dan keyin qayta urinib koʻring.",
@@ -136,7 +135,8 @@
     "theme": "Mavzu",
     "dayMode": "Kunduzgi rejim",
     "nightMode": "Tungi rejim",
-    "menu": "Menyu"
+    "menu": "Menyu",
+    "nearby": "Yaqinlik"
   },
   "marketplace": {
     "title": "Bozor",
@@ -154,7 +154,11 @@
     "noResults": "Eʼlonlar topilmadi",
     "tryAdjusting": "Filtrlarni oʻzgartirib koʻring",
     "showResults": "{count} ta natija",
-    "loadMore": "Koʻproq yuklash"
+    "loadMore": "Koʻproq yuklash",
+    "shares": "Ulashishlar",
+    "mapUnavailable": "Xarita yuklanmadi",
+    "mapTapToSetPin": "Xaritani bosib belgini qoʻying",
+    "useMyLocation": "Mening joyim"
   },
   "listings": {
     "title": "Eʼlonlar",
@@ -198,7 +202,7 @@
     "deleteListing": "Eʼlonni oʻchirish",
     "deleteConfirm": "Eʼlonni oʻchirishni tasdiqlaysizmi?",
     "markAsSold": "Sotildi deb belgilash",
-    "markAsSoldConfirm": "Eʼlonni sotilgan deb belgilaysizmi? Bu amalni qaytarib boʻlmaydi.",
+    "markAsSoldConfirm": "E’lon sotilgan deb belgilanadi va 30 kundan so‘ng o‘chiriladi.",
     "pendingNoticeTitle": "Eʼlon koʻrib chiqilmoqda",
     "pendingNoticeBody": "Moderatorlar eʼloningizni koʻrib chiqmoqda. Odatda 24 soat ichida natija chiqadi.",
     "renew": "Yangilash",
@@ -207,7 +211,9 @@
     "commentCount": "{count} ta izoh",
     "shareCount": "{count} ta ulashish",
     "postedAgo": "{time} oldin joylashtirilgan",
-    "updatedAgo": "{time} oldin yangilangan"
+    "updatedAgo": "{time} oldin yangilangan",
+    "restore": "Qayta aktivlashtirish",
+    "locationOnMap": "Xaritada joylashuv"
   },
   "categories": {
     "all": "Barchasi",
@@ -347,7 +353,9 @@
     "beFirstToReview": "Birinchi sharh qoldiring",
     "topSellers": "Eng yaxshi sotuvchilar",
     "newSellers": "Yangi sotuvchilar",
-    "trustedSellers": "Ishonchli sotuvchilar"
+    "trustedSellers": "Ishonchli sotuvchilar",
+    "followers": "Obunachilar",
+    "totalReviews": "sharh"
   },
   "comments": {
     "title": "Izohlar",
@@ -445,7 +453,9 @@
     "publishListing": "Eʼlon qilish",
     "savingDraft": "Qoralama saqlanmoqda...",
     "publishing": "Eʼlon qilinmoqda...",
-    "publishSuccess": "Eʼlon muvaffaqiyatli joylashtirildi"
+    "publishSuccess": "Eʼlon muvaffaqiyatli joylashtirildi",
+    "mapPinLabel": "Xarita ustida belgi (ixtiyoriy)",
+    "mapPinHelp": "Xaritada belgini qo‘ying: xaridorlar e’lonni xaritada koʻrishi uchun."
   },
   "admin": {
     "title": "Admin Panel",
@@ -494,7 +504,16 @@
     "editPrefix": "Prefiks tahrirlash",
     "deletePrefix": "Prefiks oʻchirish",
     "prefixActive": "Faol",
-    "prefixInactive": "Faol emas"
+    "prefixInactive": "Faol emas",
+    "relatedReports": "Shikoyatlar",
+    "noReports": "Shikoyatlar yo‘q",
+    "actions": "Amallar",
+    "stats": "Statistika",
+    "restore": "Qayta aktivlashtirish",
+    "rejectionReason": "Rad etish sababi",
+    "confirmReject": "Rad etishni tasdiqlash",
+    "rejectionReasonPlaceholder": "Sababni batafsil yozing",
+    "rejectionReasonRequired": "Sabab yozish majburiy"
   },
   "analytics": {
     "title": "Analitika",
@@ -588,7 +607,7 @@
   },
   "success": {
     "saved": "Muvaffaqiyatli saqlandi",
-    "deleted": "Muvaffaqiyatli oʻchirildi",
+    "deleted": "Oʻchirildi",
     "updated": "Muvaffaqiyatli yangilandi",
     "created": "Muvaffaqiyatli yaratildi",
     "sent": "Muvaffaqiyatli yuborildi",
@@ -597,7 +616,9 @@
     "followed": "Obuna boʻldingiz",
     "unfollowed": "Obuna bekor qilindi",
     "favorited": "Saralanganga qoʻshildi",
-    "unfavorited": "Saralangandan olib tashlandi"
+    "unfavorited": "Saralangandan olib tashlandi",
+    "approved": "Tasdiqlandi",
+    "rejected": "Rad etildi"
   },
   "time": {
     "justNow": "Hozirgina",
@@ -757,6 +778,55 @@
       "warning": "Ogohlantirish",
       "restricted": "Cheklangan",
       "blocked": "Bloklangan"
-    }
+    },
+    "status_pending": "Kutilmoqda",
+    "status_under_review": "Ko‘rib chiqilmoqda",
+    "status_resolved_valid": "Tasdiqlandi",
+    "status_resolved_invalid": "Inkor etildi"
+  },
+  "terms": {
+    "title": "Foydalanish shartlari",
+    "subtitle": "Davom etishdan oldin shartlarni qabul qiling",
+    "intro": "SAYIN GLOBAL platformasidan foydalanish uchun quyidagi shartlarga rozilik bildirishingiz lozim.",
+    "point1": "SAYIN GLOBAL — chorva eʼlonlari bozori platformasi. Sotuvchi va xaridor oʻrtasidagi bitim ikki tomonning shaxsiy masʼuliyatidir.",
+    "point2": "Platforma sotuvchining halolligi, hayvon sifati yoki bitim natijasi uchun javobgar emas.",
+    "point3": "Firibgarlik, soxta eʼlon yoki sifatsiz mahsulot uchun platforma yoki maʼmuriyat huquqiy javobgar emas.",
+    "point4": "Foydalanuvchi shaxsan ehtiyot boʻlishi, sotuvchini tekshirishi va xavfsizlik choralarini koʻrishi shart.",
+    "disclaimer": "Platforma faqat sotuvchi va xaridor oʻrtasida muloqot vositasi boʻlib xizmat qiladi. Hech qanday bitim platforma orqali rasmiylashtirilmaydi.",
+    "checkboxLabel": "Yuqoridagi shartlarni oʻqib chiqdim va toʻliq qabul qilaman.",
+    "accept": "Roziman va davom etaman"
+  },
+  "nearby": {
+    "eyebrow": "Yaqin atrof",
+    "title": "Yaqin atrofdagi e’lonlar",
+    "modeGps": "{km} km radiusda",
+    "modeRegion": "Viloyat / tuman bo‘yicha",
+    "location": "Joylashuv",
+    "requesting": "Joyni aniqlamoqda...",
+    "permissionDenied": "Joylashuv ruxsat berilmadi — viloyat bo‘yicha qidirish.",
+    "tryAgain": "Qayta urinish",
+    "radius": "Radius",
+    "empty": "Yaqin atrofda e’lon topilmadi",
+    "emptyDesc": "Radiusni yoki kategoriyani o‘zgartirib koʻring."
+  },
+  "reviews": {
+    "writeReview": "Sharh yozish",
+    "editYourReview": "Sharhingizni tahrirlash",
+    "placeholder": "Tajribangizni boshqalar bilan boʻlishing",
+    "post": "Yuborish",
+    "posted": "Sharh yuborildi",
+    "cannotRateSelf": "Oʻzingizga sharh qoldira olmaysiz",
+    "reportPrompt": "Sabab: spam / abuse / off_topic / false_info / other",
+    "reportSent": "Shikoyat yuborildi",
+    "replyPrompt": "Javobingiz",
+    "reply": "Javob",
+    "helpful": "Foydali",
+    "edited": "tahrirlangan",
+    "sellerBadge": "Sotuvchi",
+    "viewAll": "Barcha sharhlarni koʻrish",
+    "sort_newest": "Yangi",
+    "sort_highest": "Yuqori baho",
+    "sort_lowest": "Past baho",
+    "sort_most_useful": "Eng foydali"
   }
 }

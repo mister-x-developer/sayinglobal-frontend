@@ -17,6 +17,7 @@ import { AppNav } from '@/components/layout/AppNav';
 import { AgeInput, type AnimalAge } from '@/components/listings/AgeInput';
 import { CategorySelector, BreedSelector } from '@/components/shared/CategorySelector';
 import { LocationSelector } from '@/components/shared/LocationSelector';
+import { LocationPicker } from '@/components/shared/LocationPicker';
 import { toast } from '@/components/ui/Toast';
 import { listingsApi } from '@/lib/api/listings';
 
@@ -62,6 +63,8 @@ export default function NewListingPage() {
     district: '',
     district_name: '',
     location: '',
+    latitude: null as number | null,
+    longitude: null as number | null,
   });
 
   const [age, setAge] = useState<AnimalAge>({ years: undefined, months: undefined, days: undefined });
@@ -132,6 +135,8 @@ export default function NewListingPage() {
         region: form.region_name || form.region,
         district: form.district_name || form.district || undefined,
         location: form.location.trim(),
+        latitude: form.latitude ?? undefined,
+        longitude: form.longitude ?? undefined,
       };
       const listing = await listingsApi.create(payload as any);
       for (const img of images) {
@@ -353,6 +358,24 @@ export default function NewListingPage() {
                   errors={errors}
                   required
                 />
+
+                {/* Map pin (optional, but recommended) */}
+                <div className="mt-6">
+                  <label className="text-xs font-semibold uppercase tracking-wider text-fg-subtle">
+                    {t('create.mapPinLabel' as any) ?? 'Map pin (optional)'}
+                  </label>
+                  <p className="mt-1 mb-3 text-xs text-fg-muted">
+                    {t('create.mapPinHelp' as any) ?? 'Drop a pin so buyers can see the listing on the map.'}
+                  </p>
+                  <LocationPicker
+                    value={{ lat: form.latitude, lng: form.longitude }}
+                    onChange={(next) => setForm((p) => ({
+                      ...p,
+                      latitude: next?.lat ?? null,
+                      longitude: next?.lng ?? null,
+                    }))}
+                  />
+                </div>
               </div>
 
               {/* Price */}

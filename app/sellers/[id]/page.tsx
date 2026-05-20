@@ -23,6 +23,7 @@ import { ListingCard } from '@/components/listings/ListingCard';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { FollowButton } from '@/components/sellers/FollowButton';
 import { RatingDisplay } from '@/components/shared/RatingDisplay';
+import { SellerRatingsThread } from '@/components/sellers/SellerRatingsThread';
 import { usersApi } from '@/lib/api/users';
 import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
@@ -271,11 +272,7 @@ export default function SellerDetailPage() {
                   ))}
 
                 {tab === 'reviews' && (
-                  <EmptyState
-                    icon={Star}
-                    title={t('sellers.noReviews')}
-                    description={t('sellers.beFirstToReview')}
-                  />
+                  <SellerRatingsThread sellerPublicId={id} />
                 )}
 
                 {tab === 'activity' && (

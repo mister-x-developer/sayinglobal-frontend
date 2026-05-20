@@ -8,6 +8,7 @@ import apiClient, { handleApiError } from './client';
 export interface ListingImage {
   id: string | number;
   image: string;
+  image_url?: string;
   is_primary?: boolean;
   order?: number;
 }
@@ -15,8 +16,12 @@ export interface ListingImage {
 export interface ListingSeller {
   public_id: number;
   full_name: string;
+  phone?: string;
   avatar_url?: string;
   trust_score?: number;
+  active_listings_count?: number;
+  sold_listings_count?: number;
+  followers_count?: number;
 }
 
 export interface Listing {
@@ -37,19 +42,34 @@ export interface Listing {
   location: string;
   region: string;
   district?: string;
+  latitude?: number | string | null;
+  longitude?: number | string | null;
   images: ListingImage[];
+  primary_image?: ListingImage | null;
   status: string;
   is_featured?: boolean;
   is_negotiable?: boolean;
   view_count?: number;
   favorite_count?: number;
+  share_count?: number;
   comment_count?: number;
   is_favorited?: boolean;
+  rejection_reason?: string;
+  rejection_reason_uz?: string;
+  rejection_reason_uz_cyrl?: string;
+  rejection_reason_ru?: string;
+  rejection_reason_en?: string;
   created_at: string;
   updated_at?: string;
   published_at?: string | null;
   expires_at?: string | null;
+  sold_at?: string | null;
+  scheduled_delete_at?: string | null;
+  rejected_at?: string | null;
 }
+
+/** Detail returns same shape as Listing — kept as alias for clarity. */
+export type ListingDetail = Listing;
 
 export interface ListingFilters {
   category?: string;
@@ -244,6 +264,90 @@ export const listingsApi = {
       return res.data;
     } catch (e) {
       throw new Error(handleApiError(e));
+    }
+  },
+
+  // ── Lifecycle / moderation actions ────────────────────────────────────────
+
+  /** Owner: mark active listing as sold; starts the 30-day deletion window. */
+  async markSold(publicId: number | string) {
+    const res = await apiClient.post(`/listings/${publicId}/sold/`);
+    return res.data;
+  },
+
+  /** Owner: restore a sold/expired listing. Resets the lifecycle to active. */
+  async restore(publicId: number | string) {
+    const res = await apiClient.post(`/listings/${publicId}/restore/`);
+    return res.data;
+  },
+
+  /** Admin: approve a pending listing. */
+  async approve(publicId: number | string) {
+    const res = await apiClient.post(`/listings/${publicId}/approve/`);
+    return res.data;
+  },
+
+  /** Admin: reject a listing with a reason. Backend auto-translates to 4 langs. */
+  async reject(publicId: number | string, reason: string, locale?: string) {
+    const res = await apiClient.post(`/listings/${publicId}/reject/`, {
+      reason,
+      locale,
+    });
+    return res.data;
+  },
+
+  /** Public: list seller ratings + reviews thread. */
+  async sellerRatings(userPublicId: number | string, page = 1, pageSize = 20) {
+    try {
+      const res = await apiClient.get(`/listings/seller/${userPublicId}/ratings/`, {
+        params: { page, page_size: pageSize },
+      });
+      return res.data as {
+        results: any[];
+        count: number;
+        average_score: number;
+      };
+    } catch {
+      return { results: [], count: 0, average_score: 0 };
+    }
+  },
+
+  /** Buyer: leave a 1-5 star rating + optional public review on a seller. */
+  async rateSeller(payload: { seller: number; listing: number; score: number; review?: string }) {
+    const res = await apiClient.post('/listings/rate/', payload);
+    return res.data;
+  },
+
+  /**
+   * Geo-aware "nearby" feed.
+   *
+   * Modes:
+   *   - GPS:     pass `{ lat, lng, radius_km }` (default radius 50)
+   *   - Region:  pass `{ region, district }` (text fallback)
+   *
+   * Optional `category` filters the feed (cattle/sheep/etc).
+   * Result rows include a `distance_km` field in GPS mode.
+   */
+  async nearby(opts: {
+    lat?: number;
+    lng?: number;
+    radius_km?: number;
+    region?: string;
+    district?: string;
+    category?: string;
+    page?: number;
+    page_size?: number;
+  }): Promise<{
+    results: (Listing & { distance_km?: number })[];
+    count: number;
+    mode: 'gps' | 'region';
+    radius_km: number | null;
+  }> {
+    try {
+      const res = await apiClient.get('/listings/nearby/', { params: opts });
+      return res.data;
+    } catch {
+      return { results: [], count: 0, mode: 'region', radius_km: null };
     }
   },
 };

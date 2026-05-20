@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
@@ -31,9 +31,19 @@ export default function AuthPage() {
   const t = useTranslations();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { setUser, setTokens } = useAuthStore();
+  const setSession = useAuthStore((s) => s.setSession);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const currentUser = useAuthStore((s) => s.user);
 
-  const nextPath = searchParams.get('next') || '/dashboard';
+  const nextPath = searchParams.get('next') || '';
+
+  // If the user is already authenticated, do not display the auth screen.
+  // Redirect to the appropriate landing page immediately.
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    const target = nextPath || (currentUser?.is_admin ? '/admin' : '/dashboard');
+    router.replace(target);
+  }, [isAuthenticated, currentUser?.is_admin, nextPath, router]);
 
   const [stage, setStage] = useState<Stage>('open-bot');
   const [code, setCode] = useState('');
@@ -57,13 +67,22 @@ export default function AuthPage() {
 
     try {
       const result = await authApi.verifyCode({ code });
-      setUser(result.user);
-      setTokens(result.tokens.access, result.tokens.refresh);
+      // Atomically set tokens + user + cookie in one shot, before navigating.
+      // This guarantees the middleware sees the authenticated state on the
+      // very first request of the destination route.
+      setSession(result.tokens.access, result.tokens.refresh, result.user);
       setStage('success');
-      // Route to dashboard — no admin-specific redirect.
-      // Admin panel is the backend Django admin at /admin/ (Railway URL).
-      const target = nextPath || '/dashboard';
-      setTimeout(() => router.push(target), 1200);
+
+      // Decide the destination once, synchronously, from the freshly received
+      // user payload. Admins go to /admin; everyone else to /dashboard or the
+      // ?next path the user came from.
+      const target =
+        nextPath ||
+        (result.user?.is_admin ? '/admin' : '/dashboard');
+
+      // No setTimeout. Push immediately. The success card stays visible
+      // through navigation; Next.js prefetch + replace makes this feel instant.
+      router.replace(target);
     } catch (err: unknown) {
       if (err instanceof AuthApiError) {
         if (err.message === 'invalid_or_expired_code' || err.status === 400) {
@@ -75,9 +94,6 @@ export default function AuthPage() {
         } else if (err.status === 429) {
           setErrorMessage(t('auth.errorRateLimited'));
         } else if (err.status === null) {
-          // No HTTP response received — CSP block, network failure, CORS, etc.
-          // Surface a network-error message instead of "Invalid code", which
-          // mis-attributes the failure to the OTP value the user just typed.
           setErrorMessage(t('auth.errorNetwork'));
         } else {
           setErrorMessage(t('auth.errorInvalidCode'));

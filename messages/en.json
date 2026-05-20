@@ -93,7 +93,7 @@
     "errorInvalidOrExpiredCode": "Code not found or expired. Please get a new code from the Telegram bot.",
     "errorPhoneNotSupported": "This phone number is not supported.",
     "errorNotRegistered": "You are not registered yet. Open the Telegram bot and share your phone number.",
-    "errorNetwork": "Network error. Please try again.",
+    "errorNetwork": "Network error. Check your internet connection and try again.",
     "errorPrefix": "Your phone number is not supported",
     "didntReceiveCode": "Didn't receive a code?",
     "resendCode": "Send again",
@@ -108,7 +108,6 @@
     "termsConfirm": "",
     "codeExpired": "Code expired. Please request a new one from the Telegram bot.",
     "errorRateLimited": "Too many requests. Please try again later.",
-    "errorNetwork": "Network error. Check your internet connection and try again.",
     "requestCooldown": "Please wait {time} before requesting a new code.",
     "resendIn": "Resend in {time}",
     "otpLocked": "Too many attempts. Try again in {time}",
@@ -136,7 +135,8 @@
     "theme": "Theme",
     "dayMode": "Day mode",
     "nightMode": "Night mode",
-    "menu": "Menu"
+    "menu": "Menu",
+    "nearby": "Nearby"
   },
   "marketplace": {
     "title": "Marketplace",
@@ -154,7 +154,11 @@
     "noResults": "No listings found",
     "tryAdjusting": "Try adjusting the filters",
     "showResults": "{count} results",
-    "loadMore": "Load more"
+    "loadMore": "Load more",
+    "shares": "Shares",
+    "mapUnavailable": "Map unavailable",
+    "mapTapToSetPin": "Tap the map to drop the pin",
+    "useMyLocation": "Use my location"
   },
   "listings": {
     "title": "Listings",
@@ -198,7 +202,7 @@
     "deleteListing": "Delete listing",
     "deleteConfirm": "Confirm delete?",
     "markAsSold": "Mark as sold",
-    "markAsSoldConfirm": "Mark this listing as sold? This cannot be undone.",
+    "markAsSoldConfirm": "The listing will be marked sold and deleted after 30 days.",
     "pendingNoticeTitle": "Listing under review",
     "pendingNoticeBody": "Moderators are reviewing your listing. This usually takes up to 24 hours.",
     "renew": "Renew",
@@ -207,7 +211,9 @@
     "commentCount": "{count} comments",
     "shareCount": "{count} shares",
     "postedAgo": "posted {time} ago",
-    "updatedAgo": "updated {time} ago"
+    "updatedAgo": "updated {time} ago",
+    "restore": "Reactivate",
+    "locationOnMap": "Location on map"
   },
   "categories": {
     "all": "All",
@@ -347,7 +353,9 @@
     "beFirstToReview": "Be the first to review",
     "topSellers": "Top sellers",
     "newSellers": "New sellers",
-    "trustedSellers": "Trusted sellers"
+    "trustedSellers": "Trusted sellers",
+    "followers": "Followers",
+    "totalReviews": "reviews"
   },
   "comments": {
     "title": "Comments",
@@ -445,7 +453,9 @@
     "publishListing": "Publish",
     "savingDraft": "Saving draft...",
     "publishing": "Publishing...",
-    "publishSuccess": "Listing published successfully"
+    "publishSuccess": "Listing published successfully",
+    "mapPinLabel": "Map pin (optional)",
+    "mapPinHelp": "Drop a pin so buyers can see the listing on the map."
   },
   "admin": {
     "title": "Admin Panel",
@@ -494,7 +504,16 @@
     "editPrefix": "Edit prefix",
     "deletePrefix": "Delete prefix",
     "prefixActive": "Active",
-    "prefixInactive": "Inactive"
+    "prefixInactive": "Inactive",
+    "relatedReports": "Reports",
+    "noReports": "No reports",
+    "actions": "Actions",
+    "stats": "Stats",
+    "restore": "Restore",
+    "rejectionReason": "Rejection reason",
+    "confirmReject": "Confirm rejection",
+    "rejectionReasonPlaceholder": "Describe the reason in detail",
+    "rejectionReasonRequired": "Reason is required"
   },
   "analytics": {
     "title": "Analytics",
@@ -588,7 +607,7 @@
   },
   "success": {
     "saved": "Saved successfully",
-    "deleted": "Deleted successfully",
+    "deleted": "Deleted",
     "updated": "Updated successfully",
     "created": "Created successfully",
     "sent": "Sent successfully",
@@ -597,7 +616,9 @@
     "followed": "You are now following",
     "unfollowed": "Unfollowed",
     "favorited": "Added to favorites",
-    "unfavorited": "Removed from favorites"
+    "unfavorited": "Removed from favorites",
+    "approved": "Approved",
+    "rejected": "Rejected"
   },
   "time": {
     "justNow": "Just now",
@@ -757,6 +778,55 @@
       "warning": "Warning",
       "restricted": "Restricted",
       "blocked": "Blocked"
-    }
+    },
+    "status_pending": "Pending",
+    "status_under_review": "Under review",
+    "status_resolved_valid": "Confirmed",
+    "status_resolved_invalid": "Dismissed"
+  },
+  "terms": {
+    "title": "Platform Terms",
+    "subtitle": "Accept the terms to continue",
+    "intro": "To use the SAYIN GLOBAL platform you must accept the following terms.",
+    "point1": "SAYIN GLOBAL is a livestock-listings marketplace. Any transaction between seller and buyer is the personal responsibility of both parties.",
+    "point2": "The platform is not responsible for the seller’s honesty, the quality of the animal, or the outcome of the transaction.",
+    "point3": "The platform and its administration bear no legal responsibility for fraud, false listings, or substandard goods.",
+    "point4": "Users must exercise their own caution, verify the seller, and take their own safety measures.",
+    "disclaimer": "The platform serves only as a communication channel between sellers and buyers. No transactions are processed through the platform.",
+    "checkboxLabel": "I have read the terms above and fully accept them.",
+    "accept": "Accept and continue"
+  },
+  "nearby": {
+    "eyebrow": "Nearby",
+    "title": "Nearby listings",
+    "modeGps": "Within {km} km",
+    "modeRegion": "Filter by region / district",
+    "location": "Location",
+    "requesting": "Locating...",
+    "permissionDenied": "Location not available — using region fallback.",
+    "tryAgain": "Try again",
+    "radius": "Radius",
+    "empty": "No nearby listings",
+    "emptyDesc": "Try adjusting the radius or category."
+  },
+  "reviews": {
+    "writeReview": "Write a review",
+    "editYourReview": "Edit your review",
+    "placeholder": "Share your experience",
+    "post": "Post",
+    "posted": "Review posted",
+    "cannotRateSelf": "You cannot review yourself",
+    "reportPrompt": "Reason: spam / abuse / off_topic / false_info / other",
+    "reportSent": "Reported",
+    "replyPrompt": "Your reply",
+    "reply": "Reply",
+    "helpful": "Helpful",
+    "edited": "edited",
+    "sellerBadge": "Seller",
+    "viewAll": "View all reviews",
+    "sort_newest": "Newest",
+    "sort_highest": "Highest",
+    "sort_lowest": "Lowest",
+    "sort_most_useful": "Most useful"
   }
 }

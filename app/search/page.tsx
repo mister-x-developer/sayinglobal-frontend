@@ -84,10 +84,10 @@ export default function SearchPage() {
       try {
         const [listingsData, sellersData] = await Promise.all([
           listingsApi.search(q),
-          usersApi.listSellers(),
+          usersApi.listSellers({ q, hasActive: true, pageSize: 30 }),
         ]);
         setResults(listingsData ?? []);
-        setSellers(sellersData ?? []);
+        setSellers(sellersData?.results ?? []);
       } catch {
         setResults([]);
         setSellers([]);

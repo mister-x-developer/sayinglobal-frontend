@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { Search as SearchIcon, X, Users } from 'lucide-react';
+import { Search as SearchIcon, X, Users, MapPin, Compass } from 'lucide-react';
 
 import { AppNav } from '@/components/layout/AppNav';
 import { SellerCard } from '@/components/sellers/SellerCard';
@@ -11,38 +12,80 @@ import { EmptyState } from '@/components/shared/EmptyState';
 import { usersApi } from '@/lib/api/users';
 import { searchItems } from '@/lib/utils/search';
 
+type GeoState =
+  | { kind: 'idle' }
+  | { kind: 'requesting' }
+  | { kind: 'granted'; lat: number; lng: number }
+  | { kind: 'denied' };
+
 export default function SellersDirectoryPage() {
   const t = useTranslations();
   const [search, setSearch] = useState('');
-  const [tab, setTab] = useState<'all' | 'top' | 'new'>('all');
+  const [tab, setTab] = useState<'all' | 'top' | 'new' | 'nearby'>('all');
   const [hydrated, setHydrated] = useState(false);
   const [sellers, setSellers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [geo, setGeo] = useState<GeoState>({ kind: 'idle' });
 
   useEffect(() => setHydrated(true), []);
 
+  const requestLocation = () => {
+    if (typeof navigator === 'undefined' || !navigator.geolocation) {
+      setGeo({ kind: 'denied' });
+      return;
+    }
+    setGeo({ kind: 'requesting' });
+    navigator.geolocation.getCurrentPosition(
+      (pos) => setGeo({ kind: 'granted', lat: pos.coords.latitude, lng: pos.coords.longitude }),
+      () => setGeo({ kind: 'denied' }),
+      { enableHighAccuracy: true, timeout: 6000 },
+    );
+  };
+
+  // Auto-request location when user picks the Nearby tab.
+  useEffect(() => {
+    if (tab === 'nearby' && geo.kind === 'idle') {
+      requestLocation();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab]);
+
+  // Debounce remote search
   useEffect(() => {
     let alive = true;
     setLoading(true);
-    usersApi
-      .listSellers?.()
-      .then((data: any) => {
-        if (!alive) return;
-        const arr = Array.isArray(data) ? data : data?.results ?? [];
-        setSellers(arr);
-      })
-      .catch(() => alive && setSellers([]))
-      .finally(() => alive && setLoading(false));
+    const handle = setTimeout(() => {
+      const params: any = { q: search.trim() || undefined, pageSize: 60 };
+      if (tab === 'nearby') {
+        if (geo.kind !== 'granted') {
+          // Wait for location
+          if (alive) setLoading(false);
+          return;
+        }
+        params.lat = geo.lat;
+        params.lng = geo.lng;
+        params.radius_km = 50;
+        params.hasActive = true;
+      } else {
+        params.hasActive = tab !== 'new';
+      }
+      usersApi
+        .listSellers(params)
+        .then((data) => {
+          if (!alive) return;
+          setSellers(data.results);
+        })
+        .catch(() => alive && setSellers([]))
+        .finally(() => alive && setLoading(false));
+    }, search ? 250 : 0);
     return () => {
       alive = false;
+      clearTimeout(handle);
     };
-  }, []);
+  }, [search, tab, geo]);
 
   const filtered = useMemo(() => {
-    let arr = [...sellers];
-    if (search.trim()) {
-      arr = searchItems(arr, search, (s) => [s.full_name, s.full_name]);
-    }
+    const arr = [...sellers];
     if (tab === 'top') {
       arr.sort((a, b) => (b.trust_score ?? 0) - (a.trust_score ?? 0));
     }
@@ -50,7 +93,7 @@ export default function SellersDirectoryPage() {
       arr.sort((a, b) => (b.followers_count ?? 0) - (a.followers_count ?? 0));
     }
     return arr;
-  }, [sellers, search, tab]);
+  }, [sellers, tab]);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -97,6 +140,7 @@ export default function SellersDirectoryPage() {
               { key: 'all', label: t('common.all') },
               { key: 'top', label: t('sellers.topSellers') },
               { key: 'new', label: t('sellers.newSellers') },
+              { key: 'nearby', label: t('nav.nearby' as any) ?? 'Nearby' },
             ].map((tt) => {
               const active = tab === (tt.key as any);
               return (
@@ -122,6 +166,20 @@ export default function SellersDirectoryPage() {
 
           {/* Grid */}
           <div className="mt-6">
+            {tab === 'nearby' && geo.kind !== 'granted' && (
+              <div className="mb-4 surface-elevated p-5 flex flex-wrap items-center gap-3">
+                <MapPin className="h-4 w-4 text-fg-muted" strokeWidth={1.75} />
+                <p className="flex-1 text-sm text-fg-muted">
+                  {geo.kind === 'requesting'
+                    ? (t('nearby.requesting' as any) ?? 'Locating...')
+                    : (t('nearby.permissionDenied' as any) ?? 'Location not available.')}
+                </p>
+                <button type="button" onClick={requestLocation} className="btn btn-secondary btn-sm">
+                  <Compass className="h-3.5 w-3.5" strokeWidth={2} />
+                  {t('nearby.tryAgain' as any) ?? 'Try again'}
+                </button>
+              </div>
+            )}
             {!hydrated ? null : filtered.length === 0 ? (
               <EmptyState
                 icon={Users}

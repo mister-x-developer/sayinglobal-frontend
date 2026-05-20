@@ -5,6 +5,7 @@ import { getLocale, getMessages } from 'next-intl/server';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { ToastContainer } from '@/components/ui/Toast';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
+import { TermsGate } from '@/components/providers/TermsGate';
 import './globals.css';
 
 const inter = Inter({
@@ -75,29 +76,20 @@ const themeInitScript = `
 })();
 `;
 
-// Two-stage motion safety net:
-// 1. After 600ms — reveal critical hero content (animations should be done)
-// 2. After 1500ms — reveal anything still stuck (network/JS issues)
-const motionSafetyScript = `
+// No-flash bootstrap: mark the html element as JS-ready AFTER hydration
+// completes so framer-motion doesn't run "from-opacity-0" animations on the
+// first paint. CSS handles the no-JS / pre-hydration case so initial paint
+// always shows fully-styled content; framer-motion only animates *re-mounts*
+// triggered by user interaction.
+const motionBootScript = `
 (function(){
-  function reveal(){
-    try {
-      var stuck = document.querySelectorAll('[style*="opacity: 0"], [style*="opacity:0"]');
-      for (var i = 0; i < stuck.length; i++) {
-        stuck[i].style.opacity = '1';
-        stuck[i].style.transform = 'none';
-      }
-    } catch(e) {}
-  }
-  // First pass — quick safety net
-  setTimeout(reveal, 600);
-  // Second pass — guaranteed visibility
-  setTimeout(reveal, 1500);
-  // Also reveal on load event
+  document.documentElement.classList.add('js');
   if (document.readyState === 'complete') {
-    setTimeout(reveal, 100);
+    document.documentElement.classList.add('js-ready');
   } else {
-    window.addEventListener('load', function() { setTimeout(reveal, 100); });
+    window.addEventListener('load', function(){
+      document.documentElement.classList.add('js-ready');
+    });
   }
 })();
 `;
@@ -119,12 +111,13 @@ export default async function RootLayout({
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-        <script dangerouslySetInnerHTML={{ __html: motionSafetyScript }} />
+        <script dangerouslySetInnerHTML={{ __html: motionBootScript }} />
       </head>
       <body className="antialiased min-h-screen bg-bg text-fg pb-[72px] md:pb-0">
         <ThemeProvider>
           <NextIntlClientProvider messages={messages} locale={locale}>
             {children}
+            <TermsGate />
             <MobileBottomNav />
             <ToastContainer />
           </NextIntlClientProvider>

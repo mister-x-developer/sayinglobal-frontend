@@ -138,7 +138,8 @@ export default function AdminListingsPage() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.3, delay: i * 0.03 }}
-                      className="group transition-colors hover:bg-bg-subtle"
+                      className="group cursor-pointer transition-colors hover:bg-bg-subtle"
+                      onClick={() => (window.location.href = `/admin/listings/${l.public_id}`)}
                     >
                       <td className="px-5 py-4">
                         <p className="text-sm font-semibold text-fg line-clamp-1">{l.title}</p>
@@ -158,7 +159,7 @@ export default function AdminListingsPage() {
                           {t(`listings.${l.status}` as any)}
                         </Badge>
                       </td>
-                      <td className="px-5 py-4 text-right">
+                      <td className="px-5 py-4 text-right" onClick={(e) => e.stopPropagation()}>
                         <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100">
                           <button type="button" onClick={() => handleApprove(l.public_id)} className="btn btn-sm bg-success/12 text-success hover:bg-success/20">
                             <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={2.25} />

@@ -15,6 +15,7 @@ import {
   ShieldCheck,
   LayoutGrid,
   Sparkles,
+  MapPin,
 } from 'lucide-react';
 
 import { AppNav } from '@/components/layout/AppNav';
@@ -26,7 +27,6 @@ import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
 
 const CATEGORIES = ['cattle', 'sheep', 'goats', 'horses', 'camels', 'poultry'] as const;
-
 export default function DashboardPage() {
   const t = useTranslations();
   const router = useRouter();
@@ -199,8 +199,73 @@ export default function DashboardPage() {
               )}
             </div>
           </div>
+
+          {/* Nearby listings — geo-aware section */}
+          <div className="mt-14">
+            <DashboardNearby />
+          </div>
         </div>
       </main>
     </div>
+  );
+}
+
+
+/**
+ * Dashboard Nearby preview — geo-aware mini-feed.
+ *
+ * Tries the browser geolocation API first. If denied / unavailable,
+ * silently renders nothing (the regular recommended feed still serves).
+ */
+function DashboardNearby() {
+  const t = useTranslations();
+  const [items, setItems] = useState<(Listing & { distance_km?: number })[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [hasGeo, setHasGeo] = useState(false);
+
+  useEffect(() => {
+    if (typeof navigator === 'undefined' || !navigator.geolocation) {
+      setLoading(false);
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        try {
+          const data = await listingsApi.nearby({
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+            radius_km: 50,
+            page_size: 8,
+          });
+          setItems(data.results);
+          setHasGeo(true);
+        } catch {
+          /* ignore */
+        } finally {
+          setLoading(false);
+        }
+      },
+      () => setLoading(false),
+      { enableHighAccuracy: true, timeout: 5000, maximumAge: 5 * 60_000 },
+    );
+  }, []);
+
+  if (loading || !hasGeo || items.length === 0) return null;
+
+  return (
+    <>
+      <div className="flex items-end justify-between">
+        <div className="flex items-center gap-2">
+          <MapPin className="h-5 w-5 text-brand-accent" strokeWidth={1.75} />
+          <h2 className="display-sm">{t('nearby.title' as any) ?? 'Nearby'}</h2>
+        </div>
+        <Link href="/listings/nearby" className="text-sm font-semibold text-brand-primary hover:underline">
+          {t('common.showAll')}
+        </Link>
+      </div>
+      <div className="mt-5">
+        <ListingGrid listings={items as any} />
+      </div>
+    </>
   );
 }

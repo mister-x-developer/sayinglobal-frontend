@@ -52,6 +52,13 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       applyMode(stored);
     }
     setMounted(true);
+    // Enable smooth theme transitions only after first hydration so the
+    // initial paint is instant (no transition flash).
+    if (typeof document !== 'undefined') {
+      requestAnimationFrame(() => {
+        document.body.classList.add('theme-ready');
+      });
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

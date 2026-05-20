@@ -34,6 +34,9 @@ import { CommentSection } from '@/components/listings/CommentThread';
 import { TranslatableText } from '@/components/shared/TranslateButton';
 import { RatingDisplay } from '@/components/shared/RatingDisplay';
 import { ReportDialog } from '@/components/shared/ReportDialog';
+import { MapView } from '@/components/shared/MapView';
+import { NearbyListingsSection } from '@/components/listings/NearbyListingsSection';
+import { SellerRatingsThread } from '@/components/sellers/SellerRatingsThread';
 import { AgeDisplay } from '@/components/listings/AgeInput';
 import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
@@ -336,6 +339,34 @@ export default function ListingDetailPage() {
                     />
                   </motion.div>
 
+                  {/* Map (only when coordinates are available) */}
+                  {listing.latitude != null && listing.longitude != null && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.16 }}
+                      className="surface-elevated p-6"
+                    >
+                      <h2 className="display-sm mb-4">{t('listings.locationOnMap' as any) ?? t('listings.location')}</h2>
+                      <MapView
+                        center={[Number(listing.latitude), Number(listing.longitude)]}
+                        zoom={13}
+                        markers={[{
+                          id: listing.public_id,
+                          lat: Number(listing.latitude),
+                          lng: Number(listing.longitude),
+                          label: listing.title,
+                        }]}
+                        className="h-72 w-full"
+                        fallbackCaption={`${listing.region}${listing.district ? ' · ' + listing.district : ''}`}
+                      />
+                      <p className="mt-3 text-sm text-fg-muted inline-flex items-center gap-1.5">
+                        <MapPin className="h-3.5 w-3.5" strokeWidth={1.75} />
+                        {listing.location}
+                      </p>
+                    </motion.div>
+                  )}
+
                   {/* Comments */}
                   <motion.div
                     initial={{ opacity: 0, y: 8 }}
@@ -349,6 +380,22 @@ export default function ListingDetailPage() {
                       initialComments={comments}
                     />
                   </motion.div>
+
+                  {/* Public seller reviews — full thread, same as profile */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.20 }}
+                  >
+                    <h2 className="display-sm mb-4">{t('sellers.reviews')}</h2>
+                    <SellerRatingsThread
+                      sellerPublicId={listing.seller.public_id}
+                      listingPublicId={listing.public_id}
+                    />
+                  </motion.div>
+
+                  {/* Nearby listings — same region/category */}
+                  <NearbyListingsSection listing={listing} />
                 </div>
 
                 {/* ── RIGHT COLUMN — STICKY ── */}
@@ -487,6 +534,12 @@ export default function ListingDetailPage() {
                         </Link>
                         <FollowButton sellerId={listing.seller.public_id} size="sm" />
                       </div>
+                      <Link
+                        href={`/sellers/${listing.seller.public_id}?tab=reviews`}
+                        className="mt-2 block w-full rounded-xl border border-border bg-bg-subtle/60 px-3 py-2 text-center text-xs font-semibold text-fg-muted hover:bg-bg-subtle"
+                      >
+                        {t('reviews.viewAll' as any) ?? 'View all reviews'}
+                      </Link>
                     </div>
                   </motion.div>
 

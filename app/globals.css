@@ -721,17 +721,26 @@
 
 /* ============================================================
    FRAMER-MOTION SAFETY NET
-   The inline script in <head> reveals any stuck opacity:0 element
-   after 2 seconds. This CSS handles no-JS and reduced-motion cases.
+   Strategy: SSR HTML is always visible on first paint. framer-motion
+   only "takes over" once the page is fully hydrated (html.js-ready).
+   This eliminates the "styling flash" reported in problem.txt.
    ============================================================ */
 
-/* No-JS fallback — content visible immediately */
+/* No-JS fallback */
 .no-js * {
   opacity: 1 !important;
   transform: none !important;
 }
 
-/* Reduced motion — show everything immediately */
+/* Critical: until JS marks the document ready, every framer-motion
+   inline opacity:0 is forced visible so the user never sees a flash. */
+html:not(.js-ready) [style*='opacity: 0'],
+html:not(.js-ready) [style*='opacity:0'] {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   [style*='opacity: 0'],
   [style*='opacity:0'] {

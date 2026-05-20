@@ -26,6 +26,7 @@ import { AppNav } from '@/components/layout/AppNav';
 import { Badge } from '@/components/ui/Badge';
 import { ListingImage } from '@/components/listings/ListingImage';
 import { EmptyState } from '@/components/shared/EmptyState';
+import { TranslatableText } from '@/components/shared/TranslateButton';
 import { useAuthStore } from '@/lib/store/auth';
 import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
@@ -96,9 +97,14 @@ export default function MyListingsPage() {
     setSoldConfirm(null);
     setOpenMenu(null);
     try {
-      await apiClient.post(`/listings/${id}/sold/`);
+      const result = await listingsApi.markSold(id);
       setItems((prev) =>
-        prev.map((l) => l.public_id === id ? { ...l, status: 'sold' } : l)
+        prev.map((l) => l.public_id === id ? {
+          ...l,
+          status: 'sold',
+          sold_at: new Date().toISOString(),
+          scheduled_delete_at: result?.scheduled_delete_at ?? null,
+        } : l)
       );
     } catch { load(); }
   };
@@ -320,7 +326,12 @@ export default function MyListingsPage() {
                         {l.status === 'rejected' && rejectionReason && (
                           <div className="mt-2 flex items-start gap-1.5 rounded-lg bg-danger/8 px-3 py-2">
                             <AlertCircle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-danger" strokeWidth={2} />
-                            <p className="text-xs text-danger">{rejectionReason}</p>
+                            <div className="min-w-0 flex-1">
+                              <TranslatableText
+                                text={rejectionReason}
+                                textClassName="text-xs text-danger leading-relaxed"
+                              />
+                            </div>
                           </div>
                         )}
 
@@ -398,6 +409,26 @@ export default function MyListingsPage() {
                                   >
                                     <ShoppingCart className="h-4 w-4" strokeWidth={1.75} />
                                     {t('listings.markAsSold')}
+                                  </button>
+                                )}
+                                {(l.status === 'sold' || l.status === 'expired') && (
+                                  <button
+                                    type="button"
+                                    onClick={async () => {
+                                      setOpenMenu(null);
+                                      try {
+                                        await listingsApi.restore(l.public_id);
+                                        setItems((prev) =>
+                                          prev.map((it) => it.public_id === l.public_id ? { ...it, status: 'active' } : it)
+                                        );
+                                      } catch {
+                                        load();
+                                      }
+                                    }}
+                                    className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-brand-primary hover:bg-brand-primary/10"
+                                  >
+                                    <CheckCircle2 className="h-4 w-4" strokeWidth={1.75} />
+                                    {t('listings.restore' as any)}
                                   </button>
                                 )}
                                 <div className="my-1 h-px bg-border" />

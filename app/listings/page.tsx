@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
@@ -156,6 +157,14 @@ export default function ListingsPage() {
               <SlidersHorizontal className="h-4 w-4" strokeWidth={1.75} />
               {t('marketplace.filters')}
             </button>
+
+            <Link
+              href={`/listings/nearby${category !== 'all' ? `?category=${category}` : ''}`}
+              className="btn btn-secondary btn-sm"
+            >
+              <MapPin className="h-4 w-4" strokeWidth={1.75} />
+              {t('nav.nearby' as any) ?? 'Nearby'}
+            </Link>
 
             <div className="hidden sm:block">
               <select

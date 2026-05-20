@@ -19,6 +19,7 @@ import {
   ShieldCheck,
   Plus,
   Clock,
+  Flag,
 } from 'lucide-react';
 
 import { AppNav } from '@/components/layout/AppNav';
@@ -330,6 +331,7 @@ export default function ProfilePage() {
                     { href: '/profile/edit', icon: Edit, label: t('profile.editProfile') },
                     { href: '/profile/settings', icon: Settings, label: t('nav.settings') },
                     { href: '/profile/security', icon: ShieldCheck, label: t('security.title') },
+                    { href: '/profile/reports', icon: Flag, label: t('profile.myReports' as any) ?? 'Reports' },
                     { href: '/sellers/following', icon: Users, label: t('profile.followedSellers') },
                     { href: '/chat', icon: MessageSquareText, label: t('nav.chat') },
                   ].map((l) => {

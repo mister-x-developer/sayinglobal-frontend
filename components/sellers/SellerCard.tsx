@@ -18,6 +18,7 @@ export interface SellerCardData {
   followers_count?: number;
   active_listings_count?: number;
   sold_listings_count?: number;
+  distance_km?: number;
 }
 
 export function SellerCard({ seller }: { seller: SellerCardData }) {
@@ -36,9 +37,16 @@ export function SellerCard({ seller }: { seller: SellerCardData }) {
         <div className="flex items-start gap-4">
           <Avatar src={seller.avatar_url} name={seller.full_name} size="lg" ring />
           <div className="min-w-0 flex-1">
-            <h3 className="font-display text-base font-semibold text-fg group-hover:text-brand-primary transition-colors">
-              {seller.full_name}
-            </h3>
+            <div className="flex items-center justify-between gap-2">
+              <h3 className="font-display text-base font-semibold text-fg group-hover:text-brand-primary transition-colors truncate">
+                {seller.full_name}
+              </h3>
+              {typeof seller.distance_km === 'number' && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-brand-primary/10 px-2 py-0.5 text-[10px] font-bold text-brand-primary flex-shrink-0">
+                  {seller.distance_km < 1 ? '< 1 km' : `${seller.distance_km.toFixed(1)} km`}
+                </span>
+              )}
+            </div>
             <div className="mt-1">
               <RatingDisplay score={seller.trust_score} count={seller.rating_count} size="sm" />
             </div>
