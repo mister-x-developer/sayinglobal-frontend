@@ -302,5 +302,9 @@ function NotificationRow({
       </Link>
     );
   }
-  return inner;
+  return (
+    <Link href={`/notifications/${n.public_id}`} className="block">
+      {inner}
+    </Link>
+  );
 }

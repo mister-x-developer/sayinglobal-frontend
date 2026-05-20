@@ -20,7 +20,16 @@ export interface Notification {
   public_id: number;
   notification_type: NotificationType;
   title: string;
+  title_uz?: string;
+  title_uz_cyrl?: string;
+  title_ru?: string;
+  title_en?: string;
   message: string;
+  message_uz?: string;
+  message_uz_cyrl?: string;
+  message_ru?: string;
+  message_en?: string;
+  original_locale?: string;
   is_read: boolean;
   created_at: string;
   read_at?: string | null;
@@ -37,6 +46,15 @@ export const notificationsApi = {
       return res.data ?? [];
     } catch {
       return [];
+    }
+  },
+
+  async getById(publicId: number): Promise<Notification | null> {
+    try {
+      const res = await apiClient.get<Notification>(`/notifications/${publicId}/`);
+      return res.data;
+    } catch {
+      return null;
     }
   },
 

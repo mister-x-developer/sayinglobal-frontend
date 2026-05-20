@@ -71,19 +71,18 @@ export default function ProfilePage() {
   }, [isAuthenticated]);
 
   const profile = {
-    full_name: user?.full_name ?? 'Foydalanuvchi',
+    full_name: user?.full_name ?? '',
     avatar_url: user?.avatar_url ?? user?.avatar ?? null,
     bio: user?.bio ?? '',
     phone: user?.phone ?? '',
-    trust_score: user?.trust_score ?? 5.0,
+    trust_score: user?.trust_score ?? 0,
     status: user?.status ?? 'good',
-    active_listings: myListings.length,
-    sold_listings: 12,
-    followers: 234,
-    following: 45,
-    total_views: 12470,
-    response_rate: 95,
-    total_sales: 185_000_000,
+    active_listings: myListings.filter((l) => l.status === 'active').length,
+    sold_listings: myListings.filter((l) => l.status === 'sold').length,
+    followers: (user as any)?.followers_count ?? 0,
+    following: (user as any)?.following_count ?? 0,
+    total_views: myListings.reduce((s, l) => s + (l.view_count ?? 0), 0),
+    total_favorites: myListings.reduce((s, l) => s + (l.favorite_count ?? 0), 0),
   };
 
   const stats = [
@@ -297,30 +296,27 @@ export default function ProfilePage() {
 
             {/* SIDEBAR */}
             <aside className="space-y-4">
-              {/* Response rate */}
+              {/* Account summary */}
               <div className="surface-elevated p-5">
-                <h3 className="display-sm">{t('profile.responseRate')}</h3>
-                <div className="mt-4">
-                  <div className="mb-2 flex items-center justify-between text-sm">
-                    <span className="text-fg-muted">{t('profile.responseRate')}</span>
-                    <span className="font-bold text-fg">{profile.response_rate}%</span>
+                <h3 className="display-sm">{t('profile.accountSummary' as any) ?? t('profile.title')}</h3>
+                <dl className="mt-4 space-y-3 text-sm">
+                  <div className="flex items-center justify-between">
+                    <dt className="text-fg-muted">{t('profile.activeListings')}</dt>
+                    <dd className="font-bold text-fg">{profile.active_listings}</dd>
                   </div>
-                  <div className="h-2 overflow-hidden rounded-full bg-bg-subtle">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${profile.response_rate}%` }}
-                      transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                      className="h-full rounded-full bg-brand-primary"
-                    />
+                  <div className="flex items-center justify-between">
+                    <dt className="text-fg-muted">{t('profile.soldListings')}</dt>
+                    <dd className="font-bold text-fg">{profile.sold_listings}</dd>
                   </div>
-                </div>
-
-                <div className="mt-5 border-t border-border pt-4">
-                  <p className="text-xs text-fg-subtle">{t('sellers.totalSales')}</p>
-                  <p className="mt-1 font-display text-xl font-bold text-fg">
-                    {formatPrice(profile.total_sales)}
-                  </p>
-                </div>
+                  <div className="flex items-center justify-between">
+                    <dt className="text-fg-muted">{t('profile.followers')}</dt>
+                    <dd className="font-bold text-fg">{profile.followers}</dd>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <dt className="text-fg-muted">{t('profile.following')}</dt>
+                    <dd className="font-bold text-fg">{profile.following}</dd>
+                  </div>
+                </dl>
               </div>
 
               {/* Quick links */}
@@ -361,37 +357,68 @@ export default function ProfilePage() {
 }
 
 function ActivityTimeline() {
+  // Activity timeline draws from the user's own listings instead of
+  // fabricated events. The previous demo content was misleading because
+  // it didn't reflect real platform activity.
   const t = useTranslations();
-  const events = [
-    { icon: Package, label: t('listings.createNew'), desc: t('categories.cattle'), time: new Date(Date.now() - 86400000 * 3).toISOString(), tone: 'bg-brand-primary/10 text-brand-primary' },
-    { icon: TrendingUp, label: t('listings.markAsSold'), desc: t('categories.sheep'), time: new Date(Date.now() - 86400000 * 7).toISOString(), tone: 'bg-success/12 text-success' },
-    { icon: Heart, label: t('success.favorited'), desc: t('categories.horses'), time: new Date(Date.now() - 86400000 * 10).toISOString(), tone: 'bg-warning/12 text-warning' },
-    { icon: Users, label: t('success.followed'), desc: 'Dilshod Rahimov', time: new Date(Date.now() - 86400000 * 14).toISOString(), tone: 'bg-info/12 text-info' },
-  ];
+  const router = useRouter();
+  const [items, setItems] = useState<Listing[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let alive = true;
+    setLoading(true);
+    listingsApi
+      .my()
+      .then((data) => alive && setItems((data ?? []).slice(0, 10)))
+      .catch(() => alive && setItems([]))
+      .finally(() => alive && setLoading(false));
+    return () => { alive = false; };
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="space-y-3">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div key={i} className="surface-elevated h-16 animate-pulse" />
+        ))}
+      </div>
+    );
+  }
+
+  if (items.length === 0) {
+    return (
+      <p className="text-sm text-fg-muted py-8 text-center">
+        {t('empty.noActivityDescription')}
+      </p>
+    );
+  }
 
   return (
     <div className="space-y-3">
-      {events.map((e, i) => {
-        const Icon = e.icon;
-        return (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, x: -8 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4, delay: i * 0.06 }}
-            className="surface-elevated flex items-start gap-4 p-4"
-          >
-            <div className={`mt-0.5 inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl ${e.tone}`}>
-              <Icon className="h-4 w-4" strokeWidth={1.75} />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-fg">{e.label}</p>
-              <p className="mt-0.5 text-sm text-fg-muted">{e.desc}</p>
-            </div>
-            <span className="flex-shrink-0 text-xs text-fg-subtle">{formatRelativeTime(e.time)}</span>
-          </motion.div>
-        );
-      })}
+      {items.map((l, i) => (
+        <motion.div
+          key={l.public_id}
+          initial={{ opacity: 0, x: -8 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4, delay: i * 0.04 }}
+          className="surface-elevated flex items-start gap-4 p-4 cursor-pointer hover:shadow-lift"
+          onClick={() => router.push(`/listings/${l.public_id}`)}
+        >
+          <div className="mt-0.5 inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
+            <Package className="h-4 w-4" strokeWidth={1.75} />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold text-fg line-clamp-1">{l.title}</p>
+            <p className="mt-0.5 text-sm text-fg-muted">
+              {t(`listings.${l.status}` as any) ?? l.status}
+            </p>
+          </div>
+          <span className="flex-shrink-0 text-xs text-fg-subtle">
+            {formatRelativeTime(l.created_at)}
+          </span>
+        </motion.div>
+      ))}
     </div>
   );
 }

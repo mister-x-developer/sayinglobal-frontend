@@ -513,15 +513,19 @@ export default function ListingDetailPage() {
                         </div>
                       </Link>
 
-                      {/* Trust indicators */}
+                      {/* Trust indicators (real data only) */}
                       <div className="mt-4 grid grid-cols-2 gap-2 rounded-xl bg-bg-subtle p-3">
                         <div className="text-center">
-                          <p className="font-display text-lg font-bold text-fg">98%</p>
-                          <p className="text-[11px] text-fg-subtle">{t('sellers.responseRate')}</p>
+                          <p className="font-display text-lg font-bold text-fg">
+                            {listing.seller.active_listings_count ?? 0}
+                          </p>
+                          <p className="text-[11px] text-fg-subtle">{t('profile.activeListings')}</p>
                         </div>
                         <div className="text-center">
-                          <p className="font-display text-lg font-bold text-fg">~2h</p>
-                          <p className="text-[11px] text-fg-subtle">{t('sellers.responseTime')}</p>
+                          <p className="font-display text-lg font-bold text-fg">
+                            {listing.seller.sold_listings_count ?? 0}
+                          </p>
+                          <p className="text-[11px] text-fg-subtle">{t('listings.sold')}</p>
                         </div>
                       </div>
 

@@ -41,7 +41,9 @@
     "about": "Biz haqimizda",
     "translate": "Tarjima",
     "showOriginal": "Asl matn",
-    "refresh": "Yangilash"
+    "refresh": "Yangilash",
+    "details": "Batafsil",
+    "accountSummary": "Hisob qisqacha"
   },
   "landing": {
     "heroTitle": "Raqamli Chorva Bozori",
@@ -228,7 +230,10 @@
     "camels": "Tuya",
     "camelsDescription": "Tuya, boʻta",
     "poultry": "Parranda",
-    "poultryDescription": "Tovuq, oʻrdak, gʻoz, kurka"
+    "poultryDescription": "Tovuq, oʻrdak, gʻoz, kurka",
+    "rabbits": "Quyon",
+    "bees": "Asalari",
+    "fish": "Baliq"
   },
   "animal": {
     "age": "Yoshi",
@@ -293,7 +298,12 @@
     "verifiedSeller": "Tasdiqlangan sotuvchi",
     "topSeller": "Eng yaxshi sotuvchi",
     "newSeller": "Yangi sotuvchi",
-    "trustedSeller": "Ishonchli sotuvchi"
+    "trustedSeller": "Ishonchli sotuvchi",
+    "accountSummary": "Hisob qisqacha",
+    "myReports": "Shikoyatlarim",
+    "myReportsDesc": "Siz yuborgan shikoyatlar ro'yxati",
+    "noReports": "Hozircha shikoyat yo'q",
+    "noReportsDesc": "Shikoyat yuborish uchun e'lon yoki sotuvchi sahifasini oching"
   },
   "userStatus": {
     "good": "Yaxshi",
@@ -413,7 +423,9 @@
     "listingExpired": "Eʼlon muddati tugadi",
     "complaintUpdate": "Shikoyat yangilandi",
     "adminMessage": "Admin xabari",
-    "systemUpdate": "Tizim yangilanishi"
+    "systemUpdate": "Tizim yangilanishi",
+    "read": "O'qildi",
+    "unread": "Yangi"
   },
   "search": {
     "title": "Qidirish",
@@ -458,7 +470,7 @@
     "mapPinHelp": "Xaritada belgini qo‘ying: xaridorlar e’lonni xaritada koʻrishi uchun."
   },
   "admin": {
-    "title": "Admin Panel",
+    "title": "Sarlavha",
     "dashboard": "Boshqaruv paneli",
     "users": "Foydalanuvchilar",
     "listings": "Eʼlonlar",
@@ -495,7 +507,7 @@
     "userManagement": "Foydalanuvchilarni boshqarish",
     "listingModeration": "Eʼlonlar moderatsiyasi",
     "complaintsQueue": "Shikoyatlar navbati",
-    "broadcastMessage": "Xabar yuborish",
+    "broadcastMessage": "Matn",
     "messageAllUsers": "Barcha foydalanuvchilarga",
     "messageActiveUsers": "Faol foydalanuvchilarga",
     "messageSent": "Xabar yuborildi",
@@ -506,14 +518,37 @@
     "prefixActive": "Faol",
     "prefixInactive": "Faol emas",
     "relatedReports": "Shikoyatlar",
-    "noReports": "Shikoyatlar yo‘q",
+    "noReports": "Shikoyat yo'q",
     "actions": "Amallar",
     "stats": "Statistika",
-    "restore": "Qayta aktivlashtirish",
+    "restore": "Tiklash",
     "rejectionReason": "Rad etish sababi",
     "confirmReject": "Rad etishni tasdiqlash",
     "rejectionReasonPlaceholder": "Sababni batafsil yozing",
-    "rejectionReasonRequired": "Sabab yozish majburiy"
+    "rejectionReasonRequired": "Sabab yozish majburiy",
+    "ratingsModeration": "Sharhlarni moderatsiya",
+    "broadcastTitle": "Sarlavha",
+    "broadcastSent": "Xabar yuborildi",
+    "createBroadcast": "Yangi xabar",
+    "autoTranslateHint": "Kontent avtomatik 4 tilga tarjima qilinadi.",
+    "originalLocale": "Asl til",
+    "translations": "Tarjimalar",
+    "delivery": "Yetkazib berish",
+    "recipients": "Qabul qiluvchilar",
+    "read": "O'qildi",
+    "created": "Yaratildi",
+    "sentAt": "Yuborildi",
+    "notSentYet": "Yuborilmagan",
+    "send": "Yuborish",
+    "message": "Xabar",
+    "status": "Holat",
+    "flagged": "shikoyat",
+    "reportsReceived": "Ushbu foydalanuvchiga shikoyatlar",
+    "reportsFiled": "Foydalanuvchi yuborgan shikoyatlar",
+    "broadcast": "Xabar",
+    "block": "Bloklash",
+    "unblock": "Blokdan chiqarish",
+    "accountSummary": "Hisob qisqacha"
   },
   "analytics": {
     "title": "Analitika",
@@ -586,7 +621,7 @@
     "minLength": "Kamida {min} belgi boʻlishi kerak",
     "maxLength": "Koʻpi bilan {max} belgi boʻlishi kerak",
     "networkError": "Tarmoq xatosi yuz berdi",
-    "serverError": "Server xatosi yuz berdi",
+    "serverError": "Server xatosi. Keyinroq urinib ko'ring.",
     "notFound": "Topilmadi",
     "notFoundTitle": "Sahifa topilmadi",
     "notFoundDescription": "Siz qidirayotgan sahifa mavjud emas yoki koʻchirilgan",
@@ -603,13 +638,14 @@
     "deleteFailed": "Oʻchirish muvaffaqiyatsiz",
     "loadFailed": "Yuklab boʻlmadi",
     "connectionLost": "Aloqa uzildi",
-    "reconnecting": "Qayta ulanmoqda"
+    "reconnecting": "Qayta ulanmoqda",
+    "permissionDenied": "Ruxsat yo'q"
   },
   "success": {
     "saved": "Muvaffaqiyatli saqlandi",
-    "deleted": "Oʻchirildi",
+    "deleted": "O'chirildi",
     "updated": "Muvaffaqiyatli yangilandi",
-    "created": "Muvaffaqiyatli yaratildi",
+    "created": "Yaratildi",
     "sent": "Muvaffaqiyatli yuborildi",
     "uploaded": "Muvaffaqiyatli yuklandi",
     "copied": "Nusxalandi",
@@ -646,7 +682,7 @@
     "noResults": "Natijalar yoʻq",
     "noResultsDescription": "Boshqa kalit soʻzlar yoki filtrlarni sinab koʻring",
     "noActivity": "Faoliyat yoʻq",
-    "noActivityDescription": "Bu yerda sizning faoliyatingiz koʻrsatiladi"
+    "noActivityDescription": "Hozircha faollik yo'q"
   },
   "validation": {
     "atLeastOneFieldRequired": "Kamida bitta maydon toʻldirilishi shart",
@@ -669,8 +705,8 @@
     "rulesBody": "• Faqat oʻzingizga tegishli hayvonlarni soting.\n• Eʼlonda haqiqiy va aniq maʼlumot bering.\n• Sifatli, yaqinda olingan rasmlardan foydalaning.\n• Xaridorlar bilan halol va hurmat bilan muloqot qiling.\n• Sotilgan eʼlonlarni \"Sotildi\" deb belgilang.\n• Spam, qalbaki maʼlumot yoki noqonuniy mahsulotlar taqiqlangan."
   },
   "report": {
-    "titleListing": "Eʼlon haqida shikoyat",
-    "titleSeller": "Sotuvchi haqida shikoyat",
+    "titleListing": "E'lon ustidan shikoyat",
+    "titleSeller": "Sotuvchi ustidan shikoyat",
     "subjectListing": "Eʼlon",
     "subjectSeller": "Sotuvchi",
     "chooseReason": "Sababini tanlang",
@@ -717,12 +753,13 @@
       "off_platform_payment_pressure": "Platformadan tashqarida toʻlov bosimi",
       "other": "Boshqa (tushuntirish bering)"
     },
-    "status": {
-      "pending": "Yuborildi",
-      "under_review": "Koʻrib chiqilmoqda",
-      "resolved_valid": "Tasdiqlandi",
-      "resolved_invalid": "Rad etildi"
-    }
+    "status": "Holat",
+    "title": "Shikoyat",
+    "subject": "Shikoyat qilingan",
+    "reasonLabel": "Sabab",
+    "adminResponse": "Admin javobi",
+    "created": "Yuborildi",
+    "resolved": "Hal qilindi"
   },
   "security": {
     "title": "Xavfsizlik",
@@ -827,6 +864,7 @@
     "sort_newest": "Yangi",
     "sort_highest": "Yuqori baho",
     "sort_lowest": "Past baho",
-    "sort_most_useful": "Eng foydali"
+    "sort_most_useful": "Eng foydali",
+    "moderation": "Sharhlarni moderatsiya"
   }
 }

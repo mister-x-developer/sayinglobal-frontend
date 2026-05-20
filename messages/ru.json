@@ -41,7 +41,8 @@
     "about": "О нас",
     "translate": "Перевести",
     "showOriginal": "Оригинал",
-    "refresh": "Обновить"
+    "refresh": "Обновить",
+    "details": "Подробнее"
   },
   "landing": {
     "heroTitle": "Цифровой рынок скота",
@@ -228,7 +229,10 @@
     "camels": "Верблюды",
     "camelsDescription": "Верблюды, верблюжата",
     "poultry": "Птица",
-    "poultryDescription": "Куры, утки, гуси, индейки"
+    "poultryDescription": "Куры, утки, гуси, индейки",
+    "rabbits": "Кролики",
+    "bees": "Пчёлы",
+    "fish": "Рыба"
   },
   "animal": {
     "age": "Возраст",
@@ -293,7 +297,8 @@
     "verifiedSeller": "Проверенный продавец",
     "topSeller": "Лучший продавец",
     "newSeller": "Новый продавец",
-    "trustedSeller": "Надёжный продавец"
+    "trustedSeller": "Надёжный продавец",
+    "myReports": "Мои жалобы"
   },
   "userStatus": {
     "good": "Хорошо",
@@ -413,7 +418,9 @@
     "listingExpired": "Срок объявления истёк",
     "complaintUpdate": "Обновление жалобы",
     "adminMessage": "Сообщение от админа",
-    "systemUpdate": "Обновление системы"
+    "systemUpdate": "Обновление системы",
+    "read": "Прочитано",
+    "unread": "Новое"
   },
   "search": {
     "title": "Поиск",
@@ -458,7 +465,7 @@
     "mapPinHelp": "Поставьте метку, чтобы покупатели видели объявление на карте."
   },
   "admin": {
-    "title": "Админ-панель",
+    "title": "Заголовок",
     "dashboard": "Панель управления",
     "users": "Пользователи",
     "listings": "Объявления",
@@ -495,7 +502,7 @@
     "userManagement": "Управление пользователями",
     "listingModeration": "Модерация объявлений",
     "complaintsQueue": "Очередь жалоб",
-    "broadcastMessage": "Сообщение",
+    "broadcastMessage": "Текст",
     "messageAllUsers": "Всем пользователям",
     "messageActiveUsers": "Активным пользователям",
     "messageSent": "Сообщение отправлено",
@@ -513,7 +520,29 @@
     "rejectionReason": "Причина отклонения",
     "confirmReject": "Подтвердить отклонение",
     "rejectionReasonPlaceholder": "Опишите причину подробно",
-    "rejectionReasonRequired": "Причина обязательна"
+    "rejectionReasonRequired": "Причина обязательна",
+    "ratingsModeration": "Модерация отзывов",
+    "broadcastTitle": "Заголовок",
+    "broadcastSent": "Рассылка отправлена",
+    "createBroadcast": "Новая рассылка",
+    "autoTranslateHint": "Контент автоматически переводится на 4 языка.",
+    "originalLocale": "Язык оригинала",
+    "translations": "Переводы",
+    "delivery": "Доставка",
+    "recipients": "Получатели",
+    "read": "Прочитано",
+    "created": "Создано",
+    "sentAt": "Отправлено",
+    "notSentYet": "Не отправлено",
+    "send": "Отправить",
+    "message": "Сообщение",
+    "status": "Статус",
+    "flagged": "жалоб",
+    "reportsReceived": "Жалобы на пользователя",
+    "reportsFiled": "Жалобы от пользователя",
+    "broadcast": "Рассылка",
+    "block": "Заблокировать",
+    "unblock": "Разблокировать"
   },
   "analytics": {
     "title": "Аналитика",
@@ -586,7 +615,7 @@
     "minLength": "Минимум {min} символов",
     "maxLength": "Максимум {max} символов",
     "networkError": "Ошибка сети",
-    "serverError": "Ошибка сервера",
+    "serverError": "Ошибка сервера.",
     "notFound": "Не найдено",
     "notFoundTitle": "Страница не найдена",
     "notFoundDescription": "Запрашиваемая страница не существует или была перемещена",
@@ -603,13 +632,14 @@
     "deleteFailed": "Ошибка удаления",
     "loadFailed": "Не удалось загрузить",
     "connectionLost": "Соединение потеряно",
-    "reconnecting": "Переподключение"
+    "reconnecting": "Переподключение",
+    "permissionDenied": "Нет доступа"
   },
   "success": {
     "saved": "Успешно сохранено",
     "deleted": "Удалено",
     "updated": "Успешно обновлено",
-    "created": "Успешно создано",
+    "created": "Создано",
     "sent": "Успешно отправлено",
     "uploaded": "Успешно загружено",
     "copied": "Скопировано",
@@ -827,6 +857,7 @@
     "sort_newest": "Новые",
     "sort_highest": "Высокая оценка",
     "sort_lowest": "Низкая оценка",
-    "sort_most_useful": "Самые полезные"
+    "sort_most_useful": "Самые полезные",
+    "moderation": "Модерация отзывов"
   }
 }

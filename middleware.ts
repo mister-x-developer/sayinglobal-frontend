@@ -66,6 +66,18 @@ export function middleware(req: NextRequest) {
     });
   }
 
+  // If the user is already authenticated, do not show the auth screen.
+  // Send admins to /admin, marketplace users to ?next or /dashboard.
+  if (pathname === '/auth' && isAuthenticated(req)) {
+    const nextUrl = req.nextUrl.clone();
+    const target = isPlatformAdmin(req)
+      ? '/admin'
+      : (req.nextUrl.searchParams.get('next') || '/dashboard');
+    nextUrl.pathname = target.startsWith('/') ? target.split('?')[0] : '/dashboard';
+    nextUrl.search = '';
+    return NextResponse.redirect(nextUrl);
+  }
+
   // Auth guard — redirect unauthenticated users to /auth
   if (!isPublicPath(pathname) && !isAuthenticated(req)) {
     const loginUrl = req.nextUrl.clone();

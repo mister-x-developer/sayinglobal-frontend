@@ -41,7 +41,8 @@
     "about": "About",
     "translate": "Translate",
     "showOriginal": "Original",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "details": "Details"
   },
   "landing": {
     "heroTitle": "Digital Livestock Marketplace",
@@ -228,7 +229,10 @@
     "camels": "Camels",
     "camelsDescription": "Camels, calves",
     "poultry": "Poultry",
-    "poultryDescription": "Chickens, ducks, geese, turkeys"
+    "poultryDescription": "Chickens, ducks, geese, turkeys",
+    "rabbits": "Rabbits",
+    "bees": "Bees",
+    "fish": "Fish"
   },
   "animal": {
     "age": "Age",
@@ -293,7 +297,8 @@
     "verifiedSeller": "Verified seller",
     "topSeller": "Top seller",
     "newSeller": "New seller",
-    "trustedSeller": "Trusted seller"
+    "trustedSeller": "Trusted seller",
+    "myReports": "My reports"
   },
   "userStatus": {
     "good": "Good",
@@ -413,7 +418,9 @@
     "listingExpired": "Listing expired",
     "complaintUpdate": "Complaint update",
     "adminMessage": "Admin message",
-    "systemUpdate": "System update"
+    "systemUpdate": "System update",
+    "read": "Read",
+    "unread": "New"
   },
   "search": {
     "title": "Search",
@@ -458,7 +465,7 @@
     "mapPinHelp": "Drop a pin so buyers can see the listing on the map."
   },
   "admin": {
-    "title": "Admin Panel",
+    "title": "Title",
     "dashboard": "Dashboard",
     "users": "Users",
     "listings": "Listings",
@@ -495,7 +502,7 @@
     "userManagement": "User management",
     "listingModeration": "Listing moderation",
     "complaintsQueue": "Complaints queue",
-    "broadcastMessage": "Broadcast",
+    "broadcastMessage": "Message body",
     "messageAllUsers": "All users",
     "messageActiveUsers": "Active users",
     "messageSent": "Message sent",
@@ -513,7 +520,29 @@
     "rejectionReason": "Rejection reason",
     "confirmReject": "Confirm rejection",
     "rejectionReasonPlaceholder": "Describe the reason in detail",
-    "rejectionReasonRequired": "Reason is required"
+    "rejectionReasonRequired": "Reason is required",
+    "ratingsModeration": "Reviews Moderation",
+    "broadcastTitle": "Title",
+    "broadcastSent": "Broadcast sent",
+    "createBroadcast": "New broadcast",
+    "autoTranslateHint": "Content is auto-translated to all 4 languages.",
+    "originalLocale": "Original language",
+    "translations": "Translations",
+    "delivery": "Delivery",
+    "recipients": "Recipients",
+    "read": "Read",
+    "created": "Created",
+    "sentAt": "Sent",
+    "notSentYet": "Not sent yet",
+    "send": "Send",
+    "message": "Message",
+    "status": "Status",
+    "flagged": "flagged",
+    "reportsReceived": "Reports against this user",
+    "reportsFiled": "Reports filed by user",
+    "broadcast": "Broadcast",
+    "block": "Block",
+    "unblock": "Unblock"
   },
   "analytics": {
     "title": "Analytics",
@@ -586,7 +615,7 @@
     "minLength": "Minimum {min} characters",
     "maxLength": "Maximum {max} characters",
     "networkError": "Network error",
-    "serverError": "Server error",
+    "serverError": "Server error. Please try again.",
     "notFound": "Not found",
     "notFoundTitle": "Page not found",
     "notFoundDescription": "The page you're looking for doesn't exist or has been moved",
@@ -603,13 +632,14 @@
     "deleteFailed": "Delete failed",
     "loadFailed": "Failed to load",
     "connectionLost": "Connection lost",
-    "reconnecting": "Reconnecting"
+    "reconnecting": "Reconnecting",
+    "permissionDenied": "Permission denied"
   },
   "success": {
     "saved": "Saved successfully",
     "deleted": "Deleted",
     "updated": "Updated successfully",
-    "created": "Created successfully",
+    "created": "Created",
     "sent": "Sent successfully",
     "uploaded": "Uploaded successfully",
     "copied": "Copied",
@@ -827,6 +857,7 @@
     "sort_newest": "Newest",
     "sort_highest": "Highest",
     "sort_lowest": "Lowest",
-    "sort_most_useful": "Most useful"
+    "sort_most_useful": "Most useful",
+    "moderation": "Reviews Moderation"
   }
 }

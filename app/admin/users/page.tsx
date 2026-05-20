@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import {
@@ -238,14 +239,22 @@ export default function AdminUsersPage() {
                         )}
                       </td>
                       <td className="px-5 py-4 text-right">
-                        <button
-                          type="button"
-                          onClick={() => setSelectedUser(user)}
-                          className="btn btn-secondary btn-sm opacity-0 group-hover:opacity-100"
-                        >
-                          <Eye className="h-4 w-4" strokeWidth={1.75} />
-                          {t('admin.viewDetails')}
-                        </button>
+                        <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedUser(user)}
+                            className="btn btn-secondary btn-sm"
+                          >
+                            <Eye className="h-4 w-4" strokeWidth={1.75} />
+                            {t('admin.viewDetails')}
+                          </button>
+                          <Link
+                            href={`/admin/users/${user.public_id}`}
+                            className="btn btn-primary btn-sm"
+                          >
+                            {t('common.details' as any) ?? 'Details'}
+                          </Link>
+                        </div>
                       </td>
                     </motion.tr>
                   ))}

@@ -41,7 +41,8 @@
     "about": "Биз ҳақимизда",
     "translate": "Таржима",
     "showOriginal": "Асл матн",
-    "refresh": "Янгилаш"
+    "refresh": "Янгилаш",
+    "details": "Батафсил"
   },
   "landing": {
     "heroTitle": "Рақамли Чорва Бозори",
@@ -228,7 +229,10 @@
     "camels": "Туя",
     "camelsDescription": "Туя, бўта",
     "poultry": "Парранда",
-    "poultryDescription": "Товуқ, ўрдак, ғоз, курка"
+    "poultryDescription": "Товуқ, ўрдак, ғоз, курка",
+    "rabbits": "Қуён",
+    "bees": "Асалари",
+    "fish": "Балиқ"
   },
   "animal": {
     "age": "Ёши",
@@ -293,7 +297,8 @@
     "verifiedSeller": "Тасдиқланган сотувчи",
     "topSeller": "Энг яхши сотувчи",
     "newSeller": "Янги сотувчи",
-    "trustedSeller": "Ишончли сотувчи"
+    "trustedSeller": "Ишончли сотувчи",
+    "myReports": "Шикоятларим"
   },
   "userStatus": {
     "good": "Яхши",
@@ -413,7 +418,9 @@
     "listingExpired": "Эълон муддати тугади",
     "complaintUpdate": "Шикоят янгиланди",
     "adminMessage": "Админ хабари",
-    "systemUpdate": "Тизим янгиланиши"
+    "systemUpdate": "Тизим янгиланиши",
+    "read": "Ўқилди",
+    "unread": "Янги"
   },
   "search": {
     "title": "Қидириш",
@@ -458,7 +465,7 @@
     "mapPinHelp": "Харитада белгини қўйинг: харидорлар эълонни харитада кўриши учун."
   },
   "admin": {
-    "title": "Admin Panel",
+    "title": "Сарлавҳа",
     "dashboard": "Бошқарув панели",
     "users": "Фойдаланувчилар",
     "listings": "Эълонлар",
@@ -495,7 +502,7 @@
     "userManagement": "Фойдаланувчиларни бошқариш",
     "listingModeration": "Эълонлар модерацияси",
     "complaintsQueue": "Шикоятлар навбати",
-    "broadcastMessage": "Хабар юбориш",
+    "broadcastMessage": "Матн",
     "messageAllUsers": "Барча фойдаланувчиларга",
     "messageActiveUsers": "Фаол фойдаланувчиларга",
     "messageSent": "Хабар юборилди",
@@ -513,7 +520,26 @@
     "rejectionReason": "Рад этиш сабаби",
     "confirmReject": "Рад этишни тасдиқлаш",
     "rejectionReasonPlaceholder": "Сабабни батафсил ёзинг",
-    "rejectionReasonRequired": "Сабаб ёзиш мажбурий"
+    "rejectionReasonRequired": "Сабаб ёзиш мажбурий",
+    "ratingsModeration": "Шарҳларни модерация",
+    "broadcastTitle": "Сарлавҳа",
+    "broadcastSent": "Хабар юборилди",
+    "createBroadcast": "Янги хабар",
+    "autoTranslateHint": "Контент автоматик 4 тилга таржима қилинади.",
+    "originalLocale": "Асл тил",
+    "translations": "Таржималар",
+    "delivery": "Тарқатиш",
+    "recipients": "Қабул қилувчилар",
+    "read": "Ўқилди",
+    "created": "Яратилди",
+    "sentAt": "Юборилди",
+    "notSentYet": "Юборилмаган",
+    "send": "Юбориш",
+    "message": "Хабар",
+    "status": "Ҳолат",
+    "flagged": "шикоят",
+    "block": "Блоклаш",
+    "unblock": "Блокдан чиқариш"
   },
   "analytics": {
     "title": "Аналитика",
@@ -586,7 +612,7 @@
     "minLength": "Камида {min} белги бўлиши керак",
     "maxLength": "Кўпи билан {max} белги бўлиши керак",
     "networkError": "Тармоқ хатоси",
-    "serverError": "Сервер хатоси",
+    "serverError": "Сервер хатоси.",
     "notFound": "Топилмади",
     "notFoundTitle": "Саҳифа топилмади",
     "notFoundDescription": "Сиз қидираётган саҳифа мавжуд эмас ёки кўчирилган",
@@ -603,13 +629,14 @@
     "deleteFailed": "Ўчириш муваффақиятсиз",
     "loadFailed": "Юклаб бўлмади",
     "connectionLost": "Алоқа узилди",
-    "reconnecting": "Қайта уланмоқда"
+    "reconnecting": "Қайта уланмоқда",
+    "permissionDenied": "Рухсат йўқ"
   },
   "success": {
     "saved": "Муваффақиятли сақланди",
     "deleted": "Ўчирилди",
     "updated": "Муваффақиятли янгиланди",
-    "created": "Муваффақиятли яратилди",
+    "created": "Яратилди",
     "sent": "Муваффақиятли юборилди",
     "uploaded": "Муваффақиятли юкланди",
     "copied": "Нусхаланди",
@@ -827,6 +854,7 @@
     "sort_newest": "Янги",
     "sort_highest": "Юқори баҳо",
     "sort_lowest": "Паст баҳо",
-    "sort_most_useful": "Энг фойдали"
+    "sort_most_useful": "Энг фойдали",
+    "moderation": "Шарҳларни модерация"
   }
 }

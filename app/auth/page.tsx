@@ -42,7 +42,11 @@ export default function AuthPage() {
   useEffect(() => {
     if (!isAuthenticated) return;
     const target = nextPath || (currentUser?.is_admin ? '/admin' : '/dashboard');
-    router.replace(target);
+    if (typeof window !== 'undefined') {
+      window.location.replace(target);
+    } else {
+      router.replace(target);
+    }
   }, [isAuthenticated, currentUser?.is_admin, nextPath, router]);
 
   const [stage, setStage] = useState<Stage>('open-bot');
@@ -67,21 +71,27 @@ export default function AuthPage() {
 
     try {
       const result = await authApi.verifyCode({ code });
-      // Atomically set tokens + user + cookie in one shot, before navigating.
-      // This guarantees the middleware sees the authenticated state on the
-      // very first request of the destination route.
+      // Atomic write: tokens + user + cookie BEFORE we navigate.
       setSession(result.tokens.access, result.tokens.refresh, result.user);
-      setStage('success');
 
-      // Decide the destination once, synchronously, from the freshly received
-      // user payload. Admins go to /admin; everyone else to /dashboard or the
-      // ?next path the user came from.
+      // Decide destination. is_admin → /admin, otherwise honour ?next=, fall
+      // back to /dashboard.
       const target =
-        nextPath ||
-        (result.user?.is_admin ? '/admin' : '/dashboard');
+        nextPath || (result.user?.is_admin ? '/admin' : '/dashboard');
 
-      // No setTimeout. Push immediately. The success card stays visible
-      // through navigation; Next.js prefetch + replace makes this feel instant.
+      // Critical fix for the "Redirecting..." freeze that users hit on
+      // successful login: do a full document navigation so the destination
+      // page boots with a clean React tree, the middleware re-evaluates the
+      // freshly-written cookie, and there is no possibility of a Zustand
+      // hydration race or duplicate router.replace from this page's own
+      // "already authenticated" effect.
+      //
+      // Tradeoff: ~200 ms extra paint vs hard guarantee the user actually
+      // lands on the destination — chosen deliberately.
+      if (typeof window !== 'undefined') {
+        window.location.replace(target);
+        return;
+      }
       router.replace(target);
     } catch (err: unknown) {
       if (err instanceof AuthApiError) {

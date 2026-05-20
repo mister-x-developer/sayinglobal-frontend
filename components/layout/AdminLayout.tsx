@@ -33,12 +33,12 @@ const NAV = [
   { href: '/admin/users', icon: Users, label: 'admin.users' },
   { href: '/admin/listings', icon: LayoutGrid, label: 'admin.listings' },
   { href: '/admin/moderation', icon: Flag, label: 'admin.complaints' },
+  { href: '/admin/ratings', icon: Flag, label: 'admin.ratingsModeration' },
   { href: '/admin/broadcasts', icon: Megaphone, label: 'admin.broadcasts' },
   { href: '/admin/analytics', icon: BarChart3, label: 'admin.analytics' },
   { href: '/admin/audit', icon: ScrollText, label: 'admin.auditLogs' },
   { href: '/admin/security', icon: ShieldAlert, label: 'security.title' },
   { href: '/admin/health', icon: Activity, label: 'admin.systemHealth' },
-  { href: '/admin/settings', icon: Settings, label: 'admin.settings' },
 ] as const;
 
 export function AdminLayout({ children }: { children: React.ReactNode }) {
