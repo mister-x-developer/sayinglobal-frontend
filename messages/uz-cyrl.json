@@ -539,7 +539,8 @@
     "status": "Ҳолат",
     "flagged": "шикоят",
     "block": "Блоклаш",
-    "unblock": "Блокдан чиқариш"
+    "unblock": "Блокдан чиқариш",
+    "notesRequiredToResolve": "Ҳал қилиш учун изоҳ қўшинг."
   },
   "analytics": {
     "title": "Аналитика",
@@ -749,7 +750,8 @@
       "under_review": "Кўриб чиқилмоқда",
       "resolved_valid": "Тасдиқланди",
       "resolved_invalid": "Рад этилди"
-    }
+    },
+    "complainant": "Шикоят юборувчи"
   },
   "security": {
     "title": "Хавфсизлик",
@@ -786,7 +788,7 @@
     "reportedListing": "Эълон ҳақида шикоят",
     "reportedSeller": "Сотувчи ҳақида шикоят",
     "listingOwner": "Эълон эгаси",
-    "description": "Шикоят тафсилотлари",
+    "description": "Тавсиф",
     "moderatorNotes": "Модератор изоҳи",
     "resolvedBy": "Ҳал қилди",
     "takeAction": "Ҳаракат қилиш",
@@ -794,8 +796,8 @@
     "notesRequiredHint": "Сизнинг изоҳингиз фойдаланувчига кўрсатилади.",
     "notesTooShort": "Изоҳ жуда қисқа (камида 5 та белги).",
     "startReview": "Кўриб чиқишни бошлаш",
-    "resolveValid": "Асосли — қабул қилиш",
-    "resolveInvalid": "Асоссиз — рад этиш",
+    "resolveValid": "Тасдиқлаш (Шикоят тўғри)",
+    "resolveInvalid": "Рад этиш (Шикоят тўғри эмас)",
     "startedReview": "Кўриб чиқиш бошланди",
     "resolvedValid": "Шикоят асосли деб тан олинди",
     "resolvedInvalid": "Шикоят рад этилди",
@@ -809,7 +811,9 @@
     "status_pending": "Кутилмоқда",
     "status_under_review": "Кўриб чиқилмоқда",
     "status_resolved_valid": "Тасдиқланди",
-    "status_resolved_invalid": "Инкор этилди"
+    "status_resolved_invalid": "Инкор этилди",
+    "severity": "Даражаси",
+    "assignedTo": "Тайинланган"
   },
   "terms": {
     "title": "Фойдаланиш шартлари",

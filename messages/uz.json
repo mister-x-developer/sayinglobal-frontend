@@ -548,7 +548,8 @@
     "broadcast": "Xabar",
     "block": "Bloklash",
     "unblock": "Blokdan chiqarish",
-    "accountSummary": "Hisob qisqacha"
+    "accountSummary": "Hisob qisqacha",
+    "notesRequiredToResolve": "Hal qilish uchun izoh qo'shing."
   },
   "analytics": {
     "title": "Analitika",
@@ -759,7 +760,8 @@
     "reasonLabel": "Sabab",
     "adminResponse": "Admin javobi",
     "created": "Yuborildi",
-    "resolved": "Hal qilindi"
+    "resolved": "Hal qilindi",
+    "complainant": "Shikoyat yuboruvchi"
   },
   "security": {
     "title": "Xavfsizlik",
@@ -793,19 +795,19 @@
     "emptyBody": "Joriy filtrlar boʻyicha shikoyatlar topilmadi.",
     "selectFromQueue": "Tafsilotlarni koʻrish uchun navbatdan shikoyatni tanlang",
     "reporter": "Shikoyat yuborgan",
-    "reportedListing": "Eʼlon haqida shikoyat",
+    "reportedListing": "Shikoyat qilingan e'lon",
     "reportedSeller": "Sotuvchi haqida shikoyat",
     "listingOwner": "Eʼlon egasi",
-    "description": "Shikoyat tafsilotlari",
+    "description": "Tavsif",
     "moderatorNotes": "Moderator izohi",
     "resolvedBy": "Hal qildi",
     "takeAction": "Harakat qilish",
     "notesPlaceholder": "Qarorni tushuntiring (kamida 5 ta belgi)...",
     "notesRequiredHint": "Sizning izohingiz foydalanuvchiga koʻrsatiladi.",
     "notesTooShort": "Izoh juda qisqa (kamida 5 ta belgi).",
-    "startReview": "Koʻrib chiqishni boshlash",
-    "resolveValid": "Asosli — qabul qilish",
-    "resolveInvalid": "Asossiz — rad etish",
+    "startReview": "Ko'rib chiqishni boshlash",
+    "resolveValid": "Tasdiqlash (Shikoyat to'g'ri)",
+    "resolveInvalid": "Rad etish (Shikoyat to'g'ri emas)",
     "startedReview": "Koʻrib chiqish boshlandi",
     "resolvedValid": "Shikoyat asosli deb tan olindi",
     "resolvedInvalid": "Shikoyat rad etildi",
@@ -819,7 +821,9 @@
     "status_pending": "Kutilmoqda",
     "status_under_review": "Ko‘rib chiqilmoqda",
     "status_resolved_valid": "Tasdiqlandi",
-    "status_resolved_invalid": "Inkor etildi"
+    "status_resolved_invalid": "Inkor etildi",
+    "severity": "Darajasi",
+    "assignedTo": "Tayinlangan"
   },
   "terms": {
     "title": "Foydalanish shartlari",

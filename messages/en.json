@@ -497,7 +497,7 @@
     "investigating": "Investigating",
     "resolved": "Resolved",
     "rejected": "Rejected",
-    "viewDetails": "View details",
+    "viewDetails": "Details",
     "takeAction": "Take action",
     "userManagement": "User management",
     "listingModeration": "Listing moderation",
@@ -542,7 +542,8 @@
     "reportsFiled": "Reports filed by user",
     "broadcast": "Broadcast",
     "block": "Block",
-    "unblock": "Unblock"
+    "unblock": "Unblock",
+    "notesRequiredToResolve": "Add a note before resolving."
   },
   "analytics": {
     "title": "Analytics",
@@ -752,7 +753,8 @@
       "under_review": "Under review",
       "resolved_valid": "Accepted",
       "resolved_invalid": "Rejected"
-    }
+    },
+    "complainant": "Filed by"
   },
   "security": {
     "title": "Security",
@@ -789,16 +791,16 @@
     "reportedListing": "Reported listing",
     "reportedSeller": "Reported seller",
     "listingOwner": "Listing owner",
-    "description": "Report description",
+    "description": "Description",
     "moderatorNotes": "Moderator notes",
     "resolvedBy": "Resolved by",
     "takeAction": "Take action",
     "notesPlaceholder": "Explain the decision (at least 5 characters)...",
     "notesRequiredHint": "Your note will be shown to the user.",
     "notesTooShort": "Note is too short (at least 5 characters).",
-    "startReview": "Start review",
-    "resolveValid": "Valid — accept",
-    "resolveInvalid": "Invalid — reject",
+    "startReview": "Start Review",
+    "resolveValid": "Resolve: Valid",
+    "resolveInvalid": "Resolve: Invalid",
     "startedReview": "Review started",
     "resolvedValid": "Report accepted as valid",
     "resolvedInvalid": "Report rejected",
@@ -812,7 +814,9 @@
     "status_pending": "Pending",
     "status_under_review": "Under review",
     "status_resolved_valid": "Confirmed",
-    "status_resolved_invalid": "Dismissed"
+    "status_resolved_invalid": "Dismissed",
+    "severity": "Severity",
+    "assignedTo": "Assigned to"
   },
   "terms": {
     "title": "Platform Terms",

@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 /**
  * Admin Moderation Dashboard — production V2.
  *
@@ -397,8 +399,19 @@ export default function AdminModerationPage() {
                             </span>
                           </div>
                         </div>
-                        <ChevronRight className="mt-2 h-4 w-4 shrink-0 text-fg-subtle" />
+                        <div className="flex flex-col gap-1 items-center">
+                          <ChevronRight className="mt-2 h-4 w-4 shrink-0 text-fg-subtle" />
+                        </div>
                       </button>
+                      <div className="flex justify-end border-b border-border -mt-px px-4 pb-1">
+                        <Link
+                          href={`/admin/moderation/${it.public_id}`}
+                          className="text-[10px] font-semibold text-brand-primary hover:underline"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          Full detail →
+                        </Link>
+                      </div>
                     </li>
                   ))}
                 </ul>

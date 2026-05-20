@@ -542,7 +542,8 @@
     "reportsFiled": "Жалобы от пользователя",
     "broadcast": "Рассылка",
     "block": "Заблокировать",
-    "unblock": "Разблокировать"
+    "unblock": "Разблокировать",
+    "notesRequiredToResolve": "Добавьте заметку перед решением."
   },
   "analytics": {
     "title": "Аналитика",
@@ -752,7 +753,8 @@
       "under_review": "На проверке",
       "resolved_valid": "Принято",
       "resolved_invalid": "Отклонено"
-    }
+    },
+    "complainant": "Заявитель"
   },
   "security": {
     "title": "Безопасность",
@@ -789,16 +791,16 @@
     "reportedListing": "Объявление",
     "reportedSeller": "Продавец",
     "listingOwner": "Владелец объявления",
-    "description": "Описание жалобы",
-    "moderatorNotes": "Комментарий модератора",
+    "description": "Описание",
+    "moderatorNotes": "Заметка модератора",
     "resolvedBy": "Решено",
     "takeAction": "Принять решение",
     "notesPlaceholder": "Объясните решение (минимум 5 символов)...",
     "notesRequiredHint": "Ваш комментарий будет показан пользователю.",
     "notesTooShort": "Комментарий слишком короткий (минимум 5 символов).",
-    "startReview": "Начать рассмотрение",
-    "resolveValid": "Обоснованно — принять",
-    "resolveInvalid": "Необоснованно — отклонить",
+    "startReview": "Начать проверку",
+    "resolveValid": "Подтвердить (жалоба обоснована)",
+    "resolveInvalid": "Отклонить (жалоба необоснована)",
     "startedReview": "Рассмотрение начато",
     "resolvedValid": "Жалоба признана обоснованной",
     "resolvedInvalid": "Жалоба отклонена",
@@ -812,7 +814,9 @@
     "status_pending": "Ожидает",
     "status_under_review": "На рассмотрении",
     "status_resolved_valid": "Подтверждена",
-    "status_resolved_invalid": "Отклонена"
+    "status_resolved_invalid": "Отклонена",
+    "severity": "Серьёзность",
+    "assignedTo": "Назначено"
   },
   "terms": {
     "title": "Условия использования",
