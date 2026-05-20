@@ -68,9 +68,7 @@ export default function MyListingsPage() {
   const [soldConfirm, setSoldConfirm] = useState<number | null>(null);
 
   useEffect(() => { setHydrated(true); }, []);
-  useEffect(() => {
-    if (hydrated && !isAuthenticated) router.replace('/auth');
-  }, [hydrated, isAuthenticated, router]);
+  /* auth gating handled by middleware */
 
   const load = useCallback(async () => {
     if (!isAuthenticated) return;

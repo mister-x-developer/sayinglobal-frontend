@@ -28,9 +28,7 @@ export default function FollowedSellersPage() {
   const [expanded, setExpanded] = useState<number | null>(null);
 
   useEffect(() => setHydrated(true), []);
-  useEffect(() => {
-    if (hydrated && !isAuthenticated) router.replace('/auth');
-  }, [hydrated, isAuthenticated, router]);
+  /* auth gating handled by middleware */
 
   useEffect(() => {
     if (!isAuthenticated) return;

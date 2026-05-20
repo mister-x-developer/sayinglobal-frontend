@@ -26,9 +26,7 @@ export default function FavoritesPage() {
   const [view, setView] = useState<ViewMode>('grid');
 
   useEffect(() => setHydrated(true), []);
-  useEffect(() => {
-    if (hydrated && !isAuthenticated) router.replace('/auth');
-  }, [hydrated, isAuthenticated, router]);
+  /* auth gating handled by middleware */
 
   useEffect(() => {
     if (!isAuthenticated) return;

@@ -51,9 +51,7 @@ export default function ChatPage() {
   const typingTimerRef = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => setHydrated(true), []);
-  useEffect(() => {
-    if (hydrated && !isAuthenticated) router.replace('/auth');
-  }, [hydrated, isAuthenticated, router]);
+  /* auth gating handled by middleware */
 
   // Load conversations from backend
   useEffect(() => {

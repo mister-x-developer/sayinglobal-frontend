@@ -104,9 +104,7 @@ export default function SecurityPage() {
 
   useEffect(() => setHydrated(true), []);
 
-  useEffect(() => {
-    if (hydrated && !isAuthenticated) router.replace('/auth');
-  }, [hydrated, isAuthenticated, router]);
+  /* auth gating handled by middleware */
 
   const fetchSessions = useCallback(async () => {
     setLoadingSessions(true);

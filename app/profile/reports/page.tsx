@@ -37,9 +37,7 @@ export default function MyReportsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => setHydrated(true), []);
-  useEffect(() => {
-    if (hydrated && !isAuthenticated) router.replace('/auth');
-  }, [hydrated, isAuthenticated, router]);
+  /* auth gating handled by middleware */
 
   useEffect(() => {
     let alive = true;

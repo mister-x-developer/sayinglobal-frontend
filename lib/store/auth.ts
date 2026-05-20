@@ -1,16 +1,25 @@
 /**
- * Auth Store — Telegram code-only authentication
- * Single source of truth for user/session state.
- * Hydration-safe: uses `persist` with partialize to avoid SSR mismatch.
+ * Auth Store — Telegram code-only authentication.
  *
- * Cookie strategy: every state change writes the SAME cookie (`sayin-auth`)
- * with `state.isAuthenticated`, `state.accessToken`, and `state.user.is_admin`
- * so middleware can route admins to /admin and non-admins to /dashboard.
- * The cookie is the single source of truth for middleware-side decisions.
+ * Single source of truth for user/session state.
+ *
+ * Hydration race fix:
+ * - Cookie is the synchronous truth source for middleware
+ * - Zustand `persist` is the truth source for client UI
+ * - `useAuthHydrated()` returns true ONLY after persist has rehydrated
+ *   from localStorage, so consumers never trigger redirect-to-/auth
+ *   while the store is still booting
+ *
+ * Atomicity guarantees in `setSession`:
+ *   1. localStorage written synchronously (before any navigation)
+ *   2. Cookie written synchronously
+ *   3. Zustand state set
+ *   4. Returns only after all three have happened
  */
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { useEffect, useState } from 'react';
 
 export interface User {
   public_id: number;
@@ -37,20 +46,17 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
 
-  // Canonical actions
   setUser: (user: User | null) => void;
   setTokens: (access: string, refresh: string) => void;
   setSession: (access: string, refresh: string, user: User) => void;
   updateUser: (data: Partial<User>) => void;
   logout: () => void;
   setLoading: (loading: boolean) => void;
-
-  // Compatibility shim: legacy login() used by older pages
   login: (access: string, refresh: string, user: User) => void;
 }
 
 const COOKIE_NAME = 'sayin-auth';
-const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 
 function writeAuthCookie(payload: {
   isAuthenticated: boolean;
@@ -84,6 +90,16 @@ function clearAuthCookie() {
   } catch {}
 }
 
+function writeLocalStorageTokens(access: string | null, refresh: string | null) {
+  if (typeof window === 'undefined') return;
+  try {
+    if (access) localStorage.setItem('access_token', access);
+    else localStorage.removeItem('access_token');
+    if (refresh) localStorage.setItem('refresh_token', refresh);
+    else localStorage.removeItem('refresh_token');
+  } catch {}
+}
+
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
@@ -103,12 +119,7 @@ export const useAuthStore = create<AuthState>()(
       },
 
       setTokens: (access, refresh) => {
-        if (typeof window !== 'undefined') {
-          try {
-            localStorage.setItem('access_token', access);
-            localStorage.setItem('refresh_token', refresh);
-          } catch {}
-        }
+        writeLocalStorageTokens(access, refresh);
         set({ accessToken: access, refreshToken: refresh });
         writeAuthCookie({
           isAuthenticated: true,
@@ -117,25 +128,26 @@ export const useAuthStore = create<AuthState>()(
         });
       },
 
-      // Atomic session set — writes user + tokens + cookie in a single shot
-      // so the middleware sees a consistent state on the very next navigation.
+      /**
+       * Atomic session set. Order matters:
+       *   1. localStorage (sync) — so middleware can see it on next request
+       *      (note: middleware reads cookie, but the API client reads
+       *      localStorage on cold start)
+       *   2. Cookie (sync) — middleware sees authenticated state
+       *   3. Zustand state — UI re-renders
+       */
       setSession: (access, refresh, user) => {
-        if (typeof window !== 'undefined') {
-          try {
-            localStorage.setItem('access_token', access);
-            localStorage.setItem('refresh_token', refresh);
-          } catch {}
-        }
+        writeLocalStorageTokens(access, refresh);
+        writeAuthCookie({
+          isAuthenticated: true,
+          accessToken: access,
+          user,
+        });
         set({
           accessToken: access,
           refreshToken: refresh,
           user,
           isAuthenticated: true,
-        });
-        writeAuthCookie({
-          isAuthenticated: true,
-          accessToken: access,
-          user,
         });
       },
 
@@ -155,6 +167,7 @@ export const useAuthStore = create<AuthState>()(
             localStorage.removeItem('access_token');
             localStorage.removeItem('refresh_token');
             localStorage.removeItem('sayin-follow');
+            localStorage.removeItem('sayin-auth-store');
             localStorage.removeItem('sayin-auth');
           } catch {}
         }
@@ -181,10 +194,6 @@ export const useAuthStore = create<AuthState>()(
         refreshToken: state.refreshToken,
         isAuthenticated: state.isAuthenticated,
       }),
-      // After Zustand re-hydrates from localStorage, mirror the state into
-      // the cookie so middleware sees the authenticated session on the very
-      // next navigation. Without this, a hard refresh restores Zustand state
-      // but the cookie is missing → middleware redirects to /auth.
       onRehydrateStorage: () => (state) => {
         if (state && typeof document !== 'undefined') {
           if (state.isAuthenticated && state.accessToken) {
@@ -199,3 +208,30 @@ export const useAuthStore = create<AuthState>()(
     }
   )
 );
+
+/**
+ * useAuthHydrated — returns true only after the auth store has finished
+ * rehydrating from localStorage. Pages MUST gate their "redirect if not
+ * authenticated" effects on this so they do not bounce the user back to
+ * /auth during the brief boot window.
+ */
+export function useAuthHydrated(): boolean {
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => {
+    // Zustand persist v4 exposes hasHydrated() on the store.
+    const hasHydrated = (useAuthStore as any).persist?.hasHydrated;
+    if (typeof hasHydrated === 'function' && hasHydrated()) {
+      setHydrated(true);
+      return;
+    }
+    const onFinishHydration = (useAuthStore as any).persist?.onFinishHydration;
+    if (typeof onFinishHydration === 'function') {
+      const unsub = onFinishHydration(() => setHydrated(true));
+      return () => { try { unsub?.(); } catch {} };
+    }
+    // Fallback: assume hydrated after first paint.
+    const t = setTimeout(() => setHydrated(true), 0);
+    return () => clearTimeout(t);
+  }, []);
+  return hydrated;
+}

@@ -30,18 +30,10 @@ const CATEGORIES = ['cattle', 'sheep', 'goats', 'horses', 'camels', 'poultry'] a
 export default function DashboardPage() {
   const t = useTranslations();
   const router = useRouter();
-  const { user, isAuthenticated } = useAuthStore();
-  const [hydrated, setHydrated] = useState(false);
+  const user = useAuthStore((s) => s.user);
+  // Auth gating is handled by middleware; pages don't redirect on their own.
   const [feed, setFeed] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => setHydrated(true), []);
-
-  useEffect(() => {
-    if (hydrated && !isAuthenticated) {
-      router.replace('/auth');
-    }
-  }, [hydrated, isAuthenticated, router]);
 
   useEffect(() => {
     let alive = true;
