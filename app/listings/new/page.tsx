@@ -144,7 +144,12 @@ export default function NewListingPage() {
       }
       setSaved(true);
       toast.success(t('create.publishSuccess'));
-      setTimeout(() => router.push(`/listings/${listing.public_id}`), 1000);
+      // Use window.location for the same atomic navigation as in auth.
+      if (typeof window !== 'undefined') {
+        window.location.href = `/listings/${listing.public_id}`;
+      } else {
+        router.push(`/listings/${listing.public_id}`);
+      }
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : t('errors.saveFailed'));
       setSaving(false);
