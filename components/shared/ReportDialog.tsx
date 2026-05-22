@@ -1,17 +1,21 @@
 'use client';
 
 /**
- * ReportDialog — production complaint submission UI for the website.
+ * ReportDialog — unified complaint submission modal.
  *
- * Used to submit either a listing report or a seller report.
- *  - Loads the reason catalogue from /api/moderation/v2/reasons/
- *  - Shows reasons appropriate to the report type
- *  - Description required if reason = "other" (min 10 chars)
- *  - Severity badge per reason, fully translated
+ * Supports 3 contexts:
+ *   - listing  → listing-specific reasons
+ *   - seller   → seller-specific reasons
+ *   - chat     → chat/message-specific reasons
+ *
+ * Rules:
+ *   - "other" reason always requires a non-empty description (≥10 chars)
+ *   - Each reason shows its severity badge
+ *   - On success auto-closes after 1.6s
  */
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { AlertTriangle, CheckCircle2, ShieldAlert } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, Flag, MessageSquareText, Package, ShieldAlert, User as UserIcon } from 'lucide-react';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import {
@@ -23,7 +27,8 @@ import { cn } from '@/lib/utils/cn';
 
 export type ReportTarget =
   | { kind: 'listing'; publicId: number; title?: string }
-  | { kind: 'seller'; publicId: number; fullName?: string };
+  | { kind: 'seller'; publicId: number; fullName?: string }
+  | { kind: 'chat'; publicId: number; fullName?: string };
 
 interface Props {
   open: boolean;
@@ -37,6 +42,12 @@ const SEVERITY_CLASSES: Record<ReportSeverity, string> = {
   medium:   'bg-amber-50 text-amber-700 ring-amber-200',
   high:     'bg-orange-50 text-orange-700 ring-orange-200',
   critical: 'bg-red-50 text-red-700 ring-red-200',
+};
+
+const KIND_ICON = {
+  listing: Package,
+  seller: UserIcon,
+  chat: MessageSquareText,
 };
 
 export function ReportDialog({ open, target, onClose, onSubmitted }: Props) {
@@ -59,28 +70,36 @@ export function ReportDialog({ open, target, onClose, onSubmitted }: Props) {
     moderationApi
       .getReasons()
       .then((cat) => {
-        setReasons(target.kind === 'listing' ? cat.listing_reasons : cat.seller_reasons);
+        if (target.kind === 'listing') setReasons(cat.listing_reasons);
+        else if (target.kind === 'seller') setReasons(cat.seller_reasons);
+        else setReasons(cat.chat_reasons ?? []);
       })
       .catch(() => setError(t('common.error')))
       .finally(() => setLoading(false));
   }, [open, target, t]);
 
   const requiresDescription = reasonCode === 'other';
+  const descriptionFilled = description.trim().length >= 10;
   const canSubmit =
     !!reasonCode &&
     !submitting &&
-    (!requiresDescription || description.trim().length >= 10);
+    (!requiresDescription || descriptionFilled);
 
   const onSubmit = async () => {
     if (!target || !reasonCode) return;
     setSubmitting(true);
     setError(null);
     try {
-      const payload = { reason_code: reasonCode, description: description.trim() || undefined };
+      const payload = {
+        reason_code: reasonCode,
+        description: description.trim() || undefined,
+      };
       if (target.kind === 'listing') {
         await moderationApi.reportListing(target.publicId, payload);
-      } else {
+      } else if (target.kind === 'seller') {
         await moderationApi.reportSeller(target.publicId, payload);
+      } else {
+        await moderationApi.reportChat(target.publicId, payload);
       }
       setSubmitted(true);
       onSubmitted?.();
@@ -97,21 +116,31 @@ export function ReportDialog({ open, target, onClose, onSubmitted }: Props) {
 
   if (!target) return null;
 
-  const title = target.kind === 'listing' ? t('report.titleListing') : t('report.titleSeller');
-  const subjectLabel =
-    target.kind === 'listing' ? t('report.subjectListing') : t('report.subjectSeller');
+  const KindIcon = KIND_ICON[target.kind];
+
+  const titleKey =
+    target.kind === 'listing' ? 'report.titleListing' :
+    target.kind === 'seller'  ? 'report.titleSeller' :
+                                'report.titleChat';
+  const title = t(titleKey as any);
+
   const subjectName =
-    target.kind === 'listing'
-      ? target.title ?? `#${target.publicId}`
-      : target.fullName ?? `#${target.publicId}`;
+    target.kind === 'listing' ? (target.title ?? `#${target.publicId}`) :
+    target.kind === 'seller'  ? (target.fullName ?? `#${target.publicId}`) :
+                                (target.fullName ?? `#${target.publicId}`);
 
   return (
     <Modal isOpen={open} onClose={onClose} title={title} size="md">
       <div className="space-y-4">
         {/* Subject preview */}
-        <div className="rounded-xl bg-bg-subtle px-3 py-2">
-          <div className="text-xs uppercase tracking-wide text-fg-muted">{subjectLabel}</div>
-          <div className="truncate font-semibold text-fg">{subjectName}</div>
+        <div className="flex items-center gap-2.5 rounded-xl bg-bg-subtle px-3 py-2">
+          <KindIcon className="h-4 w-4 flex-shrink-0 text-fg-muted" strokeWidth={1.75} />
+          <div className="min-w-0">
+            <div className="text-[11px] uppercase tracking-wide text-fg-muted capitalize">
+              {target.kind}
+            </div>
+            <div className="truncate text-sm font-semibold text-fg">{subjectName}</div>
+          </div>
         </div>
 
         {submitted ? (
@@ -122,12 +151,13 @@ export function ReportDialog({ open, target, onClose, onSubmitted }: Props) {
           </div>
         ) : (
           <>
+            {/* Reason list */}
             <div>
               <p className="mb-2 text-sm font-medium text-fg-muted">{t('report.chooseReason')}</p>
               {loading ? (
                 <p className="py-3 text-sm text-fg-muted">{t('common.loading')}</p>
               ) : (
-                <div className="grid gap-2">
+                <div className="grid gap-1.5 max-h-64 overflow-y-auto pr-1">
                   {reasons.map((r) => {
                     const active = reasonCode === r.code;
                     return (
@@ -143,15 +173,15 @@ export function ReportDialog({ open, target, onClose, onSubmitted }: Props) {
                         )}
                       >
                         <span className="flex-1 text-sm font-medium text-fg">
-                          {t(`report.reasons.${r.code}`)}
+                          {t(`report.reasons.${r.code}` as any) ?? r.code}
                         </span>
                         <span
                           className={cn(
-                            'rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ring-1',
+                            'rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ring-1 flex-shrink-0',
                             SEVERITY_CLASSES[r.default_severity],
                           )}
                         >
-                          {t(`report.severity.${r.default_severity}`)}
+                          {t(`report.severity.${r.default_severity}` as any) ?? r.default_severity}
                         </span>
                       </button>
                     );
@@ -160,6 +190,7 @@ export function ReportDialog({ open, target, onClose, onSubmitted }: Props) {
               )}
             </div>
 
+            {/* Description */}
             <div>
               <p className="mb-2 text-sm font-medium text-fg-muted">
                 {requiresDescription
@@ -170,17 +201,27 @@ export function ReportDialog({ open, target, onClose, onSubmitted }: Props) {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder={t('report.descriptionPlaceholder')}
-                className="min-h-[96px] w-full resize-none rounded-xl border border-border bg-bg-subtle px-3 py-2 text-sm text-fg placeholder:text-fg-subtle focus:outline-none focus:ring-2 focus:ring-brand-accent/40"
-                rows={4}
+                className={cn(
+                  'min-h-[88px] w-full resize-none rounded-xl border bg-bg-subtle px-3 py-2 text-sm text-fg placeholder:text-fg-subtle focus:outline-none focus:ring-2 focus:ring-brand-accent/40',
+                  requiresDescription && !descriptionFilled && description.length > 0
+                    ? 'border-danger/50'
+                    : 'border-border',
+                )}
+                rows={3}
               />
+              {requiresDescription && !descriptionFilled && description.length > 0 && (
+                <p className="mt-1 text-xs text-danger">
+                  {t('report.descriptionMinLength' as any) ?? 'At least 10 characters required'}
+                </p>
+              )}
             </div>
 
-            {error ? (
+            {error && (
               <div className="flex items-start gap-2 rounded-lg bg-red-50 p-2.5 text-xs text-red-600">
                 <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
                 <span>{error}</span>
               </div>
-            ) : null}
+            )}
 
             <Button
               type="button"

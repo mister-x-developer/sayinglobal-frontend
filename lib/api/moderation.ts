@@ -27,6 +27,7 @@ export interface ReportReason {
 export interface ReasonsCatalogue {
   listing_reasons: ReportReason[];
   seller_reasons: ReportReason[];
+  chat_reasons: ReportReason[];
   severities: { code: ReportSeverity; label: string }[];
 }
 
@@ -82,6 +83,50 @@ export const moderationApi = {
       return res.data;
     } catch (e) {
       throw e;
+    }
+  },
+
+  async reportChat(userPublicId: number, payload: SubmitReportInput): Promise<ReportRecord> {
+    try {
+      const res = await apiClient.post<ReportRecord>(
+        `/moderation/v2/reports/chat/${userPublicId}/`,
+        payload,
+      );
+      return res.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  async adminRestoreStatus(
+    userPublicId: number,
+    targetStatus: 'good' | 'warning' | 'restricted',
+    reason: string,
+  ): Promise<{ user_public_id: number; old_status: string; new_status: string }> {
+    try {
+      const res = await apiClient.post(
+        `/moderation/v2/admin/users/${userPublicId}/restore-status/`,
+        { target_status: targetStatus, reason },
+      );
+      return res.data;
+    } catch (e) {
+      throw new Error(handleApiError(e));
+    }
+  },
+
+  async adminTranslateReportText(
+    publicId: number,
+    field: 'description' | 'resolution_notes',
+    targetLang: 'uz' | 'uz-cyrl' | 'ru' | 'en',
+  ): Promise<{ translated: string; original: string; field: string; target_lang: string }> {
+    try {
+      const res = await apiClient.post(
+        `/moderation/v2/admin/reports/${publicId}/translate/`,
+        { field, target_lang: targetLang },
+      );
+      return res.data;
+    } catch (e) {
+      throw new Error(handleApiError(e));
     }
   },
 

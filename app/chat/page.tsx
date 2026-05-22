@@ -14,12 +14,14 @@ import {
   CheckCheck,
   MoreVertical,
   X,
+  Flag,
 } from 'lucide-react';
 
 import { AppNav } from '@/components/layout/AppNav';
 import { Avatar } from '@/components/ui/Avatar';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { TranslateButton } from '@/components/shared/TranslateButton';
+import { ReportDialog } from '@/components/shared/ReportDialog';
 import { useAuthStore } from '@/lib/store/auth';
 import { chatApi } from '@/lib/api/chat';
 import type { Conversation, ChatMessage } from '@/lib/api/chat';
@@ -47,6 +49,7 @@ export default function ChatPage() {
   const [text, setText] = useState('');
   const [search, setSearch] = useState('');
   const [typing, setTyping] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const typingTimerRef = useRef<ReturnType<typeof setTimeout>>();
 
@@ -268,7 +271,16 @@ export default function ChatPage() {
                     </Link>
                     <button
                       type="button"
-                      className="ml-auto inline-flex h-9 w-9 items-center justify-center rounded-full text-fg hover:bg-bg-subtle"
+                      onClick={() => setReportOpen(true)}
+                      className="ml-auto inline-flex h-9 w-9 items-center justify-center rounded-full text-danger hover:bg-danger/10"
+                      aria-label="Report user"
+                      title="Report this user"
+                    >
+                      <Flag className="h-4 w-4" strokeWidth={1.75} />
+                    </button>
+                    <button
+                      type="button"
+                      className="inline-flex h-9 w-9 items-center justify-center rounded-full text-fg hover:bg-bg-subtle"
                       aria-label="More"
                     >
                       <MoreVertical className="h-4 w-4" strokeWidth={1.75} />
@@ -420,6 +432,18 @@ export default function ChatPage() {
           </div>
         </div>
       </main>
+
+      {/* Chat report dialog */}
+      {activeConv && (() => {
+        const other = getOther(activeConv);
+        return (
+          <ReportDialog
+            open={reportOpen}
+            target={{ kind: 'chat', publicId: other.public_id as number, fullName: other.full_name }}
+            onClose={() => setReportOpen(false)}
+          />
+        );
+      })()}
     </div>
   );
 }

@@ -21,6 +21,7 @@ import {
   CheckCircle2,
   Clock,
   Flag,
+  Languages,
   Loader2,
   MessageSquareText,
   Package,
@@ -66,6 +67,9 @@ export default function AdminReportDetailPage() {
   const [loading, setLoading] = useState(true);
   const [notes, setNotes] = useState('');
   const [submitting, setSubmitting] = useState<'review' | 'valid' | 'invalid' | null>(null);
+  const [translating, setTranslating] = useState<'description' | 'resolution_notes' | null>(null);
+  const [translatedTexts, setTranslatedTexts] = useState<Record<string, string>>({});
+  const [translateLang, setTranslateLang] = useState<'uz' | 'uz-cyrl' | 'ru' | 'en'>('uz');
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -128,6 +132,19 @@ export default function AdminReportDetailPage() {
       toast.error(t('errors.generic'));
     } finally {
       setSubmitting(null);
+    }
+  };
+
+  const translateField = async (field: 'description' | 'resolution_notes') => {
+    if (!report) return;
+    setTranslating(field);
+    try {
+      const result = await moderationApi.adminTranslateReportText(report.public_id, field, translateLang);
+      setTranslatedTexts((prev) => ({ ...prev, [field]: result.translated }));
+    } catch {
+      toast.error(t('errors.generic'));
+    } finally {
+      setTranslating(null);
     }
   };
 
@@ -237,13 +254,46 @@ export default function AdminReportDetailPage() {
                 </p>
                 {report.description && (
                   <div className="mt-4">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-fg-subtle mb-2">
-                      {t('adminMod.description' as any) ?? 'Description'}
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-fg-subtle">
+                        {t('adminMod.description' as any) ?? 'Description'}
+                      </p>
+                      <div className="flex items-center gap-1.5">
+                        <select
+                          value={translateLang}
+                          onChange={(e) => setTranslateLang(e.target.value as any)}
+                          className="rounded-lg border border-border bg-bg-subtle px-2 py-1 text-xs text-fg"
+                        >
+                          <option value="uz">Uzbek</option>
+                          <option value="uz-cyrl">Кирилл</option>
+                          <option value="ru">Русский</option>
+                          <option value="en">English</option>
+                        </select>
+                        <button
+                          type="button"
+                          onClick={() => translateField('description')}
+                          disabled={translating !== null}
+                          className="inline-flex items-center gap-1 rounded-lg border border-border bg-bg-subtle px-2 py-1 text-xs font-medium text-fg-muted hover:bg-bg-elevated disabled:opacity-50"
+                        >
+                          {translating === 'description'
+                            ? <Loader2 className="h-3 w-3 animate-spin" />
+                            : <Languages className="h-3 w-3" strokeWidth={1.75} />}
+                          Tarjima
+                        </button>
+                        {translatedTexts.description && (
+                          <button
+                            type="button"
+                            onClick={() => setTranslatedTexts((p) => ({ ...p, description: '' }))}
+                            className="text-xs text-fg-subtle hover:text-fg"
+                          >
+                            Asl
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                    <p className="whitespace-pre-line text-sm text-fg-muted leading-relaxed">
+                      {translatedTexts.description || report.description}
                     </p>
-                    <TranslatableText
-                      text={report.description}
-                      textClassName="whitespace-pre-line text-sm text-fg-muted leading-relaxed"
-                    />
                   </div>
                 )}
               </div>
@@ -349,10 +399,102 @@ export default function AdminReportDetailPage() {
                   )}
                 </dl>
               </div>
+
+              {/* Restore user status (for warning/restricted only) */}
+              {report.reported_user &&
+                ['warning', 'restricted'].includes(report.reported_user.status ?? '') && (
+                <div className="surface-elevated p-6">
+                  <h3 className="text-eyebrow mb-3">
+                    Holatni tiklash
+                  </h3>
+                  <p className="text-xs text-fg-muted mb-3">
+                    Foydalanuvchi hozirgi holati:{' '}
+                    <span className="font-bold capitalize text-fg">{report.reported_user.status}</span>
+                    . Bu yerdan «good» yoki past darajaga tiklash mumkin.
+                    Blocked holatdan chiqarish alohida «unblock» tugmasi orqali.
+                  </p>
+                  <RestoreStatusPanel
+                    userPublicId={report.reported_user.public_id}
+                    currentStatus={report.reported_user.status as any}
+                    onRestored={load}
+                  />
+                </div>
+              )}
             </div>
           </motion.div>
         )}
       </div>
     </AdminLayout>
+  );
+}
+
+// ── RestoreStatusPanel ───────────────────────────────────────────────────────
+
+function RestoreStatusPanel({
+  userPublicId,
+  currentStatus,
+  onRestored,
+}: {
+  userPublicId: number;
+  currentStatus: 'warning' | 'restricted';
+  onRestored?: () => void;
+}) {
+  const [reason, setReason] = useState('');
+  const [targetStatus, setTargetStatus] = useState<'good' | 'warning'>('good');
+  const [loading, setLoading] = useState(false);
+
+  const options: { value: 'good' | 'warning'; label: string }[] =
+    currentStatus === 'restricted'
+      ? [{ value: 'good', label: 'good' }, { value: 'warning', label: 'warning' }]
+      : [{ value: 'good', label: 'good' }];
+
+  const handleRestore = async () => {
+    if (!reason.trim()) return;
+    setLoading(true);
+    try {
+      await moderationApi.adminRestoreStatus(userPublicId, targetStatus, reason.trim());
+      onRestored?.();
+    } catch {
+      // toast handled by caller
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-2">
+      <div className="flex gap-2">
+        {options.map((o) => (
+          <button
+            key={o.value}
+            type="button"
+            onClick={() => setTargetStatus(o.value)}
+            className={`rounded-lg border px-3 py-1.5 text-xs font-semibold transition capitalize ${
+              targetStatus === o.value
+                ? 'border-brand-primary bg-brand-primary/10 text-brand-primary'
+                : 'border-border text-fg-muted hover:bg-bg-subtle'
+            }`}
+          >
+            → {o.label}
+          </button>
+        ))}
+      </div>
+      <textarea
+        value={reason}
+        onChange={(e) => setReason(e.target.value)}
+        placeholder="Tiklash sababi..."
+        rows={2}
+        className="input-base h-auto w-full py-1.5 text-xs"
+      />
+      <button
+        type="button"
+        onClick={handleRestore}
+        disabled={!reason.trim() || loading}
+        className="btn btn-secondary btn-sm w-full"
+      >
+        {loading ? <Loader2 className="h-3 w-3 animate-spin" /> : <RefreshCw className="h-3 w-3" strokeWidth={2} />}
+        Holatni tiklash
+      </button>
+    </div>
   );
 }

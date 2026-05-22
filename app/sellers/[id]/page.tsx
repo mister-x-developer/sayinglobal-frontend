@@ -24,6 +24,7 @@ import { EmptyState } from '@/components/shared/EmptyState';
 import { FollowButton } from '@/components/sellers/FollowButton';
 import { RatingDisplay } from '@/components/shared/RatingDisplay';
 import { SellerRatingsThread } from '@/components/sellers/SellerRatingsThread';
+import { ReportDialog } from '@/components/shared/ReportDialog';
 import { usersApi } from '@/lib/api/users';
 import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
@@ -40,6 +41,7 @@ export default function SellerDetailPage() {
   const [sellerListings, setSellerListings] = useState<Listing[]>([]);
   const [tab, setTab] = useState<Tab>('listings');
   const [loading, setLoading] = useState(true);
+  const [reportOpen, setReportOpen] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -183,6 +185,7 @@ export default function SellerDetailPage() {
                         <FollowButton sellerId={seller.public_id} size="sm" />
                         <button
                           type="button"
+                          onClick={() => setReportOpen(true)}
                           className="btn btn-ghost btn-sm text-danger hover:bg-danger/10"
                           aria-label={t('common.report')}
                         >
@@ -287,6 +290,12 @@ export default function SellerDetailPage() {
           )}
         </div>
       </main>
+
+      <ReportDialog
+        open={reportOpen}
+        target={seller ? { kind: 'seller', publicId: seller.public_id, fullName: seller.full_name } : null}
+        onClose={() => setReportOpen(false)}
+      />
     </div>
   );
 }
