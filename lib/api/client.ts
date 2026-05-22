@@ -16,6 +16,50 @@ export const apiClient = axios.create({
   timeout: 30000,
 });
 
+// ── Token reader (race-safe) ────────────────────────────────────────────────
+// During the brief window between page load and Zustand persist hydration,
+// the in-memory store reads as `null` even though localStorage has valid
+// tokens. Reading directly from localStorage as a fallback prevents:
+//   * 401 → forced logout immediately after login (window.location.replace
+//     race)
+//   * stale auth state on cold start
+//   * tab focus / SSR hydration mismatch
+function readPersistedAccess(): string | null {
+  // Primary source: in-memory Zustand state (fastest)
+  const fromStore = useAuthStore.getState().accessToken;
+  if (fromStore) return fromStore;
+  // Fallback: localStorage (Zustand persist key)
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = localStorage.getItem('sayin-auth-store');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      const t = parsed?.state?.accessToken;
+      if (typeof t === 'string' && t.length > 20) return t;
+    }
+    const direct = localStorage.getItem('access_token');
+    if (direct && direct.length > 20) return direct;
+  } catch {}
+  return null;
+}
+
+function readPersistedRefresh(): string | null {
+  const fromStore = useAuthStore.getState().refreshToken;
+  if (fromStore) return fromStore;
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = localStorage.getItem('sayin-auth-store');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      const t = parsed?.state?.refreshToken;
+      if (typeof t === 'string' && t.length > 20) return t;
+    }
+    const direct = localStorage.getItem('refresh_token');
+    if (direct && direct.length > 20) return direct;
+  } catch {}
+  return null;
+}
+
 // ── Token refresh single-flight (F-29 + F-30) ───────────────────────────────
 // Replaces the old `isRefreshing` flag + `refreshQueue` array with a single
 // Promise<string> mutex. All concurrent 401s share the same refresh future,
@@ -32,7 +76,7 @@ async function refreshAccessToken(): Promise<string> {
   if (refreshInFlight) return refreshInFlight;
   refreshInFlight = (async () => {
     try {
-      const refreshToken = useAuthStore.getState().refreshToken;
+      const refreshToken = readPersistedRefresh();
       if (!refreshToken) throw new Error('no_refresh');
       const res = await axios.post(`${API_URL}/api/users/auth/token/refresh/`, {
         refresh: refreshToken,
@@ -51,10 +95,15 @@ async function refreshAccessToken(): Promise<string> {
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     // Do NOT attach a stale Bearer token to OTP/auth endpoints.
-    // These are AllowAny — sending a revoked token could block them.
     const isOtpEndpoint = config.url?.includes('/auth/');
     if (!isOtpEndpoint) {
-      const token = useAuthStore.getState().accessToken;
+      // Race-safe: prefer in-memory store, fall back to localStorage
+      // during the brief Zustand persist hydration window. Without this
+      // fallback, the first request after login (full page reload via
+      // window.location.replace) hits the backend with NO Bearer →
+      // 401 → forced logout, causing the "logged out 2 seconds after
+      // login" bug.
+      const token = readPersistedAccess();
       if (token && config.headers) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -74,7 +123,6 @@ apiClient.interceptors.request.use(
         const osMatch = ua.match(/\(([^)]+)\)/);
         const os = osMatch ? osMatch[1].split(';')[0].trim() : 'Web';
         const deviceName = `${browserName} on ${os}`;
-        // Persist a stable device id across visits
         let deviceId = '';
         try {
           deviceId = localStorage.getItem('sayin_device_id') || '';
@@ -109,15 +157,21 @@ apiClient.interceptors.response.use(
 
     original._retry = true;
 
-    const refreshToken = useAuthStore.getState().refreshToken;
+    const refreshToken = readPersistedRefresh();
     if (!refreshToken) {
-      useAuthStore.getState().logout();
-      if (typeof window !== 'undefined') window.location.href = '/auth';
+      // No refresh token anywhere — only logout if we're actually past the
+      // hydration window. During cold-start, just propagate the error and
+      // let the page-level guards handle it.
+      const looksHydrated = useAuthStore.getState().isAuthenticated
+        || (typeof window !== 'undefined' && localStorage.getItem('sayin-auth-store'));
+      if (looksHydrated) {
+        useAuthStore.getState().logout();
+        if (typeof window !== 'undefined') window.location.href = '/auth';
+      }
       return Promise.reject(error);
     }
 
     try {
-      // F-29 single-flight: every concurrent 401 awaits the same Promise.
       const newToken = await refreshAccessToken();
       if (original.headers) original.headers.Authorization = `Bearer ${newToken}`;
       return apiClient(original);
