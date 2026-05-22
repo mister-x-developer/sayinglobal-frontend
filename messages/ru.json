@@ -43,7 +43,7 @@
     "showOriginal": "Оригинал",
     "refresh": "Обновить",
     "details": "Подробнее",
-    "accountSummary": "Hisob qisqacha"
+    "accountSummary": "Сводка аккаунта"
   },
   "landing": {
     "heroTitle": "Цифровой рынок скота",
@@ -161,7 +161,7 @@
     "mapUnavailable": "Карта недоступна",
     "mapTapToSetPin": "Нажмите на карту, чтобы поставить метку",
     "useMyLocation": "Моё местоположение",
-    "views": "Ko'rishlar"
+    "views": "Просмотры"
   },
   "listings": {
     "title": "Объявления",
@@ -217,15 +217,15 @@
     "updatedAgo": "обновлено {time} назад",
     "restore": "Восстановить",
     "locationOnMap": "Местоположение на карте",
-    "descriptionPlaceholder": "Hayvon haqida batafsil yozing...",
-    "titlePlaceholder": "E'lon sarlavhasi",
-    "age": "Yoshi",
-    "gender": "Jinsi",
-    "male": "Erkak",
-    "female": "Urg'ochi",
-    "weight": "Vazni",
-    "breed": "Zot",
-    "healthStatus": "Sog'lig'i"
+    "descriptionPlaceholder": "Напишите подробную информацию о животном...",
+    "titlePlaceholder": "Заголовок объявления",
+    "age": "Возраст",
+    "gender": "Пол",
+    "male": "Самец",
+    "female": "Самка",
+    "weight": "Вес",
+    "breed": "Порода",
+    "healthStatus": "Здоровье"
   },
   "categories": {
     "all": "Все",
@@ -310,8 +310,8 @@
     "newSeller": "Новый продавец",
     "trustedSeller": "Надёжный продавец",
     "myReports": "Мои жалобы",
-    "title": "Profil",
-    "accountSummary": "Hisob qisqacha"
+    "title": "Профиль",
+    "accountSummary": "Сводка аккаунта"
   },
   "userStatus": {
     "good": "Хорошо",
@@ -374,7 +374,7 @@
     "trustedSellers": "Надёжные продавцы",
     "followers": "Подписчики",
     "totalReviews": "отзывов",
-    "trustNotice": "Platforma buyer-seller o'rtasidagi bitim uchun javobgar emas"
+    "trustNotice": "Платформа не несёт ответственности за сделки между покупателями и продавцами"
   },
   "comments": {
     "title": "Комментарии",
@@ -418,8 +418,8 @@
     "today": "Сегодня",
     "yesterday": "Вчера",
     "messageCopied": "Сообщение скопировано",
-    "send": "Yuborish",
-    "placeholder": "Xabar yozing..."
+    "send": "Отправить",
+    "placeholder": "Напишите сообщение..."
   },
   "notifications": {
     "title": "Уведомления",
@@ -437,7 +437,7 @@
     "systemUpdate": "Обновление системы",
     "read": "Прочитано",
     "unread": "Новое",
-    "empty": "Bildirishnomalar yo'q"
+    "empty": "Уведомлений нет"
   },
   "search": {
     "title": "Поиск",
@@ -452,9 +452,9 @@
     "filterByPrice": "По цене",
     "filterByLocation": "По местоположению",
     "filterByDate": "По дате",
-    "recent": "So'nggi qidiruvlar",
-    "popular": "Mashhur qidiruvlar",
-    "sellers": "Sotuvchilar"
+    "recent": "Недавние запросы",
+    "popular": "Популярные запросы",
+    "sellers": "Продавцы"
   },
   "create": {
     "title": "Создать объявление",
@@ -483,7 +483,7 @@
     "publishSuccess": "Объявление успешно опубликовано",
     "mapPinLabel": "Метка на карте (необязательно)",
     "mapPinHelp": "Поставьте метку, чтобы покупатели видели объявление на карте.",
-    "stepBasics": "Asosiy ma'lumot"
+    "stepBasics": "Основная информация"
   },
   "admin": {
     "title": "Заголовок",
@@ -565,7 +565,8 @@
     "block": "Заблокировать",
     "unblock": "Разблокировать",
     "notesRequiredToResolve": "Добавьте заметку перед решением.",
-    "reports": "Hisobotlar"
+    "reports": "Отчёты",
+    "accountSummary": "Сводка аккаунта"
   },
   "analytics": {
     "title": "Аналитика",
@@ -659,8 +660,8 @@
     "connectionLost": "Соединение потеряно",
     "reconnecting": "Переподключение",
     "permissionDenied": "Нет доступа",
-    "generic": "Xatolik yuz berdi",
-    "network": "Tarmoq xatosi"
+    "generic": "Произошла ошибка",
+    "network": "Ошибка сети"
   },
   "success": {
     "saved": "Успешно сохранено",
@@ -708,7 +709,7 @@
   "validation": {
     "atLeastOneFieldRequired": "Необходимо заполнить хотя бы одно поле",
     "regionRequired": "Сначала выберите регион",
-    "required": "Majburiy maydon"
+    "required": "Обязательное поле"
   },
   "profileInfo": {
     "title": "Важная информация",
@@ -773,7 +774,14 @@
       "demanding_prepayment_scam": "Подозрительные требования предоплаты",
       "harassment": "Преследование или угрозы",
       "off_platform_payment_pressure": "Давление на оплату вне платформы",
-      "other": "Другое (опишите подробно)"
+      "other": "Другое (опишите подробно)",
+      "abusive_language": "Оскорбительный или нецензурный язык",
+      "spam_messages": "Спам или рекламные сообщения",
+      "threats": "Угрозы или запугивание",
+      "scam_in_chat": "Попытка мошенничества в чате",
+      "inappropriate_content": "Неподобающий контент",
+      "harassment_in_chat": "Преследование или нежелательные контакты",
+      "impersonation": "Самозванство или ложная личность"
     },
     "status": {
       "pending": "Ожидает",
@@ -792,7 +800,9 @@
     "status.under_review": "Ko'rib chiqilmoqda",
     "status.resolved_valid": "Tasdiqlandi",
     "status.resolved_invalid": "Rad etildi",
-    "statusLabel": "Holat"
+    "statusLabel": "Holat",
+    "titleChat": "Жалоба на пользователя (чат)",
+    "descriptionMinLength": "Минимум 10 символов"
   },
   "security": {
     "title": "Безопасность",
@@ -863,7 +873,7 @@
     "reason_fake_vaccination": "Soxta vaksina",
     "reason_misleading_photos": "Rasmlar noto'g'ri",
     "reason_fraudulent_pricing": "Narx aldamchi",
-    "reason_duplicate_listing": "Takroriy e'lon",
+    "reason_duplicate_listing": "Злоупотребление дублированием объявлений",
     "reason_false_breed_claim": "Zot noto'g'ri",
     "reason_fake_location": "Joylashuv soxta",
     "reason_unavailable_after_agreement": "Kelishuvdan keyin yo'qoldi",
@@ -874,7 +884,7 @@
     "reason_scam_attempt": "Firibgarlik urinishi",
     "reason_no_show_after_deal": "Kelishuvdan keyin kelmadi",
     "reason_false_identity": "Yolg'on shaxs",
-    "reason_repeated_fake_listings": "Qayta soxta e'lonlar",
+    "reason_repeated_fake_listings": "Повторные фальшивые объявления",
     "reason_demanding_prepayment_scam": "Oldindan to'lov firibgarlik",
     "reason_harassment": "Bezovta qilish",
     "reason_off_platform_payment_pressure": "Platforma tashqarida to'lov",

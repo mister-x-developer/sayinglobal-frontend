@@ -43,7 +43,7 @@
     "showOriginal": "Original",
     "refresh": "Refresh",
     "details": "Details",
-    "accountSummary": "Hisob qisqacha"
+    "accountSummary": "Account summary"
   },
   "landing": {
     "heroTitle": "Digital Livestock Marketplace",
@@ -161,7 +161,7 @@
     "mapUnavailable": "Map unavailable",
     "mapTapToSetPin": "Tap the map to drop the pin",
     "useMyLocation": "Use my location",
-    "views": "Ko'rishlar"
+    "views": "Views"
   },
   "listings": {
     "title": "Listings",
@@ -217,15 +217,15 @@
     "updatedAgo": "updated {time} ago",
     "restore": "Reactivate",
     "locationOnMap": "Location on map",
-    "descriptionPlaceholder": "Hayvon haqida batafsil yozing...",
-    "titlePlaceholder": "E'lon sarlavhasi",
-    "age": "Yoshi",
-    "gender": "Jinsi",
-    "male": "Erkak",
-    "female": "Urg'ochi",
-    "weight": "Vazni",
-    "breed": "Zot",
-    "healthStatus": "Sog'lig'i"
+    "descriptionPlaceholder": "Write detailed information about the animal...",
+    "titlePlaceholder": "Listing title",
+    "age": "Age",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "weight": "Weight",
+    "breed": "Breed",
+    "healthStatus": "Health"
   },
   "categories": {
     "all": "All",
@@ -310,8 +310,8 @@
     "newSeller": "New seller",
     "trustedSeller": "Trusted seller",
     "myReports": "My reports",
-    "title": "Profil",
-    "accountSummary": "Hisob qisqacha"
+    "title": "Profile",
+    "accountSummary": "Account summary"
   },
   "userStatus": {
     "good": "Good",
@@ -374,7 +374,7 @@
     "trustedSellers": "Trusted sellers",
     "followers": "Followers",
     "totalReviews": "reviews",
-    "trustNotice": "Platforma buyer-seller o'rtasidagi bitim uchun javobgar emas"
+    "trustNotice": "The platform is not responsible for transactions between buyers and sellers"
   },
   "comments": {
     "title": "Comments",
@@ -418,8 +418,8 @@
     "today": "Today",
     "yesterday": "Yesterday",
     "messageCopied": "Message copied",
-    "send": "Yuborish",
-    "placeholder": "Xabar yozing..."
+    "send": "Send",
+    "placeholder": "Type a message..."
   },
   "notifications": {
     "title": "Notifications",
@@ -437,7 +437,7 @@
     "systemUpdate": "System update",
     "read": "Read",
     "unread": "New",
-    "empty": "Bildirishnomalar yo'q"
+    "empty": "No notifications"
   },
   "search": {
     "title": "Search",
@@ -452,9 +452,9 @@
     "filterByPrice": "By price",
     "filterByLocation": "By location",
     "filterByDate": "By date",
-    "recent": "So'nggi qidiruvlar",
-    "popular": "Mashhur qidiruvlar",
-    "sellers": "Sotuvchilar"
+    "recent": "Recent searches",
+    "popular": "Popular searches",
+    "sellers": "Sellers"
   },
   "create": {
     "title": "Create listing",
@@ -483,7 +483,7 @@
     "publishSuccess": "Listing published successfully",
     "mapPinLabel": "Map pin (optional)",
     "mapPinHelp": "Drop a pin so buyers can see the listing on the map.",
-    "stepBasics": "Asosiy ma'lumot"
+    "stepBasics": "Basic info"
   },
   "admin": {
     "title": "Title",
@@ -565,7 +565,8 @@
     "block": "Block",
     "unblock": "Unblock",
     "notesRequiredToResolve": "Add a note before resolving.",
-    "reports": "Hisobotlar"
+    "reports": "Reports",
+    "accountSummary": "Account summary"
   },
   "analytics": {
     "title": "Analytics",
@@ -659,8 +660,8 @@
     "connectionLost": "Connection lost",
     "reconnecting": "Reconnecting",
     "permissionDenied": "Permission denied",
-    "generic": "Xatolik yuz berdi",
-    "network": "Tarmoq xatosi"
+    "generic": "An error occurred",
+    "network": "Network error"
   },
   "success": {
     "saved": "Saved successfully",
@@ -708,7 +709,7 @@
   "validation": {
     "atLeastOneFieldRequired": "At least one field is required",
     "regionRequired": "Please select a region first",
-    "required": "Majburiy maydon"
+    "required": "Required field"
   },
   "profileInfo": {
     "title": "Important information",
@@ -773,7 +774,14 @@
       "demanding_prepayment_scam": "Suspicious prepayment demands",
       "harassment": "Harassment or threats",
       "off_platform_payment_pressure": "Pressure to pay outside platform",
-      "other": "Other (please describe)"
+      "other": "Other (please describe)",
+      "abusive_language": "Abusive or offensive language",
+      "spam_messages": "Spam or promotional messages",
+      "threats": "Threats or intimidation",
+      "scam_in_chat": "Scam or fraud attempt in chat",
+      "inappropriate_content": "Inappropriate content",
+      "harassment_in_chat": "Harassment or repeated unwanted contact",
+      "impersonation": "Impersonation or false identity"
     },
     "status": {
       "pending": "Pending",
@@ -792,7 +800,9 @@
     "status.under_review": "Ko'rib chiqilmoqda",
     "status.resolved_valid": "Tasdiqlandi",
     "status.resolved_invalid": "Rad etildi",
-    "statusLabel": "Holat"
+    "statusLabel": "Holat",
+    "titleChat": "Report this user (chat)",
+    "descriptionMinLength": "At least 10 characters required"
   },
   "security": {
     "title": "Security",
@@ -811,7 +821,7 @@
       "otp_locked": "Account temporarily locked",
       "session_created": "New session started",
       "session_revoked": "Session ended",
-      "all_sessions_revoked": "All other sessions ended",
+      "all_sessions_revoked": "All sessions ended",
       "suspicious_activity": "Suspicious activity detected"
     },
     "sessions": "Seanslat",
@@ -863,7 +873,7 @@
     "reason_fake_vaccination": "Soxta vaksina",
     "reason_misleading_photos": "Rasmlar noto'g'ri",
     "reason_fraudulent_pricing": "Narx aldamchi",
-    "reason_duplicate_listing": "Takroriy e'lon",
+    "reason_duplicate_listing": "Duplicate listing abuse",
     "reason_false_breed_claim": "Zot noto'g'ri",
     "reason_fake_location": "Joylashuv soxta",
     "reason_unavailable_after_agreement": "Kelishuvdan keyin yo'qoldi",
@@ -874,7 +884,7 @@
     "reason_scam_attempt": "Firibgarlik urinishi",
     "reason_no_show_after_deal": "Kelishuvdan keyin kelmadi",
     "reason_false_identity": "Yolg'on shaxs",
-    "reason_repeated_fake_listings": "Qayta soxta e'lonlar",
+    "reason_repeated_fake_listings": "Repeated fake listings",
     "reason_demanding_prepayment_scam": "Oldindan to'lov firibgarlik",
     "reason_harassment": "Bezovta qilish",
     "reason_off_platform_payment_pressure": "Platforma tashqarida to'lov",

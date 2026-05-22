@@ -43,7 +43,7 @@
     "showOriginal": "Асл матн",
     "refresh": "Янгилаш",
     "details": "Батафсил",
-    "accountSummary": "Hisob qisqacha"
+    "accountSummary": "Ҳисоб қисқача"
   },
   "landing": {
     "heroTitle": "Рақамли Чорва Бозори",
@@ -161,7 +161,7 @@
     "mapUnavailable": "Харита юкланмади",
     "mapTapToSetPin": "Харитани босиб белгини қўйинг",
     "useMyLocation": "Менинг жойим",
-    "views": "Koʻrishlar"
+    "views": "Кўришлар"
   },
   "listings": {
     "title": "Эълонлар",
@@ -217,15 +217,15 @@
     "updatedAgo": "{time} олдин янгиланган",
     "restore": "Қайта активлаштириш",
     "locationOnMap": "Харитада жойлашув",
-    "descriptionPlaceholder": "Hayvon haqida batafsil yozing...",
-    "titlePlaceholder": "Eʼlon sarlavhasi",
-    "age": "Yoshi",
-    "gender": "Jinsi",
-    "male": "Erkak",
-    "female": "Urgʻochi",
-    "weight": "Vazni",
-    "breed": "Zot",
-    "healthStatus": "Sogʻligʻi"
+    "descriptionPlaceholder": "Ҳайвон ҳақида батафсил ёзинг...",
+    "titlePlaceholder": "Эълон сарлавҳаси",
+    "age": "Ёши",
+    "gender": "Жинси",
+    "male": "Эркак",
+    "female": "Урғочи",
+    "weight": "Вазни",
+    "breed": "Зот",
+    "healthStatus": "Соғлиги"
   },
   "categories": {
     "all": "Барчаси",
@@ -310,8 +310,8 @@
     "newSeller": "Янги сотувчи",
     "trustedSeller": "Ишончли сотувчи",
     "myReports": "Шикоятларим",
-    "title": "Profil",
-    "accountSummary": "Hisob qisqacha"
+    "title": "Профил",
+    "accountSummary": "Ҳисоб қисқача"
   },
   "userStatus": {
     "good": "Яхши",
@@ -374,7 +374,7 @@
     "trustedSellers": "Ишончли сотувчилар",
     "followers": "Обуначилар",
     "totalReviews": "шарҳ",
-    "trustNotice": "Platforma buyer-seller oʻrtasidagi bitim uchun javobgar emas"
+    "trustNotice": "Платформа харидор ва сотувчи ўртасидаги битим учун жавобгар эмас"
   },
   "comments": {
     "title": "Изоҳлар",
@@ -418,8 +418,8 @@
     "today": "Бугун",
     "yesterday": "Кеча",
     "messageCopied": "Хабар нусхаланди",
-    "send": "Yuborish",
-    "placeholder": "Xabar yozing..."
+    "send": "Юбориш",
+    "placeholder": "Хабар ёзинг..."
   },
   "notifications": {
     "title": "Билдиришномалар",
@@ -437,7 +437,7 @@
     "systemUpdate": "Тизим янгиланиши",
     "read": "Ўқилди",
     "unread": "Янги",
-    "empty": "Bildirishnomalar yoʻq"
+    "empty": "Билдиришномалар йўқ"
   },
   "search": {
     "title": "Қидириш",
@@ -452,9 +452,9 @@
     "filterByPrice": "Нарх бўйича",
     "filterByLocation": "Жойлашув бўйича",
     "filterByDate": "Сана бўйича",
-    "recent": "Soʻnggi qidiruvlar",
-    "popular": "Mashhur qidiruvlar",
-    "sellers": "Sotuvchilar"
+    "recent": "Сўнгги қидирувлар",
+    "popular": "Машҳур қидирувлар",
+    "sellers": "Сотувчилар"
   },
   "create": {
     "title": "Эълон яратиш",
@@ -483,7 +483,7 @@
     "publishSuccess": "Эълон муваффақиятли жойлаштирилди",
     "mapPinLabel": "Харита устида белги (ихтиёрий)",
     "mapPinHelp": "Харитада белгини қўйинг: харидорлар эълонни харитада кўриши учун.",
-    "stepBasics": "Asosiy maʼlumot"
+    "stepBasics": "Асосий маълумот"
   },
   "admin": {
     "title": "Сарлавҳа",
@@ -562,10 +562,11 @@
     "block": "Блоклаш",
     "unblock": "Блокдан чиқариш",
     "notesRequiredToResolve": "Ҳал қилиш учун изоҳ қўшинг.",
-    "reports": "Hisobotlar",
+    "reports": "Ҳисоботлар",
     "reportsReceived": "Foydalanuvchiga shikoyatlar",
     "reportsFiled": "Yuborilgan shikoyatlar",
-    "broadcast": "Xabar"
+    "broadcast": "Xabar",
+    "accountSummary": "Ҳисоб қисқача"
   },
   "analytics": {
     "title": "Аналитика",
@@ -659,8 +660,8 @@
     "connectionLost": "Алоқа узилди",
     "reconnecting": "Қайта уланмоқда",
     "permissionDenied": "Рухсат йўқ",
-    "generic": "Xatolik yuz berdi",
-    "network": "Tarmoq xatosi"
+    "generic": "Хатолик юз берди",
+    "network": "Тармоқ хатоси"
   },
   "success": {
     "saved": "Муваффақиятли сақланди",
@@ -708,7 +709,7 @@
   "validation": {
     "atLeastOneFieldRequired": "Камида битта майдон тўлдирилиши шарт",
     "regionRequired": "Аввал вилоятни танланг",
-    "required": "Majburiy maydon"
+    "required": "Мажбурий майдон"
   },
   "profileInfo": {
     "title": "Муҳим маълумот",
@@ -773,7 +774,14 @@
       "demanding_prepayment_scam": "Шубҳали олдиндан тўлов талаби",
       "harassment": "Таҳқир ёки таҳдид",
       "off_platform_payment_pressure": "Платформадан ташқарида тўлов босими",
-      "other": "Бошқа (тушунтириш беринг)"
+      "other": "Бошқа (тушунтириш беринг)",
+      "abusive_language": "Ҳақоратли ёки тахқирловчи тил",
+      "spam_messages": "Спам ёки реклама хабарлари",
+      "threats": "Таҳдид ёки қўрқитиш",
+      "scam_in_chat": "Чатда фирибгарликка уриниш",
+      "inappropriate_content": "Нооʻрин контент",
+      "harassment_in_chat": "Таъқиб ёки истalmagan мулоқот",
+      "impersonation": "Сохта шахсият"
     },
     "status": {
       "pending": "Кутилмоқда",
@@ -792,7 +800,9 @@
     "status.under_review": "Koʻrib chiqilmoqda",
     "status.resolved_valid": "Tasdiqlandi",
     "status.resolved_invalid": "Rad etildi",
-    "statusLabel": "Holat"
+    "statusLabel": "Holat",
+    "titleChat": "Фойдаланувчи ҳақида шикоят (чат)",
+    "descriptionMinLength": "Камида 10 та белги керак"
   },
   "security": {
     "title": "Хавфсизлик",
@@ -863,7 +873,7 @@
     "reason_fake_vaccination": "Soxta vaksina",
     "reason_misleading_photos": "Rasmlar notoʻgʻri",
     "reason_fraudulent_pricing": "Narx aldamchi",
-    "reason_duplicate_listing": "Takroriy eʼlon",
+    "reason_duplicate_listing": "Такрорий эълон суиистеъмоли",
     "reason_false_breed_claim": "Zot notoʻgʻri",
     "reason_fake_location": "Joylashuv soxta",
     "reason_unavailable_after_agreement": "Kelishuvdan keyin yoʻqoldi",
@@ -874,7 +884,7 @@
     "reason_scam_attempt": "Firibgarlik urinishi",
     "reason_no_show_after_deal": "Kelishuvdan keyin kelmadi",
     "reason_false_identity": "Yolgʻon shaxs",
-    "reason_repeated_fake_listings": "Qayta soxta eʼlonlar",
+    "reason_repeated_fake_listings": "Такрорий сохта эълонлар",
     "reason_demanding_prepayment_scam": "Oldindan toʻlov firibgarlik",
     "reason_harassment": "Bezovta qilish",
     "reason_off_platform_payment_pressure": "Platforma tashqarida toʻlov",

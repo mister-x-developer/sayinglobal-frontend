@@ -777,7 +777,14 @@
       "demanding_prepayment_scam": "Shubhali oldindan toʻlov talabi",
       "harassment": "Tahqir yoki tahdid",
       "off_platform_payment_pressure": "Platformadan tashqarida toʻlov bosimi",
-      "other": "Boshqa (tushuntirish bering)"
+      "other": "Boshqa (tushuntirish bering)",
+      "abusive_language": "Haqoratli yoki taqirlovchi til",
+      "spam_messages": "Spam yoki reklama xabarlari",
+      "threats": "Tahdid yoki qo'rqitish",
+      "scam_in_chat": "Chatda firibgarlikka urinish",
+      "inappropriate_content": "Nomunosib kontent",
+      "harassment_in_chat": "Taʼqib yoki istalmagan muloqot",
+      "impersonation": "Soxta shaxsiyat"
     },
     "status": {
       "pending": "Kutilmoqda",
@@ -796,7 +803,9 @@
     "status.under_review": "Koʻrib chiqilmoqda",
     "status.resolved_valid": "Tasdiqlandi",
     "status.resolved_invalid": "Rad etildi",
-    "statusLabel": "Holat"
+    "statusLabel": "Holat",
+    "titleChat": "Chat orqali shikoyat",
+    "descriptionMinLength": "Kamida 10 ta belgi kerak"
   },
   "security": {
     "title": "Xavfsizlik",
