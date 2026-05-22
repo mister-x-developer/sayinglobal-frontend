@@ -3,13 +3,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { LayoutGrid, MapPin, Search as SearchIcon, X, SlidersHorizontal } from 'lucide-react';
 
 import { AppNav } from '@/components/layout/AppNav';
 import { ListingGrid } from '@/components/listings/ListingGrid';
-import { CategoryIcon } from '@/components/shared/CategoryIcon';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { ListingGridSkeleton } from '@/components/shared/LoadingStates';
 import { listingsApi } from '@/lib/api/listings';
@@ -158,14 +157,6 @@ export default function ListingsPage() {
               {t('marketplace.filters')}
             </button>
 
-            <Link
-              href={`/listings/nearby${category !== 'all' ? `?category=${category}` : ''}`}
-              className="btn btn-secondary btn-sm"
-            >
-              <MapPin className="h-4 w-4" strokeWidth={1.75} />
-              {t('nav.nearby' as any) ?? 'Nearby'}
-            </Link>
-
             <div className="hidden sm:block">
               <select
                 value={sort}
@@ -182,7 +173,7 @@ export default function ListingsPage() {
             </div>
           </div>
 
-          {/* Categories chips row */}
+          {/* Categories chips row — text only, no icons */}
           <div className="no-scrollbar mt-5 flex gap-2 overflow-x-auto pb-1">
             {CATS.map((c) => {
               const active = c.key === category;
@@ -191,19 +182,13 @@ export default function ListingsPage() {
                   key={c.key}
                   type="button"
                   onClick={() => setCategory(c.key)}
-                  className={`group inline-flex h-10 flex-shrink-0 items-center gap-2 rounded-full border px-4 text-sm font-medium transition-all ${
+                  className={`inline-flex h-10 flex-shrink-0 items-center rounded-full border px-5 text-sm font-semibold transition-all ${
                     active
-                      ? 'border-brand-primary bg-brand-primary text-white'
-                      : 'border-border bg-bg-elevated text-fg hover:border-fg-subtle hover:bg-bg-subtle'
+                      ? 'border-brand-primary bg-brand-primary text-white shadow-sm'
+                      : 'border-border bg-bg-elevated text-fg hover:border-brand-primary/40 hover:bg-bg-subtle'
                   }`}
                 >
-                  {c.key !== 'all' && (
-                    <CategoryIcon
-                      name={c.key as any}
-                      className={`h-4 w-4 ${active ? 'text-white' : 'text-fg-muted'}`}
-                    />
-                  )}
-                  <span>{t(`categories.${c.key}`)}</span>
+                  {t(`categories.${c.key}`)}
                 </button>
               );
             })}
@@ -277,6 +262,30 @@ export default function ListingsPage() {
           </div>
         </div>
       </main>
+
+      {/* Floating Nearby Button */}
+      <AnimatePresence>
+        <motion.div
+          initial={{ opacity: 0, y: 24, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="fixed bottom-8 right-6 z-40 sm:bottom-10 sm:right-8"
+        >
+          <Link
+            href={`/listings/nearby${category !== 'all' ? `?category=${category}` : ''}`}
+            className="group flex items-center gap-3 rounded-2xl bg-brand-primary px-5 py-3.5 text-white shadow-[0_8px_32px_rgba(31,122,82,0.45)] transition-all hover:bg-brand-primary/90 hover:shadow-[0_12px_40px_rgba(31,122,82,0.55)] hover:scale-105 active:scale-95"
+            aria-label={t('nearby.title' as any) ?? 'Nearby listings'}
+          >
+            <div className="relative">
+              <MapPin className="h-5 w-5" strokeWidth={2} />
+              <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-brand-secondary ring-2 ring-brand-primary" />
+            </div>
+            <span className="text-sm font-bold tracking-wide">
+              {t('nearby.title' as any) ?? 'Yaqin atrofda'}
+            </span>
+          </Link>
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
