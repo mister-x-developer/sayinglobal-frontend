@@ -59,6 +59,39 @@ apiClient.interceptors.request.use(
         config.headers.Authorization = `Bearer ${token}`;
       }
     }
+    // Attach X-Device-* headers so backend UserSession shows real device.
+    if (typeof window !== 'undefined' && config.headers) {
+      try {
+        const ua = navigator.userAgent || '';
+        const platform = /Android/i.test(ua) ? 'web-android'
+                       : /iPhone|iPad|iPod/i.test(ua) ? 'web-ios'
+                       : 'web';
+        const browserName = /Chrome\/[\d.]+/.test(ua) && !/Edg\//.test(ua) ? 'Chrome'
+                          : /Edg\//.test(ua) ? 'Edge'
+                          : /Firefox\//.test(ua) ? 'Firefox'
+                          : /Safari\//.test(ua) && !/Chrome/.test(ua) ? 'Safari'
+                          : 'Browser';
+        const osMatch = ua.match(/\(([^)]+)\)/);
+        const os = osMatch ? osMatch[1].split(';')[0].trim() : 'Web';
+        const deviceName = `${browserName} on ${os}`;
+        // Persist a stable device id across visits
+        let deviceId = '';
+        try {
+          deviceId = localStorage.getItem('sayin_device_id') || '';
+          if (!deviceId) {
+            deviceId = (crypto as any).randomUUID
+              ? (crypto as any).randomUUID()
+              : `web-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+            localStorage.setItem('sayin_device_id', deviceId);
+          }
+        } catch {}
+        config.headers['X-Device-Id'] = deviceId;
+        config.headers['X-Device-Name'] = deviceName;
+        config.headers['X-Platform'] = platform;
+        config.headers['X-Os-Version'] = os;
+        config.headers['X-App-Version'] = 'web-1.0.0';
+      } catch {}
+    }
     return config;
   },
   (error) => Promise.reject(error)
