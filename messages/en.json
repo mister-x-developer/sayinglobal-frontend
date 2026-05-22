@@ -43,7 +43,9 @@
     "showOriginal": "Original",
     "refresh": "Refresh",
     "details": "Details",
-    "accountSummary": "Account summary"
+    "accountSummary": "Account summary",
+    "error": "An error occurred",
+    "empty": "Empty"
   },
   "landing": {
     "heroTitle": "Digital Livestock Marketplace",
@@ -311,7 +313,10 @@
     "trustedSeller": "Trusted seller",
     "myReports": "My reports",
     "title": "Profile",
-    "accountSummary": "Account summary"
+    "accountSummary": "Account summary",
+    "noReports": "No reports",
+    "noReportsDesc": "You have not submitted any reports yet",
+    "security": "Security"
   },
   "userStatus": {
     "good": "Good",
@@ -344,7 +349,13 @@
     "showLocation": "Show location",
     "showActivity": "Show activity",
     "deleteAccount": "Delete account",
-    "deleteAccountWarning": "Account deletion is permanent and removes all data"
+    "deleteAccountWarning": "Account deletion is permanent and removes all data",
+    "pushDescription": "Browser and in-app notifications",
+    "messageNotifDescription": "Notifications about new messages",
+    "listingNotifDescription": "Activity on your listings",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System"
   },
   "sellers": {
     "title": "Sellers",
@@ -829,15 +840,15 @@
     "events": "Xavfsizlik voqealari"
   },
   "adminMod": {
-    "title": "Moderation centre",
-    "subtitle": "Review and resolve user-submitted reports.",
+    "title": "Reports",
+    "subtitle": "Moderation panel",
     "queue": "Queue",
-    "totalReports": "reports",
+    "totalReports": "Total reports",
     "allTypes": "All types",
     "allSeverities": "All severities",
     "emptyTitle": "No reports",
-    "emptyBody": "No reports match the current filters.",
-    "selectFromQueue": "Select a report from the queue to view details",
+    "emptyBody": "No reports found matching the filters",
+    "selectFromQueue": "Select from the queue",
     "reporter": "Reporter",
     "reportedListing": "Reported listing",
     "reportedSeller": "Reported seller",
@@ -846,16 +857,16 @@
     "moderatorNotes": "Moderator notes",
     "resolvedBy": "Resolved by",
     "takeAction": "Take action",
-    "notesPlaceholder": "Explain the decision (at least 5 characters)...",
-    "notesRequiredHint": "Your note will be shown to the user.",
-    "notesTooShort": "Note is too short (at least 5 characters).",
-    "startReview": "Start Review",
-    "resolveValid": "Resolve: Valid",
-    "resolveInvalid": "Resolve: Invalid",
+    "notesPlaceholder": "Add a note...",
+    "notesRequiredHint": "A note is required to resolve",
+    "notesTooShort": "Note must be at least 5 characters",
+    "startReview": "Start review",
+    "resolveValid": "Confirm",
+    "resolveInvalid": "Dismiss",
     "startedReview": "Review started",
-    "resolvedValid": "Report accepted as valid",
-    "resolvedInvalid": "Report rejected",
-    "statusChangedTo": "Seller status changed to {status}",
+    "resolvedValid": "Confirmed",
+    "resolvedInvalid": "Dismissed",
+    "statusChangedTo": "Status changed to:",
     "sellerStatus": {
       "good": "Good",
       "warning": "Warning",
@@ -888,7 +899,14 @@
     "reason_demanding_prepayment_scam": "Oldindan to'lov firibgarlik",
     "reason_harassment": "Bezovta qilish",
     "reason_off_platform_payment_pressure": "Platforma tashqarida to'lov",
-    "reason_other": "Boshqa sabab"
+    "reason_other": "Other",
+    "reason_abusive_language": "Abusive language",
+    "reason_spam_messages": "Spam messages",
+    "reason_threats": "Threats",
+    "reason_scam_in_chat": "Scam in chat",
+    "reason_inappropriate_content": "Inappropriate content",
+    "reason_harassment_in_chat": "Harassment in chat",
+    "reason_impersonation": "Impersonation"
   },
   "terms": {
     "title": "Platform Terms",
