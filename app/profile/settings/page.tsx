@@ -6,16 +6,13 @@ import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import {
   Bell,
-  Globe,
-  Eye,
-  Shield,
-  Trash2,
   Check,
   Moon,
   Sun,
   ArrowLeft,
   MessageSquareText,
-  Package,
+  Shield,
+  Trash2,
   ShieldCheck,
 } from 'lucide-react';
 
@@ -24,14 +21,15 @@ import { Badge } from '@/components/ui/Badge';
 import { useTheme } from '@/components/providers/ThemeProvider';
 import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher';
 
-function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
+function Toggle({ on, onToggle, disabled = false }: { on: boolean; onToggle: () => void; disabled?: boolean }) {
   return (
     <button
       type="button"
       role="switch"
       aria-checked={on}
-      onClick={onToggle}
-      className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+      onClick={!disabled ? onToggle : undefined}
+      disabled={disabled}
+      className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
         on ? 'bg-brand-primary' : 'bg-border-strong'
       }`}
     >
@@ -49,11 +47,13 @@ function SettingRow({
   description,
   on,
   onToggle,
+  disabled,
 }: {
   label: string;
   description?: string;
   on: boolean;
   onToggle: () => void;
+  disabled?: boolean;
 }) {
   return (
     <div className="flex items-center justify-between gap-4 py-4">
@@ -61,18 +61,12 @@ function SettingRow({
         <p className="text-sm font-semibold text-fg">{label}</p>
         {description && <p className="mt-0.5 text-xs text-fg-muted">{description}</p>}
       </div>
-      <Toggle on={on} onToggle={onToggle} />
+      <Toggle on={on} onToggle={onToggle} disabled={disabled} />
     </div>
   );
 }
 
-function Section({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="surface-elevated overflow-hidden">
       <div className="border-b border-border px-5 py-4">
@@ -90,26 +84,10 @@ export default function SettingsPage() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteInput, setDeleteInput] = useState('');
 
-  const [notifs, setNotifs] = useState({
-    email: true,
-    push: true,
-    messages: true,
-    listings: true,
-    marketing: false,
-  });
-
-  const [privacy, setPrivacy] = useState({
-    showPhone: true,
-    showEmail: false,
-    showLocation: true,
-    allowMessages: true,
-  });
-
-  const toggleNotif = (key: keyof typeof notifs) =>
-    setNotifs((prev) => ({ ...prev, [key]: !prev[key] }));
-
-  const togglePrivacy = (key: keyof typeof privacy) =>
-    setPrivacy((prev) => ({ ...prev, [key]: !prev[key] }));
+  // Only push notifications remain — email removed (users have no email)
+  const [pushNotifs, setPushNotifs] = useState(true);
+  const [msgNotifs, setMsgNotifs] = useState(true);
+  const [listingNotifs, setListingNotifs] = useState(true);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -134,7 +112,6 @@ export default function SettingsPage() {
 
             <p className="text-eyebrow">{t('settings.title')}</p>
             <h1 className="display-md mt-2">{t('settings.title')}</h1>
-            <p className="mt-2 text-fg-muted">{t('settings.account')}</p>
 
             <div className="mt-8 space-y-4">
               {/* APPEARANCE */}
@@ -179,54 +156,32 @@ export default function SettingsPage() {
                 </div>
               </Section>
 
-              {/* NOTIFICATIONS */}
+              {/* NOTIFICATIONS — push only, no email */}
               <Section title={t('settings.notifications')}>
                 <SettingRow
-                  label={t('settings.emailNotifications')}
-                  description="Muhim yangiliklar haqida email orqali"
-                  on={notifs.email}
-                  onToggle={() => toggleNotif('email')}
-                />
-                <SettingRow
                   label={t('settings.pushNotifications')}
-                  description="Brauzer orqali bildirishnomalar"
-                  on={notifs.push}
-                  onToggle={() => toggleNotif('push')}
+                  description={t('settings.pushDescription' as any) ?? 'Brauzer orqali bildirishnomalar'}
+                  on={pushNotifs}
+                  onToggle={() => setPushNotifs((v) => !v)}
                 />
                 <SettingRow
                   label={t('settings.messageNotifications')}
-                  description="Yangi xabarlar haqida"
-                  on={notifs.messages}
-                  onToggle={() => toggleNotif('messages')}
+                  description={t('settings.messageNotifDescription' as any) ?? 'Yangi xabarlar haqida'}
+                  on={msgNotifs}
+                  onToggle={() => setMsgNotifs((v) => !v)}
                 />
                 <SettingRow
                   label={t('settings.favoriteNotifications')}
-                  description="Eʼlonlaringiz boʻyicha faollik"
-                  on={notifs.listings}
-                  onToggle={() => toggleNotif('listings')}
+                  description={t('settings.listingNotifDescription' as any) ?? 'Eʼlonlaringiz boʻyicha faollik'}
+                  on={listingNotifs}
+                  onToggle={() => setListingNotifs((v) => !v)}
                 />
-              </Section>
-
-              {/* PRIVACY */}
-              <Section title={t('settings.privacy')}>
-                <SettingRow
-                  label={t('settings.showPhone')}
-                  description="Profilingizda telefon raqamingiz koʻrinadi"
-                  on={privacy.showPhone}
-                  onToggle={() => togglePrivacy('showPhone')}
-                />
-                <SettingRow
-                  label={t('settings.showLocation')}
-                  description="Eʼlonlaringizda joylashuvingiz koʻrinadi"
-                  on={privacy.showLocation}
-                  onToggle={() => togglePrivacy('showLocation')}
-                />
-                <SettingRow
-                  label={t('settings.showActivity')}
-                  description="Boshqa foydalanuvchilar faolligingizni koʻradi"
-                  on={privacy.allowMessages}
-                  onToggle={() => togglePrivacy('allowMessages')}
-                />
+                {/* Info note */}
+                <div className="py-3">
+                  <p className="text-xs text-fg-subtle leading-relaxed">
+                    ℹ️ Platforma bildirishnomalari Telegram orqali ham yuboriladi.
+                  </p>
+                </div>
               </Section>
 
               {/* SECURITY */}
@@ -237,8 +192,8 @@ export default function SettingsPage() {
                       <MessageSquareText className="h-5 w-5" strokeWidth={1.75} />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-fg">Telegram</p>
-                      <p className="text-xs text-fg-muted">Telegram orqali kirish</p>
+                      <p className="text-sm font-semibold text-fg">Telegram OTP</p>
+                      <p className="text-xs text-fg-muted">Kod orqali kirishning yagona usuli</p>
                     </div>
                   </div>
                   <Badge variant="success">
@@ -273,7 +228,7 @@ export default function SettingsPage() {
         </div>
       </main>
 
-      {/* Delete confirm overlay */}
+      {/* Delete confirm */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div
@@ -288,8 +243,8 @@ export default function SettingsPage() {
             <h2 className="display-sm">{t('settings.deleteAccount')}</h2>
             <p className="mt-2 text-sm text-fg-muted">{t('settings.deleteAccountWarning')}</p>
             <div className="mt-4">
-              <label className="mb-1.5 block text-xs font-semibold text-fg-muted uppercase tracking-wider">
-                Tasdiqlash uchun "OʻCHIRISH" deb yozing
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-fg-muted">
+                Tasdiqlash uchun «OʻCHIRISH» deb yozing
               </label>
               <input
                 value={deleteInput}
@@ -299,18 +254,10 @@ export default function SettingsPage() {
               />
             </div>
             <div className="mt-5 flex gap-3">
-              <button
-                type="button"
-                onClick={() => setShowDeleteConfirm(false)}
-                className="btn btn-secondary flex-1"
-              >
+              <button type="button" onClick={() => setShowDeleteConfirm(false)} className="btn btn-secondary flex-1">
                 {t('common.cancel')}
               </button>
-              <button
-                type="button"
-                disabled={deleteInput !== 'OʻCHIRISH'}
-                className="btn btn-danger flex-1"
-              >
+              <button type="button" disabled={deleteInput !== 'OʻCHIRISH'} className="btn btn-danger flex-1">
                 {t('common.delete')}
               </button>
             </div>
