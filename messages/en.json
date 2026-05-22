@@ -42,7 +42,8 @@
     "translate": "Translate",
     "showOriginal": "Original",
     "refresh": "Refresh",
-    "details": "Details"
+    "details": "Details",
+    "accountSummary": "Hisob qisqacha"
   },
   "landing": {
     "heroTitle": "Digital Livestock Marketplace",
@@ -159,7 +160,8 @@
     "shares": "Shares",
     "mapUnavailable": "Map unavailable",
     "mapTapToSetPin": "Tap the map to drop the pin",
-    "useMyLocation": "Use my location"
+    "useMyLocation": "Use my location",
+    "views": "Ko'rishlar"
   },
   "listings": {
     "title": "Listings",
@@ -214,7 +216,16 @@
     "postedAgo": "posted {time} ago",
     "updatedAgo": "updated {time} ago",
     "restore": "Reactivate",
-    "locationOnMap": "Location on map"
+    "locationOnMap": "Location on map",
+    "descriptionPlaceholder": "Hayvon haqida batafsil yozing...",
+    "titlePlaceholder": "E'lon sarlavhasi",
+    "age": "Yoshi",
+    "gender": "Jinsi",
+    "male": "Erkak",
+    "female": "Urg'ochi",
+    "weight": "Vazni",
+    "breed": "Zot",
+    "healthStatus": "Sog'lig'i"
   },
   "categories": {
     "all": "All",
@@ -298,7 +309,9 @@
     "topSeller": "Top seller",
     "newSeller": "New seller",
     "trustedSeller": "Trusted seller",
-    "myReports": "My reports"
+    "myReports": "My reports",
+    "title": "Profil",
+    "accountSummary": "Hisob qisqacha"
   },
   "userStatus": {
     "good": "Good",
@@ -360,7 +373,8 @@
     "newSellers": "New sellers",
     "trustedSellers": "Trusted sellers",
     "followers": "Followers",
-    "totalReviews": "reviews"
+    "totalReviews": "reviews",
+    "trustNotice": "Platforma buyer-seller o'rtasidagi bitim uchun javobgar emas"
   },
   "comments": {
     "title": "Comments",
@@ -403,7 +417,9 @@
     "reportUser": "Report user",
     "today": "Today",
     "yesterday": "Yesterday",
-    "messageCopied": "Message copied"
+    "messageCopied": "Message copied",
+    "send": "Yuborish",
+    "placeholder": "Xabar yozing..."
   },
   "notifications": {
     "title": "Notifications",
@@ -420,7 +436,8 @@
     "adminMessage": "Admin message",
     "systemUpdate": "System update",
     "read": "Read",
-    "unread": "New"
+    "unread": "New",
+    "empty": "Bildirishnomalar yo'q"
   },
   "search": {
     "title": "Search",
@@ -434,7 +451,10 @@
     "filterByCategory": "By category",
     "filterByPrice": "By price",
     "filterByLocation": "By location",
-    "filterByDate": "By date"
+    "filterByDate": "By date",
+    "recent": "So'nggi qidiruvlar",
+    "popular": "Mashhur qidiruvlar",
+    "sellers": "Sotuvchilar"
   },
   "create": {
     "title": "Create listing",
@@ -462,7 +482,8 @@
     "publishing": "Publishing...",
     "publishSuccess": "Listing published successfully",
     "mapPinLabel": "Map pin (optional)",
-    "mapPinHelp": "Drop a pin so buyers can see the listing on the map."
+    "mapPinHelp": "Drop a pin so buyers can see the listing on the map.",
+    "stepBasics": "Asosiy ma'lumot"
   },
   "admin": {
     "title": "Title",
@@ -543,7 +564,8 @@
     "broadcast": "Broadcast",
     "block": "Block",
     "unblock": "Unblock",
-    "notesRequiredToResolve": "Add a note before resolving."
+    "notesRequiredToResolve": "Add a note before resolving.",
+    "reports": "Hisobotlar"
   },
   "analytics": {
     "title": "Analytics",
@@ -607,7 +629,9 @@
     "navoi": "Navoi",
     "sirdarya": "Syrdarya",
     "khorezm": "Khorezm",
-    "karakalpakstan": "Karakalpakstan"
+    "karakalpakstan": "Karakalpakstan",
+    "tashkent_city": "Toshkent shahri",
+    "syrdarya": "Sirdaryo"
   },
   "errors": {
     "required": "This field is required",
@@ -634,7 +658,9 @@
     "loadFailed": "Failed to load",
     "connectionLost": "Connection lost",
     "reconnecting": "Reconnecting",
-    "permissionDenied": "Permission denied"
+    "permissionDenied": "Permission denied",
+    "generic": "Xatolik yuz berdi",
+    "network": "Tarmoq xatosi"
   },
   "success": {
     "saved": "Saved successfully",
@@ -681,7 +707,8 @@
   },
   "validation": {
     "atLeastOneFieldRequired": "At least one field is required",
-    "regionRequired": "Please select a region first"
+    "regionRequired": "Please select a region first",
+    "required": "Majburiy maydon"
   },
   "profileInfo": {
     "title": "Important information",
@@ -749,12 +776,23 @@
       "other": "Other (please describe)"
     },
     "status": {
-      "pending": "Submitted",
+      "pending": "Pending",
       "under_review": "Under review",
-      "resolved_valid": "Accepted",
-      "resolved_invalid": "Rejected"
+      "resolved_valid": "Confirmed",
+      "resolved_invalid": "Dismissed"
     },
-    "complainant": "Filed by"
+    "complainant": "Filed by",
+    "title": "Shikoyat",
+    "subject": "Shikoyat qilingan",
+    "reasonLabel": "Sabab",
+    "adminResponse": "Admin javobi",
+    "created": "Yuborildi",
+    "resolved": "Hal qilindi",
+    "status.pending": "Kutilmoqda",
+    "status.under_review": "Ko'rib chiqilmoqda",
+    "status.resolved_valid": "Tasdiqlandi",
+    "status.resolved_invalid": "Rad etildi",
+    "statusLabel": "Holat"
   },
   "security": {
     "title": "Security",
@@ -775,7 +813,10 @@
       "session_revoked": "Session ended",
       "all_sessions_revoked": "All other sessions ended",
       "suspicious_activity": "Suspicious activity detected"
-    }
+    },
+    "sessions": "Seanslat",
+    "revokeAllOthers": "Boshqa seanslarga ruxsatni qaytarib olish",
+    "events": "Xavfsizlik voqealari"
   },
   "adminMod": {
     "title": "Moderation centre",
@@ -816,7 +857,28 @@
     "status_resolved_valid": "Confirmed",
     "status_resolved_invalid": "Dismissed",
     "severity": "Severity",
-    "assignedTo": "Assigned to"
+    "assignedTo": "Assigned to",
+    "reason_fake_animal_age": "Yoshi to'g'ri emas",
+    "reason_hidden_illness": "Kasallik yashirilgan",
+    "reason_fake_vaccination": "Soxta vaksina",
+    "reason_misleading_photos": "Rasmlar noto'g'ri",
+    "reason_fraudulent_pricing": "Narx aldamchi",
+    "reason_duplicate_listing": "Takroriy e'lon",
+    "reason_false_breed_claim": "Zot noto'g'ri",
+    "reason_fake_location": "Joylashuv soxta",
+    "reason_unavailable_after_agreement": "Kelishuvdan keyin yo'qoldi",
+    "reason_prohibited_animal": "Taqiqlangan hayvon",
+    "reason_misleading_description": "Noto'g'ri tavsif",
+    "reason_repeated_violations": "Qayta-qayta qoidabuzarlik",
+    "reason_aggressive_behavior": "Tajovuzkor muomala",
+    "reason_scam_attempt": "Firibgarlik urinishi",
+    "reason_no_show_after_deal": "Kelishuvdan keyin kelmadi",
+    "reason_false_identity": "Yolg'on shaxs",
+    "reason_repeated_fake_listings": "Qayta soxta e'lonlar",
+    "reason_demanding_prepayment_scam": "Oldindan to'lov firibgarlik",
+    "reason_harassment": "Bezovta qilish",
+    "reason_off_platform_payment_pressure": "Platforma tashqarida to'lov",
+    "reason_other": "Boshqa sabab"
   },
   "terms": {
     "title": "Platform Terms",

@@ -160,7 +160,8 @@
     "shares": "Ulashishlar",
     "mapUnavailable": "Xarita yuklanmadi",
     "mapTapToSetPin": "Xaritani bosib belgini qoʻying",
-    "useMyLocation": "Mening joyim"
+    "useMyLocation": "Mening joyim",
+    "views": "Ko'rishlar"
   },
   "listings": {
     "title": "Eʼlonlar",
@@ -215,7 +216,16 @@
     "postedAgo": "{time} oldin joylashtirilgan",
     "updatedAgo": "{time} oldin yangilangan",
     "restore": "Qayta aktivlashtirish",
-    "locationOnMap": "Xaritada joylashuv"
+    "locationOnMap": "Xaritada joylashuv",
+    "descriptionPlaceholder": "Hayvon haqida batafsil yozing...",
+    "titlePlaceholder": "E'lon sarlavhasi",
+    "age": "Yoshi",
+    "gender": "Jinsi",
+    "male": "Erkak",
+    "female": "Urg'ochi",
+    "weight": "Vazni",
+    "breed": "Zot",
+    "healthStatus": "Sog'lig'i"
   },
   "categories": {
     "all": "Barchasi",
@@ -303,7 +313,8 @@
     "myReports": "Shikoyatlarim",
     "myReportsDesc": "Siz yuborgan shikoyatlar ro'yxati",
     "noReports": "Hozircha shikoyat yo'q",
-    "noReportsDesc": "Shikoyat yuborish uchun e'lon yoki sotuvchi sahifasini oching"
+    "noReportsDesc": "Shikoyat yuborish uchun e'lon yoki sotuvchi sahifasini oching",
+    "title": "Profil"
   },
   "userStatus": {
     "good": "Yaxshi",
@@ -365,7 +376,8 @@
     "newSellers": "Yangi sotuvchilar",
     "trustedSellers": "Ishonchli sotuvchilar",
     "followers": "Obunachilar",
-    "totalReviews": "sharh"
+    "totalReviews": "sharh",
+    "trustNotice": "Platforma buyer-seller o'rtasidagi bitim uchun javobgar emas"
   },
   "comments": {
     "title": "Izohlar",
@@ -408,7 +420,9 @@
     "reportUser": "Shikoyat qilish",
     "today": "Bugun",
     "yesterday": "Kecha",
-    "messageCopied": "Xabar nusxalandi"
+    "messageCopied": "Xabar nusxalandi",
+    "send": "Yuborish",
+    "placeholder": "Xabar yozing..."
   },
   "notifications": {
     "title": "Bildirishnomalar",
@@ -425,7 +439,8 @@
     "adminMessage": "Admin xabari",
     "systemUpdate": "Tizim yangilanishi",
     "read": "O'qildi",
-    "unread": "Yangi"
+    "unread": "Yangi",
+    "empty": "Bildirishnomalar yo'q"
   },
   "search": {
     "title": "Qidirish",
@@ -439,7 +454,10 @@
     "filterByCategory": "Kategoriya boʻyicha",
     "filterByPrice": "Narx boʻyicha",
     "filterByLocation": "Joylashuv boʻyicha",
-    "filterByDate": "Sana boʻyicha"
+    "filterByDate": "Sana boʻyicha",
+    "recent": "So'nggi qidiruvlar",
+    "popular": "Mashhur qidiruvlar",
+    "sellers": "Sotuvchilar"
   },
   "create": {
     "title": "Eʼlon yaratish",
@@ -467,7 +485,8 @@
     "publishing": "Eʼlon qilinmoqda...",
     "publishSuccess": "Eʼlon muvaffaqiyatli joylashtirildi",
     "mapPinLabel": "Xarita ustida belgi (ixtiyoriy)",
-    "mapPinHelp": "Xaritada belgini qo‘ying: xaridorlar e’lonni xaritada koʻrishi uchun."
+    "mapPinHelp": "Xaritada belgini qo‘ying: xaridorlar e’lonni xaritada koʻrishi uchun.",
+    "stepBasics": "Asosiy ma'lumot"
   },
   "admin": {
     "title": "Sarlavha",
@@ -549,7 +568,8 @@
     "block": "Bloklash",
     "unblock": "Blokdan chiqarish",
     "accountSummary": "Hisob qisqacha",
-    "notesRequiredToResolve": "Hal qilish uchun izoh qo'shing."
+    "notesRequiredToResolve": "Hal qilish uchun izoh qo'shing.",
+    "reports": "Hisobotlar"
   },
   "analytics": {
     "title": "Analitika",
@@ -613,7 +633,9 @@
     "navoi": "Navoiy",
     "sirdarya": "Sirdaryo",
     "khorezm": "Xorazm",
-    "karakalpakstan": "Qoraqalpogʻiston"
+    "karakalpakstan": "Qoraqalpogʻiston",
+    "tashkent_city": "Toshkent shahri",
+    "syrdarya": "Sirdaryo"
   },
   "errors": {
     "required": "Bu maydon toʻldirilishi shart",
@@ -640,7 +662,9 @@
     "loadFailed": "Yuklab boʻlmadi",
     "connectionLost": "Aloqa uzildi",
     "reconnecting": "Qayta ulanmoqda",
-    "permissionDenied": "Ruxsat yo'q"
+    "permissionDenied": "Ruxsat yo'q",
+    "generic": "Xatolik yuz berdi",
+    "network": "Tarmoq xatosi"
   },
   "success": {
     "saved": "Muvaffaqiyatli saqlandi",
@@ -687,7 +711,8 @@
   },
   "validation": {
     "atLeastOneFieldRequired": "Kamida bitta maydon toʻldirilishi shart",
-    "regionRequired": "Avval viloyatni tanlang"
+    "regionRequired": "Avval viloyatni tanlang",
+    "required": "Majburiy maydon"
   },
   "profileInfo": {
     "title": "Muhim maʼlumot",
@@ -754,14 +779,24 @@
       "off_platform_payment_pressure": "Platformadan tashqarida toʻlov bosimi",
       "other": "Boshqa (tushuntirish bering)"
     },
-    "status": "Holat",
+    "status": {
+      "pending": "Kutilmoqda",
+      "under_review": "Ko'rib chiqilmoqda",
+      "resolved_valid": "Tasdiqlandi",
+      "resolved_invalid": "Rad etildi"
+    },
     "title": "Shikoyat",
     "subject": "Shikoyat qilingan",
     "reasonLabel": "Sabab",
     "adminResponse": "Admin javobi",
     "created": "Yuborildi",
     "resolved": "Hal qilindi",
-    "complainant": "Shikoyat yuboruvchi"
+    "complainant": "Shikoyat yuboruvchi",
+    "status.pending": "Kutilmoqda",
+    "status.under_review": "Ko'rib chiqilmoqda",
+    "status.resolved_valid": "Tasdiqlandi",
+    "status.resolved_invalid": "Rad etildi",
+    "statusLabel": "Holat"
   },
   "security": {
     "title": "Xavfsizlik",
@@ -782,7 +817,10 @@
       "session_revoked": "Seans yakunlandi",
       "all_sessions_revoked": "Barcha boshqa seanslar yakunlandi",
       "suspicious_activity": "Shubhali faollik aniqlandi"
-    }
+    },
+    "sessions": "Seanslat",
+    "revokeAllOthers": "Boshqa seanslarga ruxsatni qaytarib olish",
+    "events": "Xavfsizlik voqealari"
   },
   "adminMod": {
     "title": "Moderatsiya markazi",
@@ -823,7 +861,28 @@
     "status_resolved_valid": "Tasdiqlandi",
     "status_resolved_invalid": "Inkor etildi",
     "severity": "Darajasi",
-    "assignedTo": "Tayinlangan"
+    "assignedTo": "Tayinlangan",
+    "reason_fake_animal_age": "Yoshi to'g'ri emas",
+    "reason_hidden_illness": "Kasallik yashirilgan",
+    "reason_fake_vaccination": "Soxta vaksina",
+    "reason_misleading_photos": "Rasmlar noto'g'ri",
+    "reason_fraudulent_pricing": "Narx aldamchi",
+    "reason_duplicate_listing": "Takroriy e'lon",
+    "reason_false_breed_claim": "Zot noto'g'ri",
+    "reason_fake_location": "Joylashuv soxta",
+    "reason_unavailable_after_agreement": "Kelishuvdan keyin yo'qoldi",
+    "reason_prohibited_animal": "Taqiqlangan hayvon",
+    "reason_misleading_description": "Noto'g'ri tavsif",
+    "reason_repeated_violations": "Qayta-qayta qoidabuzarlik",
+    "reason_aggressive_behavior": "Tajovuzkor muomala",
+    "reason_scam_attempt": "Firibgarlik urinishi",
+    "reason_no_show_after_deal": "Kelishuvdan keyin kelmadi",
+    "reason_false_identity": "Yolg'on shaxs",
+    "reason_repeated_fake_listings": "Qayta soxta e'lonlar",
+    "reason_demanding_prepayment_scam": "Oldindan to'lov firibgarlik",
+    "reason_harassment": "Bezovta qilish",
+    "reason_off_platform_payment_pressure": "Platforma tashqarida to'lov",
+    "reason_other": "Boshqa sabab"
   },
   "terms": {
     "title": "Foydalanish shartlari",

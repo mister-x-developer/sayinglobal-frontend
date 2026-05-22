@@ -42,7 +42,8 @@
     "translate": "Таржима",
     "showOriginal": "Асл матн",
     "refresh": "Янгилаш",
-    "details": "Батафсил"
+    "details": "Батафсил",
+    "accountSummary": "Hisob qisqacha"
   },
   "landing": {
     "heroTitle": "Рақамли Чорва Бозори",
@@ -159,7 +160,8 @@
     "shares": "Улашишлар",
     "mapUnavailable": "Харита юкланмади",
     "mapTapToSetPin": "Харитани босиб белгини қўйинг",
-    "useMyLocation": "Менинг жойим"
+    "useMyLocation": "Менинг жойим",
+    "views": "Ko'rishlar"
   },
   "listings": {
     "title": "Эълонлар",
@@ -214,7 +216,16 @@
     "postedAgo": "{time} олдин жойлаштирилган",
     "updatedAgo": "{time} олдин янгиланган",
     "restore": "Қайта активлаштириш",
-    "locationOnMap": "Харитада жойлашув"
+    "locationOnMap": "Харитада жойлашув",
+    "descriptionPlaceholder": "Hayvon haqida batafsil yozing...",
+    "titlePlaceholder": "E'lon sarlavhasi",
+    "age": "Yoshi",
+    "gender": "Jinsi",
+    "male": "Erkak",
+    "female": "Urg'ochi",
+    "weight": "Vazni",
+    "breed": "Zot",
+    "healthStatus": "Sog'lig'i"
   },
   "categories": {
     "all": "Барчаси",
@@ -298,7 +309,9 @@
     "topSeller": "Энг яхши сотувчи",
     "newSeller": "Янги сотувчи",
     "trustedSeller": "Ишончли сотувчи",
-    "myReports": "Шикоятларим"
+    "myReports": "Шикоятларим",
+    "title": "Profil",
+    "accountSummary": "Hisob qisqacha"
   },
   "userStatus": {
     "good": "Яхши",
@@ -360,7 +373,8 @@
     "newSellers": "Янги сотувчилар",
     "trustedSellers": "Ишончли сотувчилар",
     "followers": "Обуначилар",
-    "totalReviews": "шарҳ"
+    "totalReviews": "шарҳ",
+    "trustNotice": "Platforma buyer-seller o'rtasidagi bitim uchun javobgar emas"
   },
   "comments": {
     "title": "Изоҳлар",
@@ -403,7 +417,9 @@
     "reportUser": "Шикоят қилиш",
     "today": "Бугун",
     "yesterday": "Кеча",
-    "messageCopied": "Хабар нусхаланди"
+    "messageCopied": "Хабар нусхаланди",
+    "send": "Yuborish",
+    "placeholder": "Xabar yozing..."
   },
   "notifications": {
     "title": "Билдиришномалар",
@@ -420,7 +436,8 @@
     "adminMessage": "Админ хабари",
     "systemUpdate": "Тизим янгиланиши",
     "read": "Ўқилди",
-    "unread": "Янги"
+    "unread": "Янги",
+    "empty": "Bildirishnomalar yo'q"
   },
   "search": {
     "title": "Қидириш",
@@ -434,7 +451,10 @@
     "filterByCategory": "Категория бўйича",
     "filterByPrice": "Нарх бўйича",
     "filterByLocation": "Жойлашув бўйича",
-    "filterByDate": "Сана бўйича"
+    "filterByDate": "Сана бўйича",
+    "recent": "So'nggi qidiruvlar",
+    "popular": "Mashhur qidiruvlar",
+    "sellers": "Sotuvchilar"
   },
   "create": {
     "title": "Эълон яратиш",
@@ -462,7 +482,8 @@
     "publishing": "Эълон қилинмоқда...",
     "publishSuccess": "Эълон муваффақиятли жойлаштирилди",
     "mapPinLabel": "Харита устида белги (ихтиёрий)",
-    "mapPinHelp": "Харитада белгини қўйинг: харидорлар эълонни харитада кўриши учун."
+    "mapPinHelp": "Харитада белгини қўйинг: харидорлар эълонни харитада кўриши учун.",
+    "stepBasics": "Asosiy ma'lumot"
   },
   "admin": {
     "title": "Сарлавҳа",
@@ -540,7 +561,11 @@
     "flagged": "шикоят",
     "block": "Блоклаш",
     "unblock": "Блокдан чиқариш",
-    "notesRequiredToResolve": "Ҳал қилиш учун изоҳ қўшинг."
+    "notesRequiredToResolve": "Ҳал қилиш учун изоҳ қўшинг.",
+    "reports": "Hisobotlar",
+    "reportsReceived": "Foydalanuvchiga shikoyatlar",
+    "reportsFiled": "Yuborilgan shikoyatlar",
+    "broadcast": "Xabar"
   },
   "analytics": {
     "title": "Аналитика",
@@ -604,7 +629,9 @@
     "navoi": "Навоий",
     "sirdarya": "Сирдарё",
     "khorezm": "Хоразм",
-    "karakalpakstan": "Қорақалпоғистон"
+    "karakalpakstan": "Қорақалпоғистон",
+    "tashkent_city": "Toshkent shahri",
+    "syrdarya": "Sirdaryo"
   },
   "errors": {
     "required": "Бу майдон тўлдирилиши шарт",
@@ -631,7 +658,9 @@
     "loadFailed": "Юклаб бўлмади",
     "connectionLost": "Алоқа узилди",
     "reconnecting": "Қайта уланмоқда",
-    "permissionDenied": "Рухсат йўқ"
+    "permissionDenied": "Рухсат йўқ",
+    "generic": "Xatolik yuz berdi",
+    "network": "Tarmoq xatosi"
   },
   "success": {
     "saved": "Муваффақиятли сақланди",
@@ -678,7 +707,8 @@
   },
   "validation": {
     "atLeastOneFieldRequired": "Камида битта майдон тўлдирилиши шарт",
-    "regionRequired": "Аввал вилоятни танланг"
+    "regionRequired": "Аввал вилоятни танланг",
+    "required": "Majburiy maydon"
   },
   "profileInfo": {
     "title": "Муҳим маълумот",
@@ -746,12 +776,23 @@
       "other": "Бошқа (тушунтириш беринг)"
     },
     "status": {
-      "pending": "Юборилди",
+      "pending": "Кутилмоқда",
       "under_review": "Кўриб чиқилмоқда",
       "resolved_valid": "Тасдиқланди",
       "resolved_invalid": "Рад этилди"
     },
-    "complainant": "Шикоят юборувчи"
+    "complainant": "Шикоят юборувчи",
+    "title": "Shikoyat",
+    "subject": "Shikoyat qilingan",
+    "reasonLabel": "Sabab",
+    "adminResponse": "Admin javobi",
+    "created": "Yuborildi",
+    "resolved": "Hal qilindi",
+    "status.pending": "Kutilmoqda",
+    "status.under_review": "Ko'rib chiqilmoqda",
+    "status.resolved_valid": "Tasdiqlandi",
+    "status.resolved_invalid": "Rad etildi",
+    "statusLabel": "Holat"
   },
   "security": {
     "title": "Хавфсизлик",
@@ -772,7 +813,10 @@
       "session_revoked": "Сеанс якунланди",
       "all_sessions_revoked": "Барча бошқа сеанслар якунланди",
       "suspicious_activity": "Шубҳали фаоллик аниқланди"
-    }
+    },
+    "sessions": "Seanslat",
+    "revokeAllOthers": "Boshqa seanslarga ruxsatni qaytarib olish",
+    "events": "Xavfsizlik voqealari"
   },
   "adminMod": {
     "title": "Модерация маркази",
@@ -813,7 +857,28 @@
     "status_resolved_valid": "Тасдиқланди",
     "status_resolved_invalid": "Инкор этилди",
     "severity": "Даражаси",
-    "assignedTo": "Тайинланган"
+    "assignedTo": "Тайинланган",
+    "reason_fake_animal_age": "Yoshi to'g'ri emas",
+    "reason_hidden_illness": "Kasallik yashirilgan",
+    "reason_fake_vaccination": "Soxta vaksina",
+    "reason_misleading_photos": "Rasmlar noto'g'ri",
+    "reason_fraudulent_pricing": "Narx aldamchi",
+    "reason_duplicate_listing": "Takroriy e'lon",
+    "reason_false_breed_claim": "Zot noto'g'ri",
+    "reason_fake_location": "Joylashuv soxta",
+    "reason_unavailable_after_agreement": "Kelishuvdan keyin yo'qoldi",
+    "reason_prohibited_animal": "Taqiqlangan hayvon",
+    "reason_misleading_description": "Noto'g'ri tavsif",
+    "reason_repeated_violations": "Qayta-qayta qoidabuzarlik",
+    "reason_aggressive_behavior": "Tajovuzkor muomala",
+    "reason_scam_attempt": "Firibgarlik urinishi",
+    "reason_no_show_after_deal": "Kelishuvdan keyin kelmadi",
+    "reason_false_identity": "Yolg'on shaxs",
+    "reason_repeated_fake_listings": "Qayta soxta e'lonlar",
+    "reason_demanding_prepayment_scam": "Oldindan to'lov firibgarlik",
+    "reason_harassment": "Bezovta qilish",
+    "reason_off_platform_payment_pressure": "Platforma tashqarida to'lov",
+    "reason_other": "Boshqa sabab"
   },
   "terms": {
     "title": "Фойдаланиш шартлари",

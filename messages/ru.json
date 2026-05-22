@@ -42,7 +42,8 @@
     "translate": "Перевести",
     "showOriginal": "Оригинал",
     "refresh": "Обновить",
-    "details": "Подробнее"
+    "details": "Подробнее",
+    "accountSummary": "Hisob qisqacha"
   },
   "landing": {
     "heroTitle": "Цифровой рынок скота",
@@ -159,7 +160,8 @@
     "shares": "Поделились",
     "mapUnavailable": "Карта недоступна",
     "mapTapToSetPin": "Нажмите на карту, чтобы поставить метку",
-    "useMyLocation": "Моё местоположение"
+    "useMyLocation": "Моё местоположение",
+    "views": "Ko'rishlar"
   },
   "listings": {
     "title": "Объявления",
@@ -214,7 +216,16 @@
     "postedAgo": "опубликовано {time} назад",
     "updatedAgo": "обновлено {time} назад",
     "restore": "Восстановить",
-    "locationOnMap": "Местоположение на карте"
+    "locationOnMap": "Местоположение на карте",
+    "descriptionPlaceholder": "Hayvon haqida batafsil yozing...",
+    "titlePlaceholder": "E'lon sarlavhasi",
+    "age": "Yoshi",
+    "gender": "Jinsi",
+    "male": "Erkak",
+    "female": "Urg'ochi",
+    "weight": "Vazni",
+    "breed": "Zot",
+    "healthStatus": "Sog'lig'i"
   },
   "categories": {
     "all": "Все",
@@ -298,7 +309,9 @@
     "topSeller": "Лучший продавец",
     "newSeller": "Новый продавец",
     "trustedSeller": "Надёжный продавец",
-    "myReports": "Мои жалобы"
+    "myReports": "Мои жалобы",
+    "title": "Profil",
+    "accountSummary": "Hisob qisqacha"
   },
   "userStatus": {
     "good": "Хорошо",
@@ -360,7 +373,8 @@
     "newSellers": "Новые продавцы",
     "trustedSellers": "Надёжные продавцы",
     "followers": "Подписчики",
-    "totalReviews": "отзывов"
+    "totalReviews": "отзывов",
+    "trustNotice": "Platforma buyer-seller o'rtasidagi bitim uchun javobgar emas"
   },
   "comments": {
     "title": "Комментарии",
@@ -403,7 +417,9 @@
     "reportUser": "Пожаловаться",
     "today": "Сегодня",
     "yesterday": "Вчера",
-    "messageCopied": "Сообщение скопировано"
+    "messageCopied": "Сообщение скопировано",
+    "send": "Yuborish",
+    "placeholder": "Xabar yozing..."
   },
   "notifications": {
     "title": "Уведомления",
@@ -420,7 +436,8 @@
     "adminMessage": "Сообщение от админа",
     "systemUpdate": "Обновление системы",
     "read": "Прочитано",
-    "unread": "Новое"
+    "unread": "Новое",
+    "empty": "Bildirishnomalar yo'q"
   },
   "search": {
     "title": "Поиск",
@@ -434,7 +451,10 @@
     "filterByCategory": "По категории",
     "filterByPrice": "По цене",
     "filterByLocation": "По местоположению",
-    "filterByDate": "По дате"
+    "filterByDate": "По дате",
+    "recent": "So'nggi qidiruvlar",
+    "popular": "Mashhur qidiruvlar",
+    "sellers": "Sotuvchilar"
   },
   "create": {
     "title": "Создать объявление",
@@ -462,7 +482,8 @@
     "publishing": "Публикация...",
     "publishSuccess": "Объявление успешно опубликовано",
     "mapPinLabel": "Метка на карте (необязательно)",
-    "mapPinHelp": "Поставьте метку, чтобы покупатели видели объявление на карте."
+    "mapPinHelp": "Поставьте метку, чтобы покупатели видели объявление на карте.",
+    "stepBasics": "Asosiy ma'lumot"
   },
   "admin": {
     "title": "Заголовок",
@@ -543,7 +564,8 @@
     "broadcast": "Рассылка",
     "block": "Заблокировать",
     "unblock": "Разблокировать",
-    "notesRequiredToResolve": "Добавьте заметку перед решением."
+    "notesRequiredToResolve": "Добавьте заметку перед решением.",
+    "reports": "Hisobotlar"
   },
   "analytics": {
     "title": "Аналитика",
@@ -607,7 +629,9 @@
     "navoi": "Навои",
     "sirdarya": "Сырдарья",
     "khorezm": "Хорезм",
-    "karakalpakstan": "Каракалпакстан"
+    "karakalpakstan": "Каракалпакстан",
+    "tashkent_city": "Toshkent shahri",
+    "syrdarya": "Sirdaryo"
   },
   "errors": {
     "required": "Это поле обязательно",
@@ -634,7 +658,9 @@
     "loadFailed": "Не удалось загрузить",
     "connectionLost": "Соединение потеряно",
     "reconnecting": "Переподключение",
-    "permissionDenied": "Нет доступа"
+    "permissionDenied": "Нет доступа",
+    "generic": "Xatolik yuz berdi",
+    "network": "Tarmoq xatosi"
   },
   "success": {
     "saved": "Успешно сохранено",
@@ -681,7 +707,8 @@
   },
   "validation": {
     "atLeastOneFieldRequired": "Необходимо заполнить хотя бы одно поле",
-    "regionRequired": "Сначала выберите регион"
+    "regionRequired": "Сначала выберите регион",
+    "required": "Majburiy maydon"
   },
   "profileInfo": {
     "title": "Важная информация",
@@ -749,12 +776,23 @@
       "other": "Другое (опишите подробно)"
     },
     "status": {
-      "pending": "Отправлено",
-      "under_review": "На проверке",
-      "resolved_valid": "Принято",
-      "resolved_invalid": "Отклонено"
+      "pending": "Ожидает",
+      "under_review": "На рассмотрении",
+      "resolved_valid": "Подтверждена",
+      "resolved_invalid": "Отклонена"
     },
-    "complainant": "Заявитель"
+    "complainant": "Заявитель",
+    "title": "Shikoyat",
+    "subject": "Shikoyat qilingan",
+    "reasonLabel": "Sabab",
+    "adminResponse": "Admin javobi",
+    "created": "Yuborildi",
+    "resolved": "Hal qilindi",
+    "status.pending": "Kutilmoqda",
+    "status.under_review": "Ko'rib chiqilmoqda",
+    "status.resolved_valid": "Tasdiqlandi",
+    "status.resolved_invalid": "Rad etildi",
+    "statusLabel": "Holat"
   },
   "security": {
     "title": "Безопасность",
@@ -775,7 +813,10 @@
       "session_revoked": "Сессия завершена",
       "all_sessions_revoked": "Все другие сессии завершены",
       "suspicious_activity": "Обнаружена подозрительная активность"
-    }
+    },
+    "sessions": "Seanslat",
+    "revokeAllOthers": "Boshqa seanslarga ruxsatni qaytarib olish",
+    "events": "Xavfsizlik voqealari"
   },
   "adminMod": {
     "title": "Центр модерации",
@@ -816,7 +857,28 @@
     "status_resolved_valid": "Подтверждена",
     "status_resolved_invalid": "Отклонена",
     "severity": "Серьёзность",
-    "assignedTo": "Назначено"
+    "assignedTo": "Назначено",
+    "reason_fake_animal_age": "Yoshi to'g'ri emas",
+    "reason_hidden_illness": "Kasallik yashirilgan",
+    "reason_fake_vaccination": "Soxta vaksina",
+    "reason_misleading_photos": "Rasmlar noto'g'ri",
+    "reason_fraudulent_pricing": "Narx aldamchi",
+    "reason_duplicate_listing": "Takroriy e'lon",
+    "reason_false_breed_claim": "Zot noto'g'ri",
+    "reason_fake_location": "Joylashuv soxta",
+    "reason_unavailable_after_agreement": "Kelishuvdan keyin yo'qoldi",
+    "reason_prohibited_animal": "Taqiqlangan hayvon",
+    "reason_misleading_description": "Noto'g'ri tavsif",
+    "reason_repeated_violations": "Qayta-qayta qoidabuzarlik",
+    "reason_aggressive_behavior": "Tajovuzkor muomala",
+    "reason_scam_attempt": "Firibgarlik urinishi",
+    "reason_no_show_after_deal": "Kelishuvdan keyin kelmadi",
+    "reason_false_identity": "Yolg'on shaxs",
+    "reason_repeated_fake_listings": "Qayta soxta e'lonlar",
+    "reason_demanding_prepayment_scam": "Oldindan to'lov firibgarlik",
+    "reason_harassment": "Bezovta qilish",
+    "reason_off_platform_payment_pressure": "Platforma tashqarida to'lov",
+    "reason_other": "Boshqa sabab"
   },
   "terms": {
     "title": "Условия использования",
