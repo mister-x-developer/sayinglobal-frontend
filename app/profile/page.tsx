@@ -18,7 +18,6 @@ import {
   MessageSquareText,
   ShieldCheck,
   Plus,
-  Clock,
   Flag,
 } from 'lucide-react';
 
@@ -137,10 +136,6 @@ export default function ProfilePage() {
                           {profile.phone}
                         </span>
                       )}
-                      <span className="inline-flex items-center gap-1.5">
-                        <Clock className="h-4 w-4" strokeWidth={1.75} />
-                        {t('profile.responseTime')}: ~2h
-                      </span>
                     </div>
                   </div>
 

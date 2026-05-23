@@ -83,28 +83,28 @@ export default function AdminDashboardPage() {
         {
           label: t('admin.totalUsers'),
           value: stats.users.total,
-          subtext: `+${stats.users.new_today} bugun`,
+          subtext: `+${stats.users.new_today} ${t('analytics.today')}`,
           icon: Users,
           tone: 'bg-info/12 text-info',
         },
         {
           label: t('admin.activeListings'),
           value: stats.listings.active,
-          subtext: `${formatNumber(stats.listings.total)} jami`,
+          subtext: `${formatNumber(stats.listings.total)} ${t('admin.totalListings')}`,
           icon: Package,
           tone: 'bg-brand-primary/10 text-brand-primary',
         },
         {
-          label: "Ko'rishlar",
+          label: t('analytics.totalViews'),
           value: stats.engagement.total_views,
-          subtext: `+${stats.engagement.views_today} bugun`,
+          subtext: `+${stats.engagement.views_today} ${t('analytics.today')}`,
           icon: Eye,
           tone: 'bg-success/12 text-success',
         },
         {
-          label: 'Xabarlar',
+          label: t('analytics.totalMessages'),
           value: stats.messages.total,
-          subtext: `+${stats.messages.today} bugun`,
+          subtext: `+${stats.messages.today} ${t('analytics.today')}`,
           icon: MessageCircle,
           tone: 'bg-purple-500/12 text-purple-600',
         },
@@ -194,29 +194,29 @@ export default function AdminDashboardPage() {
                 className="surface-elevated overflow-hidden"
               >
                 <div className="border-b border-border px-5 py-4">
-                  <h2 className="display-sm">{t('analytics.todayShort' as any) ?? 'Bugun'}</h2>
+                  <h2 className="display-sm">{t('analytics.today')}</h2>
                 </div>
                 <div className="grid grid-cols-2 gap-2 p-4">
                   <div className="rounded-xl border border-border p-4">
-                    <p className="text-xs text-fg-subtle">Yangi foydalanuvchilar</p>
+                    <p className="text-xs text-fg-subtle">{t('analytics.newUsers')}</p>
                     <p className="mt-1 font-display text-2xl font-bold text-brand-primary">
                       {formatNumber(stats.users.new_today)}
                     </p>
                   </div>
                   <div className="rounded-xl border border-border p-4">
-                    <p className="text-xs text-fg-subtle">Yangi e'lonlar</p>
+                    <p className="text-xs text-fg-subtle">{t('analytics.newListings')}</p>
                     <p className="mt-1 font-display text-2xl font-bold text-info">
                       {formatNumber(stats.listings.new_today)}
                     </p>
                   </div>
                   <div className="rounded-xl border border-border p-4">
-                    <p className="text-xs text-fg-subtle">Sotilgan e'lonlar</p>
+                    <p className="text-xs text-fg-subtle">{t('admin.soldListings')}</p>
                     <p className="mt-1 font-display text-2xl font-bold text-success">
                       {formatNumber(stats.listings.sold)}
                     </p>
                   </div>
                   <div className="rounded-xl border border-border p-4">
-                    <p className="text-xs text-fg-subtle">Faol foydalanuvchilar</p>
+                    <p className="text-xs text-fg-subtle">{t('analytics.activeUsers')}</p>
                     <p className="mt-1 font-display text-2xl font-bold text-purple-600">
                       {formatNumber(stats.users.active)}
                     </p>

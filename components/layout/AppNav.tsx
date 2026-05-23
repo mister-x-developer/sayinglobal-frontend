@@ -27,7 +27,7 @@ import { Logo } from '@/components/shared/Logo';
 import { ThemeSwitcher } from '@/components/shared/ThemeSwitcher';
 import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher';
 import { Avatar } from '@/components/ui/Avatar';
-import { useAuthStore } from '@/lib/store/auth';
+import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
 import { useNotificationsStore } from '@/lib/store/notifications';
 
 // ── Mobile drawer rendered via portal so it escapes the sticky header stacking context ──
@@ -172,11 +172,16 @@ export function AppNav() {
   const pathname = usePathname();
   const router = useRouter();
   const { user, isAuthenticated, logout } = useAuthStore();
+  const hydrated = useAuthHydrated();
   const { unreadCount } = useNotificationsStore();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
+
+  // Stable logo href: only switch to /dashboard after Zustand has hydrated.
+  // Before hydration, default to '/' so SSR and first paint are consistent.
+  const logoHref = hydrated && isAuthenticated ? '/dashboard' : '/';
 
   useEffect(() => {
     setMounted(true);
@@ -229,7 +234,7 @@ export function AppNav() {
               <Menu className="h-5 w-5" strokeWidth={1.75} />
             </button>
 
-            <Logo size="sm" href={isAuthenticated ? '/dashboard' : '/'} />
+            <Logo size="sm" href={logoHref} />
 
             {/* Desktop links */}
             <nav className="ml-6 hidden items-center gap-1 md:flex" aria-label="Main navigation">
