@@ -62,16 +62,16 @@ const nextConfig = {
         key: 'Content-Security-Policy',
         value: [
           "default-src 'self'",
-          // Scripts — self + Next.js inline scripts (nonce not used here; use __next_ prefix)
-          "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-          // Styles
-          "style-src 'self' 'unsafe-inline'",
-          // Images — self + our S3/Railway backend
-          "img-src 'self' data: blob: https://*.amazonaws.com https://*.idrivee2.com https://*.idrivee2-21.com https://sayinglobal.up.railway.app https://sayinglobal-backend-production.up.railway.app",
+          // Scripts — self + Next.js inline scripts + Leaflet CDN (unpkg)
+          "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com",
+          // Styles — self + Leaflet CDN CSS (unpkg)
+          "style-src 'self' 'unsafe-inline' https://unpkg.com",
+          // Images — self + our S3/Railway backend + OSM tiles + Leaflet CDN images + Nominatim
+          "img-src 'self' data: blob: https://*.amazonaws.com https://*.idrivee2.com https://*.idrivee2-21.com https://sayinglobal.up.railway.app https://sayinglobal-backend-production.up.railway.app https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://unpkg.com",
           // Fonts
           "font-src 'self' data:",
-          // API/WS connections — production backend lives at sayinglobal.up.railway.app
-          "connect-src 'self' https://sayinglobal.up.railway.app wss://sayinglobal.up.railway.app https://sayinglobal-backend-production.up.railway.app wss://sayinglobal-backend-production.up.railway.app https://sentry.io https://o4504523.ingest.sentry.io",
+          // API/WS connections — production backend + Nominatim reverse geocoding + OSM tile fetchers
+          "connect-src 'self' https://sayinglobal.up.railway.app wss://sayinglobal.up.railway.app https://sayinglobal-backend-production.up.railway.app wss://sayinglobal-backend-production.up.railway.app https://sentry.io https://o4504523.ingest.sentry.io https://nominatim.openstreetmap.org https://*.tile.openstreetmap.org https://tile.openstreetmap.org",
           // No frames
           "frame-ancestors 'none'",
           // Workers for Next.js
