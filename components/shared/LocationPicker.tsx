@@ -1,20 +1,17 @@
 'use client';
 
 /**
- * Interactive location picker for listing create/edit.
+ * LocationPicker — premium interactive map.
  *
- * - Click on the map to drop / move a pin.
- * - "Use my location" button runs the browser geolocation API.
- * - Reads/writes `latitude` and `longitude` via `value` + `onChange`.
- *
- * Map tiles are loaded lazily from the OSM CDN — if the script fails,
- * the component degrades to a "lat / lng" pair of inputs so the user
- * can still type coordinates manually (or skip them entirely).
+ * - Click on the map to drop / move a pin
+ * - "Use my location" button uses the browser geolocation API
+ * - NEVER displays raw lat/lng numbers to the user
+ * - Shows a clear status: "Joylashuv aniqlandi" / "Joyni tanlang"
  */
 
 import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Crosshair, Loader2, MapPin } from 'lucide-react';
+import { Crosshair, Loader2, MapPin, CheckCircle2 } from 'lucide-react';
 import {
   DEFAULT_CENTER,
   DEFAULT_ZOOM,
@@ -39,9 +36,9 @@ export function LocationPicker({ value, onChange, className = 'h-80 w-full' }: L
   const [failed, setFailed] = useState(false);
   const [locating, setLocating] = useState(false);
 
-  // Current pin position derived from props
   const lat = value.lat;
   const lng = value.lng;
+  const hasPin = lat != null && lng != null;
 
   useEffect(() => {
     let cancelled = false;
@@ -51,21 +48,42 @@ export function LocationPicker({ value, onChange, className = 'h-80 w-full' }: L
       .then((L) => {
         if (cancelled || !containerRef.current) return;
         Lref.current = L;
-        const initialCenter: [number, number] =
-          lat != null && lng != null ? [lat, lng] : DEFAULT_CENTER;
 
+        // Custom premium pin icon (SVG)
+        const pinIcon = L.divIcon({
+          className: 'sg-map-pin',
+          html: `
+            <div style="position:relative;width:36px;height:46px;">
+              <svg width="36" height="46" viewBox="0 0 36 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 0C8.06 0 0 8.06 0 18c0 13.5 18 28 18 28s18-14.5 18-28C36 8.06 27.94 0 18 0z" fill="#1F7A52"/>
+                <circle cx="18" cy="18" r="7" fill="#fff"/>
+                <circle cx="18" cy="18" r="3.5" fill="#F2B100"/>
+              </svg>
+              <div style="position:absolute;left:50%;bottom:0;width:14px;height:5px;transform:translateX(-50%);background:rgba(0,0,0,0.18);border-radius:50%;filter:blur(3px);"></div>
+            </div>
+          `,
+          iconSize: [36, 46],
+          iconAnchor: [18, 46],
+        });
+
+        const initialCenter: [number, number] = hasPin ? [lat!, lng!] : DEFAULT_CENTER;
         mapRef.current = L.map(containerRef.current, {
           zoomControl: true,
           scrollWheelZoom: true,
-        }).setView(initialCenter, lat != null && lng != null ? 14 : DEFAULT_ZOOM);
+          attributionControl: false,
+        }).setView(initialCenter, hasPin ? 15 : DEFAULT_ZOOM);
 
         L.tileLayer(TILE_URL, {
           maxZoom: 19,
           attribution: TILE_ATTRIBUTION,
         }).addTo(mapRef.current);
 
-        if (lat != null && lng != null) {
-          markerRef.current = L.marker([lat, lng], { draggable: true }).addTo(mapRef.current);
+        L.control.attribution({ prefix: false, position: 'bottomright' })
+          .addAttribution('© OpenStreetMap')
+          .addTo(mapRef.current);
+
+        if (hasPin) {
+          markerRef.current = L.marker([lat!, lng!], { draggable: true, icon: pinIcon }).addTo(mapRef.current);
           markerRef.current.on('dragend', (e: any) => {
             const p = e.target.getLatLng();
             onChange({ lat: p.lat, lng: p.lng });
@@ -77,7 +95,7 @@ export function LocationPicker({ value, onChange, className = 'h-80 w-full' }: L
           if (markerRef.current) {
             markerRef.current.setLatLng([clat, clng]);
           } else {
-            markerRef.current = L.marker([clat, clng], { draggable: true }).addTo(mapRef.current);
+            markerRef.current = L.marker([clat, clng], { draggable: true, icon: pinIcon }).addTo(mapRef.current);
             markerRef.current.on('dragend', (ev: any) => {
               const p = ev.target.getLatLng();
               onChange({ lat: p.lat, lng: p.lng });
@@ -93,11 +111,9 @@ export function LocationPicker({ value, onChange, className = 'h-80 w-full' }: L
     return () => {
       cancelled = true;
     };
-    // we want to (re)initialise only once
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Sync external value → marker
   useEffect(() => {
     const L = Lref.current;
     if (!L || !mapRef.current) return;
@@ -109,7 +125,19 @@ export function LocationPicker({ value, onChange, className = 'h-80 w-full' }: L
       return;
     }
     if (!markerRef.current) {
-      markerRef.current = L.marker([lat, lng], { draggable: true }).addTo(mapRef.current);
+      const pinIcon = L.divIcon({
+        className: 'sg-map-pin',
+        html: `
+          <svg width="36" height="46" viewBox="0 0 36 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 0C8.06 0 0 8.06 0 18c0 13.5 18 28 18 28s18-14.5 18-28C36 8.06 27.94 0 18 0z" fill="#1F7A52"/>
+            <circle cx="18" cy="18" r="7" fill="#fff"/>
+            <circle cx="18" cy="18" r="3.5" fill="#F2B100"/>
+          </svg>
+        `,
+        iconSize: [36, 46],
+        iconAnchor: [18, 46],
+      });
+      markerRef.current = L.marker([lat, lng], { draggable: true, icon: pinIcon }).addTo(mapRef.current);
       markerRef.current.on('dragend', (e: any) => {
         const p = e.target.getLatLng();
         onChange({ lat: p.lat, lng: p.lng });
@@ -117,10 +145,9 @@ export function LocationPicker({ value, onChange, className = 'h-80 w-full' }: L
     } else {
       markerRef.current.setLatLng([lat, lng]);
     }
-    mapRef.current.panTo([lat, lng]);
+    mapRef.current.flyTo([lat, lng], 15, { duration: 0.6 });
   }, [lat, lng, onChange]);
 
-  // Cleanup
   useEffect(() => {
     return () => {
       if (mapRef.current) {
@@ -143,60 +170,62 @@ export function LocationPicker({ value, onChange, className = 'h-80 w-full' }: L
     );
   };
 
+  if (failed) {
+    return (
+      <div className="rounded-2xl border border-warning/30 bg-warning/8 p-6 text-center">
+        <p className="text-sm font-semibold text-warning">
+          {t('marketplace.mapUnavailable' as any) ?? 'Xarita yuklanmadi'}
+        </p>
+        <p className="mt-2 text-xs text-fg-muted">
+          Internet aloqasini tekshiring va sahifani qayta yuklang.
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <div>
-      <div className="flex items-center justify-between gap-2 mb-2">
-        <div className="text-xs text-fg-subtle inline-flex items-center gap-1.5">
-          <MapPin className="h-3.5 w-3.5" strokeWidth={1.75} />
-          {lat != null && lng != null
-            ? `${lat.toFixed(5)}, ${lng.toFixed(5)}`
-            : t('marketplace.mapTapToSetPin' as any) ?? 'Tap on the map to set the pin'}
+    <div className="space-y-2">
+      {/* Status + action bar */}
+      <div className="flex items-center justify-between gap-2 px-1">
+        <div className="flex items-center gap-2 min-w-0">
+          {hasPin ? (
+            <>
+              <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-success" strokeWidth={2.25} />
+              <span className="text-sm font-semibold text-success truncate">
+                {t('marketplace.locationSet' as any) ?? 'Joylashuv belgilandi'}
+              </span>
+            </>
+          ) : (
+            <>
+              <MapPin className="h-4 w-4 flex-shrink-0 text-fg-muted" strokeWidth={1.75} />
+              <span className="text-sm text-fg-muted truncate">
+                {t('marketplace.mapTapToSetPin' as any) ?? 'Xaritani bosib joyni belgilang'}
+              </span>
+            </>
+          )}
         </div>
         <button
           type="button"
           onClick={useMyLocation}
           disabled={locating}
-          className="btn btn-secondary btn-sm"
+          className="btn btn-secondary btn-sm flex-shrink-0"
         >
           {locating ? (
             <Loader2 className="h-3.5 w-3.5 animate-spin" strokeWidth={2} />
           ) : (
             <Crosshair className="h-3.5 w-3.5" strokeWidth={2} />
           )}
-          {t('marketplace.useMyLocation' as any) ?? 'Use my location'}
+          <span className="hidden sm:inline">
+            {t('marketplace.useMyLocation' as any) ?? 'Mening joyim'}
+          </span>
         </button>
       </div>
 
-      {failed ? (
-        <div className="grid grid-cols-2 gap-3">
-          <input
-            type="number"
-            step="0.000001"
-            placeholder="Latitude"
-            value={lat ?? ''}
-            onChange={(e) => {
-              const v = parseFloat(e.target.value);
-              if (Number.isFinite(v) && lng != null) onChange({ lat: v, lng });
-              else if (!e.target.value && lng == null) onChange(null);
-            }}
-            className="input-base"
-          />
-          <input
-            type="number"
-            step="0.000001"
-            placeholder="Longitude"
-            value={lng ?? ''}
-            onChange={(e) => {
-              const v = parseFloat(e.target.value);
-              if (Number.isFinite(v) && lat != null) onChange({ lat, lng: v });
-              else if (!e.target.value && lat == null) onChange(null);
-            }}
-            className="input-base"
-          />
-        </div>
-      ) : (
-        <div ref={containerRef} className={`${className} overflow-hidden rounded-2xl border border-border`} />
-      )}
+      {/* Map container */}
+      <div
+        ref={containerRef}
+        className={`${className} overflow-hidden rounded-2xl border border-border shadow-soft ring-1 ring-black/5`}
+      />
     </div>
   );
 }
