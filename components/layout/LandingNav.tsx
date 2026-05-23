@@ -7,6 +7,7 @@ import { ArrowRight } from 'lucide-react';
 import { Logo } from '@/components/shared/Logo';
 import { ThemeSwitcher } from '@/components/shared/ThemeSwitcher';
 import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher';
+import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
 
 /**
  * Landing-only navigation.
@@ -16,6 +17,12 @@ import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher';
 export function LandingNav() {
   const t = useTranslations();
   const [scrolled, setScrolled] = useState(false);
+  const { isAuthenticated } = useAuthStore();
+  const hydrated = useAuthHydrated();
+
+  // After hydration: authenticated users get logo → /dashboard,
+  // unauthenticated users get logo → / (landing, current page).
+  const logoHref = hydrated && isAuthenticated ? '/dashboard' : '/';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -34,22 +41,35 @@ export function LandingNav() {
     >
       <div className="container-page">
         <nav className="flex h-16 items-center justify-between" aria-label="Main navigation">
-          <Logo size="sm" />
+          <Logo size="sm" href={logoHref} />
 
           <div className="flex items-center gap-2 sm:gap-3">
             <LanguageSwitcher />
             <ThemeSwitcher />
-            <Link
-              href="/auth"
-              className="btn btn-primary btn-sm gap-1.5 group"
-            >
-              <span className="hidden sm:inline">{t('auth.title')}</span>
-              <span className="sm:hidden">{t('common.continue')}</span>
-              <ArrowRight
-                className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5"
-                strokeWidth={2.25}
-              />
-            </Link>
+            {hydrated && isAuthenticated ? (
+              <Link
+                href="/dashboard"
+                className="btn btn-primary btn-sm gap-1.5 group"
+              >
+                <span>{t('nav.home')}</span>
+                <ArrowRight
+                  className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5"
+                  strokeWidth={2.25}
+                />
+              </Link>
+            ) : (
+              <Link
+                href="/auth"
+                className="btn btn-primary btn-sm gap-1.5 group"
+              >
+                <span className="hidden sm:inline">{t('auth.title')}</span>
+                <span className="sm:hidden">{t('common.continue')}</span>
+                <ArrowRight
+                  className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5"
+                  strokeWidth={2.25}
+                />
+              </Link>
+            )}
           </div>
         </nav>
       </div>
