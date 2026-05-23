@@ -163,6 +163,8 @@
     "mapUnavailable": "Харита юкланмади",
     "mapTapToSetPin": "Харитани босиб белгини қўйинг",
     "useMyLocation": "Менинг жойим",
+    "locationSet": "Жойлашув белгиланди",
+    "geocoding": "Манзил аниқланмоқда...",
     "views": "Кўришлар"
   },
   "listings": {

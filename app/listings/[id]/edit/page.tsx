@@ -352,6 +352,13 @@ export default function EditListingPage() {
                     latitude: next?.lat ?? null,
                     longitude: next?.lng ?? null,
                   })}
+                  onAddress={(addr) => {
+                    update({
+                      location: form.location.trim() ? form.location : (addr.location || form.location),
+                      region_name: form.region_name.trim() ? form.region_name : (addr.region || form.region_name),
+                      district_name: form.district_name.trim() ? form.district_name : (addr.district || form.district_name),
+                    });
+                  }}
                 />
               </div>
             </div>

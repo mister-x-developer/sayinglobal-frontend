@@ -379,6 +379,19 @@ export default function NewListingPage() {
                       latitude: next?.lat ?? null,
                       longitude: next?.lng ?? null,
                     }))}
+                    onAddress={(addr) => {
+                      setForm((p) => ({
+                        ...p,
+                        // Only auto-fill if the field is currently empty
+                        location: p.location.trim() ? p.location : addr.location,
+                        region_name: p.region_name.trim() ? p.region_name : addr.region,
+                        district_name: p.district_name.trim() ? p.district_name : addr.district,
+                      }));
+                      // Also push to the LocationSelector via onLocationChange
+                      if (!form.location.trim() && addr.location) {
+                        set('location', addr.location);
+                      }
+                    }}
                   />
                 </div>
               </div>

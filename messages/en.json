@@ -163,6 +163,8 @@
     "mapUnavailable": "Map unavailable",
     "mapTapToSetPin": "Tap the map to drop the pin",
     "useMyLocation": "Use my location",
+    "locationSet": "Location set",
+    "geocoding": "Resolving address...",
     "views": "Views"
   },
   "listings": {

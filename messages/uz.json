@@ -163,6 +163,8 @@
     "mapUnavailable": "Xarita yuklanmadi",
     "mapTapToSetPin": "Xaritani bosib belgini qoʻying",
     "useMyLocation": "Mening joyim",
+    "locationSet": "Joylashuv belgilandi",
+    "geocoding": "Manzil aniqlanmoqda...",
     "views": "Koʻrishlar"
   },
   "listings": {
