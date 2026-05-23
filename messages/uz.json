@@ -860,6 +860,7 @@
     "takeAction": "Choralar koʻrish",
     "notesPlaceholder": "Izoh yozing...",
     "notesRequiredHint": "Hal qilish uchun izoh yozish shart",
+    "severityFromAdmin": "Sababingiz «boshqa» boʻlgani uchun darajani siz belgilang:",
     "notesTooShort": "Izoh kamida 5 ta belgi boʻishi kerak",
     "startReview": "Koʻrib chiqishni boshlash",
     "resolveValid": "Tasdiqlash",

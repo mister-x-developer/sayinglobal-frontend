@@ -1,90 +1,101 @@
 'use client'
 
 /**
- * Admin Analytics Page
+ * Admin Analytics Page — real data from backend (IsPlatformAdmin only).
  */
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import {
-  Users, Package, DollarSign, TrendingUp, TrendingDown,
-  Eye, Heart, MessageCircle, Calendar
+  Users, Package, MessageCircle, Eye,
+  TrendingUp, BarChart3, Loader2,
 } from 'lucide-react'
 import { AdminLayout } from '@/components/layout/AdminLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
-import { formatNumber, formatPrice } from '@/lib/utils/format'
+import { formatNumber } from '@/lib/utils/format'
+import {
+  analyticsApi,
+  type DashboardStats,
+  type CategoryStat,
+  type ActivityAnalytics,
+} from '@/lib/api/analytics'
 
 export default function AdminAnalyticsPage() {
-  const [timeRange, setTimeRange] = useState('30d')
+  const [days, setDays] = useState(30)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [dashboard, setDashboard] = useState<DashboardStats | null>(null)
+  const [categories, setCategories] = useState<CategoryStat[]>([])
+  const [activity, setActivity] = useState<ActivityAnalytics | null>(null)
 
-  // Demo analytics data
-  const stats = [
-    {
-      label: 'Jami foydalanuvchilar',
-      value: 12458,
-      change: '+12.5%',
-      trend: 'up',
-      icon: Users,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-100 dark:bg-blue-900/20',
-    },
-    {
-      label: 'Faol e\'lonlar',
-      value: 3247,
-      change: '+8.2%',
-      trend: 'up',
-      icon: Package,
-      color: 'text-brand-primary',
-      bgColor: 'bg-brand-primary/10',
-    },
-    {
-      label: 'Jami savdo',
-      value: '2.4M',
-      change: '+15.3%',
-      trend: 'up',
-      icon: DollarSign,
-      color: 'text-green-600',
-      bgColor: 'bg-green-100 dark:bg-green-900/20',
-    },
-    {
-      label: 'Kunlik faol foydalanuvchilar',
-      value: 4523,
-      change: '-2.1%',
-      trend: 'down',
-      icon: TrendingUp,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-100 dark:bg-purple-900/20',
-    },
-  ]
+  useEffect(() => {
+    let cancelled = false
+    setLoading(true)
+    setError(null)
+    Promise.all([
+      analyticsApi.dashboard(),
+      analyticsApi.listingsByCategory(),
+      analyticsApi.activity(days),
+    ])
+      .then(([d, c, a]) => {
+        if (cancelled) return
+        setDashboard(d)
+        setCategories(c)
+        setActivity(a)
+      })
+      .catch((e: any) => {
+        if (cancelled) return
+        setError(e?.response?.data?.detail || e?.message || 'Failed to load analytics')
+      })
+      .finally(() => !cancelled && setLoading(false))
+    return () => {
+      cancelled = true
+    }
+  }, [days])
 
-  const categoryStats = [
-    { name: 'Qoramol', count: 1245, percentage: 38 },
-    { name: 'Qo\'y', count: 892, percentage: 27 },
-    { name: 'Echki', count: 654, percentage: 20 },
-    { name: 'Ot', count: 312, percentage: 10 },
-    { name: 'Tuya', count: 98, percentage: 3 },
-    { name: 'Parranda', count: 46, percentage: 2 },
-  ]
+  const totalCategoryCount =
+    categories.reduce((sum, c) => sum + (c.total_listings ?? 0), 0) || 1
 
-  const regionStats = [
-    { name: 'Toshkent', users: 3245, listings: 892 },
-    { name: 'Samarqand', users: 2156, listings: 654 },
-    { name: 'Andijon', users: 1876, listings: 543 },
-    { name: 'Farg\'ona', users: 1654, listings: 487 },
-    { name: 'Namangan', users: 1234, listings: 398 },
-  ]
-
-  const activityData = [
-    { label: 'Jami ko\'rishlar', value: 145678, icon: Eye, color: 'text-blue-600' },
-    { name: 'Saralangan', value: 23456, icon: Heart, color: 'text-red-600' },
-    { label: 'Xabarlar', value: 12345, icon: MessageCircle, color: 'text-green-600' },
-  ]
+  const stats = dashboard
+    ? [
+        {
+          label: 'Jami foydalanuvchilar',
+          value: dashboard.users.total,
+          subtext: `+${dashboard.users.new_today} bugun`,
+          icon: Users,
+          color: 'text-blue-600',
+          bgColor: 'bg-blue-100 dark:bg-blue-900/20',
+        },
+        {
+          label: "Faol e'lonlar",
+          value: dashboard.listings.active,
+          subtext: `${formatNumber(dashboard.listings.total)} jami`,
+          icon: Package,
+          color: 'text-brand-primary',
+          bgColor: 'bg-brand-primary/10',
+        },
+        {
+          label: "Ko'rishlar",
+          value: dashboard.engagement.total_views,
+          subtext: `+${dashboard.engagement.views_today} bugun`,
+          icon: Eye,
+          color: 'text-purple-600',
+          bgColor: 'bg-purple-100 dark:bg-purple-900/20',
+        },
+        {
+          label: 'Xabarlar',
+          value: dashboard.messages.total,
+          subtext: `+${dashboard.messages.today} bugun`,
+          icon: MessageCircle,
+          color: 'text-green-600',
+          bgColor: 'bg-green-100 dark:bg-green-900/20',
+        },
+      ]
+    : []
 
   return (
     <AdminLayout>
-
       <div className="container-page py-8">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -96,252 +107,199 @@ export default function AdminAnalyticsPage() {
                 Analitika
               </h1>
               <p className="mt-2 text-gray-600 dark:text-gray-400">
-                Platforma statistikasi va hisobotlar
+                Platforma statistikasi va hisobotlar (real-time, DB asosida)
               </p>
             </div>
-
             <select
-              value={timeRange}
-              onChange={(e) => setTimeRange(e.target.value)}
+              value={days}
+              onChange={(e) => setDays(Number(e.target.value))}
               className="h-12 rounded-xl border-2 border-gray-200 bg-white px-4 dark:border-gray-700 dark:bg-gray-800"
             >
-              <option value="7d">So'nggi 7 kun</option>
-              <option value="30d">So'nggi 30 kun</option>
-              <option value="90d">So'nggi 90 kun</option>
-              <option value="1y">So'nggi yil</option>
+              <option value={7}>So'nggi 7 kun</option>
+              <option value={30}>So'nggi 30 kun</option>
+              <option value={90}>So'nggi 90 kun</option>
+              <option value={365}>So'nggi yil</option>
             </select>
           </div>
         </motion.div>
 
-        {/* Main Stats */}
-        <div className="mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {stats.map((stat, index) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 + index * 0.05 }}
-            >
-              <Card className="transition-all hover:shadow-lg">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {stat.label}
-                      </p>
-                      <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">
-                        {typeof stat.value === 'number' ? formatNumber(stat.value) : stat.value}
-                      </p>
-                      <div className={`mt-2 flex items-center text-sm ${
-                        stat.trend === 'up' ? 'text-green-600' : 'text-red-600'
-                      }`}>
-                        {stat.trend === 'up' ? (
-                          <TrendingUp className="mr-1 h-4 w-4" />
-                        ) : (
-                          <TrendingDown className="mr-1 h-4 w-4" />
-                        )}
-                        <span>{stat.change}</span>
-                      </div>
-                    </div>
-                    <div className={`rounded-full p-3 ${stat.bgColor}`}>
-                      <stat.icon className={`h-6 w-6 ${stat.color}`} />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
+        {error && (
+          <div className="mb-6 rounded-xl border border-danger/30 bg-danger/10 p-4 text-sm text-danger">
+            {error}
+          </div>
+        )}
 
-        <div className="grid gap-8 lg:grid-cols-2">
-          {/* Category Distribution */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <Card>
-              <CardHeader>
-                <CardTitle>Kategoriyalar bo'yicha</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {categoryStats.map((category, index) => (
-                    <div key={category.name}>
-                      <div className="mb-2 flex items-center justify-between text-sm">
-                        <span className="font-medium text-gray-900 dark:text-white">
-                          {category.name}
-                        </span>
-                        <span className="text-gray-600 dark:text-gray-400">
-                          {formatNumber(category.count)} ({category.percentage}%)
-                        </span>
-                      </div>
-                      <div className="h-2 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          animate={{ width: `${category.percentage}%` }}
-                          transition={{ delay: 0.5 + index * 0.1, duration: 0.5 }}
-                          className="h-full bg-brand-primary"
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
+        {loading && !dashboard && (
+          <div className="flex items-center justify-center py-32">
+            <Loader2 className="h-8 w-8 animate-spin text-brand-primary" />
+          </div>
+        )}
 
-          {/* Region Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-          >
-            <Card>
-              <CardHeader>
-                <CardTitle>Hududlar bo'yicha</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {regionStats.map((region, index) => (
-                    <div
-                      key={region.name}
-                      className="flex items-center justify-between rounded-lg border border-gray-200 p-4 dark:border-gray-700"
-                    >
-                      <div>
-                        <p className="font-semibold text-gray-900 dark:text-white">
-                          {region.name}
-                        </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                          {formatNumber(region.users)} foydalanuvchi
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-semibold text-brand-primary">
-                          {formatNumber(region.listings)}
-                        </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                          e'lon
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          {/* Activity Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-          >
-            <Card>
-              <CardHeader>
-                <CardTitle>Faollik</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {activityData.map((activity) => (
-                    <div
-                      key={activity.label}
-                      className="flex items-center justify-between rounded-lg border border-gray-200 p-4 dark:border-gray-700"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="rounded-full bg-gray-100 p-3 dark:bg-gray-700">
-                          <activity.icon className={`h-5 w-5 ${activity.color}`} />
+        {dashboard && (
+          <>
+            {/* Main stats */}
+            <div className="mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {stats.map((stat, index) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 + index * 0.05 }}
+                >
+                  <Card className="transition-all hover:shadow-lg">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            {stat.label}
+                          </p>
+                          <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">
+                            {formatNumber(stat.value)}
+                          </p>
+                          <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                            {stat.subtext}
+                          </p>
                         </div>
-                        <span className="font-medium text-gray-900 dark:text-white">
-                          {activity.label}
-                        </span>
+                        <div className={`rounded-full p-3 ${stat.bgColor}`}>
+                          <stat.icon className={`h-6 w-6 ${stat.color}`} />
+                        </div>
                       </div>
-                      <span className="text-2xl font-bold text-gray-900 dark:text-white">
-                        {formatNumber(activity.value)}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
 
-          {/* Growth Chart Placeholder */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-          >
-            <Card>
-              <CardHeader>
-                <CardTitle>O'sish grafigi</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex h-64 items-center justify-center rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">
-                  <div className="text-center">
-                    <Calendar className="mx-auto mb-3 h-12 w-12 text-gray-400" />
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Grafik ko'rinishi
-                    </p>
-                    <p className="mt-1 text-xs text-gray-500">
-                      Chart.js yoki Recharts bilan amalga oshiriladi
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
+            <div className="grid gap-8 lg:grid-cols-2">
+              {/* Categories */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Kategoriyalar bo'yicha taqsimot</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {categories.length === 0 ? (
+                      <p className="py-6 text-center text-sm text-gray-500">
+                        Hozircha ma'lumot yo'q
+                      </p>
+                    ) : (
+                      <div className="space-y-4">
+                        {categories.map((category, index) => {
+                          const pct = Math.round(
+                            ((category.total_listings ?? 0) /
+                              totalCategoryCount) *
+                              100
+                          )
+                          return (
+                            <div key={category.name}>
+                              <div className="mb-2 flex items-center justify-between text-sm">
+                                <span className="font-medium text-gray-900 dark:text-white">
+                                  {category.name_uz || category.name}
+                                </span>
+                                <span className="text-gray-600 dark:text-gray-400">
+                                  {formatNumber(category.total_listings)} ({pct}%)
+                                </span>
+                              </div>
+                              <div className="h-2 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+                                <motion.div
+                                  initial={{ width: 0 }}
+                                  animate={{ width: `${pct}%` }}
+                                  transition={{ delay: 0.5 + index * 0.05, duration: 0.5 }}
+                                  className="h-full bg-brand-primary"
+                                />
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </motion.div>
 
-        {/* Additional Metrics */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
-          className="mt-8"
-        >
-          <Card>
-            <CardHeader>
-              <CardTitle>Qo'shimcha ko'rsatkichlar</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                    87%
-                  </p>
-                  <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Foydalanuvchi qoniqishi
-                  </p>
-                </div>
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                    4.8
-                  </p>
-                  <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    O'rtacha reyting
-                  </p>
-                </div>
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                    2.5 soat
-                  </p>
-                  <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    O'rtacha javob vaqti
-                  </p>
-                </div>
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                    92%
-                  </p>
-                  <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Muvaffaqiyatli bitimlar
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+              {/* Daily activity */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+              >
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Kunlik faollik (so'nggi {days} kun)</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {!activity || activity.daily_activity.length === 0 ? (
+                      <div className="flex h-48 flex-col items-center justify-center text-gray-500">
+                        <BarChart3 className="mb-3 h-12 w-12" />
+                        <p className="text-sm">
+                          Bu davr uchun aggregatlangan ma'lumotlar yetarli emas.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="max-h-72 space-y-2 overflow-y-auto pr-1">
+                        {activity.daily_activity.map((row) => (
+                          <div
+                            key={row.date}
+                            className="flex items-center justify-between rounded-lg border border-gray-200 px-4 py-3 text-sm dark:border-gray-700"
+                          >
+                            <span className="font-medium">{row.date}</span>
+                            <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-400">
+                              <span title="Views">
+                                <Eye className="mr-1 inline h-3.5 w-3.5" />
+                                {formatNumber(row.total_views)}
+                              </span>
+                              <span title="Messages">
+                                <MessageCircle className="mr-1 inline h-3.5 w-3.5" />
+                                {formatNumber(row.total_messages)}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              {/* Event distribution */}
+              {activity && activity.event_distribution.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                  className="lg:col-span-2"
+                >
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Eventlar taqsimoti (so'nggi {days} kun)</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                        {activity.event_distribution.slice(0, 9).map((ev) => (
+                          <div
+                            key={ev.event_type}
+                            className="flex items-center justify-between rounded-lg border border-gray-200 px-4 py-3 dark:border-gray-700"
+                          >
+                            <span className="text-sm font-medium text-gray-900 dark:text-white">
+                              {ev.event_type}
+                            </span>
+                            <span className="font-display text-lg font-bold text-brand-primary">
+                              {formatNumber(ev.count)}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </AdminLayout>
   )

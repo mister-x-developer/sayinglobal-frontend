@@ -229,7 +229,7 @@ export function AppNav() {
               <Menu className="h-5 w-5" strokeWidth={1.75} />
             </button>
 
-            <Logo size="sm" />
+            <Logo size="sm" href={isAuthenticated ? '/dashboard' : '/'} />
 
             {/* Desktop links */}
             <nav className="ml-6 hidden items-center gap-1 md:flex" aria-label="Main navigation">

@@ -177,11 +177,14 @@ export const moderationApi = {
   async adminResolveValid(
     publicId: number,
     moderatorNotes: string,
+    severity?: 'low' | 'medium' | 'high' | 'critical',
   ): Promise<{ complaint: AdminReportRecord; seller_status_changed_to: string | null }> {
     try {
+      const body: Record<string, unknown> = { moderator_notes: moderatorNotes };
+      if (severity) body.severity = severity;
       const res = await apiClient.post(
         `/moderation/v2/admin/reports/${publicId}/resolve-valid/`,
-        { moderator_notes: moderatorNotes },
+        body,
       );
       return res.data;
     } catch (e) {

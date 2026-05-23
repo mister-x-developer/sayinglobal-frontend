@@ -165,6 +165,7 @@ export default function AdminModerationPage() {
   const [selected, setSelected] = useState<AdminReportRecord | null>(null);
   const [acting, setActing] = useState<null | 'start' | 'valid' | 'invalid'>(null);
   const [moderatorNotes, setModeratorNotes] = useState('');
+  const [severityChoice, setSeverityChoice] = useState<ReportSeverity | ''>('');
   const [outcomeError, setOutcomeError] = useState<string | null>(null);
 
   const fetchQueue = useCallback(async () => {
@@ -226,7 +227,14 @@ export default function AdminModerationPage() {
     setOutcomeError(null);
     try {
       if (kind === 'valid') {
-        const res = await moderationApi.adminResolveValid(selected.public_id, moderatorNotes);
+        const res = await moderationApi.adminResolveValid(
+          selected.public_id,
+          moderatorNotes,
+          // Pass admin-chosen severity only when reason is "other".
+          selected.reason_code === 'other' && severityChoice
+            ? severityChoice
+            : undefined,
+        );
         setSelected(res.complaint);
         setItems((prev) =>
           prev.map((p) => (p.public_id === res.complaint.public_id ? res.complaint : p))
@@ -247,6 +255,7 @@ export default function AdminModerationPage() {
         toast.success(t('adminMod.resolvedInvalid'));
       }
       setModeratorNotes('');
+      setSeverityChoice('');
     } catch (e: any) {
       setOutcomeError(e?.message || t('common.error'));
     } finally {
@@ -369,7 +378,7 @@ export default function AdminModerationPage() {
                     <li key={it.public_id}>
                       <button
                         type="button"
-                        onClick={() => { setSelected(it); setModeratorNotes(''); setOutcomeError(null); }}
+                        onClick={() => { setSelected(it); setModeratorNotes(''); setSeverityChoice(''); setOutcomeError(null); }}
                         className={cn(
                           'flex w-full items-start gap-3 border-b border-border px-4 py-3 text-left transition hover:bg-bg-subtle',
                           selected?.public_id === it.public_id && 'bg-bg-subtle',
@@ -427,6 +436,8 @@ export default function AdminModerationPage() {
                 acting={acting}
                 moderatorNotes={moderatorNotes}
                 setModeratorNotes={setModeratorNotes}
+                severityChoice={severityChoice}
+                setSeverityChoice={setSeverityChoice}
                 outcomeError={outcomeError}
                 onStartReview={onStartReview}
                 onResolveValid={() => onResolve('valid')}
@@ -479,13 +490,17 @@ function FilterChip({
 // ── Detail pane ──────────────────────────────────────────────────────────────
 
 function ReportDetailPane({
-  report, acting, moderatorNotes, setModeratorNotes, outcomeError,
+  report, acting, moderatorNotes, setModeratorNotes,
+  severityChoice, setSeverityChoice,
+  outcomeError,
   onStartReview, onResolveValid, onResolveInvalid,
 }: {
   report: AdminReportRecord;
   acting: null | 'start' | 'valid' | 'invalid';
   moderatorNotes: string;
   setModeratorNotes: (s: string) => void;
+  severityChoice: ReportSeverity | '';
+  setSeverityChoice: (s: ReportSeverity | '') => void;
   outcomeError: string | null;
   onStartReview: () => void;
   onResolveValid: () => void;
@@ -593,6 +608,36 @@ function ReportDetailPane({
               placeholder={t('adminMod.notesPlaceholder')}
               className="min-h-[100px] w-full resize-none rounded-xl border border-border bg-bg-subtle px-3 py-2 text-sm text-fg placeholder:text-fg-subtle focus:outline-none focus:ring-2 focus:ring-brand-accent/40"
             />
+
+            {/* When the reason is "other" the auto-assigned severity is meaningless;
+                require admin to set a real severity before accepting the report. */}
+            {report.reason_code === 'other' ? (
+              <div className="mt-3 rounded-xl border border-border bg-bg-subtle/50 p-3">
+                <p className="mb-2 text-xs font-semibold text-fg-subtle">
+                  {t('adminMod.severityFromAdmin' as any) ?? "Sababingiz «boshqa» bo'lgani uchun darajani siz belgilang:"}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {(['low', 'medium', 'high', 'critical'] as const).map((s) => {
+                    const active = severityChoice === s;
+                    const tone = SEVERITY_VISUAL[s];
+                    return (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => setSeverityChoice(s)}
+                        className={cn(
+                          'rounded-full px-3 py-1 text-xs font-semibold ring-1 transition',
+                          active ? `${tone.bg} ${tone.fg}` : 'bg-bg ring-border text-fg-subtle hover:bg-bg-subtle',
+                        )}
+                      >
+                        {t(`report.severity.${s}`)}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
+
             {outcomeError ? (
               <div className="mt-2 flex items-start gap-2 rounded-lg bg-red-50 p-2 text-xs text-red-700">
                 <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
@@ -616,7 +661,10 @@ function ReportDetailPane({
                 variant="primary"
                 onClick={onResolveValid}
                 isLoading={acting === 'valid'}
-                disabled={moderatorNotes.trim().length < 5}
+                disabled={
+                  moderatorNotes.trim().length < 5 ||
+                  (report.reason_code === 'other' && !severityChoice)
+                }
               >
                 <CheckCircle2 className="mr-1.5 h-4 w-4" />
                 {t('adminMod.resolveValid')}
