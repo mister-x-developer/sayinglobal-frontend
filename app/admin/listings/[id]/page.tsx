@@ -22,6 +22,7 @@ import {
   Eye,
   Heart,
   Share2,
+  MapPin,
   MessageSquareText,
   ShieldAlert,
   RefreshCw,
@@ -34,6 +35,7 @@ import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
 import { toast } from '@/components/ui/Toast';
 import { TranslatableText, TranslateButton } from '@/components/shared/TranslateButton';
+import { MapView } from '@/components/shared/MapView';
 import { listingsApi, type ListingDetail } from '@/lib/api/listings';
 import { moderationApi, type AdminReportRecord } from '@/lib/api/moderation';
 import { formatPrice, formatRelativeTime } from '@/lib/utils/format';
@@ -215,6 +217,32 @@ export default function AdminListingDetailPage() {
                   textClassName="whitespace-pre-line text-pretty leading-[1.75] text-fg-muted"
                 />
               </div>
+
+              {/* Location map — shown when coordinates are available */}
+              {listing.latitude != null && listing.longitude != null && (
+                <div className="surface-elevated p-6">
+                  <h2 className="display-sm mb-4">
+                    {t('listings.locationOnMap' as any) ?? t('listings.location')}
+                  </h2>
+                  <MapView
+                    center={[Number(listing.latitude), Number(listing.longitude)]}
+                    zoom={13}
+                    markers={[{
+                      id: listing.public_id,
+                      lat: Number(listing.latitude),
+                      lng: Number(listing.longitude),
+                      label: listing.title,
+                    }]}
+                    className="h-64 w-full"
+                  />
+                  <p className="mt-3 inline-flex items-center gap-1.5 text-sm text-fg-muted">
+                    <span className="font-semibold text-fg">{listing.location}</span>
+                    {listing.region && (
+                      <span className="text-fg-subtle">· {listing.region}{listing.district ? ` · ${listing.district}` : ''}</span>
+                    )}
+                  </p>
+                </div>
+              )}
 
               {/* Specs */}
               {(listing.breed || listing.weight_kg || listing.age_years || listing.gender) && (
