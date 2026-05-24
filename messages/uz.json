@@ -814,10 +814,6 @@
     "created": "Yuborildi",
     "resolved": "Hal qilindi",
     "complainant": "Shikoyatchi",
-    "status.pending": "Kutilmoqda",
-    "status.under_review": "Koʻrib chiqilmoqda",
-    "status.resolved_valid": "Tasdiqlandi",
-    "status.resolved_invalid": "Rad etildi",
     "statusLabel": "Holat",
     "titleChat": "Chat orqali shikoyat",
     "descriptionMinLength": "Kamida 10 ta belgi kerak"

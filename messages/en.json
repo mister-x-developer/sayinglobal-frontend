@@ -802,10 +802,10 @@
       "listing_already_sold": "Already sold but still listed as active"
     },
     "status": {
-      "pending": "Pending",
-      "under_review": "Under review",
-      "resolved_valid": "Confirmed",
-      "resolved_invalid": "Dismissed"
+      "pending": "Kutilmoqda",
+      "under_review": "Ko'rib chiqilmoqda",
+      "resolved_valid": "Tasdiqlandi",
+      "resolved_invalid": "Rad etildi"
     },
     "complainant": "Filed by",
     "title": "Shikoyat",
@@ -814,10 +814,6 @@
     "adminResponse": "Admin javobi",
     "created": "Yuborildi",
     "resolved": "Hal qilindi",
-    "status.pending": "Kutilmoqda",
-    "status.under_review": "Ko'rib chiqilmoqda",
-    "status.resolved_valid": "Tasdiqlandi",
-    "status.resolved_invalid": "Rad etildi",
     "statusLabel": "Holat",
     "titleChat": "Report this user (chat)",
     "descriptionMinLength": "At least 10 characters required"

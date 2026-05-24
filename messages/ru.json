@@ -802,10 +802,10 @@
       "listing_already_sold": "Продано, но всё ещё отображается как активное"
     },
     "status": {
-      "pending": "Ожидает",
-      "under_review": "На рассмотрении",
-      "resolved_valid": "Подтверждена",
-      "resolved_invalid": "Отклонена"
+      "pending": "Kutilmoqda",
+      "under_review": "Ko'rib chiqilmoqda",
+      "resolved_valid": "Tasdiqlandi",
+      "resolved_invalid": "Rad etildi"
     },
     "complainant": "Заявитель",
     "title": "Shikoyat",
@@ -814,10 +814,6 @@
     "adminResponse": "Admin javobi",
     "created": "Yuborildi",
     "resolved": "Hal qilindi",
-    "status.pending": "Kutilmoqda",
-    "status.under_review": "Ko'rib chiqilmoqda",
-    "status.resolved_valid": "Tasdiqlandi",
-    "status.resolved_invalid": "Rad etildi",
     "statusLabel": "Holat",
     "titleChat": "Жалоба на пользователя (чат)",
     "descriptionMinLength": "Минимум 10 символов"

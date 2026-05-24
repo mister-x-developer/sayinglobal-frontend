@@ -802,10 +802,10 @@
       "listing_already_sold": "Сотилган лекин ҳали сотувда туribди"
     },
     "status": {
-      "pending": "Кутилмоқда",
-      "under_review": "Кўриб чиқилмоқда",
-      "resolved_valid": "Тасдиқланди",
-      "resolved_invalid": "Рад этилди"
+      "pending": "Kutilmoqda",
+      "under_review": "Koʻrib chiqilmoqda",
+      "resolved_valid": "Tasdiqlandi",
+      "resolved_invalid": "Rad etildi"
     },
     "complainant": "Шикоят юборувчи",
     "title": "Shikoyat",
@@ -814,10 +814,6 @@
     "adminResponse": "Admin javobi",
     "created": "Yuborildi",
     "resolved": "Hal qilindi",
-    "status.pending": "Kutilmoqda",
-    "status.under_review": "Koʻrib chiqilmoqda",
-    "status.resolved_valid": "Tasdiqlandi",
-    "status.resolved_invalid": "Rad etildi",
     "statusLabel": "Holat",
     "titleChat": "Фойдаланувчи ҳақида шикоят (чат)",
     "descriptionMinLength": "Камида 10 та белги керак"
