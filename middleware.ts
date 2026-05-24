@@ -57,7 +57,14 @@ function isPublicPath(pathname: string): boolean {
   // Auth pages
   if (pathname.startsWith('/auth')) return true;
   // Public marketplace pages — browsing without login
-  return PUBLIC_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+  // Note: /listings/new and /listings/:id/edit require auth
+  if (pathname === '/listings') return true;
+  if (pathname === '/listings/nearby') return true;
+  if (pathname === '/search') return true;
+  if (pathname.startsWith('/sellers')) return true;
+  // Individual listing detail pages are public
+  if (/^\/listings\/\d+$/.test(pathname)) return true;
+  return false;
 }
 
 export function middleware(req: NextRequest) {
