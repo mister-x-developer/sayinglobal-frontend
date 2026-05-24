@@ -21,6 +21,8 @@ import {
   LogOut,
   ChevronRight,
   Activity,
+  Bot,
+  CreditCard,
 } from 'lucide-react';
 
 import { Logo } from '@/components/shared/Logo';
@@ -33,6 +35,8 @@ const NAV = [
   { href: '/admin/users', icon: Users, label: 'admin.users' },
   { href: '/admin/listings', icon: LayoutGrid, label: 'admin.listings' },
   { href: '/admin/moderation', icon: Flag, label: 'admin.complaints' },
+  { href: '/admin/ai-moderation', icon: Bot, label: 'admin.aiModeration' },
+  { href: '/admin/plans', icon: CreditCard, label: 'admin.plans' },
   { href: '/admin/ratings', icon: Flag, label: 'admin.ratingsModeration' },
   { href: '/admin/broadcasts', icon: Megaphone, label: 'admin.broadcasts' },
   { href: '/admin/analytics', icon: BarChart3, label: 'admin.analytics' },

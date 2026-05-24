@@ -581,7 +581,9 @@
     "unblock": "Разблокировать",
     "notesRequiredToResolve": "Добавьте заметку перед решением.",
     "reports": "Отчёты",
-    "accountSummary": "Сводка аккаунта"
+    "accountSummary": "Сводка аккаунта",
+    "aiModeration": "AI Модерация",
+    "plans": "Тарифы"
   },
   "analytics": {
     "title": "Аналитика",
@@ -796,7 +798,8 @@
       "scam_in_chat": "Попытка мошенничества в чате",
       "inappropriate_content": "Неподобающий контент",
       "harassment_in_chat": "Преследование или нежелательные контакты",
-      "impersonation": "Самозванство или ложная личность"
+      "impersonation": "Самозванство или ложная личность",
+      "listing_already_sold": "Продано, но всё ещё отображается как активное"
     },
     "status": {
       "pending": "Ожидает",
@@ -911,7 +914,8 @@
     "reason_scam_in_chat": "Мошенничество в чате",
     "reason_inappropriate_content": "Неприемлемый контент",
     "reason_harassment_in_chat": "Преследование в чате",
-    "reason_impersonation": "Самозванство"
+    "reason_impersonation": "Самозванство",
+    "reason_listing_already_sold": "Продано, но активно"
   },
   "terms": {
     "title": "Условия использования",
@@ -958,5 +962,31 @@
     "sort_lowest": "Низкая оценка",
     "sort_most_useful": "Самые полезные",
     "moderation": "Модерация отзывов"
+  },
+  "plans": {
+    "title": "Тарифы",
+    "starter": "Начальный",
+    "standard": "Стандарт",
+    "pro": "Про",
+    "monthlyLimit": "Месячный лимит объявлений",
+    "activeLimit": "Лимит активных объявлений",
+    "myPlan": "Мой тариф",
+    "upgrade": "Улучшить тариф",
+    "limitReached": "Достигнут месячный лимит",
+    "activeLimitReached": "Достигнут лимит активных объявлений"
+  },
+  "referral": {
+    "title": "Реферальная система",
+    "myCode": "Мой реферальный код",
+    "useCode": "Использовать реферальный код",
+    "reward": "Награда: после первого активного объявления",
+    "pending": "Ожидание",
+    "rewarded": "Награда выдана"
+  },
+  "ai": {
+    "moderationScore": "Оценка AI-модерации",
+    "flagged": "Отмечено AI",
+    "clean": "AI: проблем нет",
+    "alreadySoldDetected": "AI: обнаружен сигнал о продаже"
   }
 }

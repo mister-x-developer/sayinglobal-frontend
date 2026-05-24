@@ -581,7 +581,9 @@
     "unblock": "Blokdan chiqarish",
     "accountSummary": "Hisob qisqacha",
     "notesRequiredToResolve": "Hal qilish uchun izoh qoʻshing.",
-    "reports": "Hisobotlar"
+    "reports": "Hisobotlar",
+    "aiModeration": "AI Moderatsiya",
+    "plans": "Tariflar"
   },
   "analytics": {
     "title": "Analitika",
@@ -796,7 +798,8 @@
       "scam_in_chat": "Chatda firibgarlikka urinish",
       "inappropriate_content": "Nomunosib kontent",
       "harassment_in_chat": "Taʼqib yoki istalmagan muloqot",
-      "impersonation": "Soxta shaxsiyat"
+      "impersonation": "Soxta shaxsiyat",
+      "listing_already_sold": "Sotilgan lekin hali sotuvda turibdi"
     },
     "status": {
       "pending": "Kutilmoqda",
@@ -911,7 +914,8 @@
     "reason_scam_in_chat": "Chatda firibgarlik",
     "reason_inappropriate_content": "Nomunosib kontent",
     "reason_harassment_in_chat": "Chatda taʼqib",
-    "reason_impersonation": "Soxta shaxsiyat"
+    "reason_impersonation": "Soxta shaxsiyat",
+    "reason_listing_already_sold": "Sotilgan lekin hali sotuvda"
   },
   "terms": {
     "title": "Foydalanish shartlari",
@@ -958,5 +962,31 @@
     "sort_lowest": "Past baho",
     "sort_most_useful": "Eng foydali",
     "moderation": "Sharhlarni moderatsiya"
+  },
+  "plans": {
+    "title": "Tariflar",
+    "starter": "Boshlang'ich",
+    "standard": "Standart",
+    "pro": "Pro",
+    "monthlyLimit": "Oylik e'lon limiti",
+    "activeLimit": "Faol e'lonlar limiti",
+    "myPlan": "Mening tarifim",
+    "upgrade": "Tarifni yangilash",
+    "limitReached": "Oylik limitga yetdingiz",
+    "activeLimitReached": "Faol e'lonlar limitiga yetdingiz"
+  },
+  "referral": {
+    "title": "Referal tizimi",
+    "myCode": "Mening referal kodim",
+    "useCode": "Referal kodni ishlatish",
+    "reward": "Mukofot: birinchi faol e'londan keyin",
+    "pending": "Kutilmoqda",
+    "rewarded": "Mukofot berildi"
+  },
+  "ai": {
+    "moderationScore": "AI moderatsiya bali",
+    "flagged": "AI tomonidan belgilangan",
+    "clean": "AI: muammo yo'q",
+    "alreadySoldDetected": "AI: sotilgan signal aniqlandi"
   }
 }

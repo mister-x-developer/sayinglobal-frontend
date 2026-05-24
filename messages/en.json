@@ -581,7 +581,9 @@
     "unblock": "Unblock",
     "notesRequiredToResolve": "Add a note before resolving.",
     "reports": "Reports",
-    "accountSummary": "Account summary"
+    "accountSummary": "Account summary",
+    "aiModeration": "AI Moderation",
+    "plans": "Plans"
   },
   "analytics": {
     "title": "Analytics",
@@ -796,7 +798,8 @@
       "scam_in_chat": "Scam or fraud attempt in chat",
       "inappropriate_content": "Inappropriate content",
       "harassment_in_chat": "Harassment or repeated unwanted contact",
-      "impersonation": "Impersonation or false identity"
+      "impersonation": "Impersonation or false identity",
+      "listing_already_sold": "Already sold but still listed as active"
     },
     "status": {
       "pending": "Pending",
@@ -911,7 +914,8 @@
     "reason_scam_in_chat": "Scam in chat",
     "reason_inappropriate_content": "Inappropriate content",
     "reason_harassment_in_chat": "Harassment in chat",
-    "reason_impersonation": "Impersonation"
+    "reason_impersonation": "Impersonation",
+    "reason_listing_already_sold": "Already sold but active"
   },
   "terms": {
     "title": "Platform Terms",
@@ -958,5 +962,31 @@
     "sort_lowest": "Lowest",
     "sort_most_useful": "Most useful",
     "moderation": "Reviews Moderation"
+  },
+  "plans": {
+    "title": "Plans",
+    "starter": "Starter",
+    "standard": "Standard",
+    "pro": "Pro",
+    "monthlyLimit": "Monthly listing limit",
+    "activeLimit": "Active listing limit",
+    "myPlan": "My plan",
+    "upgrade": "Upgrade plan",
+    "limitReached": "Monthly limit reached",
+    "activeLimitReached": "Active listing limit reached"
+  },
+  "referral": {
+    "title": "Referral system",
+    "myCode": "My referral code",
+    "useCode": "Use referral code",
+    "reward": "Reward: after first active listing",
+    "pending": "Pending",
+    "rewarded": "Rewarded"
+  },
+  "ai": {
+    "moderationScore": "AI moderation score",
+    "flagged": "Flagged by AI",
+    "clean": "AI: no issues",
+    "alreadySoldDetected": "AI: already-sold signal detected"
   }
 }

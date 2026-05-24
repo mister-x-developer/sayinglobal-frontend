@@ -581,7 +581,9 @@
     "reportsReceived": "Foydalanuvchiga shikoyatlar",
     "reportsFiled": "Yuborilgan shikoyatlar",
     "broadcast": "Xabar",
-    "accountSummary": "Ҳисоб қисқача"
+    "accountSummary": "Ҳисоб қисқача",
+    "aiModeration": "AI Модерация",
+    "plans": "Тарифлар"
   },
   "analytics": {
     "title": "Аналитика",
@@ -796,7 +798,8 @@
       "scam_in_chat": "Чатда фирибгарликка уриниш",
       "inappropriate_content": "Нооʻрин контент",
       "harassment_in_chat": "Таъқиб ёки истalmagan мулоқот",
-      "impersonation": "Сохта шахсият"
+      "impersonation": "Сохта шахсият",
+      "listing_already_sold": "Сотилган лекин ҳали сотувда туribди"
     },
     "status": {
       "pending": "Кутилмоқда",
@@ -911,7 +914,8 @@
     "reason_scam_in_chat": "Чатда фирибгарлик",
     "reason_inappropriate_content": "Нооʻрин контент",
     "reason_harassment_in_chat": "Чатда таъқиб",
-    "reason_impersonation": "Сохта шахсият"
+    "reason_impersonation": "Сохта шахсият",
+    "reason_listing_already_sold": "Сотилган лекин ҳали сотувда"
   },
   "terms": {
     "title": "Фойдаланиш шартлари",
@@ -958,5 +962,31 @@
     "sort_lowest": "Паст баҳо",
     "sort_most_useful": "Энг фойдали",
     "moderation": "Шарҳларни модерация"
+  },
+  "plans": {
+    "title": "Тарифлар",
+    "starter": "Бошланғич",
+    "standard": "Стандарт",
+    "pro": "Про",
+    "monthlyLimit": "Ойлик эълон лимити",
+    "activeLimit": "Фаол эълонлар лимити",
+    "myPlan": "Менинг тарифим",
+    "upgrade": "Тарифни янгилаш",
+    "limitReached": "Ойлик лимитга етдингиз",
+    "activeLimitReached": "Фаол эълонлар лимитига етдингиз"
+  },
+  "referral": {
+    "title": "Реферал тизими",
+    "myCode": "Менинг реферал кодим",
+    "useCode": "Реферал кодни ишлатиш",
+    "reward": "Мукофот: биринчи фаол эълондан кейин",
+    "pending": "Кутилмоқда",
+    "rewarded": "Мукофот берилди"
+  },
+  "ai": {
+    "moderationScore": "AI модерация бали",
+    "flagged": "AI томонидан белгиланган",
+    "clean": "AI: муаммо йўқ",
+    "alreadySoldDetected": "AI: сотилган сигнал аниқланди"
   }
 }
