@@ -4,8 +4,14 @@ import { locales, defaultLocale, type Locale } from './lib/i18n';
 const LOCALE_COOKIE = 'sayin-locale';
 const AUTH_COOKIE = 'sayin-auth';
 
-// Routes accessible without authentication
-const PUBLIC_PATHS = ['/', '/auth'];
+// Routes accessible without authentication — marketplace browsing is public
+const PUBLIC_PREFIXES = [
+  '/auth',
+  '/listings',
+  '/sellers',
+  '/search',
+  '/listings/nearby',
+];
 
 function pickLocale(req: NextRequest): Locale {
   const cookie = req.cookies.get(LOCALE_COOKIE)?.value as Locale | undefined;
@@ -46,10 +52,12 @@ function isPlatformAdmin(req: NextRequest): boolean {
 }
 
 function isPublicPath(pathname: string): boolean {
-  // Exact match or starts with /auth
-  return PUBLIC_PATHS.some(
-    (p) => pathname === p || pathname.startsWith('/auth')
-  );
+  // Landing page
+  if (pathname === '/') return true;
+  // Auth pages
+  if (pathname.startsWith('/auth')) return true;
+  // Public marketplace pages — browsing without login
+  return PUBLIC_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 }
 
 export function middleware(req: NextRequest) {
