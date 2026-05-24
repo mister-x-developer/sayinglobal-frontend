@@ -98,46 +98,6 @@ export function BreedSelector({ categorySlug, value, onChange, placeholder }: Br
       <option value="">{t('animal.breed')}</option>
       {breeds.map((b) => (
         <option key={b.slug} value={b.name || b.name_uz}>
-          {/* name is locale-resolved by backend; name_uz is fallback */}
-          {b.name || b.name_uz}
-        </option>
-      ))}
-    </select>
-  );
-}
-
-
-interface BreedSelectorProps {
-  categorySlug: string;
-  value: string;
-  onChange: (value: string) => void;
-  placeholder?: string;
-}
-
-export function BreedSelector({ categorySlug, value, onChange, placeholder }: BreedSelectorProps) {
-  const t = useTranslations();
-  const { breeds } = useBreeds(categorySlug);
-
-  if (breeds.length === 0) {
-    return (
-      <input
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder ?? t('animal.breed')}
-        className="input-base w-full"
-      />
-    );
-  }
-
-  return (
-    <select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className="input-base w-full cursor-pointer"
-    >
-      <option value="">{t('animal.breed')}</option>
-      {breeds.map((b) => (
-        <option key={b.slug} value={b.name || b.name_uz}>
           {b.name || b.name_uz}
         </option>
       ))}
