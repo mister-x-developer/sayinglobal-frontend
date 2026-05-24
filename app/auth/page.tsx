@@ -313,6 +313,7 @@ function EnterCodeStage({
       </div>
 
       <button
+        type="submit"
         onClick={onSubmit}
         disabled={verifyDisabled}
         className="btn btn-primary btn-lg mt-6 w-full"

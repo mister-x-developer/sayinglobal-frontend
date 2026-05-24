@@ -571,6 +571,7 @@
     right: 0;
     height: 38%;
     pointer-events: none;
+    overflow: hidden;
   }
 
   .hill {

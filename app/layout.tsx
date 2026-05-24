@@ -107,7 +107,7 @@ export default async function RootLayout({
       lang={locale}
       data-theme="day"
       suppressHydrationWarning
-      className={`${inter.variable} ${poppins.variable}`}
+      className={`${inter.variable} ${poppins.variable} overflow-x-hidden`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
