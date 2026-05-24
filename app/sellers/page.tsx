@@ -135,7 +135,7 @@ export default function SellersDirectoryPage() {
           </div>
 
           {/* Tabs */}
-          <div className="mt-5 flex gap-2 border-b border-border">
+          <div className="mt-5 flex gap-2 border-b border-border overflow-x-auto no-scrollbar">
             {[
               { key: 'all', label: t('common.all') },
               { key: 'top', label: t('sellers.topSellers') },

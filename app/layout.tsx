@@ -113,7 +113,7 @@ export default async function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <script dangerouslySetInnerHTML={{ __html: motionBootScript }} />
       </head>
-      <body className="antialiased min-h-screen bg-bg text-fg pb-[72px] md:pb-0">
+      <body className="antialiased min-h-screen bg-bg text-fg pb-[72px] md:pb-0 overflow-x-hidden">
         <ThemeProvider>
           <NextIntlClientProvider messages={messages} locale={locale}>
             {children}
