@@ -7,6 +7,7 @@ import { ToastContainer } from '@/components/ui/Toast';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { TermsGate } from '@/components/providers/TermsGate';
 import { AIAssistant } from '@/components/shared/AIAssistant';
+import { OnboardingModal } from '@/components/shared/OnboardingModal';
 import './globals.css';
 
 const inter = Inter({
@@ -121,6 +122,7 @@ export default async function RootLayout({
             <TermsGate />
             <MobileBottomNav />
             <AIAssistant />
+            <OnboardingModal />
             <ToastContainer />
           </NextIntlClientProvider>
         </ThemeProvider>
