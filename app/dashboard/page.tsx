@@ -85,7 +85,7 @@ export default function DashboardPage() {
           </motion.div>
 
           {/* Quick links */}
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {[
               {
                 href: '/listings',
@@ -98,6 +98,12 @@ export default function DashboardPage() {
                 icon: ShieldCheck,
                 label: t('nav.sellers'),
                 tone: 'bg-brand-accent/12 text-brand-accent',
+              },
+              {
+                href: '/listings/nearby',
+                icon: MapPin,
+                label: t('nearby.title' as any) ?? 'Yaqin atrofdagi',
+                tone: 'bg-success/12 text-success',
               },
               {
                 href: '/profile/favorites',

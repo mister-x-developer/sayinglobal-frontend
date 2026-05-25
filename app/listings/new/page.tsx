@@ -81,9 +81,10 @@ export default function NewListingPage() {
     if (!form.description.trim()) e.description = t('errors.required');
     if (!form.price || isNaN(Number(form.price)) || Number(form.price) <= 0) e.price = t('errors.required');
     if (!form.region) e.region = t('errors.required');
-    if (!form.location.trim()) e.location = t('errors.required');
+    // Location: either text OR map pin is sufficient
+    if (!form.location.trim() && !form.latitude) e.location = t('errors.required');
     if (!age.years && !age.months && !age.days) e.age = t('validation.atLeastOneFieldRequired');
-    if (images.length < 3) e.images = "Kamida 3 ta rasm yuklang";
+    if (images.length < 1) e.images = "Kamida 1 ta rasm yuklang";
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -135,7 +136,7 @@ export default function NewListingPage() {
         vaccination_status: form.vaccination_status || undefined,
         region: form.region_name || form.region,
         district: form.district_name || form.district || undefined,
-        location: form.location.trim(),
+        location: form.location.trim() || form.region_name || form.region || 'Noma\'lum',
         latitude: form.latitude ?? undefined,
         longitude: form.longitude ?? undefined,
       };
@@ -346,7 +347,7 @@ export default function NewListingPage() {
                   </button>
                 )}
                 <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={handleImages} className="hidden" />
-                <p className="mt-2 text-xs text-fg-subtle">{images.length}/5 · Kamida 3 ta rasm kerak</p>
+                <p className="mt-2 text-xs text-fg-subtle">{images.length}/5 · Kamida 1 ta rasm kerak (3 ta tavsiya etiladi)</p>
                 {errors.images && <p className="mt-1 text-xs text-danger">{errors.images}</p>}
               </div>
 

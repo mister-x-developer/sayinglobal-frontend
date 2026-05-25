@@ -11,12 +11,12 @@
  * - Moderation help (admin only)
  * - Broadcast drafting (admin only)
  * - User guidance
- * - Multilingual responses
+ * - Multilingual responses (responds in user's interface language)
  */
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { Bot, X, Send, Loader2, Minimize2, Maximize2, Sparkles } from 'lucide-react';
 import { useAuthStore } from '@/lib/store/auth';
 import apiClient from '@/lib/api/client';
@@ -28,23 +28,37 @@ interface Message {
   timestamp: Date;
 }
 
-const SYSTEM_CONTEXT = {
-  user: `You are a helpful assistant for SAYIN GLOBAL, a livestock marketplace in Uzbekistan.
-Help users with: finding listings, understanding how the platform works, creating listings, 
-managing their profile, understanding plans and referrals, and general marketplace questions.
-Always be friendly, concise, and helpful. Respond in the user's language (Uzbek, Russian, or English).
-Do NOT reveal internal system details, API keys, or admin-only information.`,
+/** Map next-intl locale codes to human-readable language names for the AI prompt */
+const LOCALE_LANGUAGE: Record<string, string> = {
+  uz: 'Uzbek (Latin)',
+  'uz-cyrl': 'Uzbek (Cyrillic)',
+  ru: 'Russian',
+  en: 'English',
+};
 
-  admin: `You are an AI co-pilot for SAYIN GLOBAL platform administrators.
-You can help with: moderation decisions, reviewing reports, drafting broadcasts, 
-analyzing platform metrics, understanding user behavior, and operational tasks.
-You have access to platform context. Be precise and professional.
-Do NOT reveal superuser-only system internals, security configurations, or credentials.
-Respond in the admin's preferred language.`,
+/** Greeting text per locale */
+const GREETINGS: Record<string, { user: (name: string) => string; admin: (name: string) => string }> = {
+  uz: {
+    user: (n) => `Salom${n ? ', ' + n : ''}! Men SAYIN GLOBAL yordamchisiman. E'lonlar, sotuvchilar, planlar yoki platforma haqida savollaringiz bo'lsa, yordam beraman.`,
+    admin: (n) => `Salom, ${n || 'Admin'}! Men SAYIN GLOBAL AI yordamchisiman. Moderatsiya, e'lonlar, foydalanuvchilar yoki platforma bo'yicha savollaringizga javob beraman.`,
+  },
+  'uz-cyrl': {
+    user: (n) => `Салом${n ? ', ' + n : ''}! Мен SAYIN GLOBAL ёрдамчисиман. Эълонлар, сотувчилар, режалар ёки платформа ҳақида саволларингиз бўлса, ёрдам бераман.`,
+    admin: (n) => `Салом, ${n || 'Admin'}! Мен SAYIN GLOBAL AI ёрдамчисиман.`,
+  },
+  ru: {
+    user: (n) => `Здравствуйте${n ? ', ' + n : ''}! Я помощник SAYIN GLOBAL. Задайте вопрос об объявлениях, продавцах, тарифах или платформе.`,
+    admin: (n) => `Здравствуйте, ${n || 'Admin'}! Я AI-помощник SAYIN GLOBAL. Помогу с модерацией, объявлениями и управлением платформой.`,
+  },
+  en: {
+    user: (n) => `Hello${n ? ', ' + n : ''}! I'm the SAYIN GLOBAL assistant. Ask me anything about listings, sellers, plans, or the platform.`,
+    admin: (n) => `Hello, ${n || 'Admin'}! I'm the SAYIN GLOBAL AI assistant. I can help with moderation, listings, and platform management.`,
+  },
 };
 
 export function AIAssistant() {
   const t = useTranslations();
+  const locale = useLocale();
   const { user, isAuthenticated } = useAuthStore();
   const [open, setOpen] = useState(false);
   const [minimized, setMinimized] = useState(false);
@@ -57,6 +71,7 @@ export function AIAssistant() {
 
   const isAdmin = !!user?.is_admin;
   const role = isAdmin ? 'admin' : 'user';
+  const firstName = user?.full_name?.split(' ')[0] ?? '';
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -65,13 +80,12 @@ export function AIAssistant() {
     }
   }, [messages, open, minimized]);
 
-  // Greeting on first open
+  // Greeting on first open — uses interface locale
   useEffect(() => {
     if (open && !hasGreeted && isAuthenticated) {
       setHasGreeted(true);
-      const greeting = isAdmin
-        ? `Salom, ${user?.full_name?.split(' ')[0] ?? 'Admin'}! Men SAYIN GLOBAL AI yordamchisiman. Moderatsiya, e'lonlar, foydalanuvchilar yoki platforma bo'yicha savollaringizga javob beraman.`
-        : `Salom${user?.full_name ? ', ' + user.full_name.split(' ')[0] : ''}! Men SAYIN GLOBAL yordamchisiman. E'lonlar, sotuvchilar, planlar yoki platforma haqida savollaringiz bo'lsa, yordam beraman.`;
+      const greetFns = GREETINGS[locale] ?? GREETINGS['uz'];
+      const greeting = isAdmin ? greetFns.admin(firstName) : greetFns.user(firstName);
       setMessages([{
         id: 'greeting',
         role: 'assistant',
@@ -79,7 +93,7 @@ export function AIAssistant() {
         timestamp: new Date(),
       }]);
     }
-  }, [open, hasGreeted, isAuthenticated, isAdmin, user?.full_name]);
+  }, [open, hasGreeted, isAuthenticated, isAdmin, firstName, locale]);
 
   const sendMessage = async () => {
     const text = input.trim();
@@ -105,7 +119,8 @@ export function AIAssistant() {
       const res = await apiClient.post('/ai-moderation/assistant/', {
         message: text,
         role,
-        system_context: SYSTEM_CONTEXT[role],
+        locale,
+        language: LOCALE_LANGUAGE[locale] ?? 'Uzbek',
         history,
         user_name: user?.full_name ?? '',
       });
@@ -118,10 +133,16 @@ export function AIAssistant() {
         timestamp: new Date(),
       }]);
     } catch {
+      const errMsg: Record<string, string> = {
+        uz: "Kechirasiz, hozir javob bera olmayapman. Keyinroq urinib ko'ring.",
+        'uz-cyrl': "Кечирасиз, ҳозир жавоб бера олмаяпман. Кейинроқ уриниб кўринг.",
+        ru: 'Извините, сейчас не могу ответить. Попробуйте позже.',
+        en: "Sorry, I can't respond right now. Please try again later.",
+      };
       setMessages((prev) => [...prev, {
         id: `a-err-${Date.now()}`,
         role: 'assistant',
-        content: 'Kechirasiz, hozir javob bera olmayapman. Keyinroq urinib ko\'ring.',
+        content: errMsg[locale] ?? errMsg['uz'],
         timestamp: new Date(),
       }]);
     } finally {
@@ -177,7 +198,9 @@ export function AIAssistant() {
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold text-fg">SAYIN AI</p>
                   <p className="text-[11px] text-fg-muted">
-                    {isAdmin ? 'Admin yordamchisi' : 'Platforma yordamchisi'}
+                    {isAdmin
+                      ? (locale === 'ru' ? 'Помощник администратора' : locale === 'en' ? 'Admin assistant' : 'Admin yordamchisi')
+                      : (locale === 'ru' ? 'Помощник платформы' : locale === 'en' ? 'Platform assistant' : 'Platforma yordamchisi')}
                   </p>
                 </div>
                 <div className="flex items-center gap-1">
@@ -259,7 +282,11 @@ export function AIAssistant() {
                           value={input}
                           onChange={(e) => setInput(e.target.value)}
                           onKeyDown={handleKeyDown}
-                          placeholder="Savol bering..."
+                          placeholder={
+                            locale === 'ru' ? 'Задайте вопрос...' :
+                            locale === 'en' ? 'Ask a question...' :
+                            'Savol bering...'
+                          }
                           rows={1}
                           disabled={loading}
                           className="input-base flex-1 resize-none py-2 text-sm"
@@ -277,7 +304,9 @@ export function AIAssistant() {
                         </button>
                       </div>
                       <p className="mt-1.5 text-[10px] text-fg-subtle text-center">
-                        AI yordamchi · Faqat ma'lumot uchun
+                        {locale === 'ru' ? 'AI-помощник · Только для информации' :
+                         locale === 'en' ? 'AI assistant · For information only' :
+                         "AI yordamchi · Faqat ma'lumot uchun"}
                       </p>
                     </div>
                   </motion.div>
