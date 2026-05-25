@@ -78,6 +78,77 @@ const LOGIN_PROMPT: Record<string, { title: string; desc: string; btn: string }>
   en: { title: 'SAYIN AI', desc: "Sign in to use the AI assistant.", btn: "Sign in" },
 };
 
+/** Renders AI message content with clickable links and basic formatting */
+function AIMessageContent({ content }: { content: string }) {
+  // Split by lines, render each line with link detection
+  const lines = content.split('\n');
+  return (
+    <div className="space-y-0.5">
+      {lines.map((line, i) => {
+        // Detect internal links like /listings/123 or /plans
+        const linkMatch = line.match(/🔗\s*(\/[^\s]+)/);
+        if (linkMatch) {
+          const url = linkMatch[1];
+          const label = line.replace(/🔗\s*\/[^\s]+/, '').trim() || url;
+          return (
+            <div key={i}>
+              {label && <span>{label} </span>}
+              <a
+                href={url}
+                className="inline-flex items-center gap-1 text-brand-primary underline underline-offset-2 font-medium hover:opacity-80"
+                onClick={(e) => e.stopPropagation()}
+              >
+                🔗 {url}
+              </a>
+            </div>
+          );
+        }
+        // Detect listing links like /listings/123456789
+        const listingLinkMatch = line.match(/^\s+🔗\s*(\/listings\/\d+)/);
+        if (listingLinkMatch) {
+          return (
+            <div key={i} className="pl-2">
+              <a
+                href={listingLinkMatch[1]}
+                className="text-brand-primary underline underline-offset-2 text-[12px] hover:opacity-80"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Ko'rish →
+              </a>
+            </div>
+          );
+        }
+        // Detect bare internal paths like /listings/123 at end of line
+        const inlineLink = line.match(/\s+(\/(?:listings|sellers|plans|chat|profile)[^\s]*)/);
+        if (inlineLink && !line.startsWith('  ')) {
+          const before = line.slice(0, line.lastIndexOf(inlineLink[1])).trim();
+          return (
+            <div key={i}>
+              {before && <span>{before} </span>}
+              <a
+                href={inlineLink[1]}
+                className="text-brand-primary underline underline-offset-2 font-medium hover:opacity-80"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {inlineLink[1]}
+              </a>
+            </div>
+          );
+        }
+        // Indented lines (listing details) — smaller text
+        if (line.startsWith('  ') && line.trim()) {
+          return (
+            <div key={i} className="pl-2 text-[11px] text-fg-muted">
+              {line.trim()}
+            </div>
+          );
+        }
+        return <div key={i}>{line || '\u00A0'}</div>;
+      })}
+    </div>
+  );
+}
+
 export function AIAssistant() {
   const locale = useLocale();
   const { user, isAuthenticated } = useAuthStore();
@@ -393,7 +464,7 @@ export function AIAssistant() {
                                 ? 'rounded-br-sm bg-brand-primary text-white'
                                 : 'rounded-bl-sm bg-bg-subtle text-fg'
                             }`}>
-                              {msg.content}
+                              {msg.role === 'assistant' ? <AIMessageContent content={msg.content} /> : msg.content}
                             </div>
                             {/* Action button — shown for both user and admin */}
                             {msg.action && !msg.actionResult && (
