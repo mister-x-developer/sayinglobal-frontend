@@ -81,28 +81,63 @@ export default function ChatPage() {
   }, [isAuthenticated]);
 
   // Auto-open conversation from ?with= param
+  // If conversation doesn't exist yet, create it automatically
   useEffect(() => {
     const withId = searchParams.get('with');
-    if (withId && conversations.length > 0) {
-      const conv = conversations.find((c) =>
-        c.participants?.some((p: any) => p.public_id === Number(withId))
-      );
-      if (conv) openConversation(conv);
+    if (!withId || !isAuthenticated) return;
+
+    const sellerId = Number(withId);
+    if (!sellerId) return;
+
+    // Wait for conversations to load, then check
+    if (convLoading) return;
+
+    // Try to find existing conversation
+    const existing = conversations.find((c) =>
+      c.participants?.some((p: any) => p.public_id === sellerId)
+    );
+
+    if (existing) {
+      openConversation(existing);
+    } else {
+      // No existing conversation — create one automatically
+      chatApi.startConversation(sellerId).then((conv) => {
+        if (conv) {
+          // Normalize the new conversation
+          const normalized: Conversation = {
+            ...conv,
+            last_message: typeof (conv as any).last_message === 'object' && (conv as any).last_message !== null
+              ? (conv as any).last_message.content ?? ''
+              : (conv as any).last_message ?? '',
+          };
+          setConversations((prev) => {
+            // Add to list if not already there
+            const exists = prev.some((c) => c.id === normalized.id);
+            return exists ? prev : [normalized, ...prev];
+          });
+          openConversation(normalized);
+        }
+      }).catch(() => {
+        // Failed to create — show error in UI
+      });
     }
-  }, [searchParams, conversations]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, conversations, convLoading, isAuthenticated]);
 
   const openConversation = (conv: Conversation) => {
     setActiveConv(conv);
     setMessages([]);
     chatApi.getMessages(conv.id).then((msgs) => {
+      // Backend returns { results: [...], count, page, page_size } or flat array
+      const msgList = Array.isArray(msgs) ? msgs : (msgs as any)?.results ?? [];
       setMessages(
-        msgs.map((m: any) => ({
+        msgList.map((m: any) => ({
           id: String(m.public_id ?? m.id ?? Date.now()),
           sender_id: String(m.sender?.public_id ?? m.sender_id ?? ''),
           content: m.content ?? m.text ?? '',
           created_at: m.created_at,
           is_read: m.is_read,
-        }))
+        })).reverse() // backend returns newest first, we want oldest first
       );
     });
   };

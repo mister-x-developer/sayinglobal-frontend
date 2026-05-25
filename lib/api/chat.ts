@@ -43,7 +43,10 @@ export const chatApi = {
     try {
       const res = await apiClient.get(`/chat/conversations/${conversationId}/messages/`);
       const data = res.data;
-      return Array.isArray(data) ? data : data?.results ?? [];
+      // Backend returns { results: [...], count, page, page_size }
+      if (Array.isArray(data)) return data;
+      if (data?.results) return data.results;
+      return [];
     } catch {
       return [];
     }
