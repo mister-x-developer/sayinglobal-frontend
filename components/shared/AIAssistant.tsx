@@ -64,10 +64,18 @@ const PLACEHOLDER: Record<string, string> = {
 };
 
 const FOOTER_TEXT: Record<string, string> = {
-  uz: "SAYIN AI · Gemini 2.5 Flash",
-  'uz-cyrl': "SAYIN AI · Gemini 2.5 Flash",
-  ru: "SAYIN AI · Gemini 2.5 Flash",
-  en: "SAYIN AI · Gemini 2.5 Flash",
+  uz: "SAYIN AI · Sun'iy intellekt yordamchi",
+  'uz-cyrl': "SAYIN AI · Сунъий интеллект ёрдамчи",
+  ru: "SAYIN AI · Интеллектуальный помощник",
+  en: "SAYIN AI · Intelligent assistant",
+};
+
+// Login prompt per locale
+const LOGIN_PROMPT: Record<string, { title: string; desc: string; btn: string }> = {
+  uz: { title: 'SAYIN AI', desc: "AI yordamchidan foydalanish uchun tizimga kiring.", btn: "Kirish" },
+  'uz-cyrl': { title: 'SAYIN AI', desc: "AI ёрдамчидан фойдаланиш учун тизимга киринг.", btn: "Кириш" },
+  ru: { title: 'SAYIN AI', desc: "Войдите, чтобы использовать AI-помощника.", btn: "Войти" },
+  en: { title: 'SAYIN AI', desc: "Sign in to use the AI assistant.", btn: "Sign in" },
 };
 
 export function AIAssistant() {
@@ -173,21 +181,40 @@ export function AIAssistant() {
 
   const executeAction = async (msgId: string, actionKey: string, params: Record<string, unknown>) => {
     setActionLoading(msgId);
+    // Admin actions go to /assistant/action/, user actions to /assistant/user-action/
+    const endpoint = isAdmin
+      ? '/ai-moderation/assistant/action/'
+      : '/ai-moderation/assistant/user-action/';
     try {
-      const res = await apiClient.post('/ai-moderation/assistant/action/', {
-        action: actionKey,
-        params,
-      });
+      const res = await apiClient.post(endpoint, { action: actionKey, params });
       const result = res.data?.result ?? {};
+
+      // Format result nicely for display
+      let displayText = '';
+      if (result.listings && Array.isArray(result.listings)) {
+        displayText = result.listings.map((l: any) =>
+          `• ${l.title} — ${l.price?.toLocaleString()} ${l.currency ?? 'UZS'}\n  ${l.url}`
+        ).join('\n');
+        if (result.search_url) displayText += `\n\n🔗 ${result.search_url}`;
+      } else if (result.categories && Array.isArray(result.categories)) {
+        displayText = result.categories.map((c: any) => `• ${c.name_uz || c.name}`).join('\n');
+      } else if (result.plans && Array.isArray(result.plans)) {
+        displayText = result.plans.map((p: any) =>
+          `• ${p.name}: ${p.price > 0 ? p.price.toLocaleString() + ' UZS' : 'Bepul'} — ${p.listing_limit} ta/oy`
+        ).join('\n');
+      } else {
+        displayText = JSON.stringify(result, null, 2);
+      }
+
       setMessages((prev) => prev.map((m) =>
         m.id === msgId
-          ? { ...m, actionResult: { ok: true, text: JSON.stringify(result, null, 2) } }
+          ? { ...m, actionResult: { ok: true, text: displayText } }
           : m
       ));
     } catch (e: any) {
       setMessages((prev) => prev.map((m) =>
         m.id === msgId
-          ? { ...m, actionResult: { ok: false, text: e?.response?.data?.error ?? 'Action failed' } }
+          ? { ...m, actionResult: { ok: false, text: e?.response?.data?.error ?? 'Xato yuz berdi' } }
           : m
       ));
     } finally {
@@ -202,7 +229,62 @@ export function AIAssistant() {
     }
   };
 
-  if (!isAuthenticated) return null;
+  if (!isAuthenticated) {
+    // Show button + login prompt for unauthenticated users
+    return (
+      <>
+        <AnimatePresence>
+          {!open && (
+            <motion.button
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0, opacity: 0 }}
+              transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+              onClick={() => setOpen(true)}
+              className="fixed bottom-28 right-4 z-[60] md:bottom-8 md:right-6 inline-flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-brand-primary to-brand-primary/80 text-white shadow-[0_8px_32px_rgba(31,122,82,0.45)] hover:shadow-[0_12px_40px_rgba(31,122,82,0.55)] transition-all duration-200 hover:scale-105 active:scale-95"
+              aria-label="SAYIN AI"
+            >
+              <Sparkles className="h-6 w-6" strokeWidth={1.75} />
+            </motion.button>
+          )}
+        </AnimatePresence>
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              initial={{ opacity: 0, y: 24, scale: 0.94 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 24, scale: 0.94 }}
+              transition={{ type: 'spring', damping: 28, stiffness: 320 }}
+              className="fixed bottom-28 right-4 z-[60] md:bottom-8 md:right-6 w-[calc(100vw-2rem)] max-w-[320px]"
+            >
+              <div className="overflow-hidden rounded-2xl border border-border/60 bg-bg-elevated shadow-[0_24px_64px_rgba(0,0,0,0.18)]">
+                <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-brand-primary/8 to-brand-primary/4 border-b border-brand-primary/15">
+                  <div className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-brand-primary text-white">
+                    <Bot className="h-4 w-4" strokeWidth={1.75} />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-bold text-fg">{LOGIN_PROMPT[locale]?.title ?? 'SAYIN AI'}</p>
+                  </div>
+                  <button type="button" onClick={() => setOpen(false)} className="inline-flex h-7 w-7 items-center justify-center rounded-lg text-fg-muted hover:bg-bg-subtle">
+                    <X className="h-3.5 w-3.5" strokeWidth={2} />
+                  </button>
+                </div>
+                <div className="p-5 text-center">
+                  <div className="mx-auto mb-3 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary">
+                    <Sparkles className="h-6 w-6" strokeWidth={1.75} />
+                  </div>
+                  <p className="text-sm text-fg-muted mb-4">{LOGIN_PROMPT[locale]?.desc}</p>
+                  <a href="/auth/login" className="btn btn-primary w-full justify-center">
+                    {LOGIN_PROMPT[locale]?.btn}
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </>
+    );
+  }
 
   return (
     <>
@@ -258,8 +340,8 @@ export function AIAssistant() {
                   </p>
                   <p className="text-[10px] text-fg-muted leading-tight">
                     {isAdmin
-                      ? (locale === 'ru' ? 'Помощник администратора · Gemini 2.5' : locale === 'en' ? 'Admin co-pilot · Gemini 2.5' : 'Admin yordamchisi · Gemini 2.5')
-                      : (locale === 'ru' ? 'Помощник платформы · Gemini 2.5' : locale === 'en' ? 'Platform assistant · Gemini 2.5' : 'Platforma yordamchisi · Gemini 2.5')}
+                      ? (locale === 'ru' ? 'Помощник администратора' : locale === 'en' ? 'Admin co-pilot' : 'Admin yordamchisi')
+                      : (locale === 'ru' ? 'Интеллектуальный помощник' : locale === 'en' ? 'Intelligent assistant' : "Aqlli yordamchi")}
                   </p>
                 </div>
                 <div className="flex items-center gap-0.5">
@@ -313,17 +395,21 @@ export function AIAssistant() {
                             }`}>
                               {msg.content}
                             </div>
-                            {/* Admin action button */}
-                            {isAdmin && msg.action && !msg.actionResult && (
+                            {/* Action button — shown for both user and admin */}
+                            {msg.action && !msg.actionResult && (
                               <button
                                 type="button"
                                 onClick={() => executeAction(msg.id, msg.action!.actionKey, msg.action!.params)}
                                 disabled={actionLoading === msg.id}
-                                className="self-start inline-flex items-center gap-1.5 rounded-lg bg-brand-accent/10 border border-brand-accent/30 px-2.5 py-1 text-[11px] font-semibold text-brand-accent hover:bg-brand-accent/20 transition-colors disabled:opacity-60"
+                                className={`self-start inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-[11px] font-semibold transition-colors disabled:opacity-60 ${
+                                  isAdmin
+                                    ? 'bg-brand-accent/10 border-brand-accent/30 text-brand-accent hover:bg-brand-accent/20'
+                                    : 'bg-brand-primary/10 border-brand-primary/30 text-brand-primary hover:bg-brand-primary/20'
+                                }`}
                               >
                                 {actionLoading === msg.id
                                   ? <Loader2 className="h-3 w-3 animate-spin" />
-                                  : <Zap className="h-3 w-3" strokeWidth={2} />}
+                                  : <Sparkles className="h-3 w-3" strokeWidth={2} />}
                                 {msg.action.label}
                               </button>
                             )}
