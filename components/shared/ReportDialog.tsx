@@ -15,7 +15,7 @@
  */
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { AlertTriangle, CheckCircle2, Flag, MessageSquareText, Package, ShieldAlert, User as UserIcon } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, Flag, MessageSquareText, Package, ShieldAlert, User as UserIcon, MessageSquare } from 'lucide-react';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import {
@@ -28,7 +28,8 @@ import { cn } from '@/lib/utils/cn';
 export type ReportTarget =
   | { kind: 'listing'; publicId: number; title?: string }
   | { kind: 'seller'; publicId: number; fullName?: string }
-  | { kind: 'chat'; publicId: number; fullName?: string };
+  | { kind: 'chat'; publicId: number; fullName?: string }
+  | { kind: 'comment'; publicId: number | string; fullName?: string };
 
 interface Props {
   open: boolean;
@@ -48,6 +49,7 @@ const KIND_ICON = {
   listing: Package,
   seller: UserIcon,
   chat: MessageSquareText,
+  comment: MessageSquare,
 };
 
 export function ReportDialog({ open, target, onClose, onSubmitted }: Props) {
@@ -98,6 +100,9 @@ export function ReportDialog({ open, target, onClose, onSubmitted }: Props) {
         await moderationApi.reportListing(target.publicId, payload);
       } else if (target.kind === 'seller') {
         await moderationApi.reportSeller(target.publicId, payload);
+      } else if (target.kind === 'comment') {
+        // Report comment as a chat/content report using the comment's public_id
+        await moderationApi.reportChat(target.publicId as number, payload);
       } else {
         await moderationApi.reportChat(target.publicId, payload);
       }
@@ -116,18 +121,18 @@ export function ReportDialog({ open, target, onClose, onSubmitted }: Props) {
 
   if (!target) return null;
 
-  const KindIcon = KIND_ICON[target.kind];
+  const KindIcon = KIND_ICON[target.kind] ?? MessageSquare;
 
   const titleKey =
     target.kind === 'listing' ? 'report.titleListing' :
     target.kind === 'seller'  ? 'report.titleSeller' :
+    target.kind === 'comment' ? 'report.titleComment' :
                                 'report.titleChat';
-  const title = t(titleKey as any);
+  const title = t(titleKey as any) ?? (target.kind === 'comment' ? 'Izohni shikoyat qilish' : 'Shikoyat');
 
   const subjectName =
     target.kind === 'listing' ? (target.title ?? `#${target.publicId}`) :
-    target.kind === 'seller'  ? (target.fullName ?? `#${target.publicId}`) :
-                                (target.fullName ?? `#${target.publicId}`);
+                                ((target as any).fullName ?? `#${target.publicId}`);
 
   return (
     <Modal isOpen={open} onClose={onClose} title={title} size="md">

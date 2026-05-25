@@ -4,14 +4,15 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { ChevronDown, ChevronUp, CornerDownRight, Flag, ShieldCheck, LogIn } from 'lucide-react';
+import { ChevronDown, ChevronUp, CornerDownRight, Flag, ShieldCheck, LogIn, MessageSquare } from 'lucide-react';
 import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
 import { TranslateButton } from '@/components/shared/TranslateButton';
+import { ReportDialog } from '@/components/shared/ReportDialog';
 import { formatRelativeTime } from '@/lib/utils/format';
 
 export interface Comment {
-  public_id: number | string; // string for local optimistic comments
+  public_id: number | string;
   user: { public_id: number | string; full_name: string; avatar_url?: string; is_seller?: boolean };
   content: string;
   created_at: string;
@@ -28,11 +29,13 @@ interface CommentItemProps {
 
 export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentItemProps) {
   const t = useTranslations();
-  const [repliesOpen, setRepliesOpen] = useState(depth === 0 && (comment.replies?.length ?? 0) > 0);
+  // Always show replies by default when they exist
+  const [repliesOpen, setRepliesOpen] = useState(true);
   const [replyOpen, setReplyOpen] = useState(false);
   const [replyText, setReplyText] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [translatedContent, setTranslatedContent] = useState<string | null>(null);
+  const [reportOpen, setReportOpen] = useState(false);
 
   const isSeller = comment.user.public_id === sellerId;
   const hasReplies = (comment.replies?.length ?? 0) > 0;
@@ -57,6 +60,7 @@ export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentIt
         </Link>
 
         <div className="min-w-0 flex-1">
+          {/* Name row */}
           <div className="flex flex-wrap items-center gap-2">
             <Link
               href={`/sellers/${comment.user.public_id}`}
@@ -76,9 +80,13 @@ export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentIt
             )}
           </div>
 
-          <p className="mt-1.5 text-sm leading-relaxed text-fg">{translatedContent ?? comment.content}</p>
+          {/* Content */}
+          <p className="mt-1.5 text-sm leading-relaxed text-fg">
+            {translatedContent ?? comment.content}
+          </p>
 
-          <div className="mt-2 flex items-center gap-3">
+          {/* Action row */}
+          <div className="mt-2 flex flex-wrap items-center gap-3">
             <TranslateButton
               text={comment.content}
               onTranslated={setTranslatedContent}
@@ -88,8 +96,9 @@ export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentIt
               <button
                 type="button"
                 onClick={() => setReplyOpen((v) => !v)}
-                className="text-xs font-semibold text-fg-muted hover:text-brand-primary"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-fg-muted hover:text-brand-primary transition-colors"
               >
+                <MessageSquare className="h-3 w-3" strokeWidth={2} />
                 {t('comments.reply')}
               </button>
             )}
@@ -112,12 +121,16 @@ export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentIt
                 )}
               </button>
             )}
+            {/* Report button — always visible, not hidden */}
             <button
               type="button"
-              className="ml-auto hidden text-xs text-fg-subtle hover:text-danger group-hover:inline-flex items-center gap-1"
+              onClick={() => setReportOpen(true)}
+              className="ml-auto inline-flex items-center gap-1 text-xs text-fg-subtle hover:text-danger transition-colors"
               aria-label={t('comments.report')}
+              title={t('comments.report')}
             >
               <Flag className="h-3 w-3" strokeWidth={1.75} />
+              <span className="hidden sm:inline">{t('comments.report')}</span>
             </button>
           </div>
 
@@ -166,14 +179,15 @@ export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentIt
         </div>
       </div>
 
-      {/* Nested replies */}
-      <AnimatePresence>
+      {/* Nested replies — shown by default */}
+      <AnimatePresence initial={false}>
         {repliesOpen && hasReplies && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
+            className="overflow-hidden"
           >
             {comment.replies!.map((reply) => (
               <CommentItem
@@ -187,6 +201,17 @@ export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentIt
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Report dialog */}
+      <ReportDialog
+        open={reportOpen}
+        target={{
+          kind: 'comment',
+          publicId: comment.public_id as number,
+          fullName: comment.user.full_name,
+        }}
+        onClose={() => setReportOpen(false)}
+      />
     </div>
   );
 }
@@ -203,35 +228,49 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
   const [text, setText] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [isAuth, setIsAuth] = useState(false);
+  const [currentUser, setCurrentUser] = useState<{ public_id: number; full_name: string; avatar_url?: string } | null>(null);
 
   useEffect(() => {
     try {
       const raw = localStorage.getItem('sayin-auth-store');
       if (raw) {
         const parsed = JSON.parse(raw);
-        setIsAuth(!!parsed?.state?.isAuthenticated);
+        const auth = parsed?.state;
+        setIsAuth(!!auth?.isAuthenticated);
+        if (auth?.user) setCurrentUser(auth.user);
       }
     } catch {}
   }, []);
+
+  // Sync when initialComments updates (parent re-fetches)
+  useEffect(() => {
+    if (initialComments.length > 0) {
+      setComments(initialComments);
+    }
+  }, [initialComments]);
 
   const handleSubmit = async () => {
     if (!text.trim()) return;
     setSubmitting(true);
     try {
       const { listingsApi } = await import('@/lib/api/listings');
-      await listingsApi.createComment(listingId, text.trim());
-      // Optimistic add
+      const created = await listingsApi.createComment(listingId, text.trim());
+      // Use real data from backend if available, else optimistic
       const newComment: Comment = {
-        public_id: `local-${Date.now()}` as any,
-        user: { public_id: 0, full_name: 'Siz', avatar_url: '' },
+        public_id: created?.public_id ?? `local-${Date.now()}`,
+        user: {
+          public_id: currentUser?.public_id ?? 0,
+          full_name: currentUser?.full_name ?? t('comments.you' as any) ?? 'Siz',
+          avatar_url: currentUser?.avatar_url,
+        },
         content: text.trim(),
-        created_at: new Date().toISOString(),
+        created_at: created?.created_at ?? new Date().toISOString(),
         replies: [],
       };
       setComments((prev) => [newComment, ...prev]);
       setText('');
     } catch {
-      // keep text
+      // keep text so user can retry
     } finally {
       setSubmitting(false);
     }
@@ -240,12 +279,16 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
   const handleReply = async (parentId: number | string, content: string) => {
     try {
       const { listingsApi } = await import('@/lib/api/listings');
-      await listingsApi.createComment(listingId, content, String(parentId));
+      const created = await listingsApi.createComment(listingId, content, String(parentId));
       const newReply: Comment = {
-        public_id: `local-${Date.now()}` as any,
-        user: { public_id: 0, full_name: 'Siz', avatar_url: '' },
+        public_id: created?.public_id ?? `local-${Date.now()}`,
+        user: {
+          public_id: currentUser?.public_id ?? 0,
+          full_name: currentUser?.full_name ?? t('comments.you' as any) ?? 'Siz',
+          avatar_url: currentUser?.avatar_url,
+        },
         content,
-        created_at: new Date().toISOString(),
+        created_at: created?.created_at ?? new Date().toISOString(),
       };
       setComments((prev) =>
         prev.map((c) =>
@@ -257,6 +300,13 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
     } catch {}
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      handleSubmit();
+    }
+  };
+
   return (
     <div>
       <h3 className="display-sm">
@@ -266,34 +316,38 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
         )}
       </h3>
 
-      {/* New comment */}
+      {/* New comment input */}
       <div className="mt-4">
         {isAuth ? (
           <>
             <textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
+              onKeyDown={handleKeyDown}
               placeholder={t('comments.commentPlaceholder')}
               rows={3}
               className="input-base w-full resize-none py-3 text-sm"
             />
-            <div className="mt-2 flex justify-end">
+            <div className="mt-2 flex items-center justify-between">
+              <p className="text-xs text-fg-subtle">Ctrl+Enter — yuborish</p>
               <button
                 type="button"
                 onClick={handleSubmit}
                 disabled={!text.trim() || submitting}
                 className="btn btn-primary btn-sm"
               >
-                {t('comments.submit')}
+                {submitting ? t('common.loading') : t('comments.submit')}
               </button>
             </div>
           </>
         ) : (
           <div className="rounded-2xl border border-border bg-bg-subtle p-4 text-center">
-            <p className="text-sm text-fg-muted mb-3">Izoh qoldirish uchun tizimga kiring</p>
+            <p className="text-sm text-fg-muted mb-3">
+              {t('comments.loginToComment' as any) ?? 'Izoh qoldirish uchun tizimga kiring'}
+            </p>
             <Link href="/auth" className="btn btn-primary btn-sm">
               <LogIn className="h-4 w-4" strokeWidth={2} />
-              Kirish
+              {t('auth.login')}
             </Link>
           </div>
         )}
@@ -309,7 +363,7 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
               key={c.public_id}
               comment={c}
               sellerId={sellerId}
-              onReply={handleReply}
+              onReply={isAuth ? handleReply : undefined}
             />
           ))
         )}
