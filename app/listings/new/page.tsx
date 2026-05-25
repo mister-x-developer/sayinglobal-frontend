@@ -83,13 +83,14 @@ export default function NewListingPage() {
     if (!form.region) e.region = t('errors.required');
     if (!form.location.trim()) e.location = t('errors.required');
     if (!age.years && !age.months && !age.days) e.age = t('validation.atLeastOneFieldRequired');
+    if (images.length < 3) e.images = "Kamida 3 ta rasm yuklang";
     setErrors(e);
     return Object.keys(e).length === 0;
   };
 
   const handleImages = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
-    const remaining = 10 - images.length;
+    const remaining = 5 - images.length;
     const toAdd = files.slice(0, remaining);
     const previews: ImagePreview[] = toAdd.map((file, i) => ({
       id: `${Date.now()}-${i}`,
@@ -333,7 +334,7 @@ export default function NewListingPage() {
                     ))}
                   </div>
                 )}
-                {images.length < 10 && (
+                {images.length < 5 && (
                   <button
                     type="button"
                     onClick={() => fileRef.current?.click()}
@@ -345,7 +346,8 @@ export default function NewListingPage() {
                   </button>
                 )}
                 <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={handleImages} className="hidden" />
-                <p className="mt-2 text-xs text-fg-subtle">{images.length}/10 · {t('create.maxPhotos')}</p>
+                <p className="mt-2 text-xs text-fg-subtle">{images.length}/5 · Kamida 3 ta rasm kerak</p>
+                {errors.images && <p className="mt-1 text-xs text-danger">{errors.images}</p>}
               </div>
 
               {/* Location — backend-driven dependent selector */}

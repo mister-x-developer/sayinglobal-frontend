@@ -221,6 +221,11 @@ export default function PlansPage() {
                       {plan.price_uzs > 0 && <span className="text-sm text-fg-muted"> / {plan.duration_days} kun</span>}
                     </div>
 
+                    {/* Referral notice */}
+                    <div className="mt-3 rounded-xl bg-brand-accent/10 px-3 py-2 text-xs text-brand-accent font-semibold">
+                      🎁 Hozircha referral orqali bepul. Tez orada to'lovga o'tadi!
+                    </div>
+
                     <ul className="mt-5 space-y-2.5 flex-1">
                       <li className="flex items-center gap-2 text-sm text-fg">
                         <Check className="h-4 w-4 flex-shrink-0 text-success" strokeWidth={2.5} />
@@ -255,8 +260,14 @@ export default function PlansPage() {
                           Bepul tarif
                         </button>
                       ) : (
-                        <button className="btn btn-primary w-full">
-                          Tanlash
+                        <button
+                          onClick={() => {
+                            // Scroll to referral section
+                            document.getElementById('referral-section')?.scrollIntoView({ behavior: 'smooth' });
+                          }}
+                          className="btn btn-primary w-full"
+                        >
+                          Referral orqali olish
                           <ArrowRight className="h-4 w-4" strokeWidth={2} />
                         </button>
                       )}
@@ -299,10 +310,11 @@ export default function PlansPage() {
           {/* Referral */}
           {isAuthenticated && referral && (
             <motion.div
+              id="referral-section"
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.4 }}
-              className="mt-6 surface-elevated p-6"
+              className="mt-6 surface-elevated p-6 border-brand-accent/20 bg-brand-accent/4"
             >
               <div className="flex items-center gap-3">
                 <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-accent/12 text-brand-accent">

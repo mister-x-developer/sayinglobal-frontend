@@ -150,7 +150,7 @@ export function AIAssistant() {
             exit={{ scale: 0, opacity: 0 }}
             transition={{ type: 'spring', damping: 20, stiffness: 300 }}
             onClick={() => setOpen(true)}
-            className="fixed bottom-24 right-4 z-50 md:bottom-6 md:right-6 inline-flex h-14 w-14 items-center justify-center rounded-full bg-brand-primary text-white shadow-[0_8px_32px_rgba(31,122,82,0.4)] hover:bg-brand-primary/90 transition-all hover:scale-105 active:scale-95"
+            className="fixed bottom-28 right-4 z-[60] md:bottom-8 md:right-6 inline-flex h-14 w-14 items-center justify-center rounded-full bg-brand-primary text-white shadow-[0_8px_32px_rgba(31,122,82,0.4)] hover:bg-brand-primary/90 transition-all hover:scale-105 active:scale-95"
             aria-label="AI Assistant"
           >
             <Sparkles className="h-6 w-6" strokeWidth={1.75} />
@@ -166,7 +166,7 @@ export function AIAssistant() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed bottom-24 right-4 z-50 md:bottom-6 md:right-6 w-[calc(100vw-2rem)] max-w-sm"
+            className="fixed bottom-28 right-4 z-[60] md:bottom-8 md:right-6 w-[calc(100vw-2rem)] max-w-sm"
           >
             <div className="overflow-hidden rounded-2xl border border-border bg-bg-elevated shadow-[0_20px_60px_rgba(0,0,0,0.2)] ring-1 ring-black/5">
               {/* Header */}

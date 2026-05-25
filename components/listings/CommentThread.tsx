@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { ChevronDown, ChevronUp, CornerDownRight, Flag, ShieldCheck } from 'lucide-react';
+import { ChevronDown, ChevronUp, CornerDownRight, Flag, ShieldCheck, LogIn } from 'lucide-react';
 import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
 import { TranslateButton } from '@/components/shared/TranslateButton';
@@ -202,6 +202,17 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
   const [comments, setComments] = useState<Comment[]>(initialComments);
   const [text, setText] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [isAuth, setIsAuth] = useState(false);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('sayin-auth-store');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        setIsAuth(!!parsed?.state?.isAuthenticated);
+      }
+    } catch {}
+  }, []);
 
   const handleSubmit = async () => {
     if (!text.trim()) return;
@@ -257,23 +268,35 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
 
       {/* New comment */}
       <div className="mt-4">
-        <textarea
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder={t('comments.commentPlaceholder')}
-          rows={3}
-          className="input-base w-full resize-none py-3 text-sm"
-        />
-        <div className="mt-2 flex justify-end">
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={!text.trim() || submitting}
-            className="btn btn-primary btn-sm"
-          >
-            {t('comments.submit')}
-          </button>
-        </div>
+        {isAuth ? (
+          <>
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder={t('comments.commentPlaceholder')}
+              rows={3}
+              className="input-base w-full resize-none py-3 text-sm"
+            />
+            <div className="mt-2 flex justify-end">
+              <button
+                type="button"
+                onClick={handleSubmit}
+                disabled={!text.trim() || submitting}
+                className="btn btn-primary btn-sm"
+              >
+                {t('comments.submit')}
+              </button>
+            </div>
+          </>
+        ) : (
+          <div className="rounded-2xl border border-border bg-bg-subtle p-4 text-center">
+            <p className="text-sm text-fg-muted mb-3">Izoh qoldirish uchun tizimga kiring</p>
+            <Link href="/auth" className="btn btn-primary btn-sm">
+              <LogIn className="h-4 w-4" strokeWidth={2} />
+              Kirish
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* Comments list */}
