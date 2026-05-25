@@ -4,20 +4,17 @@
  * SAYIN GLOBAL — Platform AI Assistant
  *
  * Floating premium widget. Role-aware. Multilingual. DB/API-aware.
- * Uses Gemini 2.5 Flash via backend proxy endpoint.
- *
- * Capabilities:
- * - Platform questions (listings, sellers, plans, referrals)
- * - Moderation help (admin only)
- * - Broadcast drafting (admin only)
- * - User guidance
- * - Multilingual responses (responds in user's interface language)
+ * - User AI: platform help, listings, plans, referrals
+ * - Admin AI: full platform control, can execute moderation actions
  */
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTranslations, useLocale } from 'next-intl';
-import { Bot, X, Send, Loader2, Minimize2, Maximize2, Sparkles } from 'lucide-react';
+import { useLocale } from 'next-intl';
+import {
+  Bot, X, Send, Loader2, Minimize2, Maximize2,
+  Sparkles, Zap, ChevronDown, CheckCircle2, AlertCircle,
+} from 'lucide-react';
 import { useAuthStore } from '@/lib/store/auth';
 import apiClient from '@/lib/api/client';
 
@@ -26,9 +23,10 @@ interface Message {
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
+  action?: { label: string; actionKey: string; params: Record<string, unknown> };
+  actionResult?: { ok: boolean; text: string };
 }
 
-/** Map next-intl locale codes to human-readable language names for the AI prompt */
 const LOCALE_LANGUAGE: Record<string, string> = {
   uz: 'Uzbek (Latin)',
   'uz-cyrl': 'Uzbek (Cyrillic)',
@@ -36,28 +34,43 @@ const LOCALE_LANGUAGE: Record<string, string> = {
   en: 'English',
 };
 
-/** Greeting text per locale */
-const GREETINGS: Record<string, { user: (name: string) => string; admin: (name: string) => string }> = {
+const GREETINGS: Record<string, {
+  user: (n: string) => string;
+  admin: (n: string) => string;
+}> = {
   uz: {
-    user: (n) => `Assalomu alaykum${n ? ', ' + n : ''}! Men SAYIN GLOBAL yordamchisiman. E'lonlar, sotuvchilar, planlar yoki platforma haqida savollaringiz bo'lsa, yordam beraman.`,
-    admin: (n) => `Assalomu alaykum, ${n || 'Admin'}! Men SAYIN GLOBAL AI yordamchisiman. Moderatsiya, e'lonlar, foydalanuvchilar yoki platforma bo'yicha savollaringizga javob beraman.`,
+    user: (n) => `Assalomu alaykum${n ? ', ' + n : ''}! Men SAYIN AI — SAYIN GLOBAL yordamchisiman.\n\nE'lonlar, sotuvchilar, planlar, referral yoki platforma haqida istalgan savolni bering.`,
+    admin: (n) => `Assalomu alaykum, ${n || 'Admin'}! Men SAYIN ADMIN AI — platformaning kuchli yordamchisiman.\n\nModeratsiya, e'lonlar, foydalanuvchilar, broadcast, statistika — barchasida yordam beraman va amallarni bajaraman.`,
   },
   'uz-cyrl': {
-    user: (n) => `Ассалому алайкум${n ? ', ' + n : ''}! Мен SAYIN GLOBAL ёрдамчисиман. Эълонлар, сотувчилар, режалар ёки платформа ҳақида саволларингиз бўлса, ёрдам бераман.`,
-    admin: (n) => `Ассалому алайкум, ${n || 'Admin'}! Мен SAYIN GLOBAL AI ёрдамчисиман. Модерация, эълонлар ва платформа бўйича саволларингизга жавоб бераман.`,
+    user: (n) => `Ассалому алайкум${n ? ', ' + n : ''}! Мен SAYIN AI — SAYIN GLOBAL ёрдамчисиман.\n\nЭълонлар, сотувчилар, режалар ёки платформа ҳақида саволларингизни беринг.`,
+    admin: (n) => `Ассалому алайкум, ${n || 'Admin'}! Мен SAYIN ADMIN AI — платформанинг кучли ёрдамчисиман.\n\nМодерация, эълонлар, фойдаланувчилар ва бошқа барча ишларда ёрдам бераман.`,
   },
   ru: {
-    user: (n) => `Здравствуйте${n ? ', ' + n : ''}! Я помощник SAYIN GLOBAL. Задайте вопрос об объявлениях, продавцах, тарифах или платформе.`,
-    admin: (n) => `Здравствуйте, ${n || 'Admin'}! Я AI-помощник SAYIN GLOBAL. Помогу с модерацией, объявлениями и управлением платформой.`,
+    user: (n) => `Здравствуйте${n ? ', ' + n : ''}! Я SAYIN AI — помощник платформы SAYIN GLOBAL.\n\nЗадайте любой вопрос об объявлениях, продавцах, тарифах или функциях платформы.`,
+    admin: (n) => `Здравствуйте, ${n || 'Admin'}! Я SAYIN ADMIN AI — мощный помощник платформы.\n\nМодерация, объявления, пользователи, рассылки, статистика — помогу со всем и выполню действия.`,
   },
   en: {
-    user: (n) => `Hello${n ? ', ' + n : ''}! I'm the SAYIN GLOBAL assistant. Ask me anything about listings, sellers, plans, or the platform.`,
-    admin: (n) => `Hello, ${n || 'Admin'}! I'm the SAYIN GLOBAL AI assistant. I can help with moderation, listings, and platform management.`,
+    user: (n) => `Hello${n ? ', ' + n : ''}! I'm SAYIN AI — your SAYIN GLOBAL assistant.\n\nAsk me anything about listings, sellers, plans, referrals, or platform features.`,
+    admin: (n) => `Hello, ${n || 'Admin'}! I'm SAYIN ADMIN AI — your powerful platform co-pilot.\n\nModeration, listings, users, broadcasts, stats — I can help with everything and execute actions.`,
   },
 };
 
+const PLACEHOLDER: Record<string, string> = {
+  uz: 'Savol bering...',
+  'uz-cyrl': 'Савол беринг...',
+  ru: 'Задайте вопрос...',
+  en: 'Ask a question...',
+};
+
+const FOOTER_TEXT: Record<string, string> = {
+  uz: "SAYIN AI · Gemini 2.5 Flash",
+  'uz-cyrl': "SAYIN AI · Gemini 2.5 Flash",
+  ru: "SAYIN AI · Gemini 2.5 Flash",
+  en: "SAYIN AI · Gemini 2.5 Flash",
+};
+
 export function AIAssistant() {
-  const t = useTranslations();
   const locale = useLocale();
   const { user, isAuthenticated } = useAuthStore();
   const [open, setOpen] = useState(false);
@@ -66,27 +79,29 @@ export function AIAssistant() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [hasGreeted, setHasGreeted] = useState(false);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const isAdmin = !!user?.is_admin;
   const role = isAdmin ? 'admin' : 'user';
   const firstName = user?.full_name?.split(' ')[0] ?? '';
+  const language = LOCALE_LANGUAGE[locale] ?? 'Uzbek (Latin)';
 
-  // Auto-scroll to bottom
+  // Auto-scroll
   useEffect(() => {
     if (open && !minimized) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, open, minimized]);
 
-  // Reset greeting when locale changes so it re-greets in the new language
+  // Reset on locale change
   useEffect(() => {
     setHasGreeted(false);
     setMessages([]);
   }, [locale]);
 
-  // Greeting on first open — uses interface locale
+  // Greeting on first open
   useEffect(() => {
     if (open && !hasGreeted && isAuthenticated) {
       setHasGreeted(true);
@@ -116,8 +131,7 @@ export function AIAssistant() {
     setLoading(true);
 
     try {
-      // Build conversation history for context
-      const history = messages.slice(-6).map((m) => ({
+      const history = messages.slice(-8).map((m) => ({
         role: m.role === 'user' ? 'user' : 'model',
         parts: [{ text: m.content }],
       }));
@@ -126,12 +140,12 @@ export function AIAssistant() {
         message: text,
         role,
         locale,
-        language: LOCALE_LANGUAGE[locale] ?? 'Uzbek',
+        language,
         history,
         user_name: user?.full_name ?? '',
       });
 
-      const reply = res.data?.reply ?? res.data?.response ?? 'Kechirasiz, javob bera olmadim.';
+      const reply = res.data?.reply ?? res.data?.response ?? '...';
       setMessages((prev) => [...prev, {
         id: `a-${Date.now()}`,
         role: 'assistant',
@@ -141,7 +155,7 @@ export function AIAssistant() {
     } catch {
       const errMsg: Record<string, string> = {
         uz: "Kechirasiz, hozir javob bera olmayapman. Keyinroq urinib ko'ring.",
-        'uz-cyrl': "Кечирасиз, ҳозир жавоб бера олмаяпман. Кейинроқ уриниб кўринг.",
+        'uz-cyrl': "Кечирасиз, ҳозир жавоб бера олмаяпман.",
         ru: 'Извините, сейчас не могу ответить. Попробуйте позже.',
         en: "Sorry, I can't respond right now. Please try again later.",
       };
@@ -157,6 +171,30 @@ export function AIAssistant() {
     }
   };
 
+  const executeAction = async (msgId: string, actionKey: string, params: Record<string, unknown>) => {
+    setActionLoading(msgId);
+    try {
+      const res = await apiClient.post('/ai-moderation/assistant/action/', {
+        action: actionKey,
+        params,
+      });
+      const result = res.data?.result ?? {};
+      setMessages((prev) => prev.map((m) =>
+        m.id === msgId
+          ? { ...m, actionResult: { ok: true, text: JSON.stringify(result, null, 2) } }
+          : m
+      ));
+    } catch (e: any) {
+      setMessages((prev) => prev.map((m) =>
+        m.id === msgId
+          ? { ...m, actionResult: { ok: false, text: e?.response?.data?.error ?? 'Action failed' } }
+          : m
+      ));
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -168,7 +206,7 @@ export function AIAssistant() {
 
   return (
     <>
-      {/* Floating button */}
+      {/* Floating trigger button */}
       <AnimatePresence>
         {!open && (
           <motion.button
@@ -177,10 +215,15 @@ export function AIAssistant() {
             exit={{ scale: 0, opacity: 0 }}
             transition={{ type: 'spring', damping: 20, stiffness: 300 }}
             onClick={() => setOpen(true)}
-            className="fixed bottom-28 right-4 z-[60] md:bottom-8 md:right-6 inline-flex h-14 w-14 items-center justify-center rounded-full bg-brand-primary text-white shadow-[0_8px_32px_rgba(31,122,82,0.4)] hover:bg-brand-primary/90 transition-all hover:scale-105 active:scale-95"
-            aria-label="AI Assistant"
+            className="fixed bottom-28 right-4 z-[60] md:bottom-8 md:right-6 group inline-flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-brand-primary to-brand-primary/80 text-white shadow-[0_8px_32px_rgba(31,122,82,0.45)] hover:shadow-[0_12px_40px_rgba(31,122,82,0.55)] transition-all duration-200 hover:scale-105 active:scale-95"
+            aria-label="SAYIN AI Assistant"
           >
-            <Sparkles className="h-6 w-6" strokeWidth={1.75} />
+            <Sparkles className="h-6 w-6 transition-transform group-hover:rotate-12" strokeWidth={1.75} />
+            {isAdmin && (
+              <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-brand-accent text-[8px] font-black text-white">
+                A
+              </span>
+            )}
           </motion.button>
         )}
       </AnimatePresence>
@@ -189,31 +232,42 @@ export function AIAssistant() {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            initial={{ opacity: 0, y: 24, scale: 0.94 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed bottom-28 right-4 z-[60] md:bottom-8 md:right-6 w-[calc(100vw-2rem)] max-w-sm"
+            exit={{ opacity: 0, y: 24, scale: 0.94 }}
+            transition={{ type: 'spring', damping: 28, stiffness: 320 }}
+            className="fixed bottom-28 right-4 z-[60] md:bottom-8 md:right-6 w-[calc(100vw-2rem)] max-w-[360px]"
           >
-            <div className="overflow-hidden rounded-2xl border border-border bg-bg-elevated shadow-[0_20px_60px_rgba(0,0,0,0.2)] ring-1 ring-black/5">
+            <div className="overflow-hidden rounded-2xl border border-border/60 bg-bg-elevated shadow-[0_24px_64px_rgba(0,0,0,0.18)] ring-1 ring-black/[0.06]">
+
               {/* Header */}
-              <div className="flex items-center gap-3 border-b border-border bg-brand-primary/5 px-4 py-3">
-                <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary text-white">
-                  <Bot className="h-4 w-4" strokeWidth={1.75} />
+              <div className={`flex items-center gap-3 px-4 py-3 ${
+                isAdmin
+                  ? 'bg-gradient-to-r from-brand-accent/10 to-brand-primary/8 border-b border-brand-accent/20'
+                  : 'bg-gradient-to-r from-brand-primary/8 to-brand-primary/4 border-b border-brand-primary/15'
+              }`}>
+                <div className={`relative inline-flex h-9 w-9 items-center justify-center rounded-xl ${
+                  isAdmin ? 'bg-brand-accent text-white' : 'bg-brand-primary text-white'
+                }`}>
+                  {isAdmin ? <Zap className="h-4 w-4" strokeWidth={2} /> : <Bot className="h-4 w-4" strokeWidth={1.75} />}
+                  <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-bg-elevated bg-success" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-bold text-fg">SAYIN AI</p>
-                  <p className="text-[11px] text-fg-muted">
+                  <p className="text-sm font-bold text-fg leading-tight">
+                    {isAdmin ? 'SAYIN ADMIN AI' : 'SAYIN AI'}
+                  </p>
+                  <p className="text-[10px] text-fg-muted leading-tight">
                     {isAdmin
-                      ? (locale === 'ru' ? 'Помощник администратора' : locale === 'en' ? 'Admin assistant' : 'Admin yordamchisi')
-                      : (locale === 'ru' ? 'Помощник платформы' : locale === 'en' ? 'Platform assistant' : 'Platforma yordamchisi')}
+                      ? (locale === 'ru' ? 'Помощник администратора · Gemini 2.5' : locale === 'en' ? 'Admin co-pilot · Gemini 2.5' : 'Admin yordamchisi · Gemini 2.5')
+                      : (locale === 'ru' ? 'Помощник платформы · Gemini 2.5' : locale === 'en' ? 'Platform assistant · Gemini 2.5' : 'Platforma yordamchisi · Gemini 2.5')}
                   </p>
                 </div>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-0.5">
                   <button
                     type="button"
                     onClick={() => setMinimized((v) => !v)}
-                    className="inline-flex h-7 w-7 items-center justify-center rounded-full text-fg-muted hover:bg-bg-subtle"
+                    className="inline-flex h-7 w-7 items-center justify-center rounded-lg text-fg-muted hover:bg-bg-subtle transition-colors"
+                    aria-label={minimized ? 'Expand' : 'Minimize'}
                   >
                     {minimized
                       ? <Maximize2 className="h-3.5 w-3.5" strokeWidth={2} />
@@ -222,56 +276,89 @@ export function AIAssistant() {
                   <button
                     type="button"
                     onClick={() => setOpen(false)}
-                    className="inline-flex h-7 w-7 items-center justify-center rounded-full text-fg-muted hover:bg-bg-subtle"
+                    className="inline-flex h-7 w-7 items-center justify-center rounded-lg text-fg-muted hover:bg-bg-subtle transition-colors"
+                    aria-label="Close"
                   >
                     <X className="h-3.5 w-3.5" strokeWidth={2} />
                   </button>
                 </div>
               </div>
 
-              {/* Messages */}
-              <AnimatePresence>
+              {/* Body */}
+              <AnimatePresence initial={false}>
                 {!minimized && (
                   <motion.div
-                    initial={{ height: 0 }}
-                    animate={{ height: 'auto' }}
-                    exit={{ height: 0 }}
-                    transition={{ duration: 0.2 }}
+                    key="body"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    <div className="h-72 overflow-y-auto px-4 py-3 space-y-3">
+                    {/* Messages */}
+                    <div className="h-[280px] overflow-y-auto px-3 py-3 space-y-2.5 scroll-smooth">
                       {messages.map((msg) => (
-                        <div
-                          key={msg.id}
-                          className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                        >
+                        <div key={msg.id} className={`flex gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
                           {msg.role === 'assistant' && (
-                            <div className="mr-2 mt-1 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary">
-                              <Bot className="h-3.5 w-3.5" strokeWidth={1.75} />
+                            <div className={`mt-0.5 flex-shrink-0 inline-flex h-6 w-6 items-center justify-center rounded-lg ${
+                              isAdmin ? 'bg-brand-accent/15 text-brand-accent' : 'bg-brand-primary/12 text-brand-primary'
+                            }`}>
+                              {isAdmin ? <Zap className="h-3 w-3" strokeWidth={2} /> : <Bot className="h-3 w-3" strokeWidth={1.75} />}
                             </div>
                           )}
-                          <div
-                            className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm leading-relaxed ${
+                          <div className="flex flex-col gap-1 max-w-[82%]">
+                            <div className={`rounded-2xl px-3 py-2 text-[13px] leading-relaxed whitespace-pre-wrap ${
                               msg.role === 'user'
                                 ? 'rounded-br-sm bg-brand-primary text-white'
                                 : 'rounded-bl-sm bg-bg-subtle text-fg'
-                            }`}
-                          >
-                            {msg.content}
+                            }`}>
+                              {msg.content}
+                            </div>
+                            {/* Admin action button */}
+                            {isAdmin && msg.action && !msg.actionResult && (
+                              <button
+                                type="button"
+                                onClick={() => executeAction(msg.id, msg.action!.actionKey, msg.action!.params)}
+                                disabled={actionLoading === msg.id}
+                                className="self-start inline-flex items-center gap-1.5 rounded-lg bg-brand-accent/10 border border-brand-accent/30 px-2.5 py-1 text-[11px] font-semibold text-brand-accent hover:bg-brand-accent/20 transition-colors disabled:opacity-60"
+                              >
+                                {actionLoading === msg.id
+                                  ? <Loader2 className="h-3 w-3 animate-spin" />
+                                  : <Zap className="h-3 w-3" strokeWidth={2} />}
+                                {msg.action.label}
+                              </button>
+                            )}
+                            {/* Action result */}
+                            {msg.actionResult && (
+                              <div className={`flex items-start gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] ${
+                                msg.actionResult.ok
+                                  ? 'bg-success/10 text-success border border-success/20'
+                                  : 'bg-danger/10 text-danger border border-danger/20'
+                              }`}>
+                                {msg.actionResult.ok
+                                  ? <CheckCircle2 className="h-3 w-3 mt-0.5 flex-shrink-0" strokeWidth={2} />
+                                  : <AlertCircle className="h-3 w-3 mt-0.5 flex-shrink-0" strokeWidth={2} />}
+                                <span className="font-mono break-all">{msg.actionResult.text}</span>
+                              </div>
+                            )}
                           </div>
                         </div>
                       ))}
+
+                      {/* Typing indicator */}
                       {loading && (
-                        <div className="flex justify-start">
-                          <div className="mr-2 mt-1 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary">
-                            <Bot className="h-3.5 w-3.5" strokeWidth={1.75} />
+                        <div className="flex gap-2">
+                          <div className={`mt-0.5 flex-shrink-0 inline-flex h-6 w-6 items-center justify-center rounded-lg ${
+                            isAdmin ? 'bg-brand-accent/15 text-brand-accent' : 'bg-brand-primary/12 text-brand-primary'
+                          }`}>
+                            {isAdmin ? <Zap className="h-3 w-3" strokeWidth={2} /> : <Bot className="h-3 w-3" strokeWidth={1.75} />}
                           </div>
-                          <div className="flex items-center gap-1 rounded-2xl rounded-bl-sm bg-bg-subtle px-4 py-3">
+                          <div className="flex items-center gap-1 rounded-2xl rounded-bl-sm bg-bg-subtle px-3.5 py-2.5">
                             {[0, 1, 2].map((i) => (
                               <motion.span
                                 key={i}
                                 className="h-1.5 w-1.5 rounded-full bg-fg-subtle"
                                 animate={{ y: [0, -4, 0] }}
-                                transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.15 }}
+                                transition={{ duration: 0.55, repeat: Infinity, delay: i * 0.14 }}
                               />
                             ))}
                           </div>
@@ -280,29 +367,30 @@ export function AIAssistant() {
                       <div ref={messagesEndRef} />
                     </div>
 
-                    {/* Input */}
-                    <div className="border-t border-border p-3">
+                    {/* Input area */}
+                    <div className="border-t border-border/60 p-3">
                       <div className="flex items-end gap-2">
                         <textarea
                           ref={inputRef}
                           value={input}
                           onChange={(e) => setInput(e.target.value)}
                           onKeyDown={handleKeyDown}
-                          placeholder={
-                            locale === 'ru' ? 'Задайте вопрос...' :
-                            locale === 'en' ? 'Ask a question...' :
-                            'Savol bering...'
-                          }
+                          placeholder={PLACEHOLDER[locale] ?? PLACEHOLDER['uz']}
                           rows={1}
                           disabled={loading}
-                          className="input-base flex-1 resize-none py-2 text-sm"
+                          className="input-base flex-1 resize-none py-2 text-[13px] min-h-[36px]"
                           style={{ maxHeight: '80px' }}
                         />
                         <button
                           type="button"
                           onClick={sendMessage}
                           disabled={!input.trim() || loading}
-                          className="btn btn-primary btn-icon flex-shrink-0 h-9 w-9"
+                          className={`flex-shrink-0 inline-flex h-9 w-9 items-center justify-center rounded-xl text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
+                            isAdmin
+                              ? 'bg-brand-accent hover:bg-brand-accent/90'
+                              : 'bg-brand-primary hover:bg-brand-primary/90'
+                          }`}
+                          aria-label="Send"
                         >
                           {loading
                             ? <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2} />
@@ -310,9 +398,7 @@ export function AIAssistant() {
                         </button>
                       </div>
                       <p className="mt-1.5 text-[10px] text-fg-subtle text-center">
-                        {locale === 'ru' ? 'AI-помощник · Только для информации' :
-                         locale === 'en' ? 'AI assistant · For information only' :
-                         "AI yordamchi · Faqat ma'lumot uchun"}
+                        {FOOTER_TEXT[locale] ?? FOOTER_TEXT['uz']}
                       </p>
                     </div>
                   </motion.div>
