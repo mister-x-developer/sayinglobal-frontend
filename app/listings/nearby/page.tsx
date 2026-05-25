@@ -16,6 +16,7 @@ import { AppNav } from '@/components/layout/AppNav';
 import { ListingCard } from '@/components/listings/ListingCard';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { MapView } from '@/components/shared/MapView';
+import { NearbyMapWithUserPin } from '@/components/shared/NearbyMapWithUserPin';
 import { listingsApi, type Listing } from '@/lib/api/listings';
 import { referenceApi } from '@/lib/api/reference';
 
@@ -239,12 +240,12 @@ export default function NearbyListingsPage() {
               transition={{ duration: 0.5 }}
               className="mb-8 overflow-hidden rounded-2xl border border-border shadow-soft"
             >
-              <MapView
-                center={center ?? (mapMarkers[0] ? [mapMarkers[0].lat, mapMarkers[0].lng] : null)}
+              <NearbyMapWithUserPin
+                center={center}
                 zoom={geo.kind === 'granted' ? 11 : 6}
                 markers={mapMarkers}
+                userLocation={geo.kind === 'granted' ? [geo.lat, geo.lng] : null}
                 className="h-72 w-full sm:h-96"
-                fallbackCaption={t('marketplace.mapUnavailable' as any) ?? undefined}
               />
             </motion.div>
           )}
