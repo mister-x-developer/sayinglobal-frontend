@@ -352,12 +352,56 @@ export default function EditListingPage() {
                     latitude: next?.lat ?? null,
                     longitude: next?.lng ?? null,
                   })}
-                  onAddress={(addr) => {
-                    update({
-                      location: form.location.trim() ? form.location : (addr.location || form.location),
-                      region_name: form.region_name.trim() ? form.region_name : (addr.region || form.region_name),
-                      district_name: form.district_name.trim() ? form.district_name : (addr.district || form.district_name),
-                    });
+                  onAddress={async (addr) => {
+                    // Auto-fill location text if empty
+                    if (!form.location.trim() && addr.location) {
+                      update({ location: addr.location });
+                    }
+                    // Try to match region name → slug from backend
+                    if (addr.region && !form.region) {
+                      try {
+                        const { referenceApi } = await import('@/lib/api/reference');
+                        const regions = await referenceApi.getRegions();
+                        const regionName = addr.region.toLowerCase();
+                        const matched = regions.find((r) => {
+                          const names = [r.name_uz, r.name_ru, r.name_en, r.name].map((n) => (n || '').toLowerCase());
+                          return names.some((n) => n && (n.includes(regionName) || regionName.includes(n.split(' ')[0])));
+                        });
+                        if (matched) {
+                          update({
+                            region: matched.slug,
+                            region_name: matched.name_uz || matched.name,
+                            location: form.location.trim() ? form.location : addr.location,
+                          });
+                          if (addr.district) {
+                            const districtName = addr.district.toLowerCase();
+                            const districts = await referenceApi.getDistricts(matched.slug);
+                            const matchedDistrict = districts.find((d) => {
+                              const dnames = [d.name_uz, d.name_ru, d.name_en, d.name].map((n) => (n || '').toLowerCase());
+                              return dnames.some((n) => n && (n.includes(districtName) || districtName.includes(n.split(' ')[0])));
+                            });
+                            if (matchedDistrict) {
+                              update({
+                                district: matchedDistrict.slug,
+                                district_name: matchedDistrict.name_uz || matchedDistrict.name,
+                              });
+                            }
+                          }
+                        } else {
+                          update({
+                            region_name: form.region_name.trim() ? form.region_name : addr.region,
+                            district_name: form.district_name.trim() ? form.district_name : addr.district,
+                            location: form.location.trim() ? form.location : addr.location,
+                          });
+                        }
+                      } catch {
+                        update({
+                          region_name: form.region_name.trim() ? form.region_name : addr.region,
+                          district_name: form.district_name.trim() ? form.district_name : addr.district,
+                          location: form.location.trim() ? form.location : addr.location,
+                        });
+                      }
+                    }
                   }}
                 />
               </div>
