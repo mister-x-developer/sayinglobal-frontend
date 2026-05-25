@@ -61,6 +61,7 @@ function isPublicPath(pathname: string): boolean {
   if (pathname === '/listings') return true;
   if (pathname === '/listings/nearby') return true;
   if (pathname === '/search') return true;
+  if (pathname === '/plans') return true;
   if (pathname.startsWith('/sellers')) return true;
   // Individual listing detail pages are public
   if (/^\/listings\/\d+$/.test(pathname)) return true;

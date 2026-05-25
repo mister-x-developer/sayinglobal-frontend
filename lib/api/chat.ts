@@ -20,7 +20,8 @@ export interface ChatMessage {
 }
 
 export interface Conversation {
-  id: string;
+  id: string;          // UUID from backend
+  public_id?: number;  // numeric public id
   participants: ChatUser[];
   last_message?: string;
   last_message_time?: string;
@@ -50,7 +51,11 @@ export const chatApi = {
 
   async sendMessage(conversationId: string, content: string): Promise<ChatMessage | null> {
     try {
-      const res = await apiClient.post(`/chat/conversations/${conversationId}/messages/`, { content });
+      // Backend endpoint: POST /chat/messages/send/ with { conversation_id, content }
+      const res = await apiClient.post('/chat/messages/send/', {
+        conversation_id: conversationId,
+        content,
+      });
       return res.data;
     } catch (e) {
       throw new Error(handleApiError(e));
@@ -59,7 +64,10 @@ export const chatApi = {
 
   async startConversation(participantPublicId: number): Promise<Conversation | null> {
     try {
-      const res = await apiClient.post('/chat/conversations/', { participant_id: participantPublicId });
+      // Backend endpoint: POST /chat/conversations/create/
+      const res = await apiClient.post('/chat/conversations/create/', {
+        participant_id: participantPublicId,
+      });
       return res.data;
     } catch (e) {
       throw new Error(handleApiError(e));

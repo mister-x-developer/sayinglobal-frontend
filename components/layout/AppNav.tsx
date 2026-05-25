@@ -21,6 +21,7 @@ import {
   User as UserIcon,
   ShieldCheck,
   MapPin,
+  Sparkles,
 } from 'lucide-react';
 
 import { Logo } from '@/components/shared/Logo';
@@ -208,6 +209,7 @@ export function AppNav() {
     { href: '/listings/nearby', icon: MapPin, label: t('nav.nearby' as any) ?? 'Nearby' },
     { href: '/sellers', icon: ShieldCheck, label: t('nav.sellers') },
     { href: '/chat', icon: MessageSquareText, label: t('nav.chat') },
+    { href: '/plans', icon: Sparkles, label: t('nav.plans' as any) ?? 'Tariflar' },
   ];
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');

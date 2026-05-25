@@ -20,13 +20,15 @@ import {
 
 import { AppNav } from '@/components/layout/AppNav';
 import { ListingGrid } from '@/components/listings/ListingGrid';
-import { CategoryIcon } from '@/components/shared/CategoryIcon';
 import { ListingGridSkeleton } from '@/components/shared/LoadingStates';
 import { useAuthStore } from '@/lib/store/auth';
 import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
 
-const CATEGORIES = ['cattle', 'sheep', 'goats', 'horses', 'camels', 'poultry'] as const;
+const CATEGORIES = [
+  'cattle', 'sheep', 'goats', 'horses', 'camels', 'poultry',
+  'rabbits', 'bees', 'fish',
+] as const;
 export default function DashboardPage() {
   const t = useTranslations();
   const router = useRouter();
@@ -147,7 +149,7 @@ export default function DashboardPage() {
               </Link>
             </div>
 
-            <div className="mt-5 grid grid-cols-3 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+            <div className="mt-5 grid grid-cols-3 gap-3 sm:grid-cols-3 lg:grid-cols-9">
               {CATEGORIES.map((cat, i) => (
                 <motion.div
                   key={cat}
@@ -157,12 +159,9 @@ export default function DashboardPage() {
                 >
                   <Link
                     href={`/listings?category=${cat}`}
-                    className="surface-elevated group flex aspect-square flex-col items-center justify-center p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift"
+                    className="surface-elevated group flex flex-col items-center justify-center p-3 py-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift hover:border-brand-primary/30"
                   >
-                    <span className="text-brand-primary transition-transform group-hover:scale-110">
-                      <CategoryIcon name={cat} className="h-7 w-7 sm:h-8 sm:w-8" />
-                    </span>
-                    <span className="mt-2 text-center text-[13px] font-semibold text-fg">
+                    <span className="text-center text-[13px] font-semibold text-fg group-hover:text-brand-primary transition-colors">
                       {t(`categories.${cat}`)}
                     </span>
                   </Link>

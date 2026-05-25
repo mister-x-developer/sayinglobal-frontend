@@ -140,7 +140,8 @@
     "dayMode": "Day mode",
     "nightMode": "Night mode",
     "menu": "Menu",
-    "nearby": "Nearby"
+    "nearby": "Nearby",
+    "plans": "Plans"
   },
   "marketplace": {
     "title": "Marketplace",
