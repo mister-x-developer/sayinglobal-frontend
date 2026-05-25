@@ -379,17 +379,63 @@ export default function NewListingPage() {
                       latitude: next?.lat ?? null,
                       longitude: next?.lng ?? null,
                     }))}
-                    onAddress={(addr) => {
-                      setForm((p) => ({
-                        ...p,
-                        // Only auto-fill if the field is currently empty
-                        location: p.location.trim() ? p.location : addr.location,
-                        region_name: p.region_name.trim() ? p.region_name : addr.region,
-                        district_name: p.district_name.trim() ? p.district_name : addr.district,
-                      }));
-                      // Also push to the LocationSelector via onLocationChange
+                    onAddress={async (addr) => {
+                      // Auto-fill location text
                       if (!form.location.trim() && addr.location) {
                         set('location', addr.location);
+                      }
+
+                      // Try to match region name → slug from backend
+                      if (addr.region && !form.region) {
+                        try {
+                          const { referenceApi } = await import('@/lib/api/reference');
+                          const regions = await referenceApi.getRegions();
+                          // Match by name (case-insensitive, partial)
+                          const regionName = addr.region.toLowerCase();
+                          const matched = regions.find((r) => {
+                            const names = [r.name_uz, r.name_ru, r.name_en, r.name].map((n) => (n || '').toLowerCase());
+                            return names.some((n) => n && (n.includes(regionName) || regionName.includes(n.split(' ')[0])));
+                          });
+                          if (matched) {
+                            setForm((p) => ({
+                              ...p,
+                              region: matched.slug,
+                              region_name: matched.name_uz || matched.name,
+                              location: p.location.trim() ? p.location : addr.location,
+                            }));
+                            // Also try to match district
+                            if (addr.district) {
+                              const districtName = addr.district.toLowerCase();
+                              const districts = await referenceApi.getDistricts(matched.slug);
+                              const matchedDistrict = districts.find((d) => {
+                                const dnames = [d.name_uz, d.name_ru, d.name_en, d.name].map((n) => (n || '').toLowerCase());
+                                return dnames.some((n) => n && (n.includes(districtName) || districtName.includes(n.split(' ')[0])));
+                              });
+                              if (matchedDistrict) {
+                                setForm((p) => ({
+                                  ...p,
+                                  district: matchedDistrict.slug,
+                                  district_name: matchedDistrict.name_uz || matchedDistrict.name,
+                                }));
+                              }
+                            }
+                          } else {
+                            // No slug match — store name only
+                            setForm((p) => ({
+                              ...p,
+                              region_name: p.region_name.trim() ? p.region_name : addr.region,
+                              district_name: p.district_name.trim() ? p.district_name : addr.district,
+                              location: p.location.trim() ? p.location : addr.location,
+                            }));
+                          }
+                        } catch {
+                          setForm((p) => ({
+                            ...p,
+                            region_name: p.region_name.trim() ? p.region_name : addr.region,
+                            district_name: p.district_name.trim() ? p.district_name : addr.district,
+                            location: p.location.trim() ? p.location : addr.location,
+                          }));
+                        }
                       }
                     }}
                   />

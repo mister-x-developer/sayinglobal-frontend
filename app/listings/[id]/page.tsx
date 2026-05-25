@@ -347,7 +347,14 @@ export default function ListingDetailPage() {
                       transition={{ duration: 0.5, delay: 0.16 }}
                       className="surface-elevated p-6"
                     >
-                      <h2 className="display-sm mb-4">{t('listings.locationOnMap' as any) ?? t('listings.location')}</h2>
+                      <div className="mb-4 flex items-center justify-between gap-3">
+                        <h2 className="display-sm">{t('listings.locationOnMap' as any) ?? t('listings.location')}</h2>
+                        <OpenInMapsButton
+                          lat={Number(listing.latitude)}
+                          lng={Number(listing.longitude)}
+                          label={listing.location}
+                        />
+                      </div>
                       <MapView
                         center={[Number(listing.latitude), Number(listing.longitude)]}
                         zoom={13}
@@ -356,6 +363,8 @@ export default function ListingDetailPage() {
                           lat: Number(listing.latitude),
                           lng: Number(listing.longitude),
                           label: listing.title,
+                          price: listing.price ? new Intl.NumberFormat('uz-UZ').format(Number(listing.price)) + " so'm" : undefined,
+                          imageUrl: listing.primary_image?.image ?? listing.images?.[0]?.image ?? undefined,
                         }]}
                         className="h-72 w-full"
                         fallbackCaption={`${listing.region}${listing.district ? ' · ' + listing.district : ''}`}
@@ -610,6 +619,63 @@ function SpecItem({
         <dd className="mt-0.5 text-sm font-semibold text-fg">{value}</dd>
       </div>
     </div>
+  );
+}
+
+/**
+ * "Xaritada ochish" button.
+ * - Mobile: opens native maps app via geo: URI (works on Android/iOS)
+ * - Desktop: opens Yandex Maps with directions from user location
+ * - Fallback: Google Maps
+ */
+function OpenInMapsButton({ lat, lng, label }: { lat: number; lng: number; label?: string }) {
+  const [userPos, setUserPos] = React.useState<{ lat: number; lng: number } | null>(null);
+
+  React.useEffect(() => {
+    if (typeof navigator !== 'undefined' && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => setUserPos({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+        () => {},
+        { enableHighAccuracy: false, timeout: 5000, maximumAge: 5 * 60_000 },
+      );
+    }
+  }, []);
+
+  const handleOpen = () => {
+    const isMobile = typeof navigator !== 'undefined' &&
+      /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      // Try native maps app first (geo: URI)
+      // Android: opens Google Maps / any maps app
+      // iOS: opens Apple Maps
+      const geoUri = `geo:${lat},${lng}?q=${lat},${lng}(${encodeURIComponent(label ?? 'E\'lon')})`;
+      window.location.href = geoUri;
+      // Fallback after 500ms if geo: didn't open
+      setTimeout(() => {
+        const yandex = userPos
+          ? `https://yandex.uz/maps/?rtext=${userPos.lat},${userPos.lng}~${lat},${lng}&rtt=auto`
+          : `https://yandex.uz/maps/?pt=${lng},${lat}&z=15&l=map`;
+        window.open(yandex, '_blank');
+      }, 500);
+    } else {
+      // Desktop: Yandex Maps with route if user location available
+      const url = userPos
+        ? `https://yandex.uz/maps/?rtext=${userPos.lat},${userPos.lng}~${lat},${lng}&rtt=auto`
+        : `https://yandex.uz/maps/?pt=${lng},${lat}&z=15&l=map&text=${encodeURIComponent(label ?? '')}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleOpen}
+      className="inline-flex items-center gap-2 rounded-xl border border-brand-primary/30 bg-brand-primary/8 px-3 py-2 text-sm font-semibold text-brand-primary transition-all hover:bg-brand-primary/12 hover:border-brand-primary/50 active:scale-95"
+    >
+      <MapPin className="h-4 w-4" strokeWidth={2} />
+      {userPos ? "Yo'nalish ko'rsatish" : "Xaritada ochish"}
+    </button>
   );
 }
 

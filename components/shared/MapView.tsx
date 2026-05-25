@@ -5,6 +5,7 @@
  *
  * Used to show a single listing pin or a cluster of nearby listings.
  * Custom branded pin (green + gold) with drop shadow.
+ * Rich popup: listing image, title, price, distance badge.
  * Smart auto-fit when multiple markers are passed.
  * Click on pin → navigate to listing detail.
  */
@@ -27,6 +28,12 @@ export interface MapMarker {
   label?: string;
   href?: string;
   popupHtml?: string;
+  /** Listing image URL for rich popup */
+  imageUrl?: string;
+  /** Formatted price string */
+  price?: string;
+  /** Distance in km */
+  distanceKm?: number;
 }
 
 export interface MapViewProps {
@@ -48,6 +55,37 @@ const PIN_HTML = `
     </svg>
   </div>
 `;
+
+/** Build rich popup HTML for a listing marker */
+function buildListingPopup(m: MapMarker): string {
+  const img = m.imageUrl
+    ? `<img src="${m.imageUrl}" alt="" style="width:100%;height:80px;object-fit:cover;border-radius:8px 8px 0 0;display:block;" />`
+    : `<div style="width:100%;height:80px;background:#f0f4f2;border-radius:8px 8px 0 0;display:flex;align-items:center;justify-content:center;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+       </div>`;
+
+  const dist = m.distanceKm != null
+    ? `<span style="display:inline-flex;align-items:center;gap:3px;background:#f0fdf4;color:#1F7A52;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:4px;">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        ${m.distanceKm < 1 ? '< 1 km' : m.distanceKm.toFixed(1) + ' km'}
+       </span>`
+    : '';
+
+  const price = m.price
+    ? `<div style="font-size:13px;font-weight:800;color:#0C1F17;margin-top:2px;">${m.price}</div>`
+    : '';
+
+  return `
+    <div style="width:180px;font-family:Inter,system-ui,sans-serif;cursor:pointer;" onclick="window.location.href='${m.href ?? '#'}'">
+      ${img}
+      <div style="padding:8px 10px 10px;">
+        <div style="font-size:12px;font-weight:700;color:#0C1F17;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${m.label ?? ''}</div>
+        ${price}
+        ${dist}
+      </div>
+    </div>
+  `;
+}
 
 export function MapView({
   center,
@@ -78,7 +116,7 @@ export function MapView({
           html: PIN_HTML,
           iconSize: [36, 46],
           iconAnchor: [18, 46],
-          popupAnchor: [0, -42],
+          popupAnchor: [0, -48],
         });
 
         if (!mapRef.current) {
@@ -104,13 +142,24 @@ export function MapView({
         for (const m of markers) {
           const marker = L.marker([m.lat, m.lng], { icon: pinIcon }).addTo(layerRef.current);
           points.push([m.lat, m.lng]);
-          if (m.popupHtml) {
-            marker.bindPopup(m.popupHtml);
+
+          // Rich popup for listing markers, simple popup for single pin
+          const hasRichData = m.imageUrl || m.price || m.distanceKm != null;
+          if (hasRichData || m.href) {
+            const popupContent = m.popupHtml ?? buildListingPopup(m);
+            marker.bindPopup(L.popup({
+              maxWidth: 200,
+              minWidth: 180,
+              className: 'sg-listing-popup',
+              closeButton: false,
+              offset: [0, -4],
+            }).setContent(popupContent));
           } else if (m.label) {
             marker.bindPopup(
               `<div style="font-family:Poppins,Inter,sans-serif;font-weight:600;font-size:13px;color:#0C1F17">${m.label}</div>`,
             );
           }
+
           if (m.href) {
             marker.on('click', () => {
               if (typeof window !== 'undefined') window.location.href = m.href!;

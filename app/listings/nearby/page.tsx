@@ -82,8 +82,14 @@ export default function NearbyListingsPage() {
 
   const mapMarkers = useMemo(() =>
     results.filter((r) => r.latitude != null && r.longitude != null).map((r) => ({
-      id: r.public_id, lat: Number(r.latitude), lng: Number(r.longitude),
-      label: r.title, href: `/listings/${r.public_id}`,
+      id: r.public_id,
+      lat: Number(r.latitude),
+      lng: Number(r.longitude),
+      label: r.title,
+      href: `/listings/${r.public_id}`,
+      imageUrl: r.primary_image?.image ?? r.images?.[0]?.image ?? undefined,
+      price: r.price ? new Intl.NumberFormat('uz-UZ').format(Number(r.price)) + " so'm" : undefined,
+      distanceKm: typeof r.distance_km === 'number' ? r.distance_km : undefined,
     })), [results]);
 
   const center: [number, number] | null =
