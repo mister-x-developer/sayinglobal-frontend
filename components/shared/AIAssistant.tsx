@@ -39,12 +39,12 @@ const LOCALE_LANGUAGE: Record<string, string> = {
 /** Greeting text per locale */
 const GREETINGS: Record<string, { user: (name: string) => string; admin: (name: string) => string }> = {
   uz: {
-    user: (n) => `Salom${n ? ', ' + n : ''}! Men SAYIN GLOBAL yordamchisiman. E'lonlar, sotuvchilar, planlar yoki platforma haqida savollaringiz bo'lsa, yordam beraman.`,
-    admin: (n) => `Salom, ${n || 'Admin'}! Men SAYIN GLOBAL AI yordamchisiman. Moderatsiya, e'lonlar, foydalanuvchilar yoki platforma bo'yicha savollaringizga javob beraman.`,
+    user: (n) => `Assalomu alaykum${n ? ', ' + n : ''}! Men SAYIN GLOBAL yordamchisiman. E'lonlar, sotuvchilar, planlar yoki platforma haqida savollaringiz bo'lsa, yordam beraman.`,
+    admin: (n) => `Assalomu alaykum, ${n || 'Admin'}! Men SAYIN GLOBAL AI yordamchisiman. Moderatsiya, e'lonlar, foydalanuvchilar yoki platforma bo'yicha savollaringizga javob beraman.`,
   },
   'uz-cyrl': {
-    user: (n) => `Салом${n ? ', ' + n : ''}! Мен SAYIN GLOBAL ёрдамчисиман. Эълонлар, сотувчилар, режалар ёки платформа ҳақида саволларингиз бўлса, ёрдам бераман.`,
-    admin: (n) => `Салом, ${n || 'Admin'}! Мен SAYIN GLOBAL AI ёрдамчисиман.`,
+    user: (n) => `Ассалому алайкум${n ? ', ' + n : ''}! Мен SAYIN GLOBAL ёрдамчисиман. Эълонлар, сотувчилар, режалар ёки платформа ҳақида саволларингиз бўлса, ёрдам бераман.`,
+    admin: (n) => `Ассалому алайкум, ${n || 'Admin'}! Мен SAYIN GLOBAL AI ёрдамчисиман. Модерация, эълонлар ва платформа бўйича саволларингизга жавоб бераман.`,
   },
   ru: {
     user: (n) => `Здравствуйте${n ? ', ' + n : ''}! Я помощник SAYIN GLOBAL. Задайте вопрос об объявлениях, продавцах, тарифах или платформе.`,
@@ -79,6 +79,12 @@ export function AIAssistant() {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, open, minimized]);
+
+  // Reset greeting when locale changes so it re-greets in the new language
+  useEffect(() => {
+    setHasGreeted(false);
+    setMessages([]);
+  }, [locale]);
 
   // Greeting on first open — uses interface locale
   useEffect(() => {
