@@ -62,7 +62,20 @@ export default function ChatPage() {
     let alive = true;
     setConvLoading(true);
     chatApi.getConversations().then((data) => {
-      if (alive) setConversations(data);
+      if (alive) {
+        // Normalize: backend may return last_message as object or string
+        const normalized = data.map((c: any) => ({
+          ...c,
+          last_message: typeof c.last_message === 'object' && c.last_message !== null
+            ? c.last_message.content ?? ''
+            : c.last_message ?? '',
+          last_message_time: c.last_message_time
+            ?? (typeof c.last_message === 'object' && c.last_message !== null
+              ? c.last_message.created_at
+              : undefined),
+        }));
+        setConversations(normalized);
+      }
     }).finally(() => alive && setConvLoading(false));
     return () => { alive = false; };
   }, [isAuthenticated]);
@@ -84,7 +97,7 @@ export default function ChatPage() {
     chatApi.getMessages(conv.id).then((msgs) => {
       setMessages(
         msgs.map((m: any) => ({
-          id: String(m.id ?? m.public_id),
+          id: String(m.public_id ?? m.id ?? Date.now()),
           sender_id: String(m.sender?.public_id ?? m.sender_id ?? ''),
           content: m.content ?? m.text ?? '',
           created_at: m.created_at,
