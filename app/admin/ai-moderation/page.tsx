@@ -87,6 +87,8 @@ export default function AdminAIModerationPage() {
           </div>
           <p className="mt-2 text-sm text-fg-muted">
             AI yordamchi — yakuniy qaror moderator tomonidan qabul qilinadi.
+            <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-success/10 px-2 py-0.5 text-xs font-semibold text-success">✓ Tasdiqlash = E'lon xavfsiz</span>
+            <span className="ml-1 inline-flex items-center gap-1 rounded-full bg-danger/10 px-2 py-0.5 text-xs font-semibold text-danger">⚠ Rad etish = Muammo bor</span>
           </p>
         </div>
 
@@ -171,20 +173,20 @@ export default function AdminAIModerationPage() {
                     {!r.human_reviewed && (
                       <>
                         <button
-                          onClick={() => review(r.id, 'confirmed')}
-                          disabled={reviewing === r.id}
-                          className="btn btn-sm bg-danger/12 text-danger hover:bg-danger/20"
-                        >
-                          {reviewing === r.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <AlertTriangle className="h-3.5 w-3.5" />}
-                          Tasdiqlash
-                        </button>
-                        <button
                           onClick={() => review(r.id, 'dismissed')}
                           disabled={reviewing === r.id}
-                          className="btn btn-sm bg-success/12 text-success hover:bg-success/20"
+                          className="btn btn-sm bg-success/12 text-success hover:bg-success/20 border border-success/30"
                         >
-                          <CheckCircle2 className="h-3.5 w-3.5" />
-                          Rad etish
+                          {reviewing === r.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CheckCircle2 className="h-3.5 w-3.5" />}
+                          Tasdiqlash (Xavfsiz)
+                        </button>
+                        <button
+                          onClick={() => review(r.id, 'confirmed')}
+                          disabled={reviewing === r.id}
+                          className="btn btn-sm bg-danger/12 text-danger hover:bg-danger/20 border border-danger/30"
+                        >
+                          {reviewing === r.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <AlertTriangle className="h-3.5 w-3.5" />}
+                          Rad etish (Muammo bor)
                         </button>
                       </>
                     )}

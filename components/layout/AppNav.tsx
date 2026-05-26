@@ -122,6 +122,14 @@ function MobileDrawer({
               <div className="my-2 h-px bg-border" />
 
               <Link
+                href="/profile"
+                onClick={onClose}
+                className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-fg hover:bg-bg-subtle transition-colors"
+              >
+                <UserIcon className="h-[18px] w-[18px]" strokeWidth={1.75} />
+                {t('nav.profile')}
+              </Link>
+              <Link
                 href="/listings/new"
                 onClick={onClose}
                 className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-brand-primary hover:bg-brand-primary/10 transition-colors"
