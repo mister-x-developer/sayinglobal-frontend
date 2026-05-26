@@ -141,7 +141,8 @@ function useDraggable(storageKey: string, defaultPos: { x: number; y: number }) 
     if (!d.active) return;
     const dx = e.clientX - d.startX;
     const dy = e.clientY - d.startY;
-    if (!d.moved && Math.sqrt(dx * dx + dy * dy) < 6) return;
+    // 10px threshold on mobile (was 6px) — prevents accidental drag
+    if (!d.moved && Math.sqrt(dx * dx + dy * dy) < 10) return;
     if (!d.moved) {
       d.moved = true;
       draggingRef.current = true;
@@ -370,12 +371,18 @@ export function AIAssistant() {
         )}
       </AnimatePresence>
 
-      {/* Chat window */}
+      {/* Chat window — positioned near the AI button */}
       <AnimatePresence>
         {open && (
           <motion.div initial={{ opacity: 0, y: 24, scale: 0.94 }} animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.94 }} transition={{ type: 'spring', damping: 28, stiffness: 320 }}
-            className="fixed bottom-28 right-4 z-[60] md:bottom-8 md:right-6 w-[calc(100vw-2rem)] max-w-[380px]">
+            style={{
+              position: 'fixed',
+              // Anchor chat window near button: prefer right side, avoid going off-screen
+              right: typeof window !== 'undefined' ? Math.max(16, window.innerWidth - pos.x - 56) : 16,
+              bottom: typeof window !== 'undefined' ? Math.max(16, window.innerHeight - pos.y - 8) : 112,
+            }}
+            className="z-[60] w-[calc(100vw-2rem)] max-w-[380px]">
             <div className="overflow-hidden rounded-2xl border border-border/60 bg-bg-elevated shadow-[0_24px_64px_rgba(0,0,0,0.2)] ring-1 ring-black/[0.06] flex flex-col" style={{ height: '520px' }}>
 
               {/* Header */}

@@ -106,7 +106,8 @@ function useAdminDrag(storageKey: string, defaultPos: { x: number; y: number }) 
     if (!d.active) return;
     const dx = e.clientX - d.startX;
     const dy = e.clientY - d.startY;
-    if (!d.moved && Math.sqrt(dx * dx + dy * dy) < 6) return;
+    // 10px threshold — prevents accidental drag on mobile
+    if (!d.moved && Math.sqrt(dx * dx + dy * dy) < 10) return;
     if (!d.moved) {
       d.moved = true;
       draggingRef.current = true;

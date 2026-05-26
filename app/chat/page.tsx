@@ -327,7 +327,7 @@ export default function ChatPage() {
                     >
                       <div className="relative flex-shrink-0">
                         <Avatar src={(other as any).avatar_url} name={other.full_name} size="md" />
-                        <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-bg-elevated bg-success" />
+                        {/* No hardcoded online dot — we don't track presence */}
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2">
@@ -387,11 +387,13 @@ export default function ChatPage() {
                       name={getOther(activeConv).full_name}
                       size="sm"
                     />
-                    <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-bg-elevated bg-success" />
+                    {/* No hardcoded online indicator — presence not tracked */}
                   </div>
                   <div className="min-w-0">
                     <p className="truncate text-sm font-bold text-fg">{getOther(activeConv).full_name}</p>
-                    <p className="text-xs text-success font-medium">{t('chat.online')}</p>
+                    <p className="text-xs text-fg-muted">
+                      {locale === 'ru' ? 'Продавец' : locale === 'en' ? 'Seller' : 'Sotuvchi'}
+                    </p>
                   </div>
                 </Link>
                 {/* Header actions */}
