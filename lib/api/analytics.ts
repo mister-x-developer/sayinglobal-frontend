@@ -43,6 +43,17 @@ export interface ActivityAnalytics {
   }[];
 }
 
+export interface DailyPoint {
+  date: string;
+  count: number;
+}
+
+export interface GrowthAnalytics {
+  users_by_day: DailyPoint[];
+  listings_by_day: DailyPoint[];
+  messages_by_day: DailyPoint[];
+}
+
 export const analyticsApi = {
   async dashboard(): Promise<DashboardStats> {
     const { data } = await apiClient.get<DashboardStats>('/analytics/dashboard/');
@@ -63,6 +74,13 @@ export const analyticsApi = {
 
   async activity(days = 7): Promise<ActivityAnalytics> {
     const { data } = await apiClient.get<ActivityAnalytics>('/analytics/activity/', {
+      params: { days },
+    });
+    return data;
+  },
+
+  async growth(days = 30): Promise<GrowthAnalytics> {
+    const { data } = await apiClient.get<GrowthAnalytics>('/analytics/growth/', {
       params: { days },
     });
     return data;

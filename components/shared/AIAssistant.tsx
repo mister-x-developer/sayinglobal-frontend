@@ -158,12 +158,12 @@ function useDraggable(storageKey: string, defaultPos: { x: number; y: number }) 
     d.active = false;
     if (d.moved) {
       try { localStorage.setItem(storageKey, JSON.stringify({ x: d.curX, y: d.curY })); } catch {}
-      // Keep draggingRef true for 80ms — click fires ~10ms after pointerup
+      // Keep draggingRef true for 120ms — click fires ~10ms after pointerup
       setTimeout(() => {
         draggingRef.current = false;
         setDraggingState(false);
         d.moved = false;
-      }, 80);
+      }, 120);
     } else {
       draggingRef.current = false;
       setDraggingState(false);
@@ -205,7 +205,7 @@ export function AIAssistant() {
 
   const { pos, dragging, draggingRef, onPointerDown, onPointerMove, onPointerUp } = useDraggable(AI_POS_KEY, {
     x: typeof window !== 'undefined' ? window.innerWidth - 72 : 900,
-    y: typeof window !== 'undefined' ? window.innerHeight - 120 : 600,
+    y: typeof window !== 'undefined' ? window.innerHeight - 180 : 600,
   });
 
   useEffect(() => {

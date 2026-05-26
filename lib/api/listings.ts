@@ -248,7 +248,8 @@ export const listingsApi = {
   async listComments(listingId: number | string) {
     try {
       const res = await apiClient.get(`/listings/${listingId}/comments/`);
-      return (res.data as any[]) ?? [];
+      const data = res.data;
+      return Array.isArray(data) ? data : (data?.results ?? []);
     } catch {
       return [];
     }
@@ -256,10 +257,9 @@ export const listingsApi = {
 
   async createComment(listingId: number | string, content: string, parent?: string) {
     try {
-      const res = await apiClient.post('/listings/comments/create/', {
-        listing: listingId,
+      const res = await apiClient.post(`/listings/${listingId}/comments/`, {
         content,
-        parent,
+        parent: parent || null,
       });
       return res.data;
     } catch (e) {

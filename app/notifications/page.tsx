@@ -42,6 +42,7 @@ const TYPE_ICON: Record<NotificationType, typeof Bell> = {
   rating: Star,
   complaint_update: ShieldCheck,
   admin_message: Megaphone,
+  broadcast: Megaphone,
   system: Bell,
 };
 
@@ -55,6 +56,7 @@ const TYPE_TONE: Record<NotificationType, string> = {
   rating: 'bg-warning/12 text-warning',
   complaint_update: 'bg-danger/12 text-danger',
   admin_message: 'bg-brand-primary/10 text-brand-primary',
+  broadcast: 'bg-brand-primary/10 text-brand-primary',
   system: 'bg-bg-subtle text-fg-muted',
 };
 

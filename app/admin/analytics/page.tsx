@@ -18,6 +18,7 @@ import {
   type DashboardStats,
   type CategoryStat,
   type ActivityAnalytics,
+  type GrowthAnalytics,
 } from '@/lib/api/analytics'
 
 // ── Simple SVG bar chart ──────────────────────────────────────────────────────
@@ -151,6 +152,7 @@ export default function AdminAnalyticsPage() {
   const [dashboard, setDashboard] = useState<DashboardStats | null>(null)
   const [categories, setCategories] = useState<CategoryStat[]>([])
   const [activity, setActivity] = useState<ActivityAnalytics | null>(null)
+  const [growth, setGrowth] = useState<GrowthAnalytics | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -160,12 +162,14 @@ export default function AdminAnalyticsPage() {
       analyticsApi.dashboard(),
       analyticsApi.listingsByCategory(),
       analyticsApi.activity(days),
+      analyticsApi.growth(days).catch(() => null),
     ])
-      .then(([d, c, a]) => {
+      .then(([d, c, a, g]) => {
         if (cancelled) return
         setDashboard(d)
         setCategories(c)
         setActivity(a)
+        setGrowth(g)
       })
       .catch((e: any) => {
         if (cancelled) return
@@ -190,6 +194,16 @@ export default function AdminAnalyticsPage() {
   const dailyMsgData = (activity?.daily_activity ?? []).slice(-14).map((r) => ({
     label: r.date.slice(5),
     value: r.total_messages,
+  }))
+
+  // Growth charts — prefer dedicated growth endpoint, fall back to activity data
+  const usersGrowthData = (growth?.users_by_day ?? []).slice(-30).map((r) => ({
+    label: r.date.slice(5),
+    value: r.count,
+  }))
+  const listingsGrowthData = (growth?.listings_by_day ?? []).slice(-30).map((r) => ({
+    label: r.date.slice(5),
+    value: r.count,
   }))
   const categoryDonutData = categories.slice(0, 8).map((c, i) => ({
     label: c.name_uz || c.name,
@@ -253,6 +267,30 @@ export default function AdminAnalyticsPage() {
             </div>
 
             <div className="grid gap-6 lg:grid-cols-2">
+              {/* Users growth line chart */}
+              {usersGrowthData.length > 1 && (
+                <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
+                  <Card>
+                    <CardHeader><CardTitle className="flex items-center gap-2"><Users className="h-4 w-4 text-blue-500" strokeWidth={1.75} />Foydalanuvchilar o'sishi (so'nggi {days} kun)</CardTitle></CardHeader>
+                    <CardContent className="pb-6">
+                      <LineChart data={usersGrowthData} color="#3b82f6" />
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )}
+
+              {/* Listings growth line chart */}
+              {listingsGrowthData.length > 1 && (
+                <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.28 }}>
+                  <Card>
+                    <CardHeader><CardTitle className="flex items-center gap-2"><Package className="h-4 w-4 text-brand-primary" strokeWidth={1.75} />E'lonlar o'sishi (so'nggi {days} kun)</CardTitle></CardHeader>
+                    <CardContent className="pb-6">
+                      <LineChart data={listingsGrowthData} color="#1f7a52" />
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )}
+
               {/* Views line chart */}
               {dailyViewsData.length > 1 && (
                 <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>

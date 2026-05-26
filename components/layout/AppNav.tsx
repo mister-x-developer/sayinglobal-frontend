@@ -31,70 +31,6 @@ import { Avatar } from '@/components/ui/Avatar';
 import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
 import { useNotificationsStore } from '@/lib/store/notifications';
 
-// ── Notification sound player ─────────────────────────────────────────────────
-let _audioCtx: AudioContext | null = null;
-
-function getAudioContext(): AudioContext | null {
-  if (typeof window === 'undefined') return null;
-  try {
-    if (!_audioCtx) {
-      _audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-    }
-    return _audioCtx;
-  } catch {
-    return null;
-  }
-}
-
-// Resume AudioContext on first user interaction (required by browsers)
-if (typeof window !== 'undefined') {
-  const resumeAudio = () => {
-    const ctx = getAudioContext();
-    if (ctx && ctx.state === 'suspended') {
-      ctx.resume().catch(() => {});
-    }
-  };
-  window.addEventListener('click', resumeAudio, { once: false, passive: true });
-  window.addEventListener('touchstart', resumeAudio, { once: false, passive: true });
-  window.addEventListener('keydown', resumeAudio, { once: false, passive: true });
-}
-
-function playNotificationSound() {
-  if (typeof window === 'undefined') return;
-  try {
-    const ctx = getAudioContext();
-    if (!ctx) return;
-
-    // Resume if suspended (autoplay policy)
-    const play = () => {
-      try {
-        const oscillator = ctx.createOscillator();
-        const gainNode = ctx.createGain();
-        oscillator.connect(gainNode);
-        gainNode.connect(ctx.destination);
-        oscillator.type = 'sine';
-        // Two-tone notification: high then low
-        oscillator.frequency.setValueAtTime(880, ctx.currentTime);
-        oscillator.frequency.setValueAtTime(660, ctx.currentTime + 0.12);
-        gainNode.gain.setValueAtTime(0, ctx.currentTime);
-        gainNode.gain.linearRampToValueAtTime(0.25, ctx.currentTime + 0.02);
-        gainNode.gain.setValueAtTime(0.25, ctx.currentTime + 0.1);
-        gainNode.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.35);
-        oscillator.start(ctx.currentTime);
-        oscillator.stop(ctx.currentTime + 0.35);
-      } catch {}
-    };
-
-    if (ctx.state === 'suspended') {
-      ctx.resume().then(play).catch(() => {});
-    } else {
-      play();
-    }
-  } catch {
-    // Web Audio API not available — silent fail
-  }
-}
-
 // ── Mobile drawer rendered via portal so it escapes the sticky header stacking context ──
 function MobileDrawer({
   open,
@@ -246,12 +182,11 @@ export function AppNav() {
   const router = useRouter();
   const { user, isAuthenticated, logout } = useAuthStore();
   const hydrated = useAuthHydrated();
-  const { unreadCount, setItems, setUnreadCount, addItem } = useNotificationsStore();
+  const { unreadCount, setUnreadCount } = useNotificationsStore();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
-  const wsRef = useRef<WebSocket | null>(null);
 
   // Load unread count on mount when authenticated
   useEffect(() => {
@@ -260,61 +195,6 @@ export function AppNav() {
       notificationsApi.unreadCount().then((count) => setUnreadCount(count));
     });
   }, [isAuthenticated, setUnreadCount]);
-
-  // WebSocket for real-time notifications + sound
-  useEffect(() => {
-    if (!isAuthenticated || !user) return;
-    const token = useAuthStore.getState().accessToken;
-    if (!token) return;
-
-    const wsBase = (process.env.NEXT_PUBLIC_WS_URL || 'wss://sayinglobal.up.railway.app').replace('http', 'ws');
-    const wsUrl = `${wsBase}/ws/notifications/?token=${token}`;
-
-    let ws: WebSocket;
-    let retryTimer: ReturnType<typeof setTimeout>;
-    let retries = 0;
-    const MAX_RETRIES = 5;
-
-    const connect = () => {
-      try {
-        ws = new WebSocket(wsUrl);
-        wsRef.current = ws;
-
-        ws.onmessage = (event) => {
-          try {
-            const data = JSON.parse(event.data);
-            if (data.type === 'notification' || data.notification_type) {
-              // Play sound
-              playNotificationSound();
-              // Update unread count
-              const { unreadCount: current, setUnreadCount: setCount } = useNotificationsStore.getState();
-              setCount(current + 1);
-              // Add to store if we have full notification data
-              if (data.notification) {
-                addItem(data.notification);
-              }
-            }
-          } catch {}
-        };
-
-        ws.onclose = (e) => {
-          if (e.code === 1000 || e.code === 4001) return;
-          if (retries < MAX_RETRIES) {
-            retryTimer = setTimeout(connect, Math.min(1000 * Math.pow(2, retries++), 30000));
-          }
-        };
-      } catch {}
-    };
-
-    connect();
-
-    return () => {
-      clearTimeout(retryTimer);
-      wsRef.current?.close(1000);
-      wsRef.current = null;
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated, user?.public_id]);
 
   // Stable logo href: only switch to /dashboard after Zustand has hydrated.
   // Before hydration, default to '/' so SSR and first paint are consistent.

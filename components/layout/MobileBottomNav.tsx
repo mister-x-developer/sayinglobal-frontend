@@ -13,6 +13,9 @@ export function MobileBottomNav() {
   const t = useTranslations();
   const pathname = usePathname();
 
+  // Don't show on admin pages
+  if (pathname?.startsWith('/admin')) return null;
+
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + '/');
 

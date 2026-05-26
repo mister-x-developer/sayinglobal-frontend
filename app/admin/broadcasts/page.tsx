@@ -251,10 +251,25 @@ export default function AdminBroadcastsPage() {
                         </Badge>
                       </td>
                       <td className="px-5 py-4">
-                        <span className="inline-flex items-center gap-1 text-sm text-fg">
-                          <Users className="h-3.5 w-3.5" strokeWidth={1.75} />
-                          {b.recipient_count}
-                        </span>
+                        <div className="flex flex-col gap-1">
+                          <div className="flex items-center gap-2 text-sm text-fg">
+                            <Users className="h-3.5 w-3.5 text-fg-subtle" strokeWidth={1.75} />
+                            <span>{b.recipient_count}</span>
+                          </div>
+                          {b.recipient_count > 0 && (
+                            <div className="flex items-center gap-2">
+                              <div className="h-1.5 w-20 rounded-full bg-bg-subtle overflow-hidden">
+                                <div
+                                  className="h-full rounded-full bg-success"
+                                  style={{ width: `${Math.min((b.read_count / b.recipient_count) * 100, 100)}%` }}
+                                />
+                              </div>
+                              <span className="text-[11px] text-fg-subtle">
+                                {b.read_count}/{b.recipient_count} read
+                              </span>
+                            </div>
+                          )}
+                        </div>
                       </td>
                       <td className="px-5 py-4">
                         <span className="inline-flex items-center gap-1 text-sm text-fg">

@@ -9,6 +9,7 @@ import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
 import { TranslateButton } from '@/components/shared/TranslateButton';
 import { ReportDialog } from '@/components/shared/ReportDialog';
+import { toast } from '@/components/ui/Toast';
 import { formatRelativeTime } from '@/lib/utils/format';
 
 export interface Comment {
@@ -260,7 +261,7 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
         public_id: created?.public_id ?? `local-${Date.now()}`,
         user: {
           public_id: currentUser?.public_id ?? 0,
-          full_name: currentUser?.full_name ?? t('comments.you' as any) ?? 'Siz',
+          full_name: currentUser?.full_name ?? 'Siz',
           avatar_url: currentUser?.avatar_url,
         },
         content: text.trim(),
@@ -271,6 +272,7 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
       setText('');
     } catch {
       // keep text so user can retry
+      toast.error('Izoh yuborishda xato yuz berdi');
     } finally {
       setSubmitting(false);
     }
@@ -284,7 +286,7 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
         public_id: created?.public_id ?? `local-${Date.now()}`,
         user: {
           public_id: currentUser?.public_id ?? 0,
-          full_name: currentUser?.full_name ?? t('comments.you' as any) ?? 'Siz',
+          full_name: currentUser?.full_name ?? 'Siz',
           avatar_url: currentUser?.avatar_url,
         },
         content,
@@ -297,7 +299,9 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
             : c
         )
       );
-    } catch {}
+    } catch {
+      toast.error('Javob yuborishda xato yuz berdi');
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {

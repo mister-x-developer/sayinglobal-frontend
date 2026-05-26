@@ -18,6 +18,7 @@ import { ReportDialog } from '@/components/shared/ReportDialog';
 import { useAuthStore } from '@/lib/store/auth';
 import { chatApi } from '@/lib/api/chat';
 import type { Conversation } from '@/lib/api/chat';
+import { chatSocket } from '@/lib/ws/chatSocket';
 import { formatRelativeTime } from '@/lib/utils/format';
 import apiClient from '@/lib/api/client';
 
@@ -47,6 +48,8 @@ export default function ChatPage() {
   const [sending, setSending] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [typingUserId, setTypingUserId] = useState<string | null>(null);
+  const typingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -105,10 +108,21 @@ export default function ChatPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, conversations, convLoading, isAuthenticated]);
 
+  // Disconnect WebSocket on unmount
+  useEffect(() => {
+    return () => { chatSocket.disconnect(); };
+  }, []);
+
+  // Disconnect when no active conversation
+  useEffect(() => {
+    if (!activeConv) chatSocket.disconnect();
+  }, [activeConv]);
+
   const openConversation = (conv: Conversation) => {
     setActiveConv(conv);
     setMessages([]);
     setMoreOpen(false);
+    setTypingUserId(null);
     chatApi.getMessages(conv.id).then((msgs: any) => {
       const list = Array.isArray(msgs) ? msgs : msgs?.results ?? [];
       const mapped: Message[] = list.map((m: any) => ({
@@ -121,6 +135,43 @@ export default function ChatPage() {
       setMessages(mapped);
       scrollToBottom(false);
     });
+
+    // Connect WebSocket for real-time messages
+    const token = useAuthStore.getState().accessToken;
+    if (token && conv.id) {
+      chatSocket.connect(String(conv.id), token, {
+        onMessage: (msg) => {
+          setMessages((prev) => {
+            // Avoid duplicates (optimistic or already received)
+            if (prev.some((m) => m.id === msg.id)) return prev;
+            return [...prev, {
+              id: msg.id,
+              sender_id: msg.sender_id,
+              content: msg.content,
+              created_at: msg.created_at,
+              is_read: msg.is_read,
+            }];
+          });
+          scrollToBottom();
+          // Update conversation last_message
+          setConversations((prev) => prev.map((c) =>
+            c.id === conv.id
+              ? { ...c, last_message: msg.content, last_message_time: msg.created_at }
+              : c
+          ));
+        },
+        onTyping: (userId, isTyping) => {
+          if (userId !== myId) {
+            setTypingUserId(isTyping ? userId : null);
+            // Auto-clear typing indicator after 3s
+            if (isTyping) {
+              if (typingTimerRef.current) clearTimeout(typingTimerRef.current);
+              typingTimerRef.current = setTimeout(() => setTypingUserId(null), 3000);
+            }
+          }
+        },
+      });
+    }
   };
 
   const sendMessage = useCallback(async () => {
@@ -137,26 +188,34 @@ export default function ChatPage() {
     setMessages((prev) => [...prev, optimistic]);
     setText('');
     scrollToBottom();
-    try {
-      const sent = await chatApi.sendMessage(activeConv.id, content);
-      if (sent) {
-        const sentId = String((sent as any).public_id ?? (sent as any).id ?? optimistic.id);
-        setMessages((prev) => prev.map((m) =>
-          m.id === optimistic.id ? { ...m, id: sentId } : m
-        ));
-        // Update conversation last_message
-        setConversations((prev) => prev.map((c) =>
-          c.id === activeConv.id
-            ? { ...c, last_message: content, last_message_time: new Date().toISOString() }
-            : c
-        ));
-      }
-    } catch {
-      // Keep optimistic — user sees it, can retry
-    } finally {
+
+    // Send via WebSocket (primary) or HTTP fallback
+    const sentViaWs = chatSocket.sendMessage(content);
+    if (sentViaWs) {
       setSending(false);
-      inputRef.current?.focus();
+    } else {
+      try {
+        const sent = await chatApi.sendMessage(activeConv.id, content);
+        if (sent) {
+          const sentId = String((sent as any).public_id ?? (sent as any).id ?? optimistic.id);
+          setMessages((prev) => prev.map((m) =>
+            m.id === optimistic.id ? { ...m, id: sentId } : m
+          ));
+          // Update conversation last_message
+          setConversations((prev) => prev.map((c) =>
+            c.id === activeConv.id
+              ? { ...c, last_message: content, last_message_time: new Date().toISOString() }
+              : c
+          ));
+        }
+      } catch {
+        // Keep optimistic — user sees it, can retry
+      } finally {
+        setSending(false);
+        inputRef.current?.focus();
+      }
     }
+    inputRef.current?.focus();
   }, [text, activeConv, sending, myId]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -477,6 +536,22 @@ export default function ChatPage() {
                     </div>
                   );
                 })}
+                {/* Typing indicator */}
+                {typingUserId && (
+                  <div className="flex items-center gap-2 px-4 py-1">
+                    <div className="flex gap-1">
+                      {[0, 1, 2].map((i) => (
+                        <motion.span
+                          key={i}
+                          className="h-1.5 w-1.5 rounded-full bg-fg-subtle"
+                          animate={{ y: [0, -4, 0] }}
+                          transition={{ duration: 0.55, repeat: Infinity, delay: i * 0.14 }}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-xs text-fg-muted">...</span>
+                  </div>
+                )}
                 <div ref={messagesEndRef} />
               </div>
 
@@ -489,6 +564,7 @@ export default function ChatPage() {
                       value={text}
                       onChange={(e) => {
                         setText(e.target.value);
+                        chatSocket.sendTyping(e.target.value.length > 0);
                         // Auto-resize
                         e.target.style.height = 'auto';
                         e.target.style.height = Math.min(e.target.scrollHeight, 120) + 'px';

@@ -9,13 +9,12 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Compass, Loader2, ArrowLeft, Navigation } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { MapPin, Loader2, ArrowLeft, Navigation } from 'lucide-react';
 
 import { AppNav } from '@/components/layout/AppNav';
 import { ListingCard } from '@/components/listings/ListingCard';
 import { EmptyState } from '@/components/shared/EmptyState';
-import { MapView } from '@/components/shared/MapView';
 import { NearbyMapWithUserPin } from '@/components/shared/NearbyMapWithUserPin';
 import { listingsApi, type Listing } from '@/lib/api/listings';
 import { referenceApi } from '@/lib/api/reference';

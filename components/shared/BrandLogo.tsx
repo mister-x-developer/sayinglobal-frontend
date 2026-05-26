@@ -5,12 +5,17 @@
  * PNG files (logo.png / sayinglobal_logo.png) MUST NOT be used.
  *
  * Usage:
- *   <BrandLogo />              — full wordmark (icon + text)
+ *   <BrandLogo />              — full wordmark (icon + text), auth-aware link
  *   <BrandLogo iconOnly />     — icon only (48×48)
  *   <BrandLogo size={32} />    — custom icon size
+ *   <BrandLogo noLink />       — render without wrapping link
  */
 
+'use client';
+
 import type React from 'react';
+import Link from 'next/link';
+import { useAuthStore } from '../../lib/store/auth';
 
 export interface BrandLogoProps {
   /** Icon width / height in px. Default 48. */
@@ -18,9 +23,11 @@ export interface BrandLogoProps {
   /** Render only the icon, without the "SAYIN. Global" wordmark. */
   iconOnly?: boolean;
   className?: string;
+  /** If true, render without a wrapping link (e.g. on the auth page itself). */
+  noLink?: boolean;
 }
 
-export function BrandLogo({ size = 48, iconOnly = false, className = '' }: BrandLogoProps) {
+function BrandLogoSvg({ size = 48, iconOnly = false, className = '' }: BrandLogoProps) {
   const textScale = size / 48;
 
   return (
@@ -95,6 +102,31 @@ export function BrandLogo({ size = 48, iconOnly = false, className = '' }: Brand
         </div>
       )}
     </div>
+  );
+}
+
+export function BrandLogo({ size = 48, iconOnly = false, className = '', noLink = false }: BrandLogoProps & { noLink?: boolean }) {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isAdmin = useAuthStore((s) => s.user?.is_admin);
+
+  if (noLink) {
+    return <BrandLogoSvg size={size} iconOnly={iconOnly} className={className} />;
+  }
+
+  // Auth-aware routing:
+  // - Authenticated admin → /admin
+  // - Authenticated user → /dashboard
+  // - Unauthenticated → /
+  const href = isAuthenticated
+    ? isAdmin
+      ? '/admin'
+      : '/dashboard'
+    : '/';
+
+  return (
+    <Link href={href} aria-label="SAYIN.Global — go to home" className={`inline-flex ${className}`}>
+      <BrandLogoSvg size={size} iconOnly={iconOnly} />
+    </Link>
   );
 }
 

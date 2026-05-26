@@ -13,11 +13,15 @@ export interface Plan {
   name_en: string;
   description: string;
   description_uz: string;
+  description_uz_cyrl: string;
+  description_ru: string;
+  description_en: string;
   monthly_listing_limit: number;
   active_listing_limit: number;
   price_uzs: number;
   price_usd: number;
   duration_days: number;
+  referrals_required: number;
   order: number;
   is_default: boolean;
   status: 'active' | 'archived';

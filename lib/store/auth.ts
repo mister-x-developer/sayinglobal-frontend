@@ -45,6 +45,7 @@ interface AuthState {
   refreshToken: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  _hasHydrated: boolean;
 
   setUser: (user: User | null) => void;
   setTokens: (access: string, refresh: string) => void;
@@ -53,6 +54,7 @@ interface AuthState {
   logout: () => void;
   setLoading: (loading: boolean) => void;
   login: (access: string, refresh: string, user: User) => void;
+  setHasHydrated: (value: boolean) => void;
 }
 
 const COOKIE_NAME = 'sayin-auth';
@@ -108,6 +110,9 @@ export const useAuthStore = create<AuthState>()(
       refreshToken: null,
       isAuthenticated: false,
       isLoading: false,
+      _hasHydrated: false,
+
+      setHasHydrated: (value: boolean) => set({ _hasHydrated: value }),
 
       setUser: (user) => {
         set({ user, isAuthenticated: !!user });
@@ -193,6 +198,7 @@ export const useAuthStore = create<AuthState>()(
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,
         isAuthenticated: state.isAuthenticated,
+        // _hasHydrated is intentionally excluded — it must always start false
       }),
       onRehydrateStorage: () => (state) => {
         if (state && typeof document !== 'undefined') {
@@ -204,6 +210,8 @@ export const useAuthStore = create<AuthState>()(
             });
           }
         }
+        // Mark hydration complete — prevents premature navigation guards
+        useAuthStore.getState().setHasHydrated(true);
       },
     }
   )
@@ -234,4 +242,13 @@ export function useAuthHydrated(): boolean {
     return () => clearTimeout(t);
   }, []);
   return hydrated;
+}
+
+/**
+ * useHasHydrated — alias for useAuthHydrated.
+ * Returns true only after the auth store has finished rehydrating from localStorage.
+ * Use this to gate navigation guards so they don't fire during the boot window.
+ */
+export function useHasHydrated(): boolean {
+  return useAuthHydrated();
 }

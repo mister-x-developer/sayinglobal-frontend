@@ -15,8 +15,42 @@ import {
 } from 'lucide-react';
 import { AdminLayout } from '@/components/layout/AdminLayout';
 import { formatNumber, formatRelativeTime } from '@/lib/utils/format';
-import { analyticsApi, type DashboardStats } from '@/lib/api/analytics';
+import { analyticsApi, type DashboardStats, type GrowthAnalytics } from '@/lib/api/analytics';
 import apiClient from '@/lib/api/client';
+
+// ── Simple SVG line chart (reused from analytics page) ────────────────────────
+function LineChart({ data, color = '#1f7a52' }: { data: { label: string; value: number }[]; color?: string }) {
+  if (data.length < 2) return null;
+  const max = Math.max(...data.map((d) => d.value), 1);
+  const W = 400;
+  const H = 100;
+  const pts = data.map((d, i) => {
+    const x = (i / (data.length - 1)) * W;
+    const y = H - (d.value / max) * (H - 10) - 5;
+    return `${x},${y}`;
+  });
+  const polyline = pts.join(' ');
+  const area = `0,${H} ${polyline} ${W},${H}`;
+  return (
+    <div className="relative h-28 w-full">
+      <svg viewBox={`0 0 ${W} ${H}`} className="h-full w-full" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id={`dash-grad-${color.replace('#', '')}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={color} stopOpacity="0.25" />
+            <stop offset="100%" stopColor={color} stopOpacity="0.02" />
+          </linearGradient>
+        </defs>
+        <polygon points={area} fill={`url(#dash-grad-${color.replace('#', '')})`} />
+        <polyline points={polyline} fill="none" stroke={color} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+      </svg>
+      <div className="absolute bottom-0 left-0 right-0 flex justify-between px-1">
+        <span className="text-[9px] text-fg-subtle">{data[0]?.label}</span>
+        <span className="text-[9px] text-fg-subtle">{data[Math.floor(data.length / 2)]?.label}</span>
+        <span className="text-[9px] text-fg-subtle">{data[data.length - 1]?.label}</span>
+      </div>
+    </div>
+  );
+}
 
 // ── Stat card ─────────────────────────────────────────────────────────────────
 function StatCard({ label, value, sub, icon: Icon, color, bg, href, delay = 0 }: {
@@ -72,19 +106,22 @@ export default function AdminDashboardPage() {
   const [pendingListings, setPendingListings] = useState(0);
   const [pendingComplaints, setPendingComplaints] = useState(0);
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
+  const [growth, setGrowth] = useState<GrowthAnalytics | null>(null);
 
   const load = useCallback(async (isRefresh = false) => {
     if (isRefresh) setRefreshing(true);
     else setLoading(true);
     try {
-      const [dash, pending, complaints] = await Promise.allSettled([
+      const [dash, pending, complaints, growthData] = await Promise.allSettled([
         analyticsApi.dashboard(),
         apiClient.get('/listings/?status=pending&page_size=1'),
         apiClient.get('/moderation/complaints/?status=pending&page_size=1'),
+        analyticsApi.growth(30),
       ]);
       if (dash.status === 'fulfilled') setStats(dash.value);
       if (pending.status === 'fulfilled') setPendingListings((pending.value.data as any)?.count ?? 0);
       if (complaints.status === 'fulfilled') setPendingComplaints((complaints.value.data as any)?.count ?? 0);
+      if (growthData.status === 'fulfilled') setGrowth(growthData.value);
     } catch {}
     finally {
       setLoading(false);
@@ -274,6 +311,42 @@ export default function AdminDashboardPage() {
                 <RecentComplaints />
               </motion.div>
             </div>
+
+            {/* 30-day trends */}
+            {growth && (growth.users_by_day.length > 1 || growth.listings_by_day.length > 1) && (
+              <div className="mt-6 grid gap-6 lg:grid-cols-2">
+                {growth.users_by_day.length > 1 && (
+                  <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.45 }} className="surface-elevated overflow-hidden">
+                    <div className="border-b border-border px-5 py-4 flex items-center gap-2">
+                      <TrendingUp className="h-4 w-4 text-blue-500" strokeWidth={2} />
+                      <h2 className="font-bold text-fg">Foydalanuvchilar (30 kun)</h2>
+                    </div>
+                    <div className="p-4">
+                      <LineChart
+                        data={growth.users_by_day.slice(-30).map((r) => ({ label: r.date.slice(5), value: r.count }))}
+                        color="#3b82f6"
+                      />
+                    </div>
+                  </motion.div>
+                )}
+                {growth.listings_by_day.length > 1 && (
+                  <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }} className="surface-elevated overflow-hidden">
+                    <div className="border-b border-border px-5 py-4 flex items-center gap-2">
+                      <TrendingUp className="h-4 w-4 text-brand-primary" strokeWidth={2} />
+                      <h2 className="font-bold text-fg">E'lonlar (30 kun)</h2>
+                    </div>
+                    <div className="p-4">
+                      <LineChart
+                        data={growth.listings_by_day.slice(-30).map((r) => ({ label: r.date.slice(5), value: r.count }))}
+                        color="#1f7a52"
+                      />
+                    </div>
+                  </motion.div>
+                )}
+              </div>
+            )}
           </>
         )}
       </div>

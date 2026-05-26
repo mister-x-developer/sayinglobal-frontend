@@ -16,7 +16,7 @@
  * this listing and are not an admin.
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
@@ -80,6 +80,10 @@ export default function EditListingPage() {
 
   const [listing, setListing] = useState<Listing | null>(null);
   const [form, setForm] = useState<EditForm | null>(null);
+  const [existingImages, setExistingImages] = useState<Array<{ id: string | number; image: string; is_primary?: boolean }>>([]);
+  const [newImages, setNewImages] = useState<Array<{ id: string; preview: string; file: File; isPrimary: boolean }>>([]);
+  const [uploadingImages, setUploadingImages] = useState(false);
+  const imageFileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => setHydrated(true), []);
   useEffect(() => {
@@ -109,6 +113,11 @@ export default function EditListingPage() {
           return;
         }
         setListing(data);
+        setExistingImages((data.images ?? []).map((img) => ({
+          id: img.id,
+          image: img.image,
+          is_primary: img.is_primary,
+        })));
         setForm({
           category: (data.category as any)?.name ?? (data.category as any) ?? '',
           title: data.title ?? '',
@@ -145,6 +154,34 @@ export default function EditListingPage() {
   const update = (patch: Partial<EditForm>) =>
     setForm((prev) => (prev ? { ...prev, ...patch } : prev));
 
+  const handleAddImages = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []);
+    const totalExisting = existingImages.length + newImages.length;
+    const remaining = Math.max(0, 5 - totalExisting);
+    const toAdd = files.slice(0, remaining);
+    const previews = toAdd.map((file, i) => ({
+      id: `new-${Date.now()}-${i}`,
+      preview: URL.createObjectURL(file),
+      file,
+      isPrimary: totalExisting === 0 && i === 0,
+    }));
+    setNewImages((prev) => [...prev, ...previews]);
+    e.target.value = '';
+  };
+
+  const handleRemoveExistingImage = async (imageId: string | number) => {
+    try {
+      await listingsApi.deleteImage(String(imageId));
+      setExistingImages((prev) => prev.filter((img) => img.id !== imageId));
+    } catch {
+      toast.error(t('errors.generic'));
+    }
+  };
+
+  const handleRemoveNewImage = (id: string) => {
+    setNewImages((prev) => prev.filter((img) => img.id !== id));
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form || !listing) return;
@@ -170,6 +207,20 @@ export default function EditListingPage() {
         longitude: form.longitude ?? undefined,
       };
       await listingsApi.update(publicId, payload);
+
+      // Upload any new images added during edit
+      if (newImages.length > 0) {
+        setUploadingImages(true);
+        for (const img of newImages) {
+          try {
+            await listingsApi.uploadImage(String(publicId), img.file, img.isPrimary);
+          } catch {
+            // Continue uploading remaining images even if one fails
+          }
+        }
+        setUploadingImages(false);
+      }
+
       toast.success(t('success.updated'));
       router.push(`/listings/${publicId}`);
     } catch {
@@ -255,6 +306,95 @@ export default function EditListingPage() {
                     onChange={(name) => update({ breed: name })}
                   />
                 </div>
+              )}
+            </div>
+
+            {/* Images */}
+            <div className="surface-elevated p-6">
+              <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
+                {t('create.stepPhotos')}
+              </h2>
+
+              {/* Existing images */}
+              {existingImages.length > 0 && (
+                <div className="mb-4 grid grid-cols-3 gap-2 sm:grid-cols-5">
+                  {existingImages.map((img) => (
+                    <div key={img.id} className="group relative aspect-square overflow-hidden rounded-xl border-2 border-border">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={img.image} alt="" className="h-full w-full object-cover" />
+                      {img.is_primary && (
+                        <div className="absolute bottom-1 left-1 rounded-md bg-brand-primary px-1.5 py-0.5 text-[10px] font-bold text-white">
+                          {t('listings.primaryPhoto')}
+                        </div>
+                      )}
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveExistingImage(img.id)}
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-danger text-white"
+                          aria-label="Remove image"
+                        >
+                          <X className="h-4 w-4" strokeWidth={2.5} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* New images to be uploaded */}
+              {newImages.length > 0 && (
+                <div className="mb-4 grid grid-cols-3 gap-2 sm:grid-cols-5">
+                  {newImages.map((img) => (
+                    <div key={img.id} className="group relative aspect-square overflow-hidden rounded-xl border-2 border-dashed border-brand-primary/50">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={img.preview} alt="" className="h-full w-full object-cover" />
+                      <div className="absolute top-1 right-1 rounded-md bg-brand-primary/80 px-1.5 py-0.5 text-[10px] font-bold text-white">
+                        {t('common.new' as any) ?? 'New'}
+                      </div>
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveNewImage(img.id)}
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-danger text-white"
+                          aria-label="Remove image"
+                        >
+                          <X className="h-4 w-4" strokeWidth={2.5} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Upload button */}
+              {existingImages.length + newImages.length < 5 && (
+                <button
+                  type="button"
+                  onClick={() => imageFileRef.current?.click()}
+                  className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border bg-bg-subtle py-8 text-fg-muted transition-colors hover:border-brand-primary hover:bg-brand-primary/4 hover:text-brand-primary"
+                >
+                  <Upload className="h-8 w-8" strokeWidth={1.5} />
+                  <span className="text-sm font-medium">{t('create.uploadPhotos')}</span>
+                  <span className="text-xs">{t('create.photosHint')}</span>
+                </button>
+              )}
+              <input
+                ref={imageFileRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                multiple
+                onChange={handleAddImages}
+                className="hidden"
+              />
+              <p className="mt-2 text-xs text-fg-subtle">
+                {existingImages.length + newImages.length}/5
+              </p>
+              {uploadingImages && (
+                <p className="mt-1 text-xs text-brand-primary inline-flex items-center gap-1.5">
+                  <Loader2 className="h-3 w-3 animate-spin" strokeWidth={2} />
+                  {t('create.publishing' as any) ?? 'Uploading images...'}
+                </p>
               )}
             </div>
 

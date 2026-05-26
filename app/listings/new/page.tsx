@@ -20,6 +20,7 @@ import { LocationSelector } from '@/components/shared/LocationSelector';
 import { LocationPicker } from '@/components/shared/LocationPicker';
 import { toast } from '@/components/ui/Toast';
 import { listingsApi } from '@/lib/api/listings';
+import apiClient from '@/lib/api/client';
 
 const GENDERS = [
   { value: 'male', key: 'animal.male' },
@@ -117,6 +118,24 @@ export default function NewListingPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
+
+    // Plan limit check: verify user can create a listing before proceeding
+    try {
+      const { data: myPlan } = await apiClient.get('/plans/my/');
+      if (!myPlan.can_create_listing) {
+        const reason = myPlan.limit_reason;
+        const msg = reason === 'monthly_limit_reached'
+          ? "Oylik limitingiz tugadi. Tarifni yangilang."
+          : reason === 'active_limit_reached'
+          ? "Faol e'lonlar limitiga yetdingiz."
+          : "E'lon yaratib bo'lmaydi.";
+        toast.error(msg);
+        return;
+      }
+    } catch {
+      // If plan check fails, proceed anyway (don't block the user)
+    }
+
     setSaving(true);
     try {
       const payload = {

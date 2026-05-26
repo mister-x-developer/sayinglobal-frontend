@@ -14,6 +14,7 @@ export type NotificationType =
   | 'rating'
   | 'complaint_update'
   | 'admin_message'
+  | 'broadcast'
   | 'system';
 
 export interface Notification {

@@ -1,0 +1,143 @@
+'use client';
+
+/**
+ * NotificationSocketService — manages the WebSocket connection to the
+ * backend notifications consumer.
+ *
+ * Features:
+ * - Connects with access token (and optional refresh_jti for session revocation)
+ * - Dispatches incoming messages to the Zustand notifications store
+ * - Plays a sound on new notifications (respects user preference)
+ * - Reconnects with exponential backoff (1s → 2s → 4s … max 30s)
+ * - On close code 4001 (session revoked): logs out and redirects to /auth
+ */
+
+import { useAuthStore } from '../store/auth';
+import { useNotificationsStore } from '../store/notifications';
+import { playNotificationSound } from '../utils/notificationSound';
+
+// Derive WebSocket base URL from env vars.
+// NEXT_PUBLIC_WS_URL takes priority (e.g. wss://sayinglobal.up.railway.app/ws).
+// Falls back to NEXT_PUBLIC_API_URL with http→ws and /api suffix stripped.
+const WS_BASE = (() => {
+  const wsUrl = process.env.NEXT_PUBLIC_WS_URL;
+  if (wsUrl) {
+    // Strip trailing /ws if present — we'll append /ws/notifications/ ourselves
+    return wsUrl.replace(/\/ws\/?$/, '');
+  }
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+  return apiUrl
+    .replace(/^http/, 'ws')
+    .replace(/\/api\/?$/, '');
+})();
+
+class NotificationSocketService {
+  private ws: WebSocket | null = null;
+  private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+  private reconnectDelay = 1000;
+  private readonly maxDelay = 30000;
+  private shouldReconnect = false;
+  private currentToken: string | null = null;
+
+  connect(accessToken: string, refreshJti?: string): void {
+    if (this.ws?.readyState === WebSocket.OPEN) return;
+    this.shouldReconnect = true;
+    this.currentToken = accessToken;
+
+    let url = `${WS_BASE}/ws/notifications/?token=${accessToken}`;
+    if (refreshJti) url += `&refresh_jti=${refreshJti}`;
+
+    try {
+      this.ws = new WebSocket(url);
+    } catch {
+      // WebSocket constructor can throw in some environments
+      if (this.shouldReconnect) this.scheduleReconnect();
+      return;
+    }
+
+    this.ws.onopen = () => {
+      // Reset backoff on successful connection
+      this.reconnectDelay = 1000;
+    };
+
+    this.ws.onmessage = (event: MessageEvent) => {
+      try {
+        const data = JSON.parse(event.data as string);
+        const store = useNotificationsStore.getState();
+
+        if (data.type === 'unread_count') {
+          store.setUnreadCount(data.count ?? 0);
+        } else if (data.type === 'notification' || data.notification_type) {
+          // Play sound for new incoming notifications
+          playNotificationSound();
+
+          // Update unread count
+          store.setUnreadCount((store.unreadCount ?? 0) + 1);
+
+          // Add full notification object to store if provided
+          if (data.notification) {
+            store.addItem(data.notification);
+          }
+        }
+      } catch {
+        // Malformed message — ignore
+      }
+    };
+
+    this.ws.onclose = (event: CloseEvent) => {
+      this.ws = null;
+
+      if (event.code === 4001) {
+        // Session revoked by server — force logout
+        useAuthStore.getState().logout();
+        if (typeof window !== 'undefined') {
+          window.location.href = '/auth';
+        }
+        return;
+      }
+
+      if (this.shouldReconnect) {
+        this.scheduleReconnect();
+      }
+    };
+
+    this.ws.onerror = () => {
+      // onerror is always followed by onclose — let onclose handle reconnect
+      this.ws?.close();
+    };
+  }
+
+  disconnect(): void {
+    this.shouldReconnect = false;
+    this.currentToken = null;
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
+    if (this.ws) {
+      this.ws.close(1000);
+      this.ws = null;
+    }
+  }
+
+  send(data: object): void {
+    if (this.ws?.readyState === WebSocket.OPEN) {
+      this.ws.send(JSON.stringify(data));
+    }
+  }
+
+  private scheduleReconnect(): void {
+    if (this.reconnectTimer) clearTimeout(this.reconnectTimer);
+    const delay = this.reconnectDelay;
+    this.reconnectTimer = setTimeout(() => {
+      const token = this.currentToken || useAuthStore.getState().accessToken;
+      if (token && this.shouldReconnect) {
+        this.connect(token);
+      }
+      // Exponential backoff
+      this.reconnectDelay = Math.min(this.reconnectDelay * 2, this.maxDelay);
+    }, delay);
+  }
+}
+
+export const notificationSocket = new NotificationSocketService();

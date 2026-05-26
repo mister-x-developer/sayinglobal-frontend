@@ -148,7 +148,7 @@ export default function ProfilePage() {
                       <Edit className="h-4 w-4" strokeWidth={1.75} />
                       {t('profile.editProfile')}
                     </Link>
-                    <Link href="/profile/settings" className="btn btn-secondary btn-sm btn-icon">
+                    <Link href="/profile/settings" className="btn btn-secondary btn-sm btn-icon" aria-label={t('nav.settings')}>
                       <Settings className="h-4 w-4" strokeWidth={1.75} />
                     </Link>
                   </div>

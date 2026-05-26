@@ -127,7 +127,7 @@ function useAdminDrag(storageKey: string, defaultPos: { x: number; y: number }) 
         draggingRef.current = false;
         setDraggingState(false);
         d.moved = false;
-      }, 80);
+      }, 120);
     } else {
       draggingRef.current = false;
       setDraggingState(false);
@@ -203,7 +203,7 @@ export function AdminAIAssistant() {
 
   const { pos: btnPos, dragging: btnDragging, draggingRef: btnDraggingRef, onPointerDown, onPointerMove, onPointerUp } = useAdminDrag(
     ADMIN_AI_POS_KEY,
-    { x: typeof window !== 'undefined' ? window.innerWidth - 72 : 900, y: typeof window !== 'undefined' ? window.innerHeight - 80 : 500 }
+    { x: typeof window !== 'undefined' ? window.innerWidth - 72 : 900, y: typeof window !== 'undefined' ? window.innerHeight - 180 : 600 }
   );
 
   useEffect(() => {
