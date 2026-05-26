@@ -71,7 +71,7 @@ class NotificationSocketService {
           // Play sound for new incoming notifications
           playNotificationSound();
 
-          // Build a Notification object from the WS event and add to store
+          // Build notification object from WS payload
           const notifItem = {
             public_id: data.notification_id ? Number(data.notification_id) : Date.now(),
             notification_type: (data.notif_type || data.notification_type || 'system') as any,
@@ -79,15 +79,19 @@ class NotificationSocketService {
             message: data.body || data.message || '',
             is_read: false,
             created_at: new Date().toISOString(),
-            action_url: data.action_url || (data.related_id ? `/notifications/${data.notification_id}` : undefined),
-            metadata: data.related_id ? { broadcast_id: data.related_id } : {},
+            action_url: data.related_id ? `/notifications/${data.notification_id}` : undefined,
           };
-          store.addItem(notifItem as any);
+
+          // Add to store
+          store.addItem(notifItem);
 
           // Show toast notification
           if (typeof window !== 'undefined') {
             import('@/components/ui/Toast').then(({ toast }) => {
-              toast.success(data.title || 'Yangi bildirishnoma');
+              const title = data.title || '';
+              const body = data.body || data.message || '';
+              const msg = title ? `${title}: ${body}`.slice(0, 80) : body.slice(0, 80);
+              if (msg) toast.info(msg);
             }).catch(() => {});
           }
         }
