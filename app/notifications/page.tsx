@@ -28,6 +28,7 @@ import { useNotificationsStore } from '@/lib/store/notifications';
 import { notificationsApi } from '@/lib/api/notifications';
 import type { Notification, NotificationType } from '@/lib/api/notifications';
 import { formatRelativeTime } from '@/lib/utils/format';
+import { useLocale } from 'next-intl';
 
 type Filter = 'all' | 'unread' | 'messages' | 'listings' | 'social';
 
@@ -68,6 +69,7 @@ function matchesFilter(n: Notification, filter: Filter): boolean {
 
 export default function NotificationsPage() {
   const t = useTranslations();
+  const locale = useLocale();
   const router = useRouter();
   const { isAuthenticated } = useAuthStore();
   const { items, setItems, markRead, markAllRead, remove } = useNotificationsStore();
@@ -200,6 +202,7 @@ export default function NotificationsPage() {
                       notification={n}
                       onMarkRead={handleMarkRead}
                       onRemove={handleRemove}
+                      locale={locale}
                     />
                   ))}
                 </AnimatePresence>
@@ -216,14 +219,27 @@ function NotificationRow({
   notification: n,
   onMarkRead,
   onRemove,
+  locale,
 }: {
   notification: Notification;
   onMarkRead: (id: number) => void;
   onRemove: (id: number) => void;
+  locale: string;
 }) {
   const t = useTranslations();
   const Icon = TYPE_ICON[n.notification_type] ?? Bell;
   const tone = TYPE_TONE[n.notification_type] ?? 'bg-bg-subtle text-fg-muted';
+
+  // Pick locale-aware title/message
+  const getLocaleText = (base: string, uz?: string, uzCyrl?: string, ru?: string, en?: string) => {
+    if (locale === 'uz-cyrl' && uzCyrl) return uzCyrl;
+    if (locale === 'ru' && ru) return ru;
+    if (locale === 'en' && en) return en;
+    if (locale === 'uz' && uz) return uz;
+    return base;
+  };
+  const title = getLocaleText(n.title, n.title_uz, n.title_uz_cyrl, n.title_ru, n.title_en);
+  const message = getLocaleText(n.message, n.message_uz, n.message_uz_cyrl, n.message_ru, n.message_en);
 
   const inner = (
     <motion.div
@@ -263,9 +279,9 @@ function NotificationRow({
       {/* Content */}
       <div className="min-w-0 flex-1">
         <p className={`text-sm font-semibold ${n.is_read ? 'text-fg' : 'text-fg'}`}>
-          {n.title}
+          {title}
         </p>
-        <p className="mt-0.5 text-sm leading-relaxed text-fg-muted">{n.message}</p>
+        <p className="mt-0.5 text-sm leading-relaxed text-fg-muted">{message}</p>
         <p className="mt-1.5 text-xs text-fg-subtle">{formatRelativeTime(n.created_at)}</p>
       </div>
 
