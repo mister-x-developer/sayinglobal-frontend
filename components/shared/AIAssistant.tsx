@@ -259,7 +259,7 @@ function useDraggable(defaultPos: { x: number; y: number }) {
     const onUp = () => {
       setDragging(false);
       // Save position to localStorage
-      setPos((p) => {
+      setPos((p: { x: number; y: number }) => {
         try { localStorage.setItem(AI_POS_KEY, JSON.stringify(p)); } catch {}
         return p;
       });
