@@ -220,7 +220,6 @@ function useDraggable(defaultPos: { x: number; y: number }) {
       const saved = localStorage.getItem(AI_POS_KEY);
       if (saved) {
         const p = JSON.parse(saved);
-        // Validate saved position is still on screen
         if (p.x >= 0 && p.x < window.innerWidth - 40 && p.y >= 0 && p.y < window.innerHeight - 40) {
           return p;
         }
@@ -229,40 +228,55 @@ function useDraggable(defaultPos: { x: number; y: number }) {
     return defaultPos;
   });
   const [dragging, setDragging] = useState(false);
-  const startRef = useRef<{ mx: number; my: number; px: number; py: number } | null>(null);
+  const stateRef = useRef<{
+    active: boolean;
+    moved: boolean;
+    mx: number; my: number;
+    px: number; py: number;
+  }>({ active: false, moved: false, mx: 0, my: 0, px: 0, py: 0 });
+
+  const startDrag = useCallback((clientX: number, clientY: number, px: number, py: number) => {
+    stateRef.current = { active: true, moved: false, mx: clientX, my: clientY, px, py };
+  }, []);
 
   const onMouseDown = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
-    startRef.current = { mx: e.clientX, my: e.clientY, px: pos.x, py: pos.y };
-    setDragging(true);
-  }, [pos]);
+    startDrag(e.clientX, e.clientY, pos.x, pos.y);
+  }, [pos, startDrag]);
 
   const onTouchStart = useCallback((e: React.TouchEvent) => {
     const t = e.touches[0];
-    startRef.current = { mx: t.clientX, my: t.clientY, px: pos.x, py: pos.y };
-    setDragging(true);
-  }, [pos]);
+    startDrag(t.clientX, t.clientY, pos.x, pos.y);
+  }, [pos, startDrag]);
 
   useEffect(() => {
-    if (!dragging) return;
+    const THRESHOLD = 6;
     const onMove = (e: MouseEvent | TouchEvent) => {
-      if (!startRef.current) return;
-      const cx = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      const cy = 'touches' in e ? e.touches[0].clientY : e.clientY;
-      const dx = cx - startRef.current.mx;
-      const dy = cy - startRef.current.my;
+      const s = stateRef.current;
+      if (!s.active) return;
+      const cx = 'touches' in e ? (e as TouchEvent).touches[0].clientX : (e as MouseEvent).clientX;
+      const cy = 'touches' in e ? (e as TouchEvent).touches[0].clientY : (e as MouseEvent).clientY;
+      const dx = cx - s.mx;
+      const dy = cy - s.my;
+      if (!s.moved && Math.sqrt(dx*dx + dy*dy) < THRESHOLD) return;
+      s.moved = true;
+      setDragging(true);
       setPos({
-        x: Math.max(0, Math.min(window.innerWidth - 56, startRef.current.px + dx)),
-        y: Math.max(0, Math.min(window.innerHeight - 56, startRef.current.py + dy)),
+        x: Math.max(0, Math.min(window.innerWidth - 56, s.px + dx)),
+        y: Math.max(0, Math.min(window.innerHeight - 56, s.py + dy)),
       });
     };
     const onUp = () => {
+      const s = stateRef.current;
+      if (!s.active) return;
+      s.active = false;
+      if (s.moved) {
+        setPos((p: { x: number; y: number }) => {
+          try { localStorage.setItem(AI_POS_KEY, JSON.stringify(p)); } catch {}
+          return p;
+        });
+      }
       setDragging(false);
-      // Save position to localStorage
-      setPos((p: { x: number; y: number }) => {
-        try { localStorage.setItem(AI_POS_KEY, JSON.stringify(p)); } catch {}
-        return p;
-      });
     };
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onUp);
@@ -274,7 +288,7 @@ function useDraggable(defaultPos: { x: number; y: number }) {
       window.removeEventListener('touchmove', onMove);
       window.removeEventListener('touchend', onUp);
     };
-  }, [dragging]);
+  }, []); // mount once — stateRef is mutable
 
   return { pos, dragging, onMouseDown, onTouchStart };
 }
