@@ -210,7 +210,54 @@ function inlineMarkdown(text: string): React.ReactNode {
   return <>{parts}</>;
 }
 
-// ── Session helpers ───────────────────────────────────────────────────────────
+// ── Draggable position hook ───────────────────────────────────────────────────
+function useDraggable(defaultPos: { x: number; y: number }) {
+  const [pos, setPos] = useState(defaultPos);
+  const [dragging, setDragging] = useState(false);
+  const startRef = useRef<{ mx: number; my: number; px: number; py: number } | null>(null);
+
+  const onMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    startRef.current = { mx: e.clientX, my: e.clientY, px: pos.x, py: pos.y };
+    setDragging(true);
+  }, [pos]);
+
+  const onTouchStart = useCallback((e: React.TouchEvent) => {
+    const t = e.touches[0];
+    startRef.current = { mx: t.clientX, my: t.clientY, px: pos.x, py: pos.y };
+    setDragging(true);
+  }, [pos]);
+
+  useEffect(() => {
+    if (!dragging) return;
+    const onMove = (e: MouseEvent | TouchEvent) => {
+      if (!startRef.current) return;
+      const cx = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      const cy = 'touches' in e ? e.touches[0].clientY : e.clientY;
+      const dx = cx - startRef.current.mx;
+      const dy = cy - startRef.current.my;
+      setPos({
+        x: Math.max(0, Math.min(window.innerWidth - 56, startRef.current.px + dx)),
+        y: Math.max(0, Math.min(window.innerHeight - 56, startRef.current.py + dy)),
+      });
+    };
+    const onUp = () => setDragging(false);
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+    window.addEventListener('touchmove', onMove, { passive: true });
+    window.addEventListener('touchend', onUp);
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+      window.removeEventListener('touchmove', onMove);
+      window.removeEventListener('touchend', onUp);
+    };
+  }, [dragging]);
+
+  return { pos, dragging, onMouseDown, onTouchStart };
+}
+
+
 function loadSessions(): AISession[] {
   if (typeof window === 'undefined') return [];
   try {
@@ -267,6 +314,12 @@ export function AIAssistant() {
   const role = isAdmin ? 'admin' : 'user';
   const firstName = user?.full_name?.split(' ')[0] ?? '';
   const language = LOCALE_LANGUAGE[locale] ?? 'Uzbek (Latin)';
+
+  // Draggable position — default bottom-right
+  const { pos, dragging, onMouseDown, onTouchStart } = useDraggable({
+    x: typeof window !== 'undefined' ? window.innerWidth - 72 : 900,
+    y: typeof window !== 'undefined' ? window.innerHeight - 120 : 600,
+  });
 
   const activeSession = sessions.find((s) => s.id === activeSessionId) ?? null;
   const messages = activeSession?.messages ?? [];
@@ -452,8 +505,11 @@ export function AIAssistant() {
           {!open && (
             <motion.button initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}
               transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-              onClick={() => setOpen(true)}
-              className="fixed bottom-28 right-4 z-[60] md:bottom-8 md:right-6 inline-flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-brand-primary to-brand-primary/80 text-white shadow-[0_8px_32px_rgba(31,122,82,0.45)] hover:scale-105 active:scale-95 transition-transform"
+              onMouseDown={onMouseDown}
+              onTouchStart={onTouchStart}
+              onClick={() => !dragging && setOpen(true)}
+              style={{ position: 'fixed', left: pos.x, top: pos.y, cursor: dragging ? 'grabbing' : 'grab' }}
+              className="z-[60] inline-flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-brand-primary to-brand-primary/80 text-white shadow-[0_8px_32px_rgba(31,122,82,0.45)] select-none"
             >
               <Sparkles className="h-6 w-6" strokeWidth={1.75} />
             </motion.button>
@@ -493,13 +549,18 @@ export function AIAssistant() {
   // ── Authenticated UI ──────────────────────────────────────────────────────
   return (
     <>
-      {/* Trigger button */}
+      {/* Trigger button — draggable */}
       <AnimatePresence>
         {!open && (
-          <motion.button initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+          <motion.button
+            initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }} transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-            onClick={() => setOpen(true)}
-            className="fixed bottom-28 right-4 z-[60] md:bottom-8 md:right-6 group inline-flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-brand-primary to-brand-primary/80 text-white shadow-[0_8px_32px_rgba(31,122,82,0.45)] hover:shadow-[0_12px_40px_rgba(31,122,82,0.55)] transition-all hover:scale-105 active:scale-95"
+            onMouseDown={onMouseDown}
+            onTouchStart={onTouchStart}
+            onClick={() => !dragging && setOpen(true)}
+            style={{ position: 'fixed', left: pos.x, top: pos.y, cursor: dragging ? 'grabbing' : 'grab' }}
+            className="z-[60] group inline-flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-brand-primary to-brand-primary/80 text-white shadow-[0_8px_32px_rgba(31,122,82,0.45)] hover:shadow-[0_12px_40px_rgba(31,122,82,0.55)] transition-shadow select-none"
+            aria-label="SAYIN AI"
           >
             <Sparkles className="h-6 w-6 transition-transform group-hover:rotate-12" strokeWidth={1.75} />
             {isAdmin && <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-brand-accent text-[8px] font-black text-white">A</span>}

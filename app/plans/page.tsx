@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { Check, Crown, Zap, Star, Gift, ArrowRight, Loader2 } from 'lucide-react';
+import { Check, Crown, Zap, Star, Gift, ArrowRight, Loader2, Tag, Users } from 'lucide-react';
 
 import { AppNav } from '@/components/layout/AppNav';
 import { useAuthStore } from '@/lib/store/auth';
@@ -27,6 +27,7 @@ interface Plan {
   duration_days: number;
   is_default: boolean;
   order: number;
+  referrals_required: number;
 }
 
 interface MyPlan {
@@ -44,7 +45,7 @@ interface ReferralCode {
   rewarded_referrals: number;
 }
 
-const PLAN_ICONS = [Star, Zap, Crown];
+const PLAN_ICONS = [Tag, Zap, Crown];
 const PLAN_COLORS = [
   'from-emerald-500/10 to-teal-500/10 border-emerald-500/20',
   'from-blue-500/10 to-indigo-500/10 border-blue-500/20',
@@ -225,6 +226,21 @@ export default function PlansPage() {
                     <div className="mt-3 rounded-xl bg-brand-accent/10 px-3 py-2 text-xs text-brand-accent font-semibold">
                       🎁 Hozircha referral orqali bepul. Tez orada to'lovga o'tadi!
                     </div>
+                    {/* Referrals required */}
+                    {plan.referrals_required > 0 && (
+                      <div className="mt-2 flex items-center gap-2 rounded-xl bg-bg-subtle px-3 py-2 text-xs text-fg-muted">
+                        <Users className="h-3.5 w-3.5 flex-shrink-0 text-brand-primary" strokeWidth={2} />
+                        <span>
+                          Bu tarifni olish uchun:{' '}
+                          <strong className="text-fg">{plan.referrals_required} ta referral</strong>
+                          {referral && (
+                            <span className="ml-1 text-success">
+                              ({referral.rewarded_referrals}/{plan.referrals_required} ✓)
+                            </span>
+                          )}
+                        </span>
+                      </div>
+                    )}
 
                     <ul className="mt-5 space-y-2.5 flex-1">
                       <li className="flex items-center gap-2 text-sm text-fg">
@@ -337,9 +353,12 @@ export default function PlansPage() {
                 </button>
               </div>
               <div className="mt-3 flex gap-6 text-sm text-fg-muted">
-                <span>Jami taklif: <strong className="text-fg">{referral.total_referrals}</strong></span>
-                <span>Mukofot olindi: <strong className="text-fg">{referral.rewarded_referrals}</strong></span>
+                <span>Jami taklif: <strong className="text-fg text-lg">{referral.total_referrals}</strong></span>
+                <span>Mukofot olindi: <strong className="text-fg text-lg">{referral.rewarded_referrals}</strong></span>
               </div>
+              <p className="mt-2 text-xs text-fg-muted">
+                Standart uchun: 3 ta · Pro uchun: 7 ta mukofotlangan referral kerak
+              </p>
             </motion.div>
           )}
         </div>
