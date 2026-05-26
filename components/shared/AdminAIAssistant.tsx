@@ -55,7 +55,6 @@ const QUICK_ACTIONS = [
   { label: 'Kutilayotgan e\'lonlar', labelRu: 'Ожидающие', labelEn: 'Pending listings', action: 'get_pending_listings', params: {} },
   { label: 'Shikoyatlar', labelRu: 'Жалобы', labelEn: 'Complaints', action: 'get_pending_complaints', params: {} },
 ];
-
 function loadAdminSessions(): AdminAISession[] {
   if (typeof window === 'undefined') return [];
   try {
@@ -325,7 +324,10 @@ export function AdminAIAssistant() {
       
       // Format result for display
       let displayText = '';
-      if (result.active_listings !== undefined) {
+      if (result.analysis) {
+        // Image analysis result
+        displayText = `📸 ${result.images_analyzed ?? 0} ta rasm tahlil qilindi\n📋 E'lon: ${result.title}\n\n${result.analysis}`;
+      } else if (result.active_listings !== undefined) {
         displayText = Object.entries(result).map(([k, v]) => `${k}: ${v}`).join('\n');
       } else if (result.listings && Array.isArray(result.listings)) {
         displayText = `${locale === 'ru' ? 'Найдено' : locale === 'en' ? 'Found' : 'Topildi'}: ${result.count}\n` +
