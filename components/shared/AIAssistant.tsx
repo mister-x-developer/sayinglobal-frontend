@@ -82,32 +82,7 @@ function getToolLabel(tool: string, locale: string): string {
   return TOOL_LABELS[tool]?.[langKey] ?? `🔧 ${tool.replace(/_/g, ' ')}`;
 }
 
-// ── Tool label localization ──────────────────────────────────────────────────
-const TOOL_LABELS: Record<string, Record<string, string>> = {
-  search_listings: { uz: "E'lonlar qidirilyapti", ru: 'Поиск объявлений', en: 'Searching listings' },
-  get_seller_profile: { uz: 'Seller profili tekshirilyapti', ru: 'Проверка продавца', en: 'Checking seller' },
-  get_listing_detail: { uz: "E'lon tafsiloti olinmoqda", ru: 'Получение объявления', en: 'Fetching listing' },
-  analyze_image: { uz: 'Rasm tahlil qilinyapti', ru: 'Анализ изображения', en: 'Analyzing image' },
-  get_market_insights: { uz: 'Bozor tahlili', ru: 'Анализ рынка', en: 'Market analysis' },
-  get_nearby_listings: { uz: "Yaqin e'lonlar", ru: 'Ближайшие объявления', en: 'Nearby listings' },
-  check_seller_trustworthiness: { uz: 'Ishonchlilik tekshiruvi', ru: 'Проверка надёжности', en: 'Trust check' },
-  get_recommendations: { uz: 'Tavsiyalar tayyorlanmoqda', ru: 'Подготовка рекомендаций', en: 'Preparing recommendations' },
-  get_dynamic_trust_score: { uz: 'Trust score hisoblanmoqda', ru: 'Расчёт trust score', en: 'Computing trust score' },
-  get_platform_overview: { uz: 'Platforma statistikasi', ru: 'Статистика платформы', en: 'Platform overview' },
-  get_moderation_queue: { uz: 'Moderatsiya navbati', ru: 'Очередь модерации', en: 'Moderation queue' },
-  get_risk_analysis: { uz: 'Risk tahlili', ru: 'Анализ рисков', en: 'Risk analysis' },
-  get_suspicious_activity: { uz: 'Shubhali faollik skaneri', ru: 'Скан подозрит. активности', en: 'Suspicious activity scan' },
-  execute_moderation_action: { uz: 'Moderatsiya amali bajarilmoqda', ru: 'Выполнение модерации', en: 'Executing moderation' },
-  get_trust_graph: { uz: 'Trust grafik tahlili', ru: 'Анализ графа доверия', en: 'Trust graph analysis' },
-  get_enterprise_moderation: { uz: 'Enterprise moderation', ru: 'Enterprise модерация', en: 'Enterprise moderation' },
-  analyze_user_behavior: { uz: 'Xulq-atvor tahlili', ru: 'Анализ поведения', en: 'Behavior analysis' },
-  get_ai_observability: { uz: 'AI observability metrikalari', ru: 'Метрики AI observability', en: 'AI observability' },
-};
-
-function getToolLabel(tool: string, locale: string): string {
-  const langKey = locale === 'ru' ? 'ru' : locale === 'en' ? 'en' : 'uz';
-  return TOOL_LABELS[tool]?.[langKey] ?? tool.replace(/_/g, ' ');
-}
+const LOGIN_PROMPT: Record<string, { title: string; desc: string; btn: string }> = {
   uz: { title: 'SAYIN AI', desc: 'AI yordamchidan foydalanish uchun tizimga kiring.', btn: 'Kirish' },
   'uz-cyrl': { title: 'SAYIN AI', desc: 'AI ёрдамчидан фойдаланиш учун тизимга киринг.', btn: 'Кириш' },
   ru: { title: 'SAYIN AI', desc: 'Войдите, чтобы использовать AI-помощника.', btn: 'Войти' },
