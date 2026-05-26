@@ -403,7 +403,7 @@ export function AdminAIAssistant() {
             exit={{ opacity: 0, y: 24, scale: 0.94 }} transition={{ type: 'spring', damping: 28, stiffness: 320 }}
             className="fixed bottom-6 right-6 z-[60] w-[calc(100vw-3rem)] max-w-[420px]"
           >
-            <div className="overflow-hidden rounded-2xl border border-brand-accent/30 bg-bg-elevated shadow-[0_24px_64px_rgba(0,0,0,0.25)] ring-1 ring-brand-accent/10 flex flex-col" style={{ height: '540px' }}>
+            <div className="overflow-hidden rounded-2xl border border-brand-accent/30 bg-bg-elevated shadow-[0_24px_64px_rgba(0,0,0,0.25)] ring-1 ring-brand-accent/10 flex flex-col" style={{ height: minimized ? 'auto' : '540px' }}>
 
               {/* Header */}
               <div className="flex items-center gap-2.5 px-3.5 py-2.5 border-b border-brand-accent/20 bg-gradient-to-r from-brand-accent/15 to-brand-primary/8 flex-shrink-0">

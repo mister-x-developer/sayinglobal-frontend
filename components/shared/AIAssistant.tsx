@@ -493,19 +493,27 @@ export function AIAssistant() {
         )}
       </AnimatePresence>
 
-      {/* Chat window — positioned near the AI button */}
+      {/* Chat window — positioned above the AI button */}
       <AnimatePresence>
         {open && (
           <motion.div initial={{ opacity: 0, y: 24, scale: 0.94 }} animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.94 }} transition={{ type: 'spring', damping: 28, stiffness: 320 }}
             style={{
               position: 'fixed',
-              // Anchor chat window near button: prefer right side, avoid going off-screen
-              right: typeof window !== 'undefined' ? Math.max(16, window.innerWidth - pos.x - 56) : 16,
-              bottom: typeof window !== 'undefined' ? Math.max(16, window.innerHeight - pos.y - 8) : 112,
+              // Place window so it opens near the button, always on-screen
+              // Try to open to the left of button if near right edge, otherwise to the right
+              left: typeof window !== 'undefined'
+                ? Math.min(
+                    Math.max(16, pos.x - 320),            // prefer to left of button
+                    window.innerWidth - 396,               // but don't go off right edge
+                  )
+                : 16,
+              bottom: typeof window !== 'undefined'
+                ? Math.max(16, window.innerHeight - pos.y + 8)
+                : 112,
             }}
             className="z-[60] w-[calc(100vw-2rem)] max-w-[380px]">
-            <div className="overflow-hidden rounded-2xl border border-border/60 bg-bg-elevated shadow-[0_24px_64px_rgba(0,0,0,0.2)] ring-1 ring-black/[0.06] flex flex-col" style={{ height: '520px' }}>
+            <div className="overflow-hidden rounded-2xl border border-border/60 bg-bg-elevated shadow-[0_24px_64px_rgba(0,0,0,0.2)] ring-1 ring-black/[0.06] flex flex-col" style={{ height: minimized ? 'auto' : '520px' }}>
 
               {/* Header */}
               <div className="flex items-center gap-2.5 px-3.5 py-2.5 border-b border-border/60 bg-gradient-to-r from-brand-primary/8 to-brand-primary/4 flex-shrink-0">

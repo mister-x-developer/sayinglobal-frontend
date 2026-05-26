@@ -264,7 +264,9 @@ export default function PlansPage() {
                 const Icon = PLAN_ICONS[i % PLAN_ICONS.length];
                 const colorClass = PLAN_COLORS[i % PLAN_COLORS.length];
                 const iconColor = PLAN_ICON_COLORS[i % PLAN_ICON_COLORS.length];
-                const isCurrent = myPlan?.plan.id === plan.id;
+                const isCurrent = myPlan
+                  ? (myPlan.plan.name === plan.name && myPlan.plan.monthly_listing_limit === plan.monthly_listing_limit)
+                  : false;
 
                 return (
                   <motion.div

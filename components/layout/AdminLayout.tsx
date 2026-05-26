@@ -116,9 +116,10 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
 
   const Sidebar = ({ isDrawer = false }: { isDrawer?: boolean }) => (
     <nav className="flex h-full flex-col">
-      {/* Logo + collapse toggle */}
-      <div className={`flex h-16 items-center border-b border-border ${collapsed && !isDrawer ? 'justify-center px-2' : 'px-5'}`}>
-        {(!collapsed || isDrawer) && (
+      {/* Logo + collapse toggle — only on desktop sidebar */}
+      {!isDrawer && (
+      <div className={`flex h-16 items-center border-b border-border ${collapsed ? 'justify-center px-2' : 'px-5'}`}>
+        {!collapsed && (
           <>
             <Logo size="sm" href="/admin" />
             <span className="ml-2 rounded-md bg-brand-primary/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-brand-primary">
@@ -126,25 +127,24 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
             </span>
           </>
         )}
-        {collapsed && !isDrawer && (
+        {collapsed && (
           <ShieldCheck className="h-6 w-6 text-brand-primary" strokeWidth={1.75} />
         )}
         {/* Collapse toggle — desktop only */}
-        {!isDrawer && (
-          <button
-            type="button"
-            onClick={toggleCollapsed}
-            className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-fg-subtle hover:bg-bg-subtle hover:text-fg transition-colors ${collapsed ? '' : 'ml-auto'}`}
-            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          >
-            {collapsed ? (
-              <PanelLeftOpen className="h-4 w-4" strokeWidth={1.75} />
-            ) : (
-              <PanelLeftClose className="h-4 w-4" strokeWidth={1.75} />
-            )}
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={toggleCollapsed}
+          className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-fg-subtle hover:bg-bg-subtle hover:text-fg transition-colors ${collapsed ? '' : 'ml-auto'}`}
+          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        >
+          {collapsed ? (
+            <PanelLeftOpen className="h-4 w-4" strokeWidth={1.75} />
+          ) : (
+            <PanelLeftClose className="h-4 w-4" strokeWidth={1.75} />
+          )}
+        </button>
       </div>
+      )}
 
       {/* Nav links */}
       <div className="flex-1 overflow-y-auto p-3 space-y-4">
