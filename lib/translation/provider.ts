@@ -89,7 +89,8 @@ const backendProvider: TranslationProvider = {
     const target = LOCALE_TO_ISO[targetLocale] ?? 'en';
     const source = sourceLocale === 'auto' ? 'auto' : (LOCALE_TO_ISO[sourceLocale] ?? 'auto');
 
-    if (target === source && source !== 'auto') {
+    // Don't short-circuit for uz-cyrl: uz→uz-cyrl is a real script conversion
+    if (target === source && source !== 'auto' && targetLocale !== 'uz-cyrl') {
       return { text, fromLocale: source, toLocale: target, cached: true };
     }
 

@@ -82,10 +82,9 @@ export default function NewListingPage() {
     if (!form.description.trim()) e.description = t('errors.required');
     if (!form.price || isNaN(Number(form.price)) || Number(form.price) <= 0) e.price = t('errors.required');
     if (!form.region) e.region = t('errors.required');
-    // District is now required
     if (!form.district) e.district = t('errors.required');
+    if (!form.health_status) e.health_status = t('errors.required');
     if (!age.years && !age.months && !age.days) e.age = t('validation.atLeastOneFieldRequired');
-    // Minimum 3 photos required
     if (images.length < 3) e.images = "Kamida 3 ta rasm yuklang (maksimal 5 ta)";
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -295,7 +294,7 @@ export default function NewListingPage() {
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div>
                       <label className="mb-1.5 block text-sm font-medium text-fg">
-                        {t('animal.health')}
+                        {t('animal.health')} <span className="text-danger">*</span>
                       </label>
                       <select
                         value={form.health_status}
@@ -307,6 +306,7 @@ export default function NewListingPage() {
                           <option key={k} value={t(k as any)}>{t(k as any)}</option>
                         ))}
                       </select>
+                      {errors.health_status && <p className="mt-1 text-xs text-danger">{errors.health_status}</p>}
                     </div>
                     <div>
                       <label className="mb-1.5 block text-sm font-medium text-fg">

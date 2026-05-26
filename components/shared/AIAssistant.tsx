@@ -239,7 +239,7 @@ export function AIAssistant() {
 
   const { pos, dragging, draggingRef, onPointerDown, onPointerMove, onPointerUp } = useDraggable(AI_POS_KEY, {
     x: typeof window !== 'undefined' ? window.innerWidth - 72 : 900,
-    y: typeof window !== 'undefined' ? window.innerHeight - 180 : 600,
+    y: typeof window !== 'undefined' ? window.innerHeight - 240 : 600,
   });
 
   useEffect(() => {
