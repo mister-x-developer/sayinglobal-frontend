@@ -13,7 +13,6 @@ import {
   Megaphone,
   BarChart3,
   ScrollText,
-  Settings,
   Menu,
   X,
   ShieldAlert,
@@ -23,6 +22,8 @@ import {
   Activity,
   Bot,
   CreditCard,
+  Star,
+  Link as LinkIcon,
 } from 'lucide-react';
 
 import { Logo } from '@/components/shared/Logo';
@@ -32,19 +33,44 @@ import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher';
 import { AdminAIAssistant } from '@/components/shared/AdminAIAssistant';
 import { useAuthStore } from '@/lib/store/auth';
 
-const NAV = [
-  { href: '/admin', icon: LayoutDashboard, label: 'admin.dashboard', exact: true },
-  { href: '/admin/users', icon: Users, label: 'admin.users' },
-  { href: '/admin/listings', icon: LayoutGrid, label: 'admin.listings' },
-  { href: '/admin/moderation', icon: Flag, label: 'admin.complaints' },
-  { href: '/admin/ai-moderation', icon: Bot, label: 'admin.aiModeration' },
-  { href: '/admin/plans', icon: CreditCard, label: 'admin.plans' },
-  { href: '/admin/ratings', icon: Flag, label: 'admin.ratingsModeration' },
-  { href: '/admin/broadcasts', icon: Megaphone, label: 'admin.broadcasts' },
-  { href: '/admin/analytics', icon: BarChart3, label: 'admin.analytics' },
-  { href: '/admin/audit', icon: ScrollText, label: 'admin.auditLogs' },
-  { href: '/admin/security', icon: ShieldAlert, label: 'security.title' },
-  { href: '/admin/health', icon: Activity, label: 'admin.systemHealth' },
+const NAV_GROUPS = [
+  {
+    label: 'Asosiy',
+    items: [
+      { href: '/admin', icon: LayoutDashboard, label: 'admin.dashboard', exact: true },
+      { href: '/admin/analytics', icon: BarChart3, label: 'admin.analytics' },
+    ],
+  },
+  {
+    label: 'Moderatsiya',
+    items: [
+      { href: '/admin/listings', icon: LayoutGrid, label: 'admin.listings' },
+      { href: '/admin/moderation', icon: Flag, label: 'admin.complaints' },
+      { href: '/admin/ai-moderation', icon: Bot, label: 'admin.aiModeration' },
+      { href: '/admin/ratings', icon: Star, label: 'admin.ratingsModeration' },
+    ],
+  },
+  {
+    label: 'Foydalanuvchilar',
+    items: [
+      { href: '/admin/users', icon: Users, label: 'admin.users' },
+      { href: '/admin/security', icon: ShieldAlert, label: 'security.title' },
+    ],
+  },
+  {
+    label: 'Kontent',
+    items: [
+      { href: '/admin/broadcasts', icon: Megaphone, label: 'admin.broadcasts' },
+      { href: '/admin/plans', icon: CreditCard, label: 'admin.plans' },
+    ],
+  },
+  {
+    label: 'Tizim',
+    items: [
+      { href: '/admin/audit', icon: ScrollText, label: 'admin.auditLogs' },
+      { href: '/admin/health', icon: Activity, label: 'admin.systemHealth' },
+    ],
+  },
 ] as const;
 
 export function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -76,31 +102,38 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Nav links */}
-      <div className="flex-1 overflow-y-auto p-3">
-        <div className="space-y-0.5">
-          {NAV.map((item) => {
-            const Icon = item.icon;
-            const active = isActive(item.href, 'exact' in item ? (item as any).exact : false);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setSidebarOpen(false)}
-                className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
-                  active
-                    ? 'bg-brand-primary/12 text-brand-primary'
-                    : 'text-fg-muted hover:bg-bg-subtle hover:text-fg'
-                }`}
-              >
-                <Icon className="h-[18px] w-[18px] flex-shrink-0" strokeWidth={1.75} />
-                <span className="flex-1">{t(item.label as any)}</span>
-                {active && (
-                  <ChevronRight className="h-3.5 w-3.5 opacity-60" strokeWidth={2.25} />
-                )}
-              </Link>
-            );
-          })}
-        </div>
+      <div className="flex-1 overflow-y-auto p-3 space-y-4">
+        {NAV_GROUPS.map((group) => (
+          <div key={group.label}>
+            <p className="px-3 mb-1 text-[10px] font-bold uppercase tracking-widest text-fg-subtle/60">
+              {group.label}
+            </p>
+            <div className="space-y-0.5">
+              {group.items.map((item) => {
+                const Icon = item.icon;
+                const active = isActive(item.href, 'exact' in item ? (item as any).exact : false);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setSidebarOpen(false)}
+                    className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
+                      active
+                        ? 'bg-brand-primary/12 text-brand-primary'
+                        : 'text-fg-muted hover:bg-bg-subtle hover:text-fg'
+                    }`}
+                  >
+                    <Icon className="h-[18px] w-[18px] flex-shrink-0" strokeWidth={1.75} />
+                    <span className="flex-1">{t(item.label as any)}</span>
+                    {active && (
+                      <ChevronRight className="h-3.5 w-3.5 opacity-60" strokeWidth={2.25} />
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* User */}
