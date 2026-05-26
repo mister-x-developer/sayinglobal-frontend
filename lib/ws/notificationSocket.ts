@@ -104,7 +104,8 @@ class NotificationSocketService {
             message_en: data.message_en || data.body || '',
             is_read: false,
             created_at: new Date().toISOString(),
-            action_url: data.related_id ? `/notifications/${data.notification_id}` : undefined,
+            // Deep-link uses public_id (int), never UUID
+            action_url: data.notification_id ? `/notifications/${data.notification_id}` : undefined,
           };
 
           // Add to store
@@ -165,6 +166,11 @@ class NotificationSocketService {
     if (this.ws?.readyState === WebSocket.OPEN) {
       this.ws.send(JSON.stringify(data));
     }
+  }
+
+  /** Mark notification as read — send public_id (int), not UUID. */
+  markRead(publicId: number): void {
+    this.send({ action: 'mark_read', notification_id: publicId });
   }
 
   private scheduleReconnect(): void {
