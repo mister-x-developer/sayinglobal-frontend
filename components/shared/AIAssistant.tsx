@@ -271,24 +271,79 @@ export function AIAssistant() {
     }));
     setInput('');
     setLoading(true);
+
+    // Add streaming placeholder
+    const thinkingId = `thinking-${Date.now()}`;
+    updateSession(activeId, (s) => ({
+      ...s,
+      messages: [...s.messages, { id: thinkingId, role: 'assistant' as const, content: '⏳', timestamp: Date.now() }],
+      updatedAt: Date.now(),
+    }));
+
+    const history = messages.slice(-8).map((m) => ({ role: m.role === 'user' ? 'user' : 'model', parts: [{ text: m.content }] }));
+
     try {
-      const history = messages.slice(-8).map((m) => ({ role: m.role === 'user' ? 'user' : 'model', parts: [{ text: m.content }] }));
-      const res = await apiClient.post('/ai-moderation/assistant/', {
-        message: content, role: 'user', locale, language: lang, history, user_name: user?.full_name ?? '',
-        image_urls: [],  // TODO: allow image paste/upload in future
+      // Use streaming SSE endpoint
+      const token = useAuthStore.getState().accessToken ?? '';
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+      const streamRes = await fetch(`${baseUrl}/ai-moderation/assistant/stream/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ message: content, role: 'user', locale, language: lang, history, user_name: user?.full_name ?? '', image_urls: [] }),
       });
-      const reply = res.data?.reply ?? '...';
-      // reasoning is returned for admins — can show as collapsed trace (ignored for user view)
-      updateSession(activeId, (s) => ({
-        ...s, messages: [...s.messages, { id: `a-${Date.now()}`, role: 'assistant', content: reply, timestamp: Date.now() }],
-        updatedAt: Date.now(),
-      }));
+
+      if (!streamRes.ok || !streamRes.body) throw new Error('stream_failed');
+
+      const reader = streamRes.body.getReader();
+      const decoder = new TextDecoder();
+      let accumulatedText = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value, { stream: true });
+        for (const line of chunk.split('\n')) {
+          if (!line.startsWith('data: ')) continue;
+          try {
+            const data = JSON.parse(line.slice(6));
+            if (data.type === 'tool') {
+              const toolLabel = locale === 'ru' ? `🔧 ${data.tool}...` : locale === 'en' ? `🔧 ${data.tool}...` : `🔧 ${data.tool}...`;
+              updateSession(activeId!, (s) => ({ ...s, messages: s.messages.map((m) => m.id === thinkingId ? { ...m, content: toolLabel } : m), updatedAt: Date.now() }));
+            } else if (data.type === 'token') {
+              accumulatedText += data.text;
+              updateSession(activeId!, (s) => ({ ...s, messages: s.messages.map((m) => m.id === thinkingId ? { ...m, content: accumulatedText } : m), updatedAt: Date.now() }));
+            } else if (data.type === 'done') {
+              const finalId = `a-${Date.now()}`;
+              updateSession(activeId!, (s) => ({
+                ...s,
+                messages: [...s.messages.filter((m) => m.id !== thinkingId), { id: finalId, role: 'assistant' as const, content: accumulatedText || '...', timestamp: Date.now() }],
+                updatedAt: Date.now(),
+              }));
+              accumulatedText = '';
+            }
+          } catch {}
+        }
+      }
     } catch {
-      const err: Record<string, string> = { uz: 'Xato yuz berdi.', 'uz-cyrl': 'Хато юз берди.', ru: 'Ошибка.', en: 'Error.' };
-      updateSession(activeId, (s) => ({
-        ...s, messages: [...s.messages, { id: `e-${Date.now()}`, role: 'assistant', content: err[locale] ?? err['uz'], timestamp: Date.now() }],
-        updatedAt: Date.now(),
-      }));
+      // Fallback to non-streaming
+      try {
+        const res = await apiClient.post('/ai-moderation/assistant/', {
+          message: content, role: 'user', locale, language: lang, history, user_name: user?.full_name ?? '', image_urls: [],
+        });
+        const reply = res.data?.reply ?? '...';
+        updateSession(activeId!, (s) => ({
+          ...s,
+          messages: [...s.messages.filter((m) => m.id !== thinkingId), { id: `a-${Date.now()}`, role: 'assistant' as const, content: reply, timestamp: Date.now() }],
+          updatedAt: Date.now(),
+        }));
+      } catch {
+        const err: Record<string, string> = { uz: 'Xato yuz berdi.', 'uz-cyrl': 'Хато юз берди.', ru: 'Ошибка.', en: 'Error.' };
+        updateSession(activeId!, (s) => ({
+          ...s,
+          messages: [...s.messages.filter((m) => m.id !== thinkingId), { id: `e-${Date.now()}`, role: 'assistant' as const, content: err[locale] ?? err['uz'], timestamp: Date.now() }],
+          updatedAt: Date.now(),
+        }));
+      }
     } finally {
       setLoading(false);
       setTimeout(() => inputRef.current?.focus(), 100);
