@@ -101,7 +101,7 @@ export default function ChatPage() {
           last_message: typeof (conv as any).last_message === 'object'
             ? (conv as any).last_message?.content ?? '' : (conv as any).last_message ?? '',
         };
-        setConversations((prev) => prev.some((c) => c.id === norm.id) ? prev : [norm, ...prev]);
+        setConversations((prev) => prev.some((c) => c.public_id === norm.public_id) ? prev : [norm, ...prev]);
         openConversation(norm);
       }).catch(() => {});
     }
@@ -123,7 +123,7 @@ export default function ChatPage() {
     setMessages([]);
     setMoreOpen(false);
     setTypingUserId(null);
-    chatApi.getMessages(conv.id).then((msgs: any) => {
+    chatApi.getMessages(conv.id ?? conv.public_id).then((msgs: any) => {
       const list = Array.isArray(msgs) ? msgs : msgs?.results ?? [];
       const mapped: Message[] = list.map((m: any) => ({
         id: String(m.public_id ?? m.id ?? Math.random()),
@@ -138,8 +138,8 @@ export default function ChatPage() {
 
     // Connect WebSocket for real-time messages
     const token = useAuthStore.getState().accessToken;
-    if (token && conv.id) {
-      chatSocket.connect(String(conv.id), token, {
+    if (token && (conv.id ?? conv.public_id)) {
+      chatSocket.connect(String(conv.id ?? conv.public_id), token, {
         onMessage: (msg) => {
           setMessages((prev) => {
             // Avoid duplicates (optimistic or already received)
@@ -155,7 +155,7 @@ export default function ChatPage() {
           scrollToBottom();
           // Update conversation last_message
           setConversations((prev) => prev.map((c) =>
-            c.id === conv.id
+            c.public_id === conv.public_id
               ? { ...c, last_message: msg.content, last_message_time: msg.created_at }
               : c
           ));
@@ -195,7 +195,7 @@ export default function ChatPage() {
       setSending(false);
     } else {
       try {
-        const sent = await chatApi.sendMessage(activeConv.id, content);
+        const sent = await chatApi.sendMessage(activeConv.id ?? activeConv.public_id, content);
         if (sent) {
           const sentId = String((sent as any).public_id ?? (sent as any).id ?? optimistic.id);
           setMessages((prev) => prev.map((m) =>
@@ -203,7 +203,7 @@ export default function ChatPage() {
           ));
           // Update conversation last_message
           setConversations((prev) => prev.map((c) =>
-            c.id === activeConv.id
+            c.public_id === activeConv.public_id
               ? { ...c, last_message: content, last_message_time: new Date().toISOString() }
               : c
           ));
@@ -313,10 +313,10 @@ export default function ChatPage() {
               <div className="p-2 space-y-0.5">
                 {filteredConvs.map((conv) => {
                   const other = getOther(conv);
-                  const isActive = activeConv?.id === conv.id;
+                  const isActive = activeConv?.public_id === conv.public_id;
                   return (
                     <button
-                      key={conv.id}
+                      key={conv.public_id}
                       type="button"
                       onClick={() => openConversation(conv)}
                       className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-colors ${
