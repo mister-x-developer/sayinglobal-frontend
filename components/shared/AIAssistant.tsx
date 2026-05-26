@@ -11,6 +11,7 @@ import { useLocale } from 'next-intl';
 import {
   Bot, X, Send, Loader2, Minimize2, Maximize2, Sparkles,
   CheckCircle2, AlertCircle, Plus, MessageSquare, Trash2, ChevronLeft, ExternalLink,
+  ThumbsUp, ThumbsDown, Zap,
 } from 'lucide-react';
 import { useAuthStore } from '@/lib/store/auth';
 import apiClient from '@/lib/api/client';
@@ -18,6 +19,8 @@ import apiClient from '@/lib/api/client';
 // ── Types ─────────────────────────────────────────────────────────────────────
 interface AIMessage {
   id: string; role: 'user' | 'assistant'; content: string; timestamp: number;
+  chips?: string[];
+  feedback?: 'up' | 'down' | null;
   action?: { label: string; actionKey: string; params: Record<string, unknown> };
   actionResult?: { ok: boolean; text: string };
 }
@@ -316,7 +319,14 @@ export function AIAssistant() {
               const finalId = `a-${Date.now()}`;
               updateSession(activeId!, (s) => ({
                 ...s,
-                messages: [...s.messages.filter((m) => m.id !== thinkingId), { id: finalId, role: 'assistant' as const, content: accumulatedText || '...', timestamp: Date.now() }],
+                messages: [...s.messages.filter((m) => m.id !== thinkingId), {
+                  id: finalId,
+                  role: 'assistant' as const,
+                  content: accumulatedText || '...',
+                  timestamp: Date.now(),
+                  chips: Array.isArray(data.chips) ? data.chips : [],
+                  feedback: null,
+                }],
                 updatedAt: Date.now(),
               }));
               accumulatedText = '';
@@ -366,6 +376,19 @@ export function AIAssistant() {
       updateSession(activeId, (s) => ({ ...s, messages: s.messages.map((m) => m.id === msgId ? { ...m, actionResult: { ok: false, text: e?.response?.data?.error ?? 'Xato' } } : m) }));
     } finally { setActionLoading(null); }
   };
+
+  const sendFeedback = async (msgId: string, positive: boolean) => {
+    if (!activeId) return;
+    updateSession(activeId, (s) => ({
+      ...s,
+      messages: s.messages.map((m) => m.id === msgId ? { ...m, feedback: positive ? 'up' : 'down' } : m),
+    }));
+    try {
+      await apiClient.post('/ai-moderation/assistant/feedback/', { positive, comment: '' });
+    } catch {}
+  };
+
+  const sendChip = (chip: string) => send(chip);
 
   const onKey = (e: React.KeyboardEvent) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } };
 
@@ -520,6 +543,30 @@ export function AIAssistant() {
                                   <div className={`flex items-start gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] ${msg.actionResult.ok ? 'bg-success/10 text-success border border-success/20' : 'bg-danger/10 text-danger border border-danger/20'}`}>
                                     {msg.actionResult.ok ? <CheckCircle2 className="h-3 w-3 mt-0.5 flex-shrink-0" strokeWidth={2} /> : <AlertCircle className="h-3 w-3 mt-0.5 flex-shrink-0" strokeWidth={2} />}
                                     <span className="font-mono break-all whitespace-pre-wrap text-[10px]">{msg.actionResult.text}</span>
+                                  </div>
+                                )}
+                                {/* Follow-up chips */}
+                                {msg.role === 'assistant' && msg.chips && msg.chips.length > 0 && !loading && (
+                                  <div className="flex flex-wrap gap-1 mt-0.5">
+                                    {msg.chips.map((chip) => (
+                                      <button key={chip} type="button" onClick={() => sendChip(chip)}
+                                        className="inline-flex items-center gap-1 rounded-lg border border-brand-primary/25 bg-brand-primary/6 px-2 py-0.5 text-[11px] font-medium text-brand-primary hover:bg-brand-primary/14 transition-colors">
+                                        <Zap className="h-2.5 w-2.5" strokeWidth={2.5} />{chip}
+                                      </button>
+                                    ))}
+                                  </div>
+                                )}
+                                {/* Feedback */}
+                                {msg.role === 'assistant' && !loading && msg.id !== 'g' && (
+                                  <div className="flex items-center gap-1 mt-0.5">
+                                    <button type="button" onClick={() => sendFeedback(msg.id, true)}
+                                      className={`inline-flex h-5 w-5 items-center justify-center rounded transition-colors ${msg.feedback === 'up' ? 'text-success' : 'text-fg-subtle hover:text-success'}`}>
+                                      <ThumbsUp className="h-3 w-3" strokeWidth={2} />
+                                    </button>
+                                    <button type="button" onClick={() => sendFeedback(msg.id, false)}
+                                      className={`inline-flex h-5 w-5 items-center justify-center rounded transition-colors ${msg.feedback === 'down' ? 'text-danger' : 'text-fg-subtle hover:text-danger'}`}>
+                                      <ThumbsDown className="h-3 w-3" strokeWidth={2} />
+                                    </button>
                                   </div>
                                 )}
                               </div>
