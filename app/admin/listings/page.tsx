@@ -11,20 +11,27 @@ import { EmptyState } from '@/components/shared/EmptyState';
 import { toast } from '@/components/ui/Toast';
 import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
+import apiClient from '@/lib/api/client';
 import { formatPrice, formatRelativeTime } from '@/lib/utils/format';
 
 export default function AdminListingsPage() {
   const t = useTranslations();
   const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('pending');
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchListings = async () => {
     setLoading(true);
     try {
-      const res = await listingsApi.list({ page_size: 200 });
-      setListings(res.results ?? []);
+      // Fetch pending + active listings for admin moderation
+      const [pendingRes, activeRes] = await Promise.allSettled([
+        (apiClient as any).get('/listings/', { params: { status: 'pending', page_size: 100 } }),
+        (apiClient as any).get('/listings/', { params: { status: 'active', page_size: 100 } }),
+      ]);
+      const pending = pendingRes.status === 'fulfilled' ? ((pendingRes.value.data as any)?.results ?? []) : [];
+      const active = activeRes.status === 'fulfilled' ? ((activeRes.value.data as any)?.results ?? []) : [];
+      setListings([...pending, ...active]);
     } catch {
       setListings([]);
     } finally {
@@ -42,21 +49,25 @@ export default function AdminListingsPage() {
     });
   }, [listings, search, statusFilter]);
 
-  const handleApprove = async (id: number) => {
+  const handleApprove = async (id: number, e: React.MouseEvent) => {
+    e.stopPropagation();
     try {
-      await listingsApi.update(id, { status: 'active' } as any);
+      await listingsApi.approve(id);
       setListings((prev) => prev.map((l) => l.public_id === id ? { ...l, status: 'active' } : l));
-      toast.success(t('success.updated'));
+      toast.success(t('success.approved'));
     } catch {
       toast.error(t('errors.generic'));
     }
   };
 
-  const handleRemove = async (id: number) => {
+  const handleRemove = async (id: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const reason = prompt(t('admin.rejectionReasonPlaceholder') ?? 'Rejection reason');
+    if (reason === null) return; // cancelled
     try {
-      await listingsApi.update(id, { status: 'archived' } as any);
-      setListings((prev) => prev.map((l) => l.public_id === id ? { ...l, status: 'archived' } : l));
-      toast.success(t('success.updated'));
+      await listingsApi.reject(id, reason || 'Rejected by admin');
+      setListings((prev) => prev.map((l) => l.public_id === id ? { ...l, status: 'rejected' } : l));
+      toast.success(t('success.rejected'));
     } catch {
       toast.error(t('errors.generic'));
     }
@@ -159,12 +170,12 @@ export default function AdminListingsPage() {
                           {t(`listings.${l.status}` as any)}
                         </Badge>
                       </td>
-                      <td className="px-5 py-4 text-right" onClick={(e) => e.stopPropagation()}>
+                      <td className="px-5 py-4 text-right">
                         <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100">
-                          <button type="button" onClick={() => handleApprove(l.public_id)} className="btn btn-sm bg-success/12 text-success hover:bg-success/20">
+                          <button type="button" onClick={(e) => handleApprove(l.public_id, e)} className="btn btn-sm bg-success/12 text-success hover:bg-success/20">
                             <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={2.25} />
                           </button>
-                          <button type="button" onClick={() => handleRemove(l.public_id)} className="btn btn-sm bg-danger/12 text-danger hover:bg-danger/20">
+                          <button type="button" onClick={(e) => handleRemove(l.public_id, e)} className="btn btn-sm bg-danger/12 text-danger hover:bg-danger/20">
                             <XCircle className="h-3.5 w-3.5" strokeWidth={2.25} />
                           </button>
                         </div>
