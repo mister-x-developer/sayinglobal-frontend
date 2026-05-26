@@ -70,6 +70,11 @@ const TOOL_LABELS: Record<string, Record<string, string>> = {
   get_enterprise_moderation: { uz: '🏢 Enterprise moderation', ru: '🏢 Enterprise модерация', en: '🏢 Enterprise moderation' },
   analyze_user_behavior: { uz: '🧠 Xulq-atvor tahlili', ru: '🧠 Анализ поведения', en: '🧠 Behavior analysis' },
   get_ai_observability: { uz: '📡 AI monitoring', ru: '📡 AI мониторинг', en: '📡 AI observability' },
+  predict_seller_risk: { uz: '🔮 Risk bashorat qilinyapti', ru: '🔮 Прогноз риска', en: '🔮 Predicting risk' },
+  forecast_demand: { uz: '📅 Talab prognozi', ru: '📅 Прогноз спроса', en: '📅 Demand forecast' },
+  get_smart_recommendations: { uz: '🎯 Aqlli tavsiyalar', ru: '🎯 Умные рекомендации', en: '🎯 Smart recommendations' },
+  predict_spam_burst: { uz: '🚨 Spam bashorati', ru: '🚨 Прогноз спама', en: '🚨 Spam prediction' },
+  get_listing_success_prediction: { uz: "📊 E'lon muvaffaqiyat tahlili", ru: '📊 Прогноз успеха', en: '📊 Listing success prediction' },
 };
 
 function getToolLabel(tool: string, locale: string): string {
