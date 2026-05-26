@@ -254,6 +254,11 @@ export function AIAssistant() {
     });
   };
 
+  const clearSession = async () => {
+    try { await apiClient.post('/ai-moderation/assistant/clear-session/'); } catch {}
+    newSession();
+  };
+
   const send = async (text?: string) => {
     const content = (text ?? input).trim();
     if (!content || loading || !activeId) return;
@@ -270,8 +275,10 @@ export function AIAssistant() {
       const history = messages.slice(-8).map((m) => ({ role: m.role === 'user' ? 'user' : 'model', parts: [{ text: m.content }] }));
       const res = await apiClient.post('/ai-moderation/assistant/', {
         message: content, role: 'user', locale, language: lang, history, user_name: user?.full_name ?? '',
+        image_urls: [],  // TODO: allow image paste/upload in future
       });
       const reply = res.data?.reply ?? '...';
+      // reasoning is returned for admins — can show as collapsed trace (ignored for user view)
       updateSession(activeId, (s) => ({
         ...s, messages: [...s.messages, { id: `a-${Date.now()}`, role: 'assistant', content: reply, timestamp: Date.now() }],
         updatedAt: Date.now(),
@@ -402,7 +409,7 @@ export function AIAssistant() {
                   {!showSessions && <p className="text-[10px] text-fg-muted leading-tight truncate">{locale === 'ru' ? 'Помощник платформы' : locale === 'en' ? 'Platform assistant' : 'Platforma yordamchisi'}</p>}
                 </div>
                 <div className="flex items-center gap-0.5">
-                  {!showSessions && <button type="button" onClick={newSession} className="inline-flex h-7 w-7 items-center justify-center rounded-lg text-fg-muted hover:bg-bg-subtle"><Plus className="h-3.5 w-3.5" strokeWidth={2} /></button>}
+                  {!showSessions && <button type="button" onClick={clearSession} className="inline-flex h-7 w-7 items-center justify-center rounded-lg text-fg-muted hover:bg-bg-subtle"><Plus className="h-3.5 w-3.5" strokeWidth={2} /></button>}
                   <button type="button" onClick={() => setMinimized((v) => !v)} className="inline-flex h-7 w-7 items-center justify-center rounded-lg text-fg-muted hover:bg-bg-subtle">
                     {minimized ? <Maximize2 className="h-3.5 w-3.5" strokeWidth={2} /> : <Minimize2 className="h-3.5 w-3.5" strokeWidth={2} />}
                   </button>
