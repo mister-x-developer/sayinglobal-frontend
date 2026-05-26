@@ -81,24 +81,31 @@ function useAdminDrag(storageKey: string, defaultPos: { x: number; y: number }) 
     } catch {}
     return defaultPos;
   });
+  const posRef = useRef(pos);
+  useEffect(() => { posRef.current = pos; }, [pos]);
+
   const draggingRef = useRef(false);
   const [draggingState, setDraggingState] = useState(false);
   const drag = useRef({ active: false, moved: false, startX: 0, startY: 0, origX: 0, origY: 0, curX: 0, curY: 0 });
 
   const onPointerDown = useCallback((e: React.PointerEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    e.stopPropagation();
     const d = drag.current;
-    d.active = true; d.moved = false;
-    d.startX = e.clientX; d.startY = e.clientY;
-    d.origX = drag.current.curX || parseInt((e.currentTarget as HTMLElement).style.left || '0', 10);
-    d.origY = drag.current.curY || parseInt((e.currentTarget as HTMLElement).style.top || '0', 10);
+    d.active = true;
+    d.moved = false;
+    d.startX = e.clientX;
+    d.startY = e.clientY;
+    d.origX = posRef.current.x;
+    d.origY = posRef.current.y;
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   }, []);
 
   const onPointerMove = useCallback((e: React.PointerEvent<HTMLButtonElement>) => {
     const d = drag.current;
     if (!d.active) return;
-    const dx = e.clientX - d.startX, dy = e.clientY - d.startY;
+    const dx = e.clientX - d.startX;
+    const dy = e.clientY - d.startY;
     if (!d.moved && Math.sqrt(dx * dx + dy * dy) < 6) return;
     if (!d.moved) {
       d.moved = true;
@@ -119,7 +126,8 @@ function useAdminDrag(storageKey: string, defaultPos: { x: number; y: number }) 
       setTimeout(() => {
         draggingRef.current = false;
         setDraggingState(false);
-      }, 50);
+        d.moved = false;
+      }, 80);
     } else {
       draggingRef.current = false;
       setDraggingState(false);

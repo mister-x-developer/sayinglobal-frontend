@@ -24,14 +24,12 @@ export default function AdminListingsPage() {
   const fetchListings = async () => {
     setLoading(true);
     try {
-      // Fetch pending + active listings for admin moderation
-      const [pendingRes, activeRes] = await Promise.allSettled([
-        (apiClient as any).get('/listings/', { params: { status: 'pending', page_size: 100 } }),
-        (apiClient as any).get('/listings/', { params: { status: 'active', page_size: 100 } }),
-      ]);
-      const pending = pendingRes.status === 'fulfilled' ? ((pendingRes.value.data as any)?.results ?? []) : [];
-      const active = activeRes.status === 'fulfilled' ? ((activeRes.value.data as any)?.results ?? []) : [];
-      setListings([...pending, ...active]);
+      // Admin can see all statuses via the main listings endpoint
+      const res = await apiClient.get('/listings/', {
+        params: { status: statusFilter === 'all' ? undefined : statusFilter, page_size: 200 }
+      });
+      const data = res.data as any;
+      setListings(Array.isArray(data) ? data : data?.results ?? []);
     } catch {
       setListings([]);
     } finally {
@@ -39,15 +37,13 @@ export default function AdminListingsPage() {
     }
   };
 
-  useEffect(() => { fetchListings(); }, []);
+  useEffect(() => { fetchListings(); }, [statusFilter]);
 
   const filtered = useMemo(() => {
     return listings.filter((l) => {
-      const matchSearch = !search || l.title.toLowerCase().includes(search.toLowerCase());
-      const matchStatus = statusFilter === 'all' || l.status === statusFilter;
-      return matchSearch && matchStatus;
+      return !search || l.title.toLowerCase().includes(search.toLowerCase());
     });
-  }, [listings, search, statusFilter]);
+  }, [listings, search]);
 
   const handleApprove = async (id: number, e: React.MouseEvent) => {
     e.stopPropagation();
