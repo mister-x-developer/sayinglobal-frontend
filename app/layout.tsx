@@ -6,7 +6,7 @@ import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { ToastContainer } from '@/components/ui/Toast';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { TermsGate } from '@/components/providers/TermsGate';
-import { AIAssistant } from '@/components/shared/AIAssistant';
+import { AIAssistantWrapper } from '@/components/shared/AIAssistantWrapper';
 import { OnboardingModal } from '@/components/shared/OnboardingModal';
 import './globals.css';
 
@@ -121,7 +121,7 @@ export default async function RootLayout({
             {children}
             <TermsGate />
             <MobileBottomNav />
-            <AIAssistant />
+            <AIAssistantWrapper />
             <OnboardingModal />
             <ToastContainer />
           </NextIntlClientProvider>

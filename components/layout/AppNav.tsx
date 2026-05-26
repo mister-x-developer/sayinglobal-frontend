@@ -31,6 +31,28 @@ import { Avatar } from '@/components/ui/Avatar';
 import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
 import { useNotificationsStore } from '@/lib/store/notifications';
 
+// ── Notification sound player ─────────────────────────────────────────────────
+function playNotificationSound() {
+  if (typeof window === 'undefined') return;
+  try {
+    // Create a short beep using Web Audio API — no external file needed
+    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(880, ctx.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.1);
+    gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+    oscillator.start(ctx.currentTime);
+    oscillator.stop(ctx.currentTime + 0.3);
+  } catch {
+    // Web Audio API not available — silent fail
+  }
+}
+
 // ── Mobile drawer rendered via portal so it escapes the sticky header stacking context ──
 function MobileDrawer({
   open,
@@ -182,11 +204,12 @@ export function AppNav() {
   const router = useRouter();
   const { user, isAuthenticated, logout } = useAuthStore();
   const hydrated = useAuthHydrated();
-  const { unreadCount, setItems, setUnreadCount } = useNotificationsStore();
+  const { unreadCount, setItems, setUnreadCount, addItem } = useNotificationsStore();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
+  const wsRef = useRef<WebSocket | null>(null);
 
   // Load unread count on mount when authenticated
   useEffect(() => {
@@ -195,6 +218,60 @@ export function AppNav() {
       notificationsApi.unreadCount().then((count) => setUnreadCount(count));
     });
   }, [isAuthenticated, setUnreadCount]);
+
+  // WebSocket for real-time notifications + sound
+  useEffect(() => {
+    if (!isAuthenticated || !user) return;
+    const token = useAuthStore.getState().accessToken;
+    if (!token) return;
+
+    const wsBase = (process.env.NEXT_PUBLIC_WS_URL || 'wss://sayinglobal.up.railway.app').replace('http', 'ws');
+    const wsUrl = `${wsBase}/ws/notifications/?token=${token}`;
+
+    let ws: WebSocket;
+    let retryTimer: ReturnType<typeof setTimeout>;
+    let retries = 0;
+    const MAX_RETRIES = 5;
+
+    const connect = () => {
+      try {
+        ws = new WebSocket(wsUrl);
+        wsRef.current = ws;
+
+        ws.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            if (data.type === 'notification' || data.notification_type) {
+              // Play sound
+              playNotificationSound();
+              // Update unread count
+              setUnreadCount(unreadCount + 1);
+              // Add to store if we have full notification data
+              if (data.notification) {
+                addItem(data.notification);
+              }
+            }
+          } catch {}
+        };
+
+        ws.onclose = (e) => {
+          if (e.code === 1000 || e.code === 4001) return;
+          if (retries < MAX_RETRIES) {
+            retryTimer = setTimeout(connect, Math.min(1000 * Math.pow(2, retries++), 30000));
+          }
+        };
+      } catch {}
+    };
+
+    connect();
+
+    return () => {
+      clearTimeout(retryTimer);
+      wsRef.current?.close(1000);
+      wsRef.current = null;
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated, user?.public_id]);
 
   // Stable logo href: only switch to /dashboard after Zustand has hydrated.
   // Before hydration, default to '/' so SSR and first paint are consistent.

@@ -29,6 +29,7 @@ import { Logo } from '@/components/shared/Logo';
 import { Avatar } from '@/components/ui/Avatar';
 import { ThemeSwitcher } from '@/components/shared/ThemeSwitcher';
 import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher';
+import { AdminAIAssistant } from '@/components/shared/AdminAIAssistant';
 import { useAuthStore } from '@/lib/store/auth';
 
 const NAV = [
@@ -191,6 +192,8 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
           {children}
         </main>
       </div>
+      {/* Admin AI — separate from user AI */}
+      <AdminAIAssistant />
     </div>
   );
 }
