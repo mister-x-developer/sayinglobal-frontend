@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { useTranslations } from 'next-intl';
-import { Check, Crown, Zap, Star, Gift, ArrowRight, Loader2, Tag, Users } from 'lucide-react';
+import { useTranslations, useLocale } from 'next-intl';
+import { Check, Crown, Zap, Gift, ArrowRight, Loader2, Tag, Users } from 'lucide-react';
 
 import { AppNav } from '@/components/layout/AppNav';
 import { useAuthStore } from '@/lib/store/auth';
@@ -15,9 +15,11 @@ interface Plan {
   id: string;
   name: string;
   name_uz?: string;
+  name_uz_cyrl?: string;
   name_ru?: string;
   name_en?: string;
   description_uz?: string;
+  description_uz_cyrl?: string;
   description_ru?: string;
   description_en?: string;
   monthly_listing_limit: number;
@@ -53,13 +55,23 @@ const PLAN_COLORS = [
 ];
 const PLAN_ICON_COLORS = ['text-emerald-500', 'text-blue-500', 'text-amber-500'];
 
-function formatPrice(uzs: number): string {
-  if (uzs === 0) return "Bepul";
-  return new Intl.NumberFormat('uz-UZ').format(uzs) + " so'm";
+function getPlanName(plan: Plan, locale: string): string {
+  if (locale === 'uz-cyrl' && plan.name_uz_cyrl) return plan.name_uz_cyrl;
+  if (locale === 'ru' && plan.name_ru) return plan.name_ru;
+  if (locale === 'en' && plan.name_en) return plan.name_en;
+  return plan.name_uz || plan.name;
+}
+
+function getPlanDesc(plan: Plan, locale: string): string {
+  if (locale === 'uz-cyrl' && plan.description_uz_cyrl) return plan.description_uz_cyrl;
+  if (locale === 'ru' && plan.description_ru) return plan.description_ru;
+  if (locale === 'en' && plan.description_en) return plan.description_en;
+  return plan.description_uz || '';
 }
 
 export default function PlansPage() {
   const t = useTranslations();
+  const locale = useLocale();
   const { isAuthenticated } = useAuthStore();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [myPlan, setMyPlan] = useState<MyPlan | null>(null);
@@ -133,10 +145,12 @@ export default function PlansPage() {
             transition={{ duration: 0.45 }}
             className="text-center"
           >
-            <p className="text-eyebrow">Tariflar</p>
-            <h1 className="display-lg mt-3">Sizga mos tarif tanlang</h1>
+            <p className="text-eyebrow">{t('plans.title')}</p>
+            <h1 className="display-lg mt-3">{t('plans.title')}</h1>
             <p className="mt-4 text-lg text-fg-muted max-w-xl mx-auto">
-              Har oy yangilanadigan e'lon limitlari. Hech qanday yashirin to'lov yo'q.
+              {locale === 'ru' ? 'Ежемесячные лимиты объявлений. Никаких скрытых платежей.' :
+               locale === 'en' ? 'Monthly listing limits. No hidden fees.' :
+               "Har oy yangilanadigan e'lon limitlari. Hech qanday yashirin to'lov yo'q."}
             </p>
           </motion.div>
 
@@ -150,10 +164,14 @@ export default function PlansPage() {
             >
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
-                  <p className="text-sm text-fg-muted">Joriy tarifingiz</p>
-                  <p className="mt-1 text-xl font-bold text-fg">{myPlan.plan.name_uz ?? myPlan.plan.name}</p>
+                  <p className="text-sm text-fg-muted">
+                    {locale === 'ru' ? 'Ваш текущий тариф' : locale === 'en' ? 'Your current plan' : 'Joriy tarifingiz'}
+                  </p>
+                  <p className="mt-1 text-xl font-bold text-fg">{getPlanName(myPlan.plan, locale)}</p>
                   <p className="mt-1 text-sm text-fg-muted">
-                    Bu oy: <span className="font-semibold text-fg">{myPlan.monthly_listings_used}</span> / {myPlan.plan.monthly_listing_limit} e'lon yaratildi
+                    {locale === 'ru' ? `В этом месяце: ${myPlan.monthly_listings_used} / ${myPlan.plan.monthly_listing_limit} объявлений` :
+                     locale === 'en' ? `This month: ${myPlan.monthly_listings_used} / ${myPlan.plan.monthly_listing_limit} listings` :
+                     `Bu oy: ${myPlan.monthly_listings_used} / ${myPlan.plan.monthly_listing_limit} e'lon yaratildi`}
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
@@ -180,7 +198,7 @@ export default function PlansPage() {
               ))
             ) : plans.length === 0 ? (
               <div className="col-span-3 text-center py-12 text-fg-muted">
-                Tariflar yuklanmadi
+                {t('marketplace.noResults')}
               </div>
             ) : (
               plans.map((plan, i) => {
@@ -212,14 +230,18 @@ export default function PlansPage() {
                       <Icon className="h-6 w-6" strokeWidth={1.75} />
                     </div>
 
-                    <h3 className="mt-4 text-xl font-bold text-fg">{plan.name_uz ?? plan.name}</h3>
-                    {plan.description_uz && (
-                      <p className="mt-1 text-sm text-fg-muted">{plan.description_uz}</p>
+                    <h3 className="mt-4 text-xl font-bold text-fg">{getPlanName(plan, locale)}</h3>
+                    {getPlanDesc(plan, locale) && (
+                      <p className="mt-1 text-sm text-fg-muted">{getPlanDesc(plan, locale)}</p>
                     )}
 
                     <div className="mt-4">
-                      <span className="text-3xl font-black text-fg">{formatPrice(plan.price_uzs)}</span>
-                      {plan.price_uzs > 0 && <span className="text-sm text-fg-muted"> / {plan.duration_days} kun</span>}
+                      <span className="text-3xl font-black text-fg">
+                        {plan.price_uzs === 0
+                          ? (locale === 'ru' ? 'Бесплатно' : locale === 'en' ? 'Free' : 'Bepul')
+                          : new Intl.NumberFormat('uz-UZ').format(plan.price_uzs) + " so'm"}
+                      </span>
+                      {plan.price_uzs > 0 && <span className="text-sm text-fg-muted"> / {plan.duration_days} {locale === 'ru' ? 'дней' : locale === 'en' ? 'days' : 'kun'}</span>}
                     </div>
 
                     {/* Referral notice */}
@@ -245,19 +267,23 @@ export default function PlansPage() {
                     <ul className="mt-5 space-y-2.5 flex-1">
                       <li className="flex items-center gap-2 text-sm text-fg">
                         <Check className="h-4 w-4 flex-shrink-0 text-success" strokeWidth={2.5} />
-                        Oyiga <strong>{plan.monthly_listing_limit}</strong> ta e'lon yaratish
+                        {locale === 'ru' ? `${plan.monthly_listing_limit} объявлений/мес` :
+                         locale === 'en' ? `${plan.monthly_listing_limit} listings/month` :
+                         `Oyiga ${plan.monthly_listing_limit} ta e'lon`}
                       </li>
                       <li className="flex items-center gap-2 text-sm text-fg">
                         <Check className="h-4 w-4 flex-shrink-0 text-success" strokeWidth={2.5} />
-                        Bir vaqtda <strong>{plan.active_listing_limit}</strong> ta faol e'lon
+                        {locale === 'ru' ? `${plan.active_listing_limit} активных одновременно` :
+                         locale === 'en' ? `${plan.active_listing_limit} active at once` :
+                         `Bir vaqtda ${plan.active_listing_limit} ta faol e'lon`}
                       </li>
                       <li className="flex items-center gap-2 text-sm text-fg">
                         <Check className="h-4 w-4 flex-shrink-0 text-success" strokeWidth={2.5} />
-                        Xarita va GPS joylashuv
+                        {locale === 'ru' ? 'Карта и GPS' : locale === 'en' ? 'Map & GPS' : 'Xarita va GPS joylashuv'}
                       </li>
                       <li className="flex items-center gap-2 text-sm text-fg">
                         <Check className="h-4 w-4 flex-shrink-0 text-success" strokeWidth={2.5} />
-                        Xabarlar va izohlar
+                        {locale === 'ru' ? 'Сообщения и комментарии' : locale === 'en' ? 'Messages & comments' : 'Xabarlar va izohlar'}
                       </li>
                     </ul>
 
@@ -269,11 +295,11 @@ export default function PlansPage() {
                         </Link>
                       ) : isCurrent ? (
                         <button disabled className="btn btn-secondary w-full opacity-60 cursor-not-allowed">
-                          Joriy tarif
+                          {locale === 'ru' ? 'Текущий тариф' : locale === 'en' ? 'Current plan' : 'Joriy tarif'}
                         </button>
                       ) : plan.price_uzs === 0 ? (
                         <button disabled className="btn btn-secondary w-full opacity-60 cursor-not-allowed">
-                          Bepul tarif
+                          {locale === 'ru' ? 'Бесплатный тариф' : locale === 'en' ? 'Free plan' : 'Bepul tarif'}
                         </button>
                       ) : (
                         <button
@@ -302,8 +328,14 @@ export default function PlansPage() {
               transition={{ duration: 0.4, delay: 0.3 }}
               className="mt-10 surface-elevated p-6"
             >
-              <h2 className="display-sm">Promo kod</h2>
-              <p className="mt-1 text-sm text-fg-muted">Promo kod orqali tarif yoqing</p>
+              <h2 className="display-sm">
+                {locale === 'ru' ? 'Промо-код' : locale === 'en' ? 'Promo code' : 'Promo kod'}
+              </h2>
+              <p className="mt-1 text-sm text-fg-muted">
+                {locale === 'ru' ? 'Активируйте тариф с помощью промо-кода' :
+                 locale === 'en' ? 'Activate a plan with a promo code' :
+                 "Promo kod orqali tarif yoqing"}
+              </p>
               <div className="mt-4 flex gap-3">
                 <input
                   value={promoCode}
@@ -337,8 +369,14 @@ export default function PlansPage() {
                   <Gift className="h-5 w-5" strokeWidth={1.75} />
                 </div>
                 <div>
-                  <h2 className="display-sm">Do'stingizni taklif qiling</h2>
-                  <p className="text-sm text-fg-muted">Har bir faol taklif uchun mukofot oling</p>
+                  <h2 className="display-sm">
+                    {locale === 'ru' ? 'Пригласите друзей' : locale === 'en' ? 'Invite friends' : "Do'stingizni taklif qiling"}
+                  </h2>
+                  <p className="text-sm text-fg-muted">
+                    {locale === 'ru' ? 'Получайте бонусы за каждого активного реферала' :
+                     locale === 'en' ? 'Earn rewards for each active referral' :
+                     "Har bir faol taklif uchun mukofot oling"}
+                  </p>
                 </div>
               </div>
               <div className="mt-4 flex items-center gap-3">
@@ -353,11 +391,19 @@ export default function PlansPage() {
                 </button>
               </div>
               <div className="mt-3 flex gap-6 text-sm text-fg-muted">
-                <span>Jami taklif: <strong className="text-fg text-lg">{referral.total_referrals}</strong></span>
-                <span>Mukofot olindi: <strong className="text-fg text-lg">{referral.rewarded_referrals}</strong></span>
+                <span>
+                  {locale === 'ru' ? 'Всего приглашений' : locale === 'en' ? 'Total referrals' : 'Jami taklif'}:{' '}
+                  <strong className="text-fg text-lg">{referral.total_referrals}</strong>
+                </span>
+                <span>
+                  {locale === 'ru' ? 'Вознаграждено' : locale === 'en' ? 'Rewarded' : 'Mukofot olindi'}:{' '}
+                  <strong className="text-fg text-lg">{referral.rewarded_referrals}</strong>
+                </span>
               </div>
               <p className="mt-2 text-xs text-fg-muted">
-                Standart uchun: 3 ta · Pro uchun: 7 ta mukofotlangan referral kerak
+                {locale === 'ru' ? 'Стандарт: 3 реферала · Про: 7 рефералов' :
+                 locale === 'en' ? 'Standard: 3 referrals · Pro: 7 referrals' :
+                 'Standart uchun: 3 ta · Pro uchun: 7 ta mukofotlangan referral kerak'}
               </p>
             </motion.div>
           )}
