@@ -4,14 +4,16 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Home, LayoutGrid, Plus, MessageSquareText, User } from 'lucide-react';
+import { useNotificationsStore } from '@/lib/store/notifications';
 
 /**
  * Mobile bottom navigation bar.
- * Shown only on small screens, hidden on md+.
+ * Shows unread notification badge on the profile tab.
  */
 export function MobileBottomNav() {
   const t = useTranslations();
   const pathname = usePathname();
+  const unreadCount = useNotificationsStore((s) => s.unreadCount);
 
   // Don't show on admin pages
   if (pathname?.startsWith('/admin')) return null;
@@ -53,6 +55,9 @@ export function MobileBottomNav() {
             );
           }
 
+          // Profile tab: show unread notification badge
+          const showBadge = l.href === '/profile' && unreadCount > 0;
+
           return (
             <Link
               key={l.href}
@@ -60,7 +65,7 @@ export function MobileBottomNav() {
               role="listitem"
               aria-label={l.label}
               aria-current={active ? 'page' : undefined}
-              className={`flex min-w-[56px] flex-col items-center justify-center gap-1 py-2 px-2 transition-colors ${
+              className={`relative flex min-w-[56px] flex-col items-center justify-center gap-1 py-2 px-2 transition-colors ${
                 active ? 'text-brand-primary' : 'text-fg-subtle'
               }`}
             >
@@ -70,6 +75,11 @@ export function MobileBottomNav() {
                 }`}
                 strokeWidth={active ? 2.25 : 1.75}
               />
+              {showBadge && (
+                <span className="absolute -top-0.5 right-2 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-danger px-1 text-[9px] font-bold text-white">
+                  {unreadCount > 99 ? '99+' : unreadCount}
+                </span>
+              )}
               <span className="text-[10px] font-semibold leading-none">{l.label}</span>
             </Link>
           );

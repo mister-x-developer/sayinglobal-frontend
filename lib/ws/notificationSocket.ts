@@ -89,8 +89,10 @@ class NotificationSocketService {
             data[`message_${localeKey}`] || data.message_uz || data.body || data.message || '';
 
           // Build notification object with all locale fields
+          // notification_id is now a 9-digit public_id (int), not UUID
+          const notifPublicId = data.notification_id ? Number(data.notification_id) : 0;
           const notifItem = {
-            public_id: data.notification_id ? Number(data.notification_id) : Date.now(),
+            public_id: notifPublicId || Date.now(),
             notification_type: (data.notif_type || data.notification_type || 'system') as any,
             title: localizedTitle,
             title_uz: data.title_uz || data.title || '',
@@ -104,8 +106,8 @@ class NotificationSocketService {
             message_en: data.message_en || data.body || '',
             is_read: false,
             created_at: new Date().toISOString(),
-            // Deep-link uses public_id (int), never UUID
-            action_url: data.notification_id ? `/notifications/${data.notification_id}` : undefined,
+            // action_url from backend (already uses public_id routes)
+            action_url: data.action_url || (notifPublicId ? `/notifications/${notifPublicId}` : undefined),
           };
 
           // Add to store
@@ -168,9 +170,21 @@ class NotificationSocketService {
     }
   }
 
-  /** Mark notification as read — send public_id (int), not UUID. */
+  /** Mark a notification as read by its public_id (9-digit int). */
   markRead(publicId: number): void {
-    this.send({ action: 'mark_read', notification_id: publicId });
+    if (this.ws?.readyState === WebSocket.OPEN) {
+      this.ws.send(JSON.stringify({
+        action: 'mark_read',
+        notification_id: publicId,  // backend accepts public_id (int)
+      }));
+    }
+  }
+
+  /** Mark all notifications as read. */
+  markAllRead(): void {
+    if (this.ws?.readyState === WebSocket.OPEN) {
+      this.ws.send(JSON.stringify({ action: 'mark_all_read' }));
+    }
   }
 
   private scheduleReconnect(): void {
