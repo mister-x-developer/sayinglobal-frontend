@@ -82,9 +82,11 @@ export default function NewListingPage() {
     if (!form.description.trim()) e.description = t('errors.required');
     if (!form.price || isNaN(Number(form.price)) || Number(form.price) <= 0) e.price = t('errors.required');
     if (!form.region) e.region = t('errors.required');
-    // Location: region is enough (district optional, map pin optional but recommended)
+    // District is now required
+    if (!form.district) e.district = t('errors.required');
     if (!age.years && !age.months && !age.days) e.age = t('validation.atLeastOneFieldRequired');
-    if (images.length < 1) e.images = "Kamida 1 ta rasm yuklang";
+    // Minimum 3 photos required
+    if (images.length < 3) e.images = "Kamida 3 ta rasm yuklang (maksimal 5 ta)";
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -153,8 +155,10 @@ export default function NewListingPage() {
         health_status: form.health_status || undefined,
         vaccination_status: form.vaccination_status || undefined,
         region: form.region_name || form.region,
-        district: form.district_name || form.district || undefined,
-        location: form.location.trim() || form.region_name || form.region || 'Noma\'lum',
+        district: form.district_name || form.district,
+        // location = "Viloyat, Tuman" — ko'cha nomi yo'q
+        location: [form.region_name || form.region, form.district_name || form.district]
+          .filter(Boolean).join(', ') || form.region_name || form.region,
         latitude: form.latitude ?? undefined,
         longitude: form.longitude ?? undefined,
       };
@@ -365,7 +369,7 @@ export default function NewListingPage() {
                   </button>
                 )}
                 <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={handleImages} className="hidden" />
-                <p className="mt-2 text-xs text-fg-subtle">{images.length}/5 · Kamida 1 ta rasm kerak (3 ta tavsiya etiladi)</p>
+                <p className="mt-2 text-xs text-fg-subtle">{images.length}/5 · Kamida 3 ta rasm majburiy</p>
                 {errors.images && <p className="mt-1 text-xs text-danger">{errors.images}</p>}
               </div>
 
@@ -401,10 +405,8 @@ export default function NewListingPage() {
                       longitude: next?.lng ?? null,
                     }))}
                     onAddress={async (addr) => {
-                      // Auto-fill location text
-                      if (!form.location.trim() && addr.location) {
-                        set('location', addr.location);
-                      }
+                      // Ko'cha nomini location'ga YOZMAYMIZ — faqat region/district match qilamiz
+                      // location = "Viloyat, Tuman" formatida avtomatik quriladi
 
                       // Try to match region name → slug from backend
                       if (addr.region && !form.region) {
@@ -422,7 +424,6 @@ export default function NewListingPage() {
                               ...p,
                               region: matched.slug,
                               region_name: matched.name_uz || matched.name,
-                              location: p.location.trim() ? p.location : addr.location,
                             }));
                             // Also try to match district
                             if (addr.district) {
@@ -440,22 +441,9 @@ export default function NewListingPage() {
                                 }));
                               }
                             }
-                          } else {
-                            // No slug match — store name only
-                            setForm((p) => ({
-                              ...p,
-                              region_name: p.region_name.trim() ? p.region_name : addr.region,
-                              district_name: p.district_name.trim() ? p.district_name : addr.district,
-                              location: p.location.trim() ? p.location : addr.location,
-                            }));
                           }
                         } catch {
-                          setForm((p) => ({
-                            ...p,
-                            region_name: p.region_name.trim() ? p.region_name : addr.region,
-                            district_name: p.district_name.trim() ? p.district_name : addr.district,
-                            location: p.location.trim() ? p.location : addr.location,
-                          }));
+                          // Silently ignore — user can select manually
                         }
                       }
                     }}

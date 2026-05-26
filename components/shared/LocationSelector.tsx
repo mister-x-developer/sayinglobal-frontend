@@ -154,6 +154,7 @@ export function LocationSelector({
           }`}
         >
           {t('listings.district')}
+          {required && <span className="ml-1 text-danger">*</span>}
         </label>
         <div className="relative">
           <select
@@ -189,6 +190,7 @@ export function LocationSelector({
             {t('validation.regionRequired')}
           </p>
         )}
+        {errors.district && <p className="mt-1 text-xs text-danger">{errors.district}</p>}
       </div>
     </div>
   );

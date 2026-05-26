@@ -259,14 +259,12 @@ export function LocationPicker({
     );
   }
 
-  // Status label: show resolved address name when available, else generic hint
+  // Status label: GPS belgisi qo'yilgan yoki yo'qligini ko'rsatadi — ko'cha nomi emas
   const statusLabel = geocoding
-    ? (t('marketplace.geocoding' as any) ?? 'Manzil aniqlanmoqda...')
-    : hasPin && resolvedName
-    ? resolvedName
+    ? (t('marketplace.geocoding' as any) ?? 'Joylashuv aniqlanmoqda...')
     : hasPin
-    ? (t('marketplace.locationSet' as any) ?? 'Joylashuv belgilandi')
-    : (t('marketplace.mapTapToSetPin' as any) ?? 'Xaritani bosib joyni belgilang');
+    ? (t('marketplace.locationSet' as any) ?? 'GPS joylashuv belgilandi')
+    : (t('marketplace.mapTapToSetPin' as any) ?? 'Xaritani bosib GPS belgisini qo\'ying');
 
   return (
     <div className="space-y-2">
