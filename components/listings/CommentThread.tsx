@@ -30,7 +30,7 @@ interface CommentItemProps {
 export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentItemProps) {
   const t = useTranslations();
   // Always show replies by default when they exist
-  const [repliesOpen, setRepliesOpen] = useState(true);
+  const [repliesOpen, setRepliesOpen] = useState(false); // collapsed by default
   const [replyOpen, setReplyOpen] = useState(false);
   const [replyText, setReplyText] = useState('');
   const [submitting, setSubmitting] = useState(false);

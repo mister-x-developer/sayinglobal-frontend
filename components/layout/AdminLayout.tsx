@@ -104,7 +104,10 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
 
       {/* User */}
       <div className="border-t border-border p-3">
-        <div className="flex items-center gap-3 rounded-xl px-3 py-2.5">
+        <Link
+          href="/admin/profile"
+          className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-bg-subtle transition-colors"
+        >
           <Avatar src={user?.avatar_url ?? user?.avatar ?? null} name={user?.full_name} size="sm" />
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-semibold text-fg">{user?.full_name}</p>
@@ -112,13 +115,13 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
           </div>
           <button
             type="button"
-            onClick={() => { logout(); router.push('/'); }}
+            onClick={(e) => { e.preventDefault(); logout(); router.push('/'); }}
             className="inline-flex h-8 w-8 items-center justify-center rounded-full text-fg-subtle hover:bg-bg-subtle hover:text-danger"
             aria-label={t('nav.logout')}
           >
             <LogOut className="h-4 w-4" strokeWidth={1.75} />
           </button>
-        </div>
+        </Link>
       </div>
     </nav>
   );

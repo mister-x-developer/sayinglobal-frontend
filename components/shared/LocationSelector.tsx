@@ -190,21 +190,6 @@ export function LocationSelector({
           </p>
         )}
       </div>
-
-      {/* Free-text location */}
-      <div>
-        <label className="mb-1.5 block text-sm font-medium text-fg">
-          {t('listings.location')}
-          {required && <span className="ml-1 text-danger">*</span>}
-        </label>
-        <input
-          value={locationValue}
-          onChange={(e) => onLocationChange(e.target.value)}
-          placeholder={t('listings.location')}
-          className="input-base w-full"
-        />
-        {errors.location && <p className="mt-1 text-xs text-danger">{errors.location}</p>}
-      </div>
     </div>
   );
 }

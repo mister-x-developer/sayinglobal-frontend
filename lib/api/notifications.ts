@@ -42,8 +42,12 @@ export interface Notification {
 export const notificationsApi = {
   async list(): Promise<Notification[]> {
     try {
-      const res = await apiClient.get<Notification[]>('/notifications/');
-      return res.data ?? [];
+      const res = await apiClient.get('/notifications/');
+      const data = res.data;
+      // Backend returns { results: [...], count, page, page_size }
+      if (Array.isArray(data)) return data;
+      if (data?.results) return data.results;
+      return [];
     } catch {
       return [];
     }

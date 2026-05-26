@@ -81,8 +81,7 @@ export default function NewListingPage() {
     if (!form.description.trim()) e.description = t('errors.required');
     if (!form.price || isNaN(Number(form.price)) || Number(form.price) <= 0) e.price = t('errors.required');
     if (!form.region) e.region = t('errors.required');
-    // Location: either text OR map pin is sufficient
-    if (!form.location.trim() && !form.latitude) e.location = t('errors.required');
+    // Location: region is enough (district optional, map pin optional but recommended)
     if (!age.years && !age.months && !age.days) e.age = t('validation.atLeastOneFieldRequired');
     if (images.length < 1) e.images = "Kamida 1 ta rasm yuklang";
     setErrors(e);

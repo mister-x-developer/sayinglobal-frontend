@@ -210,9 +210,24 @@ function inlineMarkdown(text: string): React.ReactNode {
   return <>{parts}</>;
 }
 
-// ── Draggable position hook ───────────────────────────────────────────────────
+// ── Draggable position hook with localStorage persistence ────────────────────
+const AI_POS_KEY = 'sayin_ai_pos';
+
 function useDraggable(defaultPos: { x: number; y: number }) {
-  const [pos, setPos] = useState(defaultPos);
+  const [pos, setPos] = useState(() => {
+    if (typeof window === 'undefined') return defaultPos;
+    try {
+      const saved = localStorage.getItem(AI_POS_KEY);
+      if (saved) {
+        const p = JSON.parse(saved);
+        // Validate saved position is still on screen
+        if (p.x >= 0 && p.x < window.innerWidth - 40 && p.y >= 0 && p.y < window.innerHeight - 40) {
+          return p;
+        }
+      }
+    } catch {}
+    return defaultPos;
+  });
   const [dragging, setDragging] = useState(false);
   const startRef = useRef<{ mx: number; my: number; px: number; py: number } | null>(null);
 
@@ -241,7 +256,14 @@ function useDraggable(defaultPos: { x: number; y: number }) {
         y: Math.max(0, Math.min(window.innerHeight - 56, startRef.current.py + dy)),
       });
     };
-    const onUp = () => setDragging(false);
+    const onUp = () => {
+      setDragging(false);
+      // Save position to localStorage
+      setPos((p) => {
+        try { localStorage.setItem(AI_POS_KEY, JSON.stringify(p)); } catch {}
+        return p;
+      });
+    };
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onUp);
     window.addEventListener('touchmove', onMove, { passive: true });

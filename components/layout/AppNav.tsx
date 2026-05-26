@@ -182,11 +182,19 @@ export function AppNav() {
   const router = useRouter();
   const { user, isAuthenticated, logout } = useAuthStore();
   const hydrated = useAuthHydrated();
-  const { unreadCount } = useNotificationsStore();
+  const { unreadCount, setItems, setUnreadCount } = useNotificationsStore();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
+
+  // Load unread count on mount when authenticated
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    import('@/lib/api/notifications').then(({ notificationsApi }) => {
+      notificationsApi.unreadCount().then((count) => setUnreadCount(count));
+    });
+  }, [isAuthenticated, setUnreadCount]);
 
   // Stable logo href: only switch to /dashboard after Zustand has hydrated.
   // Before hydration, default to '/' so SSR and first paint are consistent.
