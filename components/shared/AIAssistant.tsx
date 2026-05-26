@@ -114,7 +114,9 @@ function useDraggable(storageKey: string, defaultPos: { x: number; y: number }) 
     } catch {}
     return defaultPos;
   });
-  const [dragging, setDragging] = useState(false);
+  // Use ref for dragging state to avoid stale closure in click handler
+  const draggingRef = useRef(false);
+  const [draggingState, setDraggingState] = useState(false);
   const drag = useRef({ active: false, moved: false, startX: 0, startY: 0, origX: 0, origY: 0, curX: 0, curY: 0 });
 
   const onPointerDown = useCallback((e: React.PointerEvent<HTMLButtonElement>) => {
@@ -122,17 +124,22 @@ function useDraggable(storageKey: string, defaultPos: { x: number; y: number }) 
     const d = drag.current;
     d.active = true; d.moved = false;
     d.startX = e.clientX; d.startY = e.clientY;
-    d.origX = parseInt((e.currentTarget as HTMLElement).style.left || '0', 10);
-    d.origY = parseInt((e.currentTarget as HTMLElement).style.top || '0', 10);
-    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    // Read current position from state via ref
+    d.origX = drag.current.curX || parseInt((e.currentTarget as HTMLElement).style.left || '0', 10);
+    d.origY = drag.current.curY || parseInt((e.currentTarget as HTMLElement).style.top || '0', 10);
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   }, []);
 
   const onPointerMove = useCallback((e: React.PointerEvent<HTMLButtonElement>) => {
     const d = drag.current;
     if (!d.active) return;
     const dx = e.clientX - d.startX, dy = e.clientY - d.startY;
-    if (!d.moved && Math.sqrt(dx*dx + dy*dy) < 5) return;
-    d.moved = true; setDragging(true);
+    if (!d.moved && Math.sqrt(dx * dx + dy * dy) < 6) return;
+    if (!d.moved) {
+      d.moved = true;
+      draggingRef.current = true;
+      setDraggingState(true);
+    }
     d.curX = Math.max(4, Math.min(window.innerWidth - 60, d.origX + dx));
     d.curY = Math.max(4, Math.min(window.innerHeight - 60, d.origY + dy));
     setPos({ x: d.curX, y: d.curY });
@@ -142,11 +149,20 @@ function useDraggable(storageKey: string, defaultPos: { x: number; y: number }) 
     const d = drag.current;
     if (!d.active) return;
     d.active = false;
-    if (d.moved) { try { localStorage.setItem(storageKey, JSON.stringify({ x: d.curX, y: d.curY })); } catch {} }
-    setTimeout(() => setDragging(false), 10);
+    if (d.moved) {
+      try { localStorage.setItem(storageKey, JSON.stringify({ x: d.curX, y: d.curY })); } catch {}
+      // Keep draggingRef true briefly so the click handler (which fires after pointerup) sees it
+      setTimeout(() => {
+        draggingRef.current = false;
+        setDraggingState(false);
+      }, 50);
+    } else {
+      draggingRef.current = false;
+      setDraggingState(false);
+    }
   }, [storageKey]);
 
-  return { pos, dragging, onPointerDown, onPointerMove, onPointerUp };
+  return { pos, dragging: draggingState, draggingRef, onPointerDown, onPointerMove, onPointerUp };
 }
 
 // ── Session helpers ───────────────────────────────────────────────────────────
@@ -179,7 +195,7 @@ export function AIAssistant() {
   const activeSession = sessions.find((s) => s.id === activeId) ?? null;
   const messages = activeSession?.messages ?? [];
 
-  const { pos, dragging, onPointerDown, onPointerMove, onPointerUp } = useDraggable(AI_POS_KEY, {
+  const { pos, dragging, draggingRef, onPointerDown, onPointerMove, onPointerUp } = useDraggable(AI_POS_KEY, {
     x: typeof window !== 'undefined' ? window.innerWidth - 72 : 900,
     y: typeof window !== 'undefined' ? window.innerHeight - 120 : 600,
   });
@@ -291,7 +307,7 @@ export function AIAssistant() {
             <motion.button initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}
               transition={{ type: 'spring', damping: 20, stiffness: 300 }}
               onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp}
-              onClick={() => !dragging && setOpen(true)}
+              onClick={() => !draggingRef.current && setOpen(true)}
               style={{ position: 'fixed', left: pos.x, top: pos.y, cursor: dragging ? 'grabbing' : 'grab', touchAction: 'none' }}
               className="z-[60] inline-flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-brand-primary to-brand-primary/80 text-white shadow-[0_8px_32px_rgba(31,122,82,0.45)] select-none">
               <Sparkles className="h-6 w-6" strokeWidth={1.75} />
@@ -331,7 +347,7 @@ export function AIAssistant() {
           <motion.button initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }} transition={{ type: 'spring', damping: 20, stiffness: 300 }}
             onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp}
-            onClick={() => !dragging && setOpen(true)}
+            onClick={() => !draggingRef.current && setOpen(true)}
             style={{ position: 'fixed', left: pos.x, top: pos.y, cursor: dragging ? 'grabbing' : 'grab', touchAction: 'none' }}
             className="z-[60] group inline-flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-brand-primary to-brand-primary/80 text-white shadow-[0_8px_32px_rgba(31,122,82,0.45)] hover:shadow-[0_12px_40px_rgba(31,122,82,0.55)] transition-shadow select-none"
             aria-label="SAYIN AI">

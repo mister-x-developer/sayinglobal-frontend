@@ -42,7 +42,8 @@ export function LanguageSwitcher() {
   const switchTo = (code: string) => {
     setOpen(false);
     setLocaleCookie(code);
-    router.refresh();
+    // Force full page reload so Next.js server reads the new cookie
+    window.location.reload();
   };
 
   return (
@@ -50,7 +51,7 @@ export function LanguageSwitcher() {
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        aria-label="Tilni oʻzgartirish"
+        aria-label={current.label}
         aria-expanded={open}
         className="inline-flex h-10 items-center gap-2 rounded-full border border-border bg-bg-elevated px-3 text-sm font-medium text-fg transition-colors hover:bg-bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >

@@ -32,22 +32,64 @@ import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
 import { useNotificationsStore } from '@/lib/store/notifications';
 
 // ── Notification sound player ─────────────────────────────────────────────────
+let _audioCtx: AudioContext | null = null;
+
+function getAudioContext(): AudioContext | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    if (!_audioCtx) {
+      _audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    }
+    return _audioCtx;
+  } catch {
+    return null;
+  }
+}
+
+// Resume AudioContext on first user interaction (required by browsers)
+if (typeof window !== 'undefined') {
+  const resumeAudio = () => {
+    const ctx = getAudioContext();
+    if (ctx && ctx.state === 'suspended') {
+      ctx.resume().catch(() => {});
+    }
+  };
+  window.addEventListener('click', resumeAudio, { once: false, passive: true });
+  window.addEventListener('touchstart', resumeAudio, { once: false, passive: true });
+  window.addEventListener('keydown', resumeAudio, { once: false, passive: true });
+}
+
 function playNotificationSound() {
   if (typeof window === 'undefined') return;
   try {
-    // Create a short beep using Web Audio API — no external file needed
-    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-    const oscillator = ctx.createOscillator();
-    const gainNode = ctx.createGain();
-    oscillator.connect(gainNode);
-    gainNode.connect(ctx.destination);
-    oscillator.type = 'sine';
-    oscillator.frequency.setValueAtTime(880, ctx.currentTime);
-    oscillator.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.1);
-    gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
-    oscillator.start(ctx.currentTime);
-    oscillator.stop(ctx.currentTime + 0.3);
+    const ctx = getAudioContext();
+    if (!ctx) return;
+
+    // Resume if suspended (autoplay policy)
+    const play = () => {
+      try {
+        const oscillator = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(ctx.destination);
+        oscillator.type = 'sine';
+        // Two-tone notification: high then low
+        oscillator.frequency.setValueAtTime(880, ctx.currentTime);
+        oscillator.frequency.setValueAtTime(660, ctx.currentTime + 0.12);
+        gainNode.gain.setValueAtTime(0, ctx.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.25, ctx.currentTime + 0.02);
+        gainNode.gain.setValueAtTime(0.25, ctx.currentTime + 0.1);
+        gainNode.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.35);
+        oscillator.start(ctx.currentTime);
+        oscillator.stop(ctx.currentTime + 0.35);
+      } catch {}
+    };
+
+    if (ctx.state === 'suspended') {
+      ctx.resume().then(play).catch(() => {});
+    } else {
+      play();
+    }
   } catch {
     // Web Audio API not available — silent fail
   }
@@ -245,7 +287,8 @@ export function AppNav() {
               // Play sound
               playNotificationSound();
               // Update unread count
-              setUnreadCount(unreadCount + 1);
+              const { unreadCount: current, setUnreadCount: setCount } = useNotificationsStore.getState();
+              setCount(current + 1);
               // Add to store if we have full notification data
               if (data.notification) {
                 addItem(data.notification);

@@ -19,6 +19,8 @@ export interface ListingCardData {
   price: number;
   currency: string;
   location: string;
+  region?: string;
+  district?: string;
   images: Array<{ id: string | number; image: string; is_primary?: boolean }>;
   seller: {
     public_id: number;
@@ -133,7 +135,13 @@ export function ListingCard({ listing, onFavorite }: Props) {
           {/* Location */}
           <div className="mt-2 flex items-center gap-1.5 text-xs text-fg-muted">
             <MapPin className="h-3.5 w-3.5 flex-shrink-0" strokeWidth={1.75} />
-            <span className="truncate">{listing.location}</span>
+            <span className="truncate">
+              {(() => {
+                const parts = [listing.region, listing.district].filter(Boolean);
+                if (parts.length > 0) return parts.join(' · ');
+                return listing.location || '';
+              })()}
+            </span>
           </div>
 
           {/* Price row */}

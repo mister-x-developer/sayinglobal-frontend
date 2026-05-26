@@ -308,7 +308,11 @@ export default function MyListingsPage() {
                             <Link href={`/listings/${l.public_id}`} className="font-display text-base font-semibold text-fg hover:underline line-clamp-1">
                               {l.title}
                             </Link>
-                            <p className="mt-1 text-sm text-fg-muted">{l.location}</p>
+                            <p className="mt-1 text-sm text-fg-muted">
+                              {(l as any).region
+                                ? `${(l as any).region}${(l as any).district ? ' · ' + (l as any).district : ''}`
+                                : l.location}
+                            </p>
                           </div>
                           <Badge variant={cfg.variant} size="sm" className="flex items-center gap-1">
                             <Icon className="h-3 w-3" strokeWidth={2} />

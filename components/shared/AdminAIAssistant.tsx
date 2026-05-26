@@ -81,7 +81,8 @@ function useAdminDrag(storageKey: string, defaultPos: { x: number; y: number }) 
     } catch {}
     return defaultPos;
   });
-  const [dragging, setDragging] = useState(false);
+  const draggingRef = useRef(false);
+  const [draggingState, setDraggingState] = useState(false);
   const drag = useRef({ active: false, moved: false, startX: 0, startY: 0, origX: 0, origY: 0, curX: 0, curY: 0 });
 
   const onPointerDown = useCallback((e: React.PointerEvent<HTMLButtonElement>) => {
@@ -89,17 +90,21 @@ function useAdminDrag(storageKey: string, defaultPos: { x: number; y: number }) 
     const d = drag.current;
     d.active = true; d.moved = false;
     d.startX = e.clientX; d.startY = e.clientY;
-    d.origX = parseInt((e.currentTarget as HTMLElement).style.left || '0', 10);
-    d.origY = parseInt((e.currentTarget as HTMLElement).style.top || '0', 10);
-    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    d.origX = drag.current.curX || parseInt((e.currentTarget as HTMLElement).style.left || '0', 10);
+    d.origY = drag.current.curY || parseInt((e.currentTarget as HTMLElement).style.top || '0', 10);
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   }, []);
 
   const onPointerMove = useCallback((e: React.PointerEvent<HTMLButtonElement>) => {
     const d = drag.current;
     if (!d.active) return;
     const dx = e.clientX - d.startX, dy = e.clientY - d.startY;
-    if (!d.moved && Math.sqrt(dx*dx + dy*dy) < 5) return;
-    d.moved = true; setDragging(true);
+    if (!d.moved && Math.sqrt(dx * dx + dy * dy) < 6) return;
+    if (!d.moved) {
+      d.moved = true;
+      draggingRef.current = true;
+      setDraggingState(true);
+    }
     d.curX = Math.max(4, Math.min(window.innerWidth - 60, d.origX + dx));
     d.curY = Math.max(4, Math.min(window.innerHeight - 60, d.origY + dy));
     setPos({ x: d.curX, y: d.curY });
@@ -109,11 +114,19 @@ function useAdminDrag(storageKey: string, defaultPos: { x: number; y: number }) 
     const d = drag.current;
     if (!d.active) return;
     d.active = false;
-    if (d.moved) { try { localStorage.setItem(storageKey, JSON.stringify({ x: d.curX, y: d.curY })); } catch {} }
-    setTimeout(() => setDragging(false), 10);
+    if (d.moved) {
+      try { localStorage.setItem(storageKey, JSON.stringify({ x: d.curX, y: d.curY })); } catch {}
+      setTimeout(() => {
+        draggingRef.current = false;
+        setDraggingState(false);
+      }, 50);
+    } else {
+      draggingRef.current = false;
+      setDraggingState(false);
+    }
   }, [storageKey]);
 
-  return { pos, dragging, onPointerDown, onPointerMove, onPointerUp };
+  return { pos, dragging: draggingState, draggingRef, onPointerDown, onPointerMove, onPointerUp };
 }
 
 function renderAdminMarkdown(text: string): React.ReactNode[] {
@@ -180,7 +193,7 @@ export function AdminAIAssistant() {
   const activeSession = sessions.find((s) => s.id === activeSessionId) ?? null;
   const messages = activeSession?.messages ?? [];
 
-  const { pos: btnPos, dragging: btnDragging, onPointerDown, onPointerMove, onPointerUp } = useAdminDrag(
+  const { pos: btnPos, dragging: btnDragging, draggingRef: btnDraggingRef, onPointerDown, onPointerMove, onPointerUp } = useAdminDrag(
     ADMIN_AI_POS_KEY,
     { x: typeof window !== 'undefined' ? window.innerWidth - 72 : 900, y: typeof window !== 'undefined' ? window.innerHeight - 80 : 500 }
   );
@@ -372,7 +385,7 @@ export function AdminAIAssistant() {
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
             onPointerUp={onPointerUp}
-            onClick={() => !btnDragging && setOpen(true)}
+            onClick={() => !btnDraggingRef.current && setOpen(true)}
             style={{ position: 'fixed', left: btnPos.x, top: btnPos.y, cursor: btnDragging ? 'grabbing' : 'grab', touchAction: 'none' }}
             className="z-[60] group inline-flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-brand-accent to-brand-accent/80 text-white shadow-[0_8px_32px_rgba(59,130,246,0.45)] hover:shadow-[0_12px_40px_rgba(59,130,246,0.55)] transition-shadow select-none"
             aria-label="Admin AI"

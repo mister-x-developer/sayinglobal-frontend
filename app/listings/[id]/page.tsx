@@ -241,7 +241,9 @@ export default function ListingDetailPage() {
                     <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-sm text-fg-muted">
                       <span className="inline-flex items-center gap-1.5">
                         <MapPin className="h-4 w-4" strokeWidth={1.75} />
-                        {listing.location}
+                        {listing.region
+                          ? `${listing.region}${listing.district ? ' · ' + listing.district : ''}`
+                          : listing.location}
                       </span>
                       {listing.created_at && (
                         <span className="inline-flex items-center gap-1.5">
@@ -319,6 +321,13 @@ export default function ListingDetailPage() {
                             icon={MapPin}
                             label={t('listings.region')}
                             value={listing.region}
+                          />
+                        )}
+                        {listing.district && (
+                          <SpecItem
+                            icon={MapPin}
+                            label={t('listings.district')}
+                            value={listing.district}
                           />
                         )}
                       </dl>

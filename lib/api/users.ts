@@ -31,7 +31,7 @@ export const usersApi = {
 
   async detail(publicId: number | string): Promise<SellerSummary | null> {
     try {
-      const res = await apiClient.get<SellerSummary>(`/users/profile/${publicId}/`);
+      const res = await apiClient.get<SellerSummary>(`/users/sellers/${publicId}/`);
       return res.data;
     } catch {
       return null;

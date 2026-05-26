@@ -35,14 +35,14 @@ import { useAuthStore } from '@/lib/store/auth';
 
 const NAV_GROUPS = [
   {
-    label: 'Asosiy',
+    labelKey: 'admin.dashboard',
     items: [
       { href: '/admin', icon: LayoutDashboard, label: 'admin.dashboard', exact: true },
       { href: '/admin/analytics', icon: BarChart3, label: 'admin.analytics' },
     ],
   },
   {
-    label: 'Moderatsiya',
+    labelKey: 'admin.moderation',
     items: [
       { href: '/admin/listings', icon: LayoutGrid, label: 'admin.listings' },
       { href: '/admin/moderation', icon: Flag, label: 'admin.complaints' },
@@ -51,21 +51,21 @@ const NAV_GROUPS = [
     ],
   },
   {
-    label: 'Foydalanuvchilar',
+    labelKey: 'admin.users',
     items: [
       { href: '/admin/users', icon: Users, label: 'admin.users' },
       { href: '/admin/security', icon: ShieldAlert, label: 'security.title' },
     ],
   },
   {
-    label: 'Kontent',
+    labelKey: 'admin.broadcasts',
     items: [
       { href: '/admin/broadcasts', icon: Megaphone, label: 'admin.broadcasts' },
       { href: '/admin/plans', icon: CreditCard, label: 'admin.plans' },
     ],
   },
   {
-    label: 'Tizim',
+    labelKey: 'admin.systemHealth',
     items: [
       { href: '/admin/audit', icon: ScrollText, label: 'admin.auditLogs' },
       { href: '/admin/health', icon: Activity, label: 'admin.systemHealth' },
@@ -104,9 +104,9 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
       {/* Nav links */}
       <div className="flex-1 overflow-y-auto p-3 space-y-4">
         {NAV_GROUPS.map((group) => (
-          <div key={group.label}>
+          <div key={group.labelKey}>
             <p className="px-3 mb-1 text-[10px] font-bold uppercase tracking-widest text-fg-subtle/60">
-              {group.label}
+              {t(group.labelKey as any)}
             </p>
             <div className="space-y-0.5">
               {group.items.map((item) => {
