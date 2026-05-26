@@ -67,16 +67,28 @@ class NotificationSocketService {
 
         if (data.type === 'unread_count') {
           store.setUnreadCount(data.count ?? 0);
-        } else if (data.type === 'notification' || data.notification_type) {
+        } else if (data.type === 'notification') {
           // Play sound for new incoming notifications
           playNotificationSound();
 
-          // Update unread count
-          store.setUnreadCount((store.unreadCount ?? 0) + 1);
+          // Build a Notification object from the WS event and add to store
+          const notifItem = {
+            public_id: data.notification_id ? Number(data.notification_id) : Date.now(),
+            notification_type: (data.notif_type || data.notification_type || 'system') as any,
+            title: data.title || '',
+            message: data.body || data.message || '',
+            is_read: false,
+            created_at: new Date().toISOString(),
+            action_url: data.action_url || (data.related_id ? `/notifications/${data.notification_id}` : undefined),
+            metadata: data.related_id ? { broadcast_id: data.related_id } : {},
+          };
+          store.addItem(notifItem as any);
 
-          // Add full notification object to store if provided
-          if (data.notification) {
-            store.addItem(data.notification);
+          // Show toast notification
+          if (typeof window !== 'undefined') {
+            import('@/components/ui/Toast').then(({ toast }) => {
+              toast.success(data.title || 'Yangi bildirishnoma');
+            }).catch(() => {});
           }
         }
       } catch {
