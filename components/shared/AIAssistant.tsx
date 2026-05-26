@@ -336,7 +336,7 @@ export function AIAssistant() {
                 <div className="p-5 text-center">
                   <div className="mx-auto mb-3 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary"><Sparkles className="h-6 w-6" strokeWidth={1.75} /></div>
                   <p className="text-sm text-fg-muted mb-4">{LOGIN_PROMPT[locale]?.desc}</p>
-                  <a href="/auth/login" className="btn btn-primary w-full justify-center">{LOGIN_PROMPT[locale]?.btn}</a>
+                  <a href="/auth" className="btn btn-primary w-full justify-center">{LOGIN_PROMPT[locale]?.btn}</a>
                 </div>
               </div>
             </motion.div>
