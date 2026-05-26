@@ -71,12 +71,37 @@ class NotificationSocketService {
           // Play sound for new incoming notifications
           playNotificationSound();
 
-          // Build notification object from WS payload
+          // Pick title/body based on current UI locale
+          const uiLocale = (() => {
+            if (typeof document === 'undefined') return 'uz';
+            try {
+              return document.cookie
+                .split(';')
+                .find((c) => c.trim().startsWith('sayin-locale='))
+                ?.split('=')[1]?.trim() || 'uz';
+            } catch { return 'uz'; }
+          })();
+
+          const localeKey = uiLocale.replace('-', '_'); // uz-cyrl → uz_cyrl
+          const localizedTitle =
+            data[`title_${localeKey}`] || data.title_uz || data.title || '';
+          const localizedBody =
+            data[`message_${localeKey}`] || data.message_uz || data.body || data.message || '';
+
+          // Build notification object with all locale fields
           const notifItem = {
             public_id: data.notification_id ? Number(data.notification_id) : Date.now(),
             notification_type: (data.notif_type || data.notification_type || 'system') as any,
-            title: data.title || '',
-            message: data.body || data.message || '',
+            title: localizedTitle,
+            title_uz: data.title_uz || data.title || '',
+            title_uz_cyrl: data.title_uz_cyrl || data.title || '',
+            title_ru: data.title_ru || data.title || '',
+            title_en: data.title_en || data.title || '',
+            message: localizedBody,
+            message_uz: data.message_uz || data.body || '',
+            message_uz_cyrl: data.message_uz_cyrl || data.body || '',
+            message_ru: data.message_ru || data.body || '',
+            message_en: data.message_en || data.body || '',
             is_read: false,
             created_at: new Date().toISOString(),
             action_url: data.related_id ? `/notifications/${data.notification_id}` : undefined,
@@ -85,12 +110,12 @@ class NotificationSocketService {
           // Add to store
           store.addItem(notifItem);
 
-          // Show toast notification
+          // Show toast with localized text
           if (typeof window !== 'undefined') {
             import('@/components/ui/Toast').then(({ toast }) => {
-              const title = data.title || '';
-              const body = data.body || data.message || '';
-              const msg = title ? `${title}: ${body}`.slice(0, 80) : body.slice(0, 80);
+              const msg = localizedTitle
+                ? `${localizedTitle}: ${localizedBody}`.slice(0, 80)
+                : localizedBody.slice(0, 80);
               if (msg) toast.info(msg);
             }).catch(() => {});
           }

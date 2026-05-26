@@ -55,7 +55,6 @@ export default function AdminBroadcastsPage() {
 
   const [newTitle, setNewTitle] = useState('');
   const [newMessage, setNewMessage] = useState('');
-  const [newLocale, setNewLocale] = useState('uz');
   const [showForm, setShowForm] = useState(false);
 
   const load = useCallback(async () => {
@@ -83,8 +82,8 @@ export default function AdminBroadcastsPage() {
       await apiClient.post('/notifications/broadcasts/create/', {
         title: newTitle.trim(),
         message: newMessage.trim(),
-        original_locale: newLocale,
         target_all: true,
+        // original_locale is auto-detected on the backend from the text
       });
       setNewTitle('');
       setNewMessage('');
@@ -167,19 +166,6 @@ export default function AdminBroadcastsPage() {
                 rows={5}
                 className="input-base h-auto w-full py-3"
               />
-              <div className="flex items-center gap-4">
-                <label className="text-sm text-fg-muted">{t('admin.originalLocale' as any) ?? 'Language'}</label>
-                <select
-                  value={newLocale}
-                  onChange={(e) => setNewLocale(e.target.value)}
-                  className="input-base h-11 w-36"
-                >
-                  <option value="uz">Uzbek (lotin)</option>
-                  <option value="uz_cyrl">Uzbek (kirill)</option>
-                  <option value="ru">Русский</option>
-                  <option value="en">English</option>
-                </select>
-              </div>
               <p className="text-xs text-fg-muted">
                 {t('admin.autoTranslateHint' as any) ?? 'Content will be auto-translated to all 4 languages.'}
               </p>
