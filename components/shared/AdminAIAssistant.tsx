@@ -11,8 +11,7 @@
  * - Persistent sessions per admin
  */
 
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useRef, useState, useCallback } from 'react';import { motion, AnimatePresence } from 'framer-motion';
 import { useLocale } from 'next-intl';
 import {
   Zap, X, Send, Loader2, Minimize2, Maximize2,
@@ -40,6 +39,7 @@ interface AdminAISession {
 }
 
 const ADMIN_AI_STORAGE = 'sayin_admin_ai_v1';
+const ADMIN_AI_POS_KEY = 'sayin_admin_ai_pos';
 const MAX_SESSIONS = 15;
 
 const GREETINGS: Record<string, (n: string) => string> = {
@@ -67,6 +67,54 @@ function loadAdminSessions(): AdminAISession[] {
 function saveAdminSessions(sessions: AdminAISession[]) {
   if (typeof window === 'undefined') return;
   try { localStorage.setItem(ADMIN_AI_STORAGE, JSON.stringify(sessions.slice(0, MAX_SESSIONS))); } catch {}
+}
+
+// ── Pointer-based drag hook ───────────────────────────────────────────────────
+function useAdminDrag(storageKey: string, defaultPos: { x: number; y: number }) {
+  const [pos, setPos] = useState<{ x: number; y: number }>(() => {
+    if (typeof window === 'undefined') return defaultPos;
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        const p = JSON.parse(saved);
+        if (p.x >= 0 && p.x < window.innerWidth - 40 && p.y >= 0 && p.y < window.innerHeight - 40) return p;
+      }
+    } catch {}
+    return defaultPos;
+  });
+  const [dragging, setDragging] = useState(false);
+  const drag = useRef({ active: false, moved: false, startX: 0, startY: 0, origX: 0, origY: 0, curX: 0, curY: 0 });
+
+  const onPointerDown = useCallback((e: React.PointerEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const d = drag.current;
+    d.active = true; d.moved = false;
+    d.startX = e.clientX; d.startY = e.clientY;
+    d.origX = parseInt((e.currentTarget as HTMLElement).style.left || '0', 10);
+    d.origY = parseInt((e.currentTarget as HTMLElement).style.top || '0', 10);
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+  }, []);
+
+  const onPointerMove = useCallback((e: React.PointerEvent<HTMLButtonElement>) => {
+    const d = drag.current;
+    if (!d.active) return;
+    const dx = e.clientX - d.startX, dy = e.clientY - d.startY;
+    if (!d.moved && Math.sqrt(dx*dx + dy*dy) < 5) return;
+    d.moved = true; setDragging(true);
+    d.curX = Math.max(4, Math.min(window.innerWidth - 60, d.origX + dx));
+    d.curY = Math.max(4, Math.min(window.innerHeight - 60, d.origY + dy));
+    setPos({ x: d.curX, y: d.curY });
+  }, []);
+
+  const onPointerUp = useCallback((_e: React.PointerEvent<HTMLButtonElement>) => {
+    const d = drag.current;
+    if (!d.active) return;
+    d.active = false;
+    if (d.moved) { try { localStorage.setItem(storageKey, JSON.stringify({ x: d.curX, y: d.curY })); } catch {} }
+    setTimeout(() => setDragging(false), 10);
+  }, [storageKey]);
+
+  return { pos, dragging, onPointerDown, onPointerMove, onPointerUp };
 }
 
 function renderAdminMarkdown(text: string): React.ReactNode[] {
@@ -132,6 +180,11 @@ export function AdminAIAssistant() {
   const firstName = user?.full_name?.split(' ')[0] ?? '';
   const activeSession = sessions.find((s) => s.id === activeSessionId) ?? null;
   const messages = activeSession?.messages ?? [];
+
+  const { pos: btnPos, dragging: btnDragging, onPointerDown, onPointerMove, onPointerUp } = useAdminDrag(
+    ADMIN_AI_POS_KEY,
+    { x: typeof window !== 'undefined' ? window.innerWidth - 72 : 900, y: typeof window !== 'undefined' ? window.innerHeight - 80 : 500 }
+  );
 
   useEffect(() => {
     const stored = loadAdminSessions();
@@ -248,7 +301,9 @@ export function AdminAIAssistant() {
         }],
         updatedAt: Date.now(),
       }));
-    } catch {
+    } catch (err: unknown) {
+      // Log the actual error for debugging
+      console.error('[AdminAI] sendMessage error:', err);
       const errMsg = locale === 'ru' ? 'Ошибка. Попробуйте снова.' : locale === 'en' ? 'Error. Try again.' : 'Xato. Qayta urining.';
       updateSession(activeSessionId, (s) => ({
         ...s,
@@ -306,14 +361,18 @@ export function AdminAIAssistant() {
 
   return (
     <>
-      {/* Trigger button — fixed bottom-left in admin panel */}
+      {/* Trigger button — draggable */}
       <AnimatePresence>
         {!open && (
           <motion.button
             initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }} transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-            onClick={() => setOpen(true)}
-            className="fixed bottom-6 right-6 z-[60] group inline-flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-brand-accent to-brand-accent/80 text-white shadow-[0_8px_32px_rgba(59,130,246,0.45)] hover:shadow-[0_12px_40px_rgba(59,130,246,0.55)] transition-all hover:scale-105 active:scale-95"
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+            onClick={() => !btnDragging && setOpen(true)}
+            style={{ position: 'fixed', left: btnPos.x, top: btnPos.y, cursor: btnDragging ? 'grabbing' : 'grab', touchAction: 'none' }}
+            className="z-[60] group inline-flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-brand-accent to-brand-accent/80 text-white shadow-[0_8px_32px_rgba(59,130,246,0.45)] hover:shadow-[0_12px_40px_rgba(59,130,246,0.55)] transition-shadow select-none"
             aria-label="Admin AI"
           >
             <Zap className="h-6 w-6" strokeWidth={2} />

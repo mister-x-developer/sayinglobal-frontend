@@ -214,7 +214,7 @@ function inlineMarkdown(text: string): React.ReactNode {
 const AI_POS_KEY = 'sayin_ai_pos';
 
 function useDraggable(defaultPos: { x: number; y: number }) {
-  const [pos, setPos] = useState(() => {
+  const [pos, setPos] = useState<{ x: number; y: number }>(() => {
     if (typeof window === 'undefined') return defaultPos;
     try {
       const saved = localStorage.getItem(AI_POS_KEY);
@@ -228,69 +228,56 @@ function useDraggable(defaultPos: { x: number; y: number }) {
     return defaultPos;
   });
   const [dragging, setDragging] = useState(false);
-  const stateRef = useRef<{
-    active: boolean;
-    moved: boolean;
-    mx: number; my: number;
-    px: number; py: number;
-  }>({ active: false, moved: false, mx: 0, my: 0, px: 0, py: 0 });
+  // All drag state in a single ref — no stale closure issues
+  const drag = useRef({
+    active: false, moved: false,
+    startX: 0, startY: 0,
+    origX: 0, origY: 0,
+    currentX: 0, currentY: 0,
+  });
 
-  const startDrag = useCallback((clientX: number, clientY: number, px: number, py: number) => {
-    stateRef.current = { active: true, moved: false, mx: clientX, my: clientY, px, py };
+  const onPointerDown = useCallback((e: React.PointerEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const d = drag.current;
+    d.active = true;
+    d.moved = false;
+    d.startX = e.clientX;
+    d.startY = e.clientY;
+    // Read current pos from DOM position (set via style)
+    const el = e.currentTarget;
+    d.origX = parseInt(el.style.left || '0', 10);
+    d.origY = parseInt(el.style.top || '0', 10);
+    el.setPointerCapture(e.pointerId);
   }, []);
 
-  const onMouseDown = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    startDrag(e.clientX, e.clientY, pos.x, pos.y);
-  }, [pos, startDrag]);
+  const onPointerMove = useCallback((e: React.PointerEvent<HTMLButtonElement>) => {
+    const d = drag.current;
+    if (!d.active) return;
+    const dx = e.clientX - d.startX;
+    const dy = e.clientY - d.startY;
+    if (!d.moved && Math.sqrt(dx * dx + dy * dy) < 5) return;
+    d.moved = true;
+    setDragging(true);
+    const newX = Math.max(4, Math.min(window.innerWidth - 60, d.origX + dx));
+    const newY = Math.max(4, Math.min(window.innerHeight - 60, d.origY + dy));
+    d.currentX = newX;
+    d.currentY = newY;
+    setPos({ x: newX, y: newY });
+  }, []);
 
-  const onTouchStart = useCallback((e: React.TouchEvent) => {
-    const t = e.touches[0];
-    startDrag(t.clientX, t.clientY, pos.x, pos.y);
-  }, [pos, startDrag]);
+  const onPointerUp = useCallback((_e: React.PointerEvent<HTMLButtonElement>) => {
+    const d = drag.current;
+    if (!d.active) return;
+    d.active = false;
+    if (d.moved) {
+      const p = { x: d.currentX, y: d.currentY };
+      try { localStorage.setItem(AI_POS_KEY, JSON.stringify(p)); } catch {}
+    }
+    // Small delay so click doesn't fire after drag
+    setTimeout(() => setDragging(false), 10);
+  }, []);
 
-  useEffect(() => {
-    const THRESHOLD = 6;
-    const onMove = (e: MouseEvent | TouchEvent) => {
-      const s = stateRef.current;
-      if (!s.active) return;
-      const cx = 'touches' in e ? (e as TouchEvent).touches[0].clientX : (e as MouseEvent).clientX;
-      const cy = 'touches' in e ? (e as TouchEvent).touches[0].clientY : (e as MouseEvent).clientY;
-      const dx = cx - s.mx;
-      const dy = cy - s.my;
-      if (!s.moved && Math.sqrt(dx*dx + dy*dy) < THRESHOLD) return;
-      s.moved = true;
-      setDragging(true);
-      setPos({
-        x: Math.max(0, Math.min(window.innerWidth - 56, s.px + dx)),
-        y: Math.max(0, Math.min(window.innerHeight - 56, s.py + dy)),
-      });
-    };
-    const onUp = () => {
-      const s = stateRef.current;
-      if (!s.active) return;
-      s.active = false;
-      if (s.moved) {
-        setPos((p: { x: number; y: number }) => {
-          try { localStorage.setItem(AI_POS_KEY, JSON.stringify(p)); } catch {}
-          return p;
-        });
-      }
-      setDragging(false);
-    };
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseup', onUp);
-    window.addEventListener('touchmove', onMove, { passive: true });
-    window.addEventListener('touchend', onUp);
-    return () => {
-      window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('mouseup', onUp);
-      window.removeEventListener('touchmove', onMove);
-      window.removeEventListener('touchend', onUp);
-    };
-  }, []); // mount once — stateRef is mutable
-
-  return { pos, dragging, onMouseDown, onTouchStart };
+  return { pos, dragging, onPointerDown, onPointerMove, onPointerUp };
 }
 
 
@@ -352,7 +339,7 @@ export function AIAssistant() {
   const language = LOCALE_LANGUAGE[locale] ?? 'Uzbek (Latin)';
 
   // Draggable position — default bottom-right
-  const { pos, dragging, onMouseDown, onTouchStart } = useDraggable({
+  const { pos, dragging, onPointerDown, onPointerMove, onPointerUp } = useDraggable({
     x: typeof window !== 'undefined' ? window.innerWidth - 72 : 900,
     y: typeof window !== 'undefined' ? window.innerHeight - 120 : 600,
   });
@@ -541,10 +528,11 @@ export function AIAssistant() {
           {!open && (
             <motion.button initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}
               transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-              onMouseDown={onMouseDown}
-              onTouchStart={onTouchStart}
+              onPointerDown={onPointerDown}
+              onPointerMove={onPointerMove}
+              onPointerUp={onPointerUp}
               onClick={() => !dragging && setOpen(true)}
-              style={{ position: 'fixed', left: pos.x, top: pos.y, cursor: dragging ? 'grabbing' : 'grab' }}
+              style={{ position: 'fixed', left: pos.x, top: pos.y, cursor: dragging ? 'grabbing' : 'grab', touchAction: 'none' }}
               className="z-[60] inline-flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-brand-primary to-brand-primary/80 text-white shadow-[0_8px_32px_rgba(31,122,82,0.45)] select-none"
             >
               <Sparkles className="h-6 w-6" strokeWidth={1.75} />
@@ -591,10 +579,11 @@ export function AIAssistant() {
           <motion.button
             initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }} transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-            onMouseDown={onMouseDown}
-            onTouchStart={onTouchStart}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
             onClick={() => !dragging && setOpen(true)}
-            style={{ position: 'fixed', left: pos.x, top: pos.y, cursor: dragging ? 'grabbing' : 'grab' }}
+            style={{ position: 'fixed', left: pos.x, top: pos.y, cursor: dragging ? 'grabbing' : 'grab', touchAction: 'none' }}
             className="z-[60] group inline-flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-brand-primary to-brand-primary/80 text-white shadow-[0_8px_32px_rgba(31,122,82,0.45)] hover:shadow-[0_12px_40px_rgba(31,122,82,0.55)] transition-shadow select-none"
             aria-label="SAYIN AI"
           >
