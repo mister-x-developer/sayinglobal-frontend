@@ -9,7 +9,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import {
   Megaphone,
   Plus,
@@ -30,12 +30,22 @@ import { formatRelativeTime } from '@/lib/utils/format';
 interface BroadcastItem {
   public_id: number;
   title: string;
+  title_uz?: string;
+  title_uz_cyrl?: string;
+  title_ru?: string;
+  title_en?: string;
   status: string;
   target_all: boolean;
   created_at: string;
   sent_at?: string | null;
   recipient_count: number;
   read_count: number;
+}
+
+/** Pick the best-available localized title for the current UI locale. */
+function localizedTitle(b: BroadcastItem, locale: string): string {
+  const key = locale.replace('-', '_') as 'uz' | 'uz_cyrl' | 'ru' | 'en';
+  return (b as any)[`title_${key}`] || b.title_uz || b.title_ru || b.title_en || b.title || '';
 }
 
 const STATUS_BADGE: Record<string, any> = {
@@ -47,6 +57,7 @@ const STATUS_BADGE: Record<string, any> = {
 
 export default function AdminBroadcastsPage() {
   const t = useTranslations();
+  const locale = useLocale();
 
   const [list, setList] = useState<BroadcastItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -227,7 +238,7 @@ export default function AdminBroadcastsPage() {
                     >
                       <td className="px-5 py-4">
                         <Link href={`/admin/broadcasts/${b.public_id}`} className="font-semibold text-fg hover:text-brand-primary transition-colors">
-                          {b.title}
+                          {localizedTitle(b, locale)}
                         </Link>
                         <p className="text-xs text-fg-subtle">{formatRelativeTime(b.created_at)}</p>
                       </td>

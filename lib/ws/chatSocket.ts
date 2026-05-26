@@ -57,7 +57,7 @@ class ChatSocketService {
     this.onTypingCb = callbacks.onTyping || null;
     this.onHistoryCb = callbacks.onHistory || null;
 
-    const url = `${WS_BASE}/ws/chat/${conversationId}/?token=${accessToken}`;
+    const url = `${WS_BASE}/ws/chat/${conversationId}/?access_token=${accessToken}`;
 
     try {
       this.ws = new WebSocket(url);

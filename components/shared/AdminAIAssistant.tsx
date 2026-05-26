@@ -297,27 +297,17 @@ export function AdminAIAssistant() {
 
       const reply = res.data?.reply ?? '...';
       
-      // Parse if reply contains an action suggestion
-      const actionMatch = reply.match(/ACTION:\s*(\w+)\s*PARAMS:\s*(\{[^}]+\})/);
-      let pendingAction: AdminAIMessage['pendingAction'] | undefined;
-      let cleanReply = reply;
-      
-      if (actionMatch) {
-        try {
-          pendingAction = {
-            label: locale === 'ru' ? 'Выполнить' : locale === 'en' ? 'Execute' : 'Bajarish',
-            actionKey: actionMatch[1],
-            params: JSON.parse(actionMatch[2]),
-          };
-          cleanReply = reply.replace(/ACTION:.*$/s, '').trim();
-        } catch {}
-      }
+      // The backend already auto-executes admin actions and returns the result
+      // embedded in the reply. We just display the reply as-is.
+      // If for some reason ACTION: syntax leaked through (shouldn't happen),
+      // strip it gracefully but don't show an execute button.
+      const cleanReply = reply.replace(/\nACTION:\s*\w+\s*PARAMS:\s*\{[^}]*\}/g, '').trim();
 
       updateSession(activeSessionId, (s) => ({
         ...s,
         messages: [...s.messages, {
           id: `a-${Date.now()}`, role: 'assistant', content: cleanReply,
-          timestamp: Date.now(), pendingAction,
+          timestamp: Date.now(),
         }],
         updatedAt: Date.now(),
       }));

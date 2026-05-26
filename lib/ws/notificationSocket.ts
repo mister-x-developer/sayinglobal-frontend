@@ -44,7 +44,7 @@ class NotificationSocketService {
     this.shouldReconnect = true;
     this.currentToken = accessToken;
 
-    let url = `${WS_BASE}/ws/notifications/?token=${accessToken}`;
+    let url = `${WS_BASE}/ws/notifications/?access_token=${accessToken}`;
     if (refreshJti) url += `&refresh_jti=${refreshJti}`;
 
     try {
