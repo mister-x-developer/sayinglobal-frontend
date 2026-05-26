@@ -107,21 +107,33 @@ export default function AdminDashboardPage() {
   const [pendingComplaints, setPendingComplaints] = useState(0);
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
   const [growth, setGrowth] = useState<GrowthAnalytics | null>(null);
+  const [healthStatus, setHealthStatus] = useState<Record<string, string>>({});
 
   const load = useCallback(async (isRefresh = false) => {
     if (isRefresh) setRefreshing(true);
     else setLoading(true);
     try {
-      const [dash, pending, complaints, growthData] = await Promise.allSettled([
+      const [dash, pending, complaints, growthData, healthData] = await Promise.allSettled([
         analyticsApi.dashboard(),
         apiClient.get('/listings/?status=pending&page_size=1'),
         apiClient.get('/moderation/complaints/?status=pending&page_size=1'),
         analyticsApi.growth(30),
+        // Health check — call the deep endpoint
+        (async () => {
+          const base = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api').replace(/\/api\/?$/, '');
+          const r = await fetch(`${base}/health/deep/`);
+          return r.json();
+        })(),
       ]);
       if (dash.status === 'fulfilled') setStats(dash.value);
       if (pending.status === 'fulfilled') setPendingListings((pending.value.data as any)?.count ?? 0);
       if (complaints.status === 'fulfilled') setPendingComplaints((complaints.value.data as any)?.count ?? 0);
       if (growthData.status === 'fulfilled') setGrowth(growthData.value);
+      if (healthData.status === 'fulfilled') {
+        setHealthStatus((healthData.value as any)?.checks ?? {});
+      } else {
+        setHealthStatus({ database: 'error', cache: 'error', broker: 'error' });
+      }
     } catch {}
     finally {
       setLoading(false);
@@ -246,20 +258,25 @@ export default function AdminDashboardPage() {
                 </div>
                 <div className="p-4 space-y-3">
                   {[
-                    { label: 'Backend API', status: 'online', href: '/admin/health' },
-                    { label: 'Ma\'lumotlar bazasi', status: 'online', href: '/admin/health' },
-                    { label: 'Redis / Cache', status: 'online', href: '/admin/health' },
-                    { label: 'AI Moderatsiya', status: 'online', href: '/admin/ai-moderation' },
-                  ].map((item) => (
-                    <Link key={item.label} href={item.href}
-                      className="flex items-center justify-between rounded-xl border border-border px-3 py-2.5 hover:bg-bg-subtle transition-colors">
-                      <span className="text-sm font-medium text-fg">{item.label}</span>
-                      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-success">
-                        <span className="h-2 w-2 rounded-full bg-success animate-pulse" />
-                        Ishlayapti
-                      </span>
-                    </Link>
-                  ))}
+                    { label: 'Backend API', key: '_api' },
+                    { label: "Ma'lumotlar bazasi", key: 'database' },
+                    { label: 'Redis / Cache', key: 'cache' },
+                    { label: 'Celery Broker', key: 'broker' },
+                  ].map((item) => {
+                    const val = item.key === '_api' ? (Object.keys(healthStatus).length > 0 ? 'ok' : loading ? 'checking' : 'error') : (healthStatus[item.key] ?? (loading ? 'checking' : 'unknown'));
+                    const isOk = val === 'ok';
+                    const isChecking = val === 'checking';
+                    return (
+                      <div key={item.label}
+                        className="flex items-center justify-between rounded-xl border border-border px-3 py-2.5">
+                        <span className="text-sm font-medium text-fg">{item.label}</span>
+                        <span className={`inline-flex items-center gap-1.5 text-xs font-semibold ${isOk ? 'text-success' : isChecking ? 'text-fg-muted' : 'text-danger'}`}>
+                          <span className={`h-2 w-2 rounded-full ${isOk ? 'bg-success animate-pulse' : isChecking ? 'bg-fg-muted' : 'bg-danger'}`} />
+                          {isOk ? 'Ishlayapti' : isChecking ? '...' : 'Xato'}
+                        </span>
+                      </div>
+                    );
+                  })}
                   <Link href="/admin/health"
                     className="flex items-center justify-center gap-2 rounded-xl border border-border px-3 py-2.5 text-sm font-medium text-fg-muted hover:bg-bg-subtle hover:text-fg transition-colors mt-2">
                     <Activity className="h-4 w-4" strokeWidth={1.75} />

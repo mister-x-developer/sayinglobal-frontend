@@ -69,12 +69,20 @@ export default function AdminHealthPage() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
+      // Use the backend URL directly — health endpoints are NOT under /api/
+      // apiClient.baseURL is /api, so we need to reach /health/deep/ differently
+      const backendBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api')
+        .replace(/\/api\/?$/, '');
       const [healthRes, opsRes] = await Promise.allSettled([
-        apiClient.get<HealthDeep>('/../../health/deep/'),
-        apiClient.get<OperationalStatus>('/../../health/status/'),
+        fetch(`${backendBase}/health/deep/`, {
+          headers: { Authorization: `Bearer ${typeof window !== 'undefined' ? (() => { try { const s = JSON.parse(localStorage.getItem('auth-store') || '{}'); return s?.state?.accessToken || ''; } catch { return ''; } })() : '' }` },
+        }).then(r => r.json()),
+        fetch(`${backendBase}/health/status/`, {
+          headers: { Authorization: `Bearer ${typeof window !== 'undefined' ? (() => { try { const s = JSON.parse(localStorage.getItem('auth-store') || '{}'); return s?.state?.accessToken || ''; } catch { return ''; } })() : '' }` },
+        }).then(r => r.json()),
       ]);
-      if (healthRes.status === 'fulfilled') setHealth(healthRes.value.data);
-      if (opsRes.status === 'fulfilled') setOps(opsRes.value.data);
+      if (healthRes.status === 'fulfilled') setHealth(healthRes.value as HealthDeep);
+      if (opsRes.status === 'fulfilled') setOps(opsRes.value as OperationalStatus);
       setLastRefresh(new Date());
     } catch {
       // silently handle — show last known state
