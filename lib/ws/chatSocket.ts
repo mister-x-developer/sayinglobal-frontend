@@ -78,6 +78,10 @@ class ChatSocketService {
           this.onHistoryCb(data.messages || []);
         } else if (data.type === 'chat_message' && this.onMessageCb) {
           const msg = data.message;
+          // Play sound for incoming messages (not own messages)
+          import('../utils/notificationSound').then(({ playChatSound }) => {
+            playChatSound();
+          }).catch(() => {});
           this.onMessageCb({
             id: msg.id,
             sender_id: msg.sender_id,
