@@ -129,11 +129,7 @@ export default function NotificationDetailPage() {
                 </div>
 
                 <div className="mt-5">
-                  <TranslatableText
-                    text={message}
-                    sourceLocale={n.original_locale}
-                    textClassName="whitespace-pre-line text-fg-muted leading-relaxed"
-                  />
+                  <p className="whitespace-pre-line text-fg-muted leading-relaxed">{message}</p>
                 </div>
 
                 {n.action_url && (
