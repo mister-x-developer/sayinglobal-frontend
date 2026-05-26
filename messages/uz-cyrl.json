@@ -584,7 +584,10 @@
     "broadcast": "Хабар",
     "accountSummary": "Ҳисоб қисқача",
     "aiModeration": "AI Модерация",
-    "plans": "Тарифлар"
+    "plans": "Тарифлар",
+    "flagged": "шикоят",
+    "reportsReceived": "Фойдаланувчига шикоятлар",
+    "reportsFiled": "Фойдаланувчи юборган шикоятлар"
   },
   "analytics": {
     "title": "Аналитика",
