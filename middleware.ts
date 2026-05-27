@@ -68,6 +68,10 @@ function isPublicPath(pathname: string): boolean {
   return false;
 }
 
+function isAdminPath(pathname: string): boolean {
+  return pathname.startsWith('/admin');
+}
+
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
@@ -101,6 +105,14 @@ export function middleware(req: NextRequest) {
     // Preserve intended destination so we can redirect back after login
     loginUrl.searchParams.set('next', pathname);
     return NextResponse.redirect(loginUrl);
+  }
+
+  // Admin route guard — non-admin authenticated users cannot access /admin/*
+  if (isAdminPath(pathname) && isAuthenticated(req) && !isPlatformAdmin(req)) {
+    const dashboardUrl = req.nextUrl.clone();
+    dashboardUrl.pathname = '/dashboard';
+    dashboardUrl.search = '';
+    return NextResponse.redirect(dashboardUrl);
   }
 
   // Platform admin routing — is_admin=True users land on /admin, not marketplace

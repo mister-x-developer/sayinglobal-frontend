@@ -147,8 +147,15 @@ class NotificationSocketService {
           if (typeof window !== 'undefined') {
             import('@/components/ui/Toast').then(({ toast }) => {
               const actionUrl = notifItem.action_url;
+              const markAsRead = () => {
+                // Mark notification as read when toast is clicked
+                if (notifItem.public_id) {
+                  notificationSocket.markRead(notifItem.public_id);
+                  useNotificationsStore.getState().markRead(notifItem.public_id);
+                }
+              };
               if (localizedTitle) {
-                toast.notification(localizedTitle, localizedBody.slice(0, 100) || undefined, actionUrl || '/notifications');
+                toast.notification(localizedTitle, localizedBody.slice(0, 100) || undefined, actionUrl || '/notifications', markAsRead);
               } else if (localizedBody) {
                 toast.info(localizedBody.slice(0, 80), undefined, actionUrl || '/notifications');
               }

@@ -5,18 +5,28 @@ import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Home, LayoutGrid, Plus, MessageSquareText, User } from 'lucide-react';
 import { useNotificationsStore } from '@/lib/store/notifications';
+import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
 
 /**
  * Mobile bottom navigation bar.
  * Shows unread notification badge on the profile tab.
+ * Hidden for unauthenticated users — they only see the landing page.
  */
 export function MobileBottomNav() {
   const t = useTranslations();
   const pathname = usePathname();
   const unreadCount = useNotificationsStore((s) => s.unreadCount);
+  const { isAuthenticated } = useAuthStore();
+  const hydrated = useAuthHydrated();
 
   // Don't show on admin pages
   if (pathname?.startsWith('/admin')) return null;
+
+  // Don't show on landing or auth pages
+  if (pathname === '/' || pathname?.startsWith('/auth')) return null;
+
+  // Don't show for unauthenticated users (after hydration)
+  if (hydrated && !isAuthenticated) return null;
 
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + '/');

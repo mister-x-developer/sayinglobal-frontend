@@ -29,6 +29,10 @@ export interface Listing {
   seller: ListingSeller;
   category: { id?: string; name: string; name_uz?: string };
   title: string;
+  title_uz?: string;
+  title_uz_cyrl?: string;
+  title_ru?: string;
+  title_en?: string;
   description: string;
   price: number;
   currency: string;

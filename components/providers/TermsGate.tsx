@@ -150,14 +150,14 @@ export function TermsGate() {
                   <Gift className="h-5 w-5" strokeWidth={1.75} />
                 </span>
                 <div>
-                  <h2 className="display-sm">Referral kod</h2>
-                  <p className="mt-0.5 text-xs text-fg-subtle">Agar do'stingiz sizga kod bergan bo'lsa, kiriting</p>
+                  <h2 className="display-sm">{t('referral.title' as any) ?? 'Referral kod'}</h2>
+                  <p className="mt-0.5 text-xs text-fg-subtle">{t('referral.subtitle' as any) ?? "Agar do'stingiz sizga kod bergan bo'lsa, kiriting"}</p>
                 </div>
               </div>
             </div>
             <div className="px-6 py-6">
               <p className="text-sm text-fg-muted mb-4">
-                Referral kod orqali platformaga qo'shilsangiz, do'stingiz mukofot oladi. Kod yo'q bo'lsa, o'tkazib yuboring.
+                {t('referral.description' as any) ?? "Referral kod orqali platformaga qo'shilsangiz, do'stingiz mukofot oladi. Kod yo'q bo'lsa, o'tkazib yuboring."}
               </p>
               <input
                 value={referralCode}
@@ -175,11 +175,11 @@ export function TermsGate() {
             <div className="border-t border-border px-6 py-4 flex gap-3">
               <button type="button" onClick={() => setStep('plans')}
                 className="btn btn-secondary flex-1">
-                O'tkazib yuborish
+                {t('common.skip' as any) ?? "O'tkazib yuborish"}
               </button>
               <button type="button" onClick={submitReferral} disabled={referralLoading}
                 className="btn btn-primary flex-1">
-                {referralLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Tasdiqlash'}
+                {referralLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : t('common.confirm')}
               </button>
             </div>
           </>
@@ -190,34 +190,34 @@ export function TermsGate() {
           <>
             <div className="border-b border-border px-6 py-5">
               <div className="flex items-center justify-between">
-                <h2 className="display-sm">Tariflar</h2>
+                <h2 className="display-sm">{t('nav.plans')}</h2>
                 <button type="button" onClick={() => setOpen(false)}
                   className="inline-flex h-8 w-8 items-center justify-center rounded-full text-fg-muted hover:bg-bg-subtle">
                   <X className="h-4 w-4" strokeWidth={2} />
                 </button>
               </div>
-              <p className="mt-1 text-sm text-fg-muted">Platformaga xush kelibsiz! Tariflarimiz bilan tanishing.</p>
+              <p className="mt-1 text-sm text-fg-muted">{t('referral.plansWelcome' as any) ?? 'Platformaga xush kelibsiz! Tariflarimiz bilan tanishing.'}</p>
             </div>
             <div className="px-6 py-6 space-y-3">
               <div className="rounded-xl bg-success/10 border border-success/20 p-4">
-                <p className="text-sm font-semibold text-success">✓ Shartlarga rozisiz!</p>
-                <p className="text-xs text-fg-muted mt-1">Hozirda barcha tariflar referral tizimi orqali bepul. Tez orada pullik bo'ladi.</p>
+                <p className="text-sm font-semibold text-success">✓ {t('terms.accepted' as any) ?? 'Shartlarga rozisiz!'}</p>
+                <p className="text-xs text-fg-muted mt-1">{t('referral.freeNote' as any) ?? 'Hozirda barcha tariflar referral tizimi orqali bepul.'}</p>
               </div>
               <div className="rounded-xl bg-brand-primary/8 border border-brand-primary/20 p-4">
-                <p className="text-sm font-semibold text-fg">🎁 Referral tizimi</p>
-                <p className="text-xs text-fg-muted mt-1">Do'stlaringizni taklif qiling → ular e'lon joylashganda siz yuqori tarif olasiz.</p>
+                <p className="text-sm font-semibold text-fg">🎁 {t('referral.systemTitle' as any) ?? 'Referral tizimi'}</p>
+                <p className="text-xs text-fg-muted mt-1">{t('referral.systemDesc' as any) ?? "Do'stlaringizni taklif qiling → ular e'lon joylashganda siz yuqori tarif olasiz."}</p>
                 <ul className="mt-2 space-y-1 text-xs text-fg-muted">
-                  <li>• 3 ta referral → Standart tarif (49,000 so'm/oy)</li>
-                  <li>• 7 ta referral → Pro tarif (99,000 so'm/oy)</li>
+                  <li>• {t('referral.tier1' as any) ?? '3 ta referral → Standart tarif'}</li>
+                  <li>• {t('referral.tier2' as any) ?? '7 ta referral → Pro tarif'}</li>
                 </ul>
               </div>
             </div>
             <div className="border-t border-border px-6 py-4 flex gap-3">
               <button type="button" onClick={() => setOpen(false)} className="btn btn-secondary flex-1">
-                Keyinroq
+                {t('common.later' as any) ?? 'Keyinroq'}
               </button>
               <a href="/plans" onClick={() => setOpen(false)} className="btn btn-primary flex-1 justify-center">
-                Tariflarni ko'rish
+                {t('referral.viewPlans' as any) ?? "Tariflarni ko'rish"}
                 <ArrowRight className="h-4 w-4" strokeWidth={2} />
               </a>
             </div>

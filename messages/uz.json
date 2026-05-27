@@ -45,7 +45,10 @@
     "details": "Batafsil",
     "accountSummary": "Hisob qisqacha",
     "error": "Xatolik yuz berdi",
-    "empty": "Boʻsh"
+    "empty": "Boʻsh",
+    "skip": "Oʻtkazib yuborish",
+    "later": "Keyinroq",
+    "confirm": "Tasdiqlash"
   },
   "landing": {
     "heroTitle": "Raqamli Chorva Bozori",
@@ -499,8 +502,8 @@
     "savingDraft": "Qoralama saqlanmoqda...",
     "publishing": "Eʼlon qilinmoqda...",
     "publishSuccess": "Eʼlon muvaffaqiyatli joylashtirildi",
-    "mapPinLabel": "Xarita ustida belgi (ixtiyoriy)",
-    "mapPinHelp": "Xaritada belgini qoʻying: xaridorlar eʼlonni xaritada koʻrishi uchun.",
+    "mapPinLabel": "Xarita ustida belgi",
+    "mapPinHelp": "Xaritada belgini qoʻying — nearby va xaritada eʼlon shu joyda koʻrinadi.",
     "stepBasics": "Asosiy maʼlumot"
   },
   "admin": {
@@ -587,7 +590,19 @@
     "notesRequiredToResolve": "Hal qilish uchun izoh qoʻshing.",
     "reports": "Hisobotlar",
     "aiModeration": "AI Moderatsiya",
-    "plans": "Tariflar"
+    "plans": "Tariflar",
+    "quickActions": "Tezkor harakatlar",
+    "todayActivity": "Bugungi faollik",
+    "newUsers": "Yangi foydalanuvchilar",
+    "newListings": "Yangi eʼlonlar",
+    "database": "Maʼlumotlar bazasi",
+    "statusOk": "Ishlayapti",
+    "statusError": "Xato",
+    "pendingListings": "Kutilayotgan eʼlonlar",
+    "recentComplaints": "Soʻnggi shikoyatlar",
+    "listingsPendingApproval": "ta eʼlon tasdiqlash kutmoqda",
+    "complaintsPendingReview": "ta shikoyat koʻrib chiqilmagan",
+    "days": "kun"
   },
   "analytics": {
     "title": "Analitika",
@@ -730,7 +745,13 @@
   "validation": {
     "atLeastOneFieldRequired": "Kamida bitta maydon toʻldirilishi shart",
     "regionRequired": "Avval viloyatni tanlang",
-    "required": "Majburiy maydon"
+    "required": "Majburiy maydon",
+    "minImages": "Kamida 3 ta rasm yuklang (maksimal 5 ta)",
+    "monthlyLimitReached": "Oylik limitingiz tugadi. Tarifni yangilang.",
+    "activeLimitReached": "Faol eʼlonlar limitiga yetdingiz.",
+    "cannotCreateListing": "Eʼlon yaratib boʻlmaydi.",
+    "openDirections": "Yoʻnalish koʻrsatish",
+    "openOnMap": "Xaritada ochish"
   },
   "profileInfo": {
     "title": "Muhim maʼlumot",
@@ -927,7 +948,20 @@
     "point4": "Foydalanuvchi shaxsan ehtiyot boʻlishi, sotuvchini tekshirishi va xavfsizlik choralarini koʻrishi shart.",
     "disclaimer": "Platforma faqat sotuvchi va xaridor oʻrtasida muloqot vositasi boʻlib xizmat qiladi. Hech qanday bitim platforma orqali rasmiylashtirilmaydi.",
     "checkboxLabel": "Yuqoridagi shartlarni oʻqib chiqdim va toʻliq qabul qilaman.",
-    "accept": "Roziman va davom etaman"
+    "accept": "Roziman va davom etaman",
+    "accepted": "Shartlarga rozisiz!"
+  },
+  "referral": {
+    "title": "Referral kod",
+    "subtitle": "Agar doʻstingiz sizga kod bergan boʻlsa, kiriting",
+    "description": "Referral kod orqali platformaga qoʻshilsangiz, doʻstingiz mukofot oladi. Kod yoʻq boʻlsa, oʻtkazib yuboring.",
+    "plansWelcome": "Platformaga xush kelibsiz! Tariflarimiz bilan tanishing.",
+    "freeNote": "Hozirda barcha tariflar referral tizimi orqali bepul.",
+    "systemTitle": "Referral tizimi",
+    "systemDesc": "Doʻstlaringizni taklif qiling → ular eʼlon joylashganda siz yuqori tarif olasiz.",
+    "tier1": "3 ta referral → Standart tarif",
+    "tier2": "7 ta referral → Pro tarif",
+    "viewPlans": "Tariflarni koʻrish"
   },
   "nearby": {
     "eyebrow": "Yaqin atrof",

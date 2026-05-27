@@ -3,10 +3,9 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Heart, MapPin, Eye, Clock } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 
 import { Avatar } from '@/components/ui/Avatar';
-import { Badge } from '@/components/ui/Badge';
 import { RatingDisplay } from '@/components/shared/RatingDisplay';
 import { ListingImage } from './ListingImage';
 import { formatPrice, formatRelativeTime } from '@/lib/utils/format';
@@ -15,6 +14,10 @@ import { cn } from '@/lib/utils/cn';
 export interface ListingCardData {
   public_id: number;
   title: string;
+  title_uz?: string;
+  title_uz_cyrl?: string;
+  title_ru?: string;
+  title_en?: string;
   description?: string;
   price: number;
   currency: string;
@@ -44,12 +47,21 @@ interface Props {
 
 export function ListingCard({ listing, onFavorite }: Props) {
   const t = useTranslations();
+  const locale = useLocale();
   const [isFavorited, setIsFavorited] = useState(!!listing.is_favorited);
   const [favAnimating, setFavAnimating] = useState(false);
 
   const primary = listing.images.find((i) => i.is_primary) ?? listing.images[0];
   const imageSrc =
     primary?.image && !primary.image.startsWith('/placeholder') ? primary.image : null;
+
+  // Get localized title
+  const localizedTitle = (() => {
+    const norm = (locale || 'uz').replace('-', '_');
+    const field = `title_${norm}` as keyof typeof listing;
+    const val = listing[field] as string | undefined;
+    return val || listing.title;
+  })();
 
   // Category display: prefer t('categories.{slug}') over raw name_uz
   const categorySlug = listing.category?.name;
@@ -78,19 +90,6 @@ export function ListingCard({ listing, onFavorite }: Props) {
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05]"
           />
-
-          {/* Negotiable badge */}
-          {listing.is_negotiable && (
-            <div className="absolute top-3 left-3">
-              <Badge
-                variant="outline"
-                size="sm"
-                className="bg-bg-elevated/88 backdrop-blur-sm text-[11px] font-semibold"
-              >
-                {t('listings.negotiable')}
-              </Badge>
-            </div>
-          )}
 
           {/* Favorite button */}
           <button
@@ -129,7 +128,7 @@ export function ListingCard({ listing, onFavorite }: Props) {
 
           {/* Title */}
           <h3 className="line-clamp-2 font-display text-[16px] font-semibold leading-snug text-fg transition-colors group-hover:text-brand-primary">
-            {listing.title}
+            {localizedTitle}
           </h3>
 
           {/* Location */}
@@ -145,12 +144,22 @@ export function ListingCard({ listing, onFavorite }: Props) {
           </div>
 
           {/* Price row */}
-          <div className="mt-4 flex items-end justify-between">
-            <p className="font-display text-xl font-bold text-fg">
-              {formatPrice(listing.price, listing.currency)}
-            </p>
+          <div className="mt-4 flex items-end justify-between gap-3">
+            <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 min-w-0">
+              <p className="font-display text-xl font-bold text-fg leading-none">
+                {formatPrice(listing.price, listing.currency)}
+              </p>
+              {listing.is_negotiable && (
+                <span
+                  className="inline-flex items-center gap-1.5 rounded-md border border-brand-primary/20 bg-brand-primary/5 px-2 py-0.5 text-[11px] font-semibold text-brand-primary"
+                  aria-label={t('listings.negotiable')}
+                >
+                  {t('listings.negotiable')}
+                </span>
+              )}
+            </div>
             {typeof listing.view_count === 'number' && listing.view_count > 0 && (
-              <div className="flex items-center gap-1 text-xs text-fg-subtle">
+              <div className="flex items-center gap-1 text-xs text-fg-subtle flex-shrink-0">
                 <Eye className="h-3.5 w-3.5" strokeWidth={1.75} />
                 <span>{listing.view_count}</span>
               </div>

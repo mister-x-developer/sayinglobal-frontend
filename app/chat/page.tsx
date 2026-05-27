@@ -590,8 +590,8 @@ export default function ChatPage() {
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* Input area */}
-              <div className="border-t border-border bg-bg-elevated px-3 py-3">
+              {/* Input area — pb-safe for iOS keyboard */}
+              <div className="border-t border-border bg-bg-elevated px-3 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
                 <div className="flex items-end gap-2">
                   <div className="flex-1 relative">
                     <textarea

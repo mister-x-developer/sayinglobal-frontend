@@ -45,7 +45,10 @@
     "details": "Details",
     "accountSummary": "Account summary",
     "error": "An error occurred",
-    "empty": "Empty"
+    "empty": "Empty",
+    "skip": "Skip",
+    "later": "Later",
+    "confirm": "Confirm"
   },
   "landing": {
     "heroTitle": "Digital Livestock Marketplace",
@@ -499,8 +502,8 @@
     "savingDraft": "Saving draft...",
     "publishing": "Publishing...",
     "publishSuccess": "Listing published successfully",
-    "mapPinLabel": "Map pin (optional)",
-    "mapPinHelp": "Drop a pin so buyers can see the listing on the map.",
+    "mapPinLabel": "Map pin location",
+    "mapPinHelp": "Drop a pin on the map — the listing will appear at this location in nearby and map views.",
     "stepBasics": "Basic info"
   },
   "admin": {
@@ -587,7 +590,19 @@
     "reports": "Reports",
     "accountSummary": "Account summary",
     "aiModeration": "AI Moderation",
-    "plans": "Plans"
+    "plans": "Plans",
+    "quickActions": "Quick actions",
+    "todayActivity": "Today's activity",
+    "newUsers": "New users",
+    "newListings": "New listings",
+    "database": "Database",
+    "statusOk": "Running",
+    "statusError": "Error",
+    "pendingListings": "Pending listings",
+    "recentComplaints": "Recent complaints",
+    "listingsPendingApproval": "listings pending approval",
+    "complaintsPendingReview": "complaints pending review",
+    "days": "days"
   },
   "analytics": {
     "title": "Analytics",
@@ -730,7 +745,13 @@
   "validation": {
     "atLeastOneFieldRequired": "At least one field is required",
     "regionRequired": "Please select a region first",
-    "required": "Required field"
+    "required": "Required field",
+    "minImages": "Upload at least 3 photos (maximum 5)",
+    "monthlyLimitReached": "Monthly limit reached. Upgrade your plan.",
+    "activeLimitReached": "Active listings limit reached.",
+    "cannotCreateListing": "Cannot create listing.",
+    "openDirections": "Get directions",
+    "openOnMap": "Open on map"
   },
   "profileInfo": {
     "title": "Important information",
@@ -927,7 +948,20 @@
     "point4": "Users must exercise their own caution, verify the seller, and take their own safety measures.",
     "disclaimer": "The platform serves only as a communication channel between sellers and buyers. No transactions are processed through the platform.",
     "checkboxLabel": "I have read the terms above and fully accept them.",
-    "accept": "Accept and continue"
+    "accept": "Accept and continue",
+    "accepted": "Terms accepted!"
+  },
+  "referral": {
+    "title": "Referral code",
+    "subtitle": "Enter a code if a friend gave you one",
+    "description": "If you join via a referral code, your friend earns a reward. Skip if you don't have one.",
+    "plansWelcome": "Welcome to SAYIN GLOBAL! Explore our plans.",
+    "freeNote": "All plans are currently free via referrals.",
+    "systemTitle": "Referral system",
+    "systemDesc": "Invite friends → when they post a listing, you get a higher plan.",
+    "tier1": "3 referrals → Standard plan",
+    "tier2": "7 referrals → Pro plan",
+    "viewPlans": "View plans"
   },
   "nearby": {
     "eyebrow": "Nearby",
