@@ -7,13 +7,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
 import {
   ArrowLeft, Send, Search as SearchIcon, MessageSquareText,
-  Check, CheckCheck, MoreVertical, Flag, Languages, X,
-  Phone, Video, Info,
+  Check, CheckCheck, MoreVertical, Flag, Languages, Info,
 } from 'lucide-react';
 
 import { AppNav } from '@/components/layout/AppNav';
 import { Avatar } from '@/components/ui/Avatar';
-import { EmptyState } from '@/components/shared/EmptyState';
 import { ReportDialog } from '@/components/shared/ReportDialog';
 import { useAuthStore } from '@/lib/store/auth';
 import { chatApi } from '@/lib/api/chat';
@@ -43,6 +41,7 @@ export default function ChatPage() {
   const [convLoading, setConvLoading] = useState(true);
   const [activeConv, setActiveConv] = useState<Conversation | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [messagesLoading, setMessagesLoading] = useState(false);
   const [text, setText] = useState('');
   const [search, setSearch] = useState('');
   const [sending, setSending] = useState(false);
@@ -121,6 +120,7 @@ export default function ChatPage() {
   const openConversation = (conv: Conversation) => {
     setActiveConv(conv);
     setMessages([]);
+    setMessagesLoading(true);
     setMoreOpen(false);
     setTypingUserId(null);
     chatApi.getMessages(conv.id ?? conv.public_id).then((msgs: any) => {
@@ -134,7 +134,7 @@ export default function ChatPage() {
       })).reverse();
       setMessages(mapped);
       scrollToBottom(false);
-    });
+    }).finally(() => setMessagesLoading(false));
 
     // Connect WebSocket for real-time messages
     const token = useAuthStore.getState().accessToken;
@@ -451,7 +451,18 @@ export default function ChatPage() {
                 className="flex-1 overflow-y-auto px-4 py-4 space-y-1"
                 onClick={() => setMoreOpen(false)}
               >
-                {messages.length === 0 && (
+                {/* Messages loading skeleton */}
+                {messagesLoading && (
+                  <div className="space-y-3 py-2">
+                    {[1, 2, 3, 4].map((i) => (
+                      <div key={i} className={`flex ${i % 2 === 0 ? 'justify-end' : 'justify-start'} gap-2`}>
+                        {i % 2 !== 0 && <div className="h-7 w-7 rounded-full bg-bg-subtle animate-pulse flex-shrink-0 self-end" />}
+                        <div className={`h-10 rounded-2xl bg-bg-subtle animate-pulse ${i % 2 === 0 ? 'rounded-br-sm w-48' : 'rounded-bl-sm w-56'}`} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {!messagesLoading && messages.length === 0 && (
                   <div className="flex flex-col items-center justify-center h-full gap-2 text-center py-12">
                     <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary">
                       <MessageSquareText className="h-6 w-6" strokeWidth={1.5} />
@@ -461,7 +472,7 @@ export default function ChatPage() {
                     </p>
                   </div>
                 )}
-                {messages.map((msg, i) => {
+                {!messagesLoading && messages.map((msg, i) => {
                   const isMe = isMyMessage(msg);
                   const prevMsg = messages[i - 1];
                   const nextMsg = messages[i + 1];
@@ -471,8 +482,29 @@ export default function ChatPage() {
                     nextMsg && new Date(nextMsg.created_at).getTime() - new Date(msg.created_at).getTime() > 300_000
                   );
 
+                  // Date separator
+                  const msgDate = new Date(msg.created_at).toLocaleDateString();
+                  const prevDate = prevMsg ? new Date(prevMsg.created_at).toLocaleDateString() : null;
+                  const showDateSep = msgDate !== prevDate;
+                  const today = new Date().toLocaleDateString();
+                  const yesterday = new Date(Date.now() - 86400000).toLocaleDateString();
+                  const dateSepLabel = msgDate === today
+                    ? (locale === 'ru' ? 'Сегодня' : locale === 'en' ? 'Today' : 'Bugun')
+                    : msgDate === yesterday
+                      ? (locale === 'ru' ? 'Вчера' : locale === 'en' ? 'Yesterday' : 'Kecha')
+                      : new Date(msg.created_at).toLocaleDateString(locale === 'ru' ? 'ru-RU' : locale === 'en' ? 'en-US' : 'uz-UZ', { day: 'numeric', month: 'long' });
+
                   return (
-                    <div key={msg.id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
+                    <div key={msg.id}>
+                      {/* Date separator */}
+                      {showDateSep && (
+                        <div className="flex items-center gap-3 my-4">
+                          <div className="flex-1 h-px bg-border" />
+                          <span className="text-[11px] font-semibold text-fg-subtle bg-bg px-2.5 py-0.5 rounded-full border border-border">{dateSepLabel}</span>
+                          <div className="flex-1 h-px bg-border" />
+                        </div>
+                      )}
+                    <div className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
                       {/* Avatar + bubble row */}
                       <div className={`flex items-end gap-2 max-w-[75%] ${isMe ? 'flex-row-reverse' : 'flex-row'}`}>
                         {/* Avatar — only for other, only on last in group */}
@@ -535,6 +567,7 @@ export default function ChatPage() {
                           )}
                         </div>
                       )}
+                    </div>
                     </div>
                   );
                 })}
