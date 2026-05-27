@@ -89,9 +89,9 @@ const backendProvider: TranslationProvider = {
     const target = LOCALE_TO_ISO[targetLocale] ?? 'en';
     const source = sourceLocale === 'auto' ? 'auto' : (LOCALE_TO_ISO[sourceLocale] ?? 'auto');
 
-    // Don't short-circuit for uz-cyrl: uz→uz-cyrl is a real script conversion
-    // Cast to string to avoid TS narrowing complaint (uz-cyrl was already handled above)
-    if (target === source && source !== 'auto' && (targetLocale as string) !== 'uz-cyrl') {
+    // Short-circuit if source and target are the same language and no translation needed.
+    // Note: uz-cyrl is handled above with an early return, so it never reaches here.
+    if (target === source && source !== 'auto') {
       return { text, fromLocale: source, toLocale: target, cached: true };
     }
 
