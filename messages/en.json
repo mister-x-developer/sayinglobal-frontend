@@ -499,8 +499,8 @@
     "savingDraft": "Saving draft...",
     "publishing": "Publishing...",
     "publishSuccess": "Listing published successfully",
-    "mapPinLabel": "Map pin (optional)",
-    "mapPinHelp": "Drop a pin so buyers can see the listing on the map.",
+    "mapPinLabel": "Map pin location",
+    "mapPinHelp": "Drop a pin on the map — the listing will appear at this location in nearby and map views.",
     "stepBasics": "Basic info"
   },
   "admin": {
@@ -730,7 +730,13 @@
   "validation": {
     "atLeastOneFieldRequired": "At least one field is required",
     "regionRequired": "Please select a region first",
-    "required": "Required field"
+    "required": "Required field",
+    "minImages": "Upload at least 3 photos (maximum 5)",
+    "monthlyLimitReached": "Monthly limit reached. Upgrade your plan.",
+    "activeLimitReached": "Active listings limit reached.",
+    "cannotCreateListing": "Cannot create listing.",
+    "openDirections": "Get directions",
+    "openOnMap": "Open on map"
   },
   "profileInfo": {
     "title": "Important information",

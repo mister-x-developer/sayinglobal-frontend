@@ -8,6 +8,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import {
   Users, Package, Flag, TrendingUp, ArrowRight, Megaphone, BarChart3,
   MessageCircle, Eye, Loader2, RefreshCw, AlertTriangle, CheckCircle2,
@@ -100,6 +101,7 @@ function QuickAction({ href, icon: Icon, label, badge, color }: {
 }
 
 export default function AdminDashboardPage() {
+  const t = useTranslations();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -144,10 +146,10 @@ export default function AdminDashboardPage() {
   useEffect(() => { load(); }, [load]);
 
   const statCards = stats ? [
-    { label: "Jami foydalanuvchilar", value: stats.users.total, sub: `+${stats.users.new_today} bugun`, icon: Users, color: 'text-blue-500', bg: 'bg-blue-500/10', href: '/admin/users', delay: 0 },
-    { label: "Faol e'lonlar", value: stats.listings.active, sub: `${formatNumber(stats.listings.total)} jami`, icon: Package, color: 'text-brand-primary', bg: 'bg-brand-primary/10', href: '/admin/listings', delay: 0.05 },
-    { label: "Ko'rishlar", value: stats.engagement.total_views, sub: `+${stats.engagement.views_today} bugun`, icon: Eye, color: 'text-purple-500', bg: 'bg-purple-500/10', delay: 0.1 },
-    { label: "Xabarlar", value: stats.messages.total, sub: `+${stats.messages.today} bugun`, icon: MessageCircle, color: 'text-green-500', bg: 'bg-green-500/10', delay: 0.15 },
+    { label: t('admin.totalUsers'), value: stats.users.total, sub: `+${stats.users.new_today} ${t('analytics.today' as any)}`, icon: Users, color: 'text-blue-500', bg: 'bg-blue-500/10', href: '/admin/users', delay: 0 },
+    { label: t('admin.activeListings'), value: stats.listings.active, sub: `${formatNumber(stats.listings.total)} ${t('common.all').toLowerCase()}`, icon: Package, color: 'text-brand-primary', bg: 'bg-brand-primary/10', href: '/admin/listings', delay: 0.05 },
+    { label: t('analytics.totalViews' as any) ?? 'Koʻrishlar', value: stats.engagement.total_views, sub: `+${stats.engagement.views_today} ${t('analytics.today' as any)}`, icon: Eye, color: 'text-purple-500', bg: 'bg-purple-500/10', delay: 0.1 },
+    { label: t('nav.chat'), value: stats.messages.total, sub: `+${stats.messages.today} ${t('analytics.today' as any)}`, icon: MessageCircle, color: 'text-green-500', bg: 'bg-green-500/10', delay: 0.15 },
   ] : [];
 
   return (
@@ -213,13 +215,13 @@ export default function AdminDashboardPage() {
                   <h2 className="font-bold text-fg">Tezkor harakatlar</h2>
                 </div>
                 <div className="p-2 space-y-0.5">
-                  <QuickAction href="/admin/users" icon={Users} label="Foydalanuvchilar" color="bg-blue-500/10 text-blue-500" />
-                  <QuickAction href="/admin/listings" icon={Package} label="E'lonlar" badge={pendingListings} color="bg-brand-primary/10 text-brand-primary" />
-                  <QuickAction href="/admin/moderation" icon={Flag} label="Shikoyatlar" badge={pendingComplaints} color="bg-danger/10 text-danger" />
-                  <QuickAction href="/admin/broadcasts" icon={Megaphone} label="Broadcast yuborish" color="bg-purple-500/10 text-purple-500" />
-                  <QuickAction href="/admin/analytics" icon={BarChart3} label="Analitika" color="bg-green-500/10 text-green-500" />
-                  <QuickAction href="/admin/ai-moderation" icon={Bot} label="AI Moderatsiya" color="bg-brand-accent/10 text-brand-accent" />
-                  <QuickAction href="/admin/plans" icon={Shield} label="Tariflar" color="bg-amber-500/10 text-amber-500" />
+                  <QuickAction href="/admin/users" icon={Users} label={t('admin.users')} color="bg-blue-500/10 text-blue-500" />
+                  <QuickAction href="/admin/listings" icon={Package} label={t('admin.listings')} badge={pendingListings} color="bg-brand-primary/10 text-brand-primary" />
+                  <QuickAction href="/admin/moderation" icon={Flag} label={t('admin.complaints')} badge={pendingComplaints} color="bg-danger/10 text-danger" />
+                  <QuickAction href="/admin/broadcasts" icon={Megaphone} label={t('admin.broadcasts')} color="bg-purple-500/10 text-purple-500" />
+                  <QuickAction href="/admin/analytics" icon={BarChart3} label={t('admin.analytics')} color="bg-green-500/10 text-green-500" />
+                  <QuickAction href="/admin/ai-moderation" icon={Bot} label={t('admin.aiModeration' as any) ?? 'AI Moderatsiya'} color="bg-brand-accent/10 text-brand-accent" />
+                  <QuickAction href="/admin/plans" icon={Shield} label={t('nav.plans')} color="bg-amber-500/10 text-amber-500" />
                 </div>
               </motion.div>
 

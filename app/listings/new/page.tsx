@@ -84,8 +84,12 @@ export default function NewListingPage() {
     if (!form.region) e.region = t('errors.required');
     if (!form.district) e.district = t('errors.required');
     if (!form.health_status) e.health_status = t('errors.required');
+    if (!form.breed.trim()) e.breed = t('errors.required');
+    if (!form.gender) e.gender = t('errors.required');
+    if (!form.weight_kg || isNaN(Number(form.weight_kg)) || Number(form.weight_kg) <= 0) e.weight_kg = t('errors.required');
+    if (form.latitude == null || form.longitude == null) e.location = t('errors.required');
     if (!age.years && !age.months && !age.days) e.age = t('validation.atLeastOneFieldRequired');
-    if (images.length < 3) e.images = "Kamida 3 ta rasm yuklang (maksimal 5 ta)";
+    if (images.length < 3) e.images = t('validation.minImages');
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -126,10 +130,10 @@ export default function NewListingPage() {
       if (!myPlan.can_create_listing) {
         const reason = myPlan.limit_reason;
         const msg = reason === 'monthly_limit_reached'
-          ? "Oylik limitingiz tugadi. Tarifni yangilang."
+          ? t('validation.monthlyLimitReached')
           : reason === 'active_limit_reached'
-          ? "Faol e'lonlar limitiga yetdingiz."
-          : "E'lon yaratib bo'lmaydi.";
+          ? t('validation.activeLimitReached')
+          : t('validation.cannotCreateListing');
         toast.error(msg);
         return;
       }
@@ -162,9 +166,22 @@ export default function NewListingPage() {
         longitude: form.longitude ?? undefined,
       };
       const listing = await listingsApi.create(payload as any);
+      
+      // Upload images with error handling
+      let uploadedCount = 0;
       for (const img of images) {
-        try { await listingsApi.uploadImage(String(listing.public_id), img.file, img.isPrimary); } catch {}
+        try {
+          await listingsApi.uploadImage(String(listing.public_id), img.file, img.isPrimary);
+          uploadedCount++;
+        } catch (uploadErr) {
+          console.error('Image upload failed:', uploadErr);
+        }
       }
+      
+      if (uploadedCount === 0 && images.length > 0) {
+        toast.error(t('errors.uploadFailed' as any) ?? 'Rasmlar yuklanmadi. Keyinroq qayta urinib koʻring.');
+      }
+      
       setSaved(true);
       toast.success(t('create.publishSuccess'));
       // Use window.location for the same atomic navigation as in auth.
@@ -250,7 +267,7 @@ export default function NewListingPage() {
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div>
                       <label className="mb-1.5 block text-sm font-medium text-fg">
-                        {t('animal.weight')} ({t('animal.kg')})
+                        {t('animal.weight')} ({t('animal.kg')}) <span className="text-danger">*</span>
                       </label>
                       <input
                         type="number"
@@ -260,10 +277,11 @@ export default function NewListingPage() {
                         placeholder="0"
                         className="input-base w-full"
                       />
+                      {errors.weight_kg && <p className="mt-1 text-xs text-danger">{errors.weight_kg}</p>}
                     </div>
                     <div>
                       <label className="mb-1.5 block text-sm font-medium text-fg">
-                        {t('animal.gender')}
+                        {t('animal.gender')} <span className="text-danger">*</span>
                       </label>
                       <select
                         value={form.gender}
@@ -275,13 +293,14 @@ export default function NewListingPage() {
                           <option key={g.value} value={g.value}>{t(g.key as any)}</option>
                         ))}
                       </select>
+                      {errors.gender && <p className="mt-1 text-xs text-danger">{errors.gender}</p>}
                     </div>
                   </div>
 
                   {/* Breed — backend-driven, depends on category */}
                   <div>
                     <label className="mb-1.5 block text-sm font-medium text-fg">
-                      {t('animal.breed')}
+                      {t('animal.breed')} <span className="text-danger">*</span>
                     </label>
                     <BreedSelector
                       categorySlug={form.category}
@@ -289,6 +308,7 @@ export default function NewListingPage() {
                       onChange={(v) => set('breed', v)}
                       placeholder={t('animal.breed')}
                     />
+                    {errors.breed && <p className="mt-1 text-xs text-danger">{errors.breed}</p>}
                   </div>
 
                   <div className="grid gap-4 sm:grid-cols-2">
@@ -389,13 +409,13 @@ export default function NewListingPage() {
                   required
                 />
 
-                {/* Map pin (optional, but recommended) */}
+                {/* Map pin — REQUIRED so nearby & map render the listing */}
                 <div className="mt-6">
                   <label className="text-xs font-semibold uppercase tracking-wider text-fg-subtle">
-                    {t('create.mapPinLabel' as any) ?? 'Map pin (optional)'}
+                    {t('create.mapPinLabel' as any)} <span className="text-danger">*</span>
                   </label>
                   <p className="mt-1 mb-3 text-xs text-fg-muted">
-                    {t('create.mapPinHelp' as any) ?? 'Drop a pin so buyers can see the listing on the map.'}
+                    {t('create.mapPinHelp' as any)}
                   </p>
                   <LocationPicker
                     value={{ lat: form.latitude, lng: form.longitude }}
@@ -448,6 +468,9 @@ export default function NewListingPage() {
                       }
                     }}
                   />
+                  {errors.location && (
+                    <p className="mt-2 text-xs text-danger">{errors.location}</p>
+                  )}
                 </div>
               </div>
 

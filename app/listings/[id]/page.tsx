@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -26,7 +26,7 @@ import {
 
 import { AppNav } from '@/components/layout/AppNav';
 import { Avatar } from '@/components/ui/Avatar';
-import { Badge } from '@/components/ui/Badge';
+
 import { ListingImage } from '@/components/listings/ListingImage';
 import { ListingGrid } from '@/components/listings/ListingGrid';
 import { FollowButton } from '@/components/sellers/FollowButton';
@@ -44,6 +44,7 @@ import { formatPrice, formatRelativeTime } from '@/lib/utils/format';
 
 export default function ListingDetailPage() {
   const t = useTranslations();
+  const locale = useLocale();
   const router = useRouter();
   const params = useParams<{ id: string }>();
   // Route params arrive as strings — convert once at the boundary
@@ -90,6 +91,15 @@ export default function ListingDetailPage() {
 
   const images = listing?.images ?? [];
   const visibleImage = images[imgIndex];
+
+  // Get localized title based on current UI locale
+  const localizedTitle = (() => {
+    if (!listing) return '';
+    const norm = (locale || 'uz').replace('-', '_');
+    const field = `title_${norm}` as keyof typeof listing;
+    const val = listing[field] as string | undefined;
+    return val || listing.title;
+  })();
 
   const handleShare = async () => {
     const url = typeof window !== 'undefined' ? window.location.href : '';
@@ -236,7 +246,7 @@ export default function ListingDetailPage() {
                           : listing.category.name_uz}
                       </p>
                     )}
-                    <h1 className="display-md text-balance">{listing.title}</h1>
+                    <h1 className="display-md text-balance">{localizedTitle}</h1>
 
                     <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-sm text-fg-muted">
                       <span className="inline-flex items-center gap-1.5">
@@ -428,13 +438,20 @@ export default function ListingDetailPage() {
                     <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-fg-subtle">
                       {t('listings.price')}
                     </p>
-                    <p className="mt-2 font-display text-3xl font-bold text-fg">
-                      {formatPrice(listing.price, listing.currency)}
-                    </p>
+                    <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                      <p className="font-display text-3xl font-bold text-fg leading-none">
+                        {formatPrice(listing.price, listing.currency)}
+                      </p>
+                    </div>
                     {listing.is_negotiable && (
-                      <Badge variant="primary" size="sm" className="mt-2">
-                        {t('listings.negotiable')}
-                      </Badge>
+                      <div className="mt-3 inline-flex items-center gap-2 rounded-xl border border-brand-primary/20 bg-brand-primary/5 px-3.5 py-2">
+                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-md bg-brand-primary/15">
+                          <CheckCircle2 className="h-3 w-3 text-brand-primary" strokeWidth={2.5} />
+                        </span>
+                        <span className="text-sm font-semibold text-brand-primary tracking-wide">
+                          {t('listings.negotiable')}
+                        </span>
+                      </div>
                     )}
 
                     <div className="mt-6 space-y-2.5">
@@ -638,6 +655,7 @@ function SpecItem({
  * - Fallback: Google Maps
  */
 function OpenInMapsButton({ lat, lng, label }: { lat: number; lng: number; label?: string }) {
+  const t = useTranslations();
   const [userPos, setUserPos] = React.useState<{ lat: number; lng: number } | null>(null);
 
   React.useEffect(() => {
@@ -683,7 +701,7 @@ function OpenInMapsButton({ lat, lng, label }: { lat: number; lng: number; label
       className="inline-flex items-center gap-2 rounded-xl border border-brand-primary/30 bg-brand-primary/8 px-3 py-2 text-sm font-semibold text-brand-primary transition-all hover:bg-brand-primary/12 hover:border-brand-primary/50 active:scale-95"
     >
       <MapPin className="h-4 w-4" strokeWidth={2} />
-      {userPos ? "Yo'nalish ko'rsatish" : "Xaritada ochish"}
+      {userPos ? t('validation.openDirections') : t('validation.openOnMap')}
     </button>
   );
 }

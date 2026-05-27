@@ -48,7 +48,7 @@ export function ToastContainer() {
   const router = useRouter();
 
   return (
-    <div className="pointer-events-none fixed bottom-4 right-4 z-[1600] flex flex-col gap-2 sm:bottom-6 sm:right-6">
+    <div className="pointer-events-none fixed bottom-20 right-4 z-[1600] flex flex-col gap-2 sm:bottom-6 sm:right-6 md:bottom-6">
       <AnimatePresence>
         {toasts.map((t) => {
           const Icon = ICON[t.type];
@@ -57,7 +57,8 @@ export function ToastContainer() {
           const handleClick = () => {
             if (t.onClick) {
               t.onClick();
-            } else if (t.href) {
+            }
+            if (t.href) {
               router.push(t.href);
             }
             remove(t.id);
@@ -70,8 +71,11 @@ export function ToastContainer() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, x: 60, scale: 0.96 }}
               transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-              className={`pointer-events-auto flex w-80 max-w-[calc(100vw-2rem)] items-start gap-3 rounded-2xl border p-4 shadow-lift backdrop-blur-xl ${TONE[t.type]} ${isClickable ? 'cursor-pointer hover:brightness-110 transition-all' : ''}`}
+              className={`pointer-events-auto flex w-80 max-w-[calc(100vw-2rem)] items-start gap-3 rounded-2xl border p-4 shadow-lift backdrop-blur-xl ${TONE[t.type]} ${isClickable ? 'cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200' : ''}`}
               onClick={isClickable ? handleClick : undefined}
+              role={isClickable ? 'button' : undefined}
+              tabIndex={isClickable ? 0 : undefined}
+              onKeyDown={isClickable ? (e) => { if (e.key === 'Enter' || e.key === ' ') handleClick(); } : undefined}
             >
               <Icon className="mt-0.5 h-5 w-5 flex-shrink-0" strokeWidth={1.75} />
               <div className="min-w-0 flex-1">
@@ -103,6 +107,13 @@ export const toast = {
     useToastStore.getState().add({ type: 'warning', title, message, href }),
   info: (title: string, message?: string, href?: string) =>
     useToastStore.getState().add({ type: 'info', title, message, href }),
-  notification: (title: string, message: string | undefined, href: string) =>
-    useToastStore.getState().add({ type: 'info', title, message, href, duration: 6000 }),
+  notification: (title: string, message: string | undefined, href: string, onRead?: () => void) =>
+    useToastStore.getState().add({
+      type: 'info',
+      title,
+      message,
+      href,
+      duration: 6000,
+      onClick: onRead ? () => { onRead(); } : undefined,
+    }),
 };

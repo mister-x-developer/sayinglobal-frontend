@@ -145,6 +145,28 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
       </div>
       )}
 
+      {/* User profile — TOP position */}
+      <div className="border-b border-border p-3">
+        {collapsed && !isDrawer ? (
+          <div className="flex flex-col items-center gap-2">
+            <Link href="/admin/profile">
+              <Avatar src={user?.avatar_url ?? user?.avatar ?? null} name={user?.full_name} size="sm" ring />
+            </Link>
+          </div>
+        ) : (
+          <Link
+            href="/admin/profile"
+            className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-bg-subtle transition-colors"
+          >
+            <Avatar src={user?.avatar_url ?? user?.avatar ?? null} name={user?.full_name} size="sm" ring />
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-semibold text-fg">{user?.full_name}</p>
+              <p className="text-xs text-fg-subtle">{roleBadge}</p>
+            </div>
+          </Link>
+        )}
+      </div>
+
       {/* Nav links */}
       <div className="flex-1 overflow-y-auto p-3 space-y-4">
         {NAV_GROUPS.map((group) => (
@@ -190,11 +212,10 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
         ))}
       </div>
 
-      {/* User footer */}
+      {/* Logout — bottom */}
       <div className="border-t border-border p-3">
         {collapsed && !isDrawer ? (
-          <div className="flex flex-col items-center gap-2">
-            <Avatar src={user?.avatar_url ?? user?.avatar ?? null} name={user?.full_name} size="sm" />
+          <div className="flex flex-col items-center">
             <button
               type="button"
               onClick={() => { logout(); router.push('/'); }}
@@ -205,24 +226,14 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
             </button>
           </div>
         ) : (
-          <Link
-            href="/admin/profile"
-            className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-bg-subtle transition-colors"
+          <button
+            type="button"
+            onClick={() => { logout(); router.push('/'); }}
+            className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-fg-muted hover:bg-bg-subtle hover:text-danger transition-colors"
           >
-            <Avatar src={user?.avatar_url ?? user?.avatar ?? null} name={user?.full_name} size="sm" />
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold text-fg">{user?.full_name}</p>
-              <p className="text-xs text-fg-subtle">{roleBadge}</p>
-            </div>
-            <button
-              type="button"
-              onClick={(e) => { e.preventDefault(); logout(); router.push('/'); }}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full text-fg-subtle hover:bg-bg-subtle hover:text-danger"
-              aria-label={t('nav.logout')}
-            >
-              <LogOut className="h-4 w-4" strokeWidth={1.75} />
-            </button>
-          </Link>
+            <LogOut className="h-[18px] w-[18px] flex-shrink-0" strokeWidth={1.75} />
+            <span>{t('nav.logout')}</span>
+          </button>
         )}
       </div>
     </nav>

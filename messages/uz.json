@@ -499,8 +499,8 @@
     "savingDraft": "Qoralama saqlanmoqda...",
     "publishing": "Eʼlon qilinmoqda...",
     "publishSuccess": "Eʼlon muvaffaqiyatli joylashtirildi",
-    "mapPinLabel": "Xarita ustida belgi (ixtiyoriy)",
-    "mapPinHelp": "Xaritada belgini qoʻying: xaridorlar eʼlonni xaritada koʻrishi uchun.",
+    "mapPinLabel": "Xarita ustida belgi",
+    "mapPinHelp": "Xaritada belgini qoʻying — nearby va xaritada eʼlon shu joyda koʻrinadi.",
     "stepBasics": "Asosiy maʼlumot"
   },
   "admin": {
@@ -730,7 +730,13 @@
   "validation": {
     "atLeastOneFieldRequired": "Kamida bitta maydon toʻldirilishi shart",
     "regionRequired": "Avval viloyatni tanlang",
-    "required": "Majburiy maydon"
+    "required": "Majburiy maydon",
+    "minImages": "Kamida 3 ta rasm yuklang (maksimal 5 ta)",
+    "monthlyLimitReached": "Oylik limitingiz tugadi. Tarifni yangilang.",
+    "activeLimitReached": "Faol eʼlonlar limitiga yetdingiz.",
+    "cannotCreateListing": "Eʼlon yaratib boʻlmaydi.",
+    "openDirections": "Yoʻnalish koʻrsatish",
+    "openOnMap": "Xaritada ochish"
   },
   "profileInfo": {
     "title": "Muhim maʼlumot",
