@@ -160,22 +160,22 @@ export default function AdminDashboardPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <p className="text-eyebrow">Admin</p>
-            <h1 className="display-lg mt-1">Boshqaruv paneli</h1>
+            <h1 className="display-lg mt-1">{t('admin.dashboard')}</h1>
             <p className="mt-1 text-sm text-fg-muted">
-              {new Date().toLocaleDateString('uz-UZ', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+              {new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
           </div>
           <button onClick={() => load(true)} disabled={refreshing}
             className="btn btn-secondary btn-sm">
             <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} strokeWidth={1.75} />
-            Yangilash
+            {t('common.refresh')}
           </button>
         </div>
 
         {loading ? (
           <div className="flex flex-col items-center justify-center py-32 gap-3">
             <Loader2 className="h-10 w-10 animate-spin text-brand-primary" strokeWidth={2} />
-            <p className="text-sm text-fg-muted">Yuklanmoqda...</p>
+            <p className="text-sm text-fg-muted">{t('common.loading')}</p>
           </div>
         ) : (
           <>
@@ -191,7 +191,7 @@ export default function AdminDashboardPage() {
                   <Link href="/admin/listings?status=pending"
                     className="flex items-center gap-2.5 rounded-xl border border-warning/30 bg-warning/8 px-4 py-3 text-sm font-semibold text-warning hover:bg-warning/12 transition-colors">
                     <AlertTriangle className="h-4 w-4" strokeWidth={2} />
-                    {pendingListings} ta e'lon tasdiqlash kutmoqda
+                    {pendingListings} {t('admin.listingsPendingApproval' as any) ?? "ta e'lon tasdiqlash kutmoqda"}
                     <ArrowRight className="h-4 w-4" strokeWidth={2} />
                   </Link>
                 )}
@@ -199,7 +199,7 @@ export default function AdminDashboardPage() {
                   <Link href="/admin/moderation"
                     className="flex items-center gap-2.5 rounded-xl border border-danger/30 bg-danger/8 px-4 py-3 text-sm font-semibold text-danger hover:bg-danger/12 transition-colors">
                     <Flag className="h-4 w-4" strokeWidth={2} />
-                    {pendingComplaints} ta shikoyat ko'rib chiqilmagan
+                    {pendingComplaints} {t('admin.complaintsPendingReview' as any) ?? "ta shikoyat ko'rib chiqilmagan"}
                     <ArrowRight className="h-4 w-4" strokeWidth={2} />
                   </Link>
                 )}
@@ -212,7 +212,7 @@ export default function AdminDashboardPage() {
                 transition={{ delay: 0.2 }} className="surface-elevated overflow-hidden">
                 <div className="border-b border-border px-5 py-4 flex items-center gap-2">
                   <Zap className="h-4 w-4 text-brand-accent" strokeWidth={2} />
-                  <h2 className="font-bold text-fg">Tezkor harakatlar</h2>
+                  <h2 className="font-bold text-fg">{t('admin.quickActions' as any) ?? 'Tezkor harakatlar'}</h2>
                 </div>
                 <div className="p-2 space-y-0.5">
                   <QuickAction href="/admin/users" icon={Users} label={t('admin.users')} color="bg-blue-500/10 text-blue-500" />
@@ -230,16 +230,16 @@ export default function AdminDashboardPage() {
                 transition={{ delay: 0.25 }} className="surface-elevated overflow-hidden">
                 <div className="border-b border-border px-5 py-4 flex items-center gap-2">
                   <Activity className="h-4 w-4 text-success" strokeWidth={2} />
-                  <h2 className="font-bold text-fg">Bugungi faollik</h2>
+                  <h2 className="font-bold text-fg">{t('admin.todayActivity' as any) ?? 'Bugungi faollik'}</h2>
                 </div>
                 <div className="p-4 grid grid-cols-2 gap-3">
                   {stats && [
-                    { label: "Yangi foydalanuvchilar", value: stats.users.new_today, color: 'text-blue-500' },
-                    { label: "Yangi e'lonlar", value: stats.listings.new_today, color: 'text-brand-primary' },
-                    { label: "Sotilgan e'lonlar", value: stats.listings.sold, color: 'text-success' },
-                    { label: "Faol foydalanuvchilar", value: stats.users.active, color: 'text-purple-500' },
-                    { label: "Ko'rishlar", value: stats.engagement.views_today, color: 'text-amber-500' },
-                    { label: "Xabarlar", value: stats.messages.today, color: 'text-green-500' },
+                    { label: t('admin.newUsers' as any) ?? 'Yangi foydalanuvchilar', value: stats.users.new_today, color: 'text-blue-500' },
+                    { label: t('admin.newListings' as any) ?? "Yangi e'lonlar", value: stats.listings.new_today, color: 'text-brand-primary' },
+                    { label: t('admin.soldListings'), value: stats.listings.sold, color: 'text-success' },
+                    { label: t('admin.activeUsers'), value: stats.users.active, color: 'text-purple-500' },
+                    { label: t('analytics.totalViews' as any) ?? "Ko'rishlar", value: stats.engagement.views_today, color: 'text-amber-500' },
+                    { label: t('nav.chat'), value: stats.messages.today, color: 'text-green-500' },
                   ].map((item) => (
                     <div key={item.label} className="rounded-xl border border-border bg-bg-subtle p-3">
                       <p className="text-[11px] text-fg-subtle leading-tight">{item.label}</p>
@@ -256,12 +256,12 @@ export default function AdminDashboardPage() {
                 transition={{ delay: 0.3 }} className="surface-elevated overflow-hidden">
                 <div className="border-b border-border px-5 py-4 flex items-center gap-2">
                   <Shield className="h-4 w-4 text-brand-primary" strokeWidth={2} />
-                  <h2 className="font-bold text-fg">Tizim holati</h2>
+                  <h2 className="font-bold text-fg">{t('admin.systemHealth')}</h2>
                 </div>
                 <div className="p-4 space-y-3">
                   {[
                     { label: 'Backend API', key: '_api' },
-                    { label: "Ma'lumotlar bazasi", key: 'database' },
+                    { label: t('admin.database' as any) ?? "Ma'lumotlar bazasi", key: 'database' },
                     { label: 'Redis / Cache', key: 'cache' },
                     { label: 'Celery Broker', key: 'broker' },
                   ].map((item) => {
@@ -274,7 +274,7 @@ export default function AdminDashboardPage() {
                         <span className="text-sm font-medium text-fg">{item.label}</span>
                         <span className={`inline-flex items-center gap-1.5 text-xs font-semibold ${isOk ? 'text-success' : isChecking ? 'text-fg-muted' : 'text-danger'}`}>
                           <span className={`h-2 w-2 rounded-full ${isOk ? 'bg-success animate-pulse' : isChecking ? 'bg-fg-muted' : 'bg-danger'}`} />
-                          {isOk ? 'Ishlayapti' : isChecking ? '...' : 'Xato'}
+                          {isOk ? t('admin.statusOk' as any) ?? 'Ishlayapti' : isChecking ? '...' : t('admin.statusError' as any) ?? 'Xato'}
                         </span>
                       </div>
                     );
@@ -282,7 +282,7 @@ export default function AdminDashboardPage() {
                   <Link href="/admin/health"
                     className="flex items-center justify-center gap-2 rounded-xl border border-border px-3 py-2.5 text-sm font-medium text-fg-muted hover:bg-bg-subtle hover:text-fg transition-colors mt-2">
                     <Activity className="h-4 w-4" strokeWidth={1.75} />
-                    Batafsil ko'rish
+                    {t('common.details')}
                   </Link>
                 </div>
               </motion.div>
@@ -296,7 +296,7 @@ export default function AdminDashboardPage() {
                 <div className="border-b border-border px-5 py-4 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4 text-warning" strokeWidth={2} />
-                    <h2 className="font-bold text-fg">Kutilayotgan e'lonlar</h2>
+                    <h2 className="font-bold text-fg">{t('admin.pendingListings' as any) ?? "Kutilayotgan e'lonlar"}</h2>
                     {pendingListings > 0 && (
                       <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-warning/15 px-1.5 text-[10px] font-bold text-warning">
                         {pendingListings}
@@ -304,7 +304,7 @@ export default function AdminDashboardPage() {
                     )}
                   </div>
                   <Link href="/admin/listings?status=pending" className="text-xs font-semibold text-brand-primary hover:underline">
-                    Barchasini ko'rish →
+                    {t('common.showAll')} →
                   </Link>
                 </div>
                 <PendingListings />
@@ -316,7 +316,7 @@ export default function AdminDashboardPage() {
                 <div className="border-b border-border px-5 py-4 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Flag className="h-4 w-4 text-danger" strokeWidth={2} />
-                    <h2 className="font-bold text-fg">So'nggi shikoyatlar</h2>
+                    <h2 className="font-bold text-fg">{t('admin.recentComplaints' as any) ?? "So'nggi shikoyatlar"}</h2>
                     {pendingComplaints > 0 && (
                       <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-danger/15 px-1.5 text-[10px] font-bold text-danger">
                         {pendingComplaints}
@@ -324,7 +324,7 @@ export default function AdminDashboardPage() {
                     )}
                   </div>
                   <Link href="/admin/moderation" className="text-xs font-semibold text-brand-primary hover:underline">
-                    Barchasini ko'rish →
+                    {t('common.showAll')} →
                   </Link>
                 </div>
                 <RecentComplaints />
@@ -339,7 +339,7 @@ export default function AdminDashboardPage() {
                     transition={{ delay: 0.45 }} className="surface-elevated overflow-hidden">
                     <div className="border-b border-border px-5 py-4 flex items-center gap-2">
                       <TrendingUp className="h-4 w-4 text-blue-500" strokeWidth={2} />
-                      <h2 className="font-bold text-fg">Foydalanuvchilar (30 kun)</h2>
+                      <h2 className="font-bold text-fg">{t('admin.newUsers' as any) ?? 'Foydalanuvchilar'} (30 {t('analytics.days' as any) ?? 'kun'})</h2>
                     </div>
                     <div className="p-4">
                       <LineChart
@@ -354,7 +354,7 @@ export default function AdminDashboardPage() {
                     transition={{ delay: 0.5 }} className="surface-elevated overflow-hidden">
                     <div className="border-b border-border px-5 py-4 flex items-center gap-2">
                       <TrendingUp className="h-4 w-4 text-brand-primary" strokeWidth={2} />
-                      <h2 className="font-bold text-fg">E'lonlar (30 kun)</h2>
+                      <h2 className="font-bold text-fg">{t('admin.listings')} (30 {t('analytics.days' as any) ?? 'kun'})</h2>
                     </div>
                     <div className="p-4">
                       <LineChart
