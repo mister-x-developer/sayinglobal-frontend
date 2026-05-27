@@ -74,6 +74,33 @@ class ChatSocketService {
       try {
         const data = JSON.parse(event.data as string);
 
+        // F-50 fix: forward the backend `session.revoked` JSON event
+        // payload to a localized toast before onclose(4403) sweeps the
+        // user to /auth. Same handling as in notificationSocket.
+        if (data.type === 'session.revoked' || data.event === 'session.revoked') {
+          if (typeof window !== 'undefined') {
+            void Promise.all([
+              import('@/components/ui/Toast'),
+              import('@/lib/i18n/runtime'),
+            ]).then(([{ toast }, runtime]) => {
+              try {
+                const reason = (data.reason as string | undefined) ?? 'session_revoked';
+                const localeKey = reason === 'admin_revoke'
+                  ? 'auth.sessionRevokedByAdmin'
+                  : reason === 'user_revoke_other_session'
+                    ? 'auth.sessionRevokedByOtherSession'
+                    : 'auth.sessionRevoked';
+                const localized = runtime.tRuntime?.(localeKey)
+                  ?? 'Sizning seansingiz tugatildi.';
+                toast.warning(localized);
+              } catch {
+                /* never block the close path */
+              }
+            }).catch(() => {});
+          }
+          return;
+        }
+
         if (data.type === 'message_history' && this.onHistoryCb) {
           this.onHistoryCb(data.messages || []);
         } else if (data.type === 'chat_message' && this.onMessageCb) {
@@ -102,9 +129,20 @@ class ChatSocketService {
 
     this.ws.onclose = (event: CloseEvent) => {
       this.ws = null;
-      if (event.code === 4401 || event.code === 4403) {
-        // Auth error — don't reconnect
+      // F-49 fix: align with notificationSocket. Auth-fatal close codes
+      // (4001 / 4401 legacy and spec; 4003 / 4403 legacy and spec) must
+      // both stop reconnecting AND force a sign-out + redirect, so the
+      // user is not left staring at a stale conversation list while
+      // their session is revoked server-side.
+      if (
+        event.code === 4001 || event.code === 4401 ||
+        event.code === 4003 || event.code === 4403
+      ) {
         this.shouldReconnect = false;
+        useAuthStore.getState().logout();
+        if (typeof window !== 'undefined') {
+          window.location.href = '/auth';
+        }
         return;
       }
       if (this.shouldReconnect) {

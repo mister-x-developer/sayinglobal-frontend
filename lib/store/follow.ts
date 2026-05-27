@@ -14,6 +14,13 @@ interface FollowState {
   unfollow: (publicId: number) => Promise<void>;
   toggle: (publicId: number) => Promise<boolean>;
   hydrateFromIds: (ids: number[]) => void;
+  /**
+   * F-33 fix (web sign-out cleanup residue): reset in-memory follow set so
+   * a sibling render after sign-out does not still show the previous user's
+   * follow buttons in the "following" state. The persist middleware's
+   * localStorage entry is also cleared by the auth-store logout path.
+   */
+  reset: () => void;
 }
 
 export const useFollowStore = create<FollowState>()(
@@ -47,6 +54,8 @@ export const useFollowStore = create<FollowState>()(
       },
 
       hydrateFromIds: (ids) => set({ following: ids }),
+
+      reset: () => set({ following: [] }),
     }),
     { name: 'sayin-follow' }
   )

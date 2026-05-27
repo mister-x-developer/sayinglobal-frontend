@@ -15,6 +15,12 @@ interface NotificationsState {
   markAllRead: () => void;
   remove: (publicId: number) => void;
   addItem: (item: Notification) => void;
+  /**
+   * F-51 fix: clear all in-memory notifications + unread count. Called from
+   * the auth-store sign-out path so the next user (or anonymous render) does
+   * not briefly see the previous user's notifications.
+   */
+  reset: () => void;
 }
 
 function countUnread(items: Notification[]) {
@@ -57,4 +63,6 @@ export const useNotificationsStore = create<NotificationsState>((set) => ({
       const items = [item, ...state.items];
       return { items, unreadCount: countUnread(items) };
     }),
+
+  reset: () => set({ items: [], unreadCount: 0 }),
 }));

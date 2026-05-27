@@ -7,6 +7,7 @@ import { ToastContainer } from '@/components/ui/Toast';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { TermsGate } from '@/components/providers/TermsGate';
 import { NotificationSocketProvider } from '@/components/providers/NotificationSocketProvider';
+import { HydrationReady } from '@/components/providers/HydrationReady';
 import { OnboardingModal } from '@/components/shared/OnboardingModal';
 import './globals.css';
 
@@ -78,24 +79,6 @@ const themeInitScript = `
 })();
 `;
 
-// No-flash bootstrap: mark the html element as JS-ready AFTER hydration
-// completes so framer-motion doesn't run "from-opacity-0" animations on the
-// first paint. CSS handles the no-JS / pre-hydration case so initial paint
-// always shows fully-styled content; framer-motion only animates *re-mounts*
-// triggered by user interaction.
-const motionBootScript = `
-(function(){
-  document.documentElement.classList.add('js');
-  if (document.readyState === 'complete') {
-    document.documentElement.classList.add('js-ready');
-  } else {
-    window.addEventListener('load', function(){
-      document.documentElement.classList.add('js-ready');
-    });
-  }
-})();
-`;
-
 export default async function RootLayout({
   children,
 }: {
@@ -113,9 +96,9 @@ export default async function RootLayout({
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-        <script dangerouslySetInnerHTML={{ __html: motionBootScript }} />
       </head>
       <body className="antialiased min-h-screen bg-bg text-fg pb-[72px] md:pb-0 overflow-x-hidden">
+        <HydrationReady />
         <ThemeProvider>
           <NextIntlClientProvider messages={messages} locale={locale}>
             {children}

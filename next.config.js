@@ -4,9 +4,11 @@ const { withSentryConfig } = require('@sentry/nextjs');
 const withNextIntl = createNextIntlPlugin('./lib/i18n.ts');
 
 const isDev = process.env.NODE_ENV === 'development';
+const apiOrigin = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api').replace(/\/api\/?$/, '');
 
 const nextConfig = {
   reactStrictMode: true,
+  skipTrailingSlashRedirect: true,
 
   images: {
     remotePatterns: [
@@ -37,6 +39,15 @@ const nextConfig = {
       config.externals = config.externals || [];
     }
     return config;
+  },
+
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: `${apiOrigin}/api/:path*/`,
+      },
+    ];
   },
 
   // Production security headers
@@ -71,7 +82,7 @@ const nextConfig = {
           // Fonts
           "font-src 'self' data:",
           // API/WS connections — production backend + Nominatim reverse geocoding + OSM tile fetchers
-          "connect-src 'self' https://sayinglobal.up.railway.app wss://sayinglobal.up.railway.app https://sayinglobal-backend-production.up.railway.app wss://sayinglobal-backend-production.up.railway.app https://sentry.io https://o4504523.ingest.sentry.io https://nominatim.openstreetmap.org https://*.tile.openstreetmap.org https://tile.openstreetmap.org",
+          "connect-src 'self' https://sayinglobal.up.railway.app wss://sayinglobal.up.railway.app https://sayinglobal-backend-production.up.railway.app wss://sayinglobal-backend-production.up.railway.app https://sentry.io https://*.ingest.sentry.io https://*.ingest.de.sentry.io https://nominatim.openstreetmap.org https://*.tile.openstreetmap.org https://tile.openstreetmap.org",
           // No frames
           "frame-ancestors 'none'",
           // Workers for Next.js
@@ -98,6 +109,7 @@ module.exports = withSentryConfig(
     silent: true,               // suppress Sentry CLI output during build
     widenClientFileUpload: true, // upload more source maps for better stack traces
     hideSourceMaps: true,       // hide source maps from browser
+    sourcemaps: { deleteSourcemapsAfterUpload: true },
     disableLogger: true,        // remove Sentry debug logs from bundle
     automaticVercelMonitors: false,
   }

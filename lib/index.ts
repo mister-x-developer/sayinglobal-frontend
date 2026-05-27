@@ -19,7 +19,11 @@ export { useNotificationsStore } from './store/notifications';
 // Hooks
 export { useAsync } from './hooks/useAsync';
 export { useForm } from './hooks/useForm';
-export { useWebSocket } from './hooks/useWebSocket';
+// F-36/F-37 cleanup: legacy `useWebSocket` hook removed. Production WS
+// traffic is owned by `lib/ws/notificationSocket.ts` and `lib/ws/chatSocket.ts`
+// singletons (which honor the spec close-code map and consume the
+// `session.revoked` event payload). The dormant hook was carrying a stale-
+// closure / wrong-close-code defect (F-36) and shipping unused (F-37).
 export { useCategories, useRegions, useBreeds } from './hooks/useReferenceData';
 
 // Translation

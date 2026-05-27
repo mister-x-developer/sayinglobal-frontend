@@ -8,10 +8,25 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { useAuthStore } from '../store/auth';
 
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api').replace(/\/api\/?$/, '');
+const API_ORIGIN = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api').replace(/\/api\/?$/, '');
+
+function shouldUseSameOriginProxy(): boolean {
+  if (typeof window === 'undefined') return false;
+  const { hostname } = window.location;
+  return hostname === 'localhost' || hostname === '127.0.0.1';
+}
+
+function getApiBaseUrl(): string {
+  // Local production smoke tests often point NEXT_PUBLIC_API_URL at the live
+  // backend, which rejects localhost CORS. Use the Next.js rewrite proxy only
+  // on localhost so production deployments keep their direct API origin.
+  return shouldUseSameOriginProxy() ? '' : API_ORIGIN;
+}
+
+const API_BASE_URL = getApiBaseUrl();
 
 export const apiClient = axios.create({
-  baseURL: `${API_URL}/api`,
+  baseURL: `${API_BASE_URL}/api`,
   headers: { 'Content-Type': 'application/json' },
   timeout: 30000,
 });
@@ -78,7 +93,7 @@ async function refreshAccessToken(): Promise<string> {
     try {
       const refreshToken = readPersistedRefresh();
       if (!refreshToken) throw new Error('no_refresh');
-      const res = await axios.post(`${API_URL}/api/users/auth/token/refresh/`, {
+      const res = await axios.post(`${API_BASE_URL}/api/users/auth/token/refresh/`, {
         refresh: refreshToken,
       });
       const { access, refresh: newRefresh } = res.data;

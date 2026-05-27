@@ -736,9 +736,9 @@
 
 /* ============================================================
    FRAMER-MOTION SAFETY NET
-   Strategy: SSR HTML is always visible on first paint. framer-motion
-   only "takes over" once the page is fully hydrated (html.js-ready).
-   This eliminates the "styling flash" reported in problem.txt.
+   Strategy: SSR HTML is always visible on first paint. The client-side
+   HydrationReady component adds html.js-ready after React has mounted, so
+   framer-motion only takes over after hydration instead of during it.
    ============================================================ */
 
 /* No-JS fallback */

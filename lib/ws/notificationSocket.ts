@@ -65,6 +65,36 @@ class NotificationSocketService {
         const data = JSON.parse(event.data as string);
         const store = useNotificationsStore.getState();
 
+        // F-50 fix: consume the backend `session.revoked` JSON event payload
+        // before the close-code redirect path runs. The event carries the
+        // session_id (our own session, not someone else's) plus an optional
+        // reason string that lets us surface a localized toast. Once the
+        // toast is rendered the close-code handler below sweeps the user
+        // to /auth.
+        if (data.type === 'session.revoked' || data.event === 'session.revoked') {
+          if (typeof window !== 'undefined') {
+            void Promise.all([
+              import('@/components/ui/Toast'),
+              import('@/lib/i18n/runtime'),
+            ]).then(([{ toast }, runtime]) => {
+              try {
+                const reason = (data.reason as string | undefined) ?? 'session_revoked';
+                const localeKey = reason === 'admin_revoke'
+                  ? 'auth.sessionRevokedByAdmin'
+                  : reason === 'user_revoke_other_session'
+                    ? 'auth.sessionRevokedByOtherSession'
+                    : 'auth.sessionRevoked';
+                const localized = runtime.tRuntime?.(localeKey)
+                  ?? 'Sizning seansingiz tugatildi.';
+                toast.warning(localized);
+              } catch {
+                /* never block the close path on toast failures */
+              }
+            }).catch(() => {});
+          }
+          return;
+        }
+
         if (data.type === 'unread_count') {
           store.setUnreadCount(data.count ?? 0);
         } else if (data.type === 'notification') {
@@ -133,8 +163,19 @@ class NotificationSocketService {
     this.ws.onclose = (event: CloseEvent) => {
       this.ws = null;
 
-      if (event.code === 4001) {
-        // Session revoked by server — force logout
+      // F-47 fix: recognise the full spec-mandated close-code map.
+      //   4001 — backend's legacy "session revoked" code (pre-F-20)
+      //   4401 — spec-mandated "unauthenticated" (post-F-20 backend)
+      //   4003 — backend's legacy "session revoked" alternate
+      //   4403 — spec-mandated "session revoked" (post-F-20 backend)
+      // All four are auth-fatal: stop reconnecting, clear auth state, and
+      // bounce the user to /auth. The previous code only matched 4001 and
+      // would reconnect-loop forever on the new codes.
+      if (
+        event.code === 4001 || event.code === 4401 ||
+        event.code === 4003 || event.code === 4403
+      ) {
+        this.shouldReconnect = false;
         useAuthStore.getState().logout();
         if (typeof window !== 'undefined') {
           window.location.href = '/auth';
@@ -193,7 +234,13 @@ class NotificationSocketService {
     if (this.reconnectTimer) clearTimeout(this.reconnectTimer);
     const delay = this.reconnectDelay;
     this.reconnectTimer = setTimeout(() => {
-      const token = this.currentToken || useAuthStore.getState().accessToken;
+      // F-48 fix: always re-read the live access token from the auth store.
+      // The previous `this.currentToken || useAuthStore.getState().accessToken`
+      // short-circuited to `currentToken` whenever it was non-null, which
+      // was always during the lifetime of a connected session — so
+      // post-rotation reconnects used the OLD token and 4001/4401'd
+      // until the backoff cap or until the next REST refresh.
+      const token = useAuthStore.getState().accessToken;
       if (token && this.shouldReconnect) {
         this.connect(token);
       }

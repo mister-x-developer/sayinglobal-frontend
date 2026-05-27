@@ -71,6 +71,20 @@ export default function AuthPage() {
 
     try {
       const result = await authApi.verifyCode({ code });
+
+      // F-31 residual hardening (defense-in-depth): the backend's
+      // VerifyCodeView (apps/users/views.py F-05 fix) returns HTTP 403
+      // `admin_blocked` for admin accounts, so this branch is normally
+      // unreachable. If a future backend regression flips the order and
+      // returns 200 with `is_admin: true`, this guard converts a tokens-leak
+      // into a usability bug — the user never reaches setSession() so no
+      // tokens or user state are persisted on the marketplace UI.
+      if (result.user?.is_admin) {
+        setErrorMessage(t('auth.errorAdminBlocked'));
+        setSubmitting(false);
+        return;
+      }
+
       // Atomic write: tokens + user + cookie BEFORE we navigate.
       setSession(result.tokens.access, result.tokens.refresh, result.user);
 
