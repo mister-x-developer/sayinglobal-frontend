@@ -580,14 +580,11 @@
     "notesRequiredToResolve": "Ҳал қилиш учун изоҳ қўшинг.",
     "reports": "Ҳисоботлар",
     "reportsReceived": "Фойдаланувчига шикоятлар",
-    "reportsFiled": "Юборилган шикоятлар",
+    "reportsFiled": "Фойдаланувчи юборган шикоятлар",
     "broadcast": "Хабар",
     "accountSummary": "Ҳисоб қисқача",
     "aiModeration": "AI Модерация",
-    "plans": "Тарифлар",
-    "flagged": "шикоят",
-    "reportsReceived": "Фойдаланувчига шикоятлар",
-    "reportsFiled": "Фойдаланувчи юборган шикоятлар"
+    "plans": "Тарифлар"
   },
   "analytics": {
     "title": "Аналитика",

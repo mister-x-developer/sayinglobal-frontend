@@ -113,13 +113,15 @@ class NotificationSocketService {
           // Add to store
           store.addItem(notifItem);
 
-          // Show toast with localized text
+          // Show toast with localized text and navigation
           if (typeof window !== 'undefined') {
             import('@/components/ui/Toast').then(({ toast }) => {
-              const msg = localizedTitle
-                ? `${localizedTitle}: ${localizedBody}`.slice(0, 80)
-                : localizedBody.slice(0, 80);
-              if (msg) toast.info(msg);
+              const actionUrl = notifItem.action_url;
+              if (localizedTitle) {
+                toast.notification(localizedTitle, localizedBody.slice(0, 100) || undefined, actionUrl || '/notifications');
+              } else if (localizedBody) {
+                toast.info(localizedBody.slice(0, 80), undefined, actionUrl || '/notifications');
+              }
             }).catch(() => {});
           }
         }
