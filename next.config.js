@@ -49,14 +49,12 @@ const nextConfig = {
     return [
       {
         // Proxy /api/* → Railway backend.
-        // IMPORTANT: destination must end with trailing slash so Django
-        // does not issue a 301 redirect (which drops the POST body and
-        // causes "network error" on the client).
-        // The :path* capture already includes the trailing slash when the
-        // browser sends one; the explicit trailing slash in the destination
-        // pattern ensures it is always present even when Vercel strips it.
+        // NOTE: destination does NOT add a trailing slash — the client-side
+        // axios interceptor already ensures every request URL ends with '/'.
+        // Adding another '/' here would create double-slash URLs (/api/listings//)
+        // which Django rejects with 404.
         source: '/api/:path*',
-        destination: `${apiOrigin}/api/:path*/`,
+        destination: `${apiOrigin}/api/:path*`,
       },
     ];
   },

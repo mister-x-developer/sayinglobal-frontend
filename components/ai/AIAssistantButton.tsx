@@ -38,6 +38,11 @@ export function AIAssistantButton() {
   const t = useTranslations();
   const { isAuthenticated } = useAuthStore();
   const hydrated = useAuthHydrated();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -53,8 +58,10 @@ export function AIAssistantButton() {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Don't render for unauthenticated users
-  if (!hydrated || !isAuthenticated) return null;
+  // Don't render for unauthenticated users or before mount
+  // Use mounted instead of hydrated — hydrated can get stuck false if
+  // Zustand's onFinishHydration callback never fires.
+  if (!mounted || !isAuthenticated) return null;
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
