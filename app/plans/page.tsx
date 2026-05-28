@@ -85,17 +85,14 @@ export default function PlansPage() {
 
   useEffect(() => {
     let alive = true;
-    // Load public plans
     apiClient.get('/plans/').then((r) => {
       if (alive) setPlans(r.data ?? []);
     }).catch(() => {});
 
     if (isAuthenticated) {
-      // Load my plan
       apiClient.get('/plans/my/').then((r) => {
         if (alive) setMyPlan(r.data);
       }).catch(() => {});
-      // Load referral code
       apiClient.get('/plans/referral/').then((r) => {
         if (alive) setReferral(r.data);
       }).catch(() => {});
@@ -110,18 +107,17 @@ export default function PlansPage() {
     setPromoLoading(true);
     try {
       const r = await apiClient.post('/plans/promo/use/', { code: promoCode.trim().toUpperCase() });
-      toast.success(r.data?.message ?? "Promo kod qo'llanildi!");
+      toast.success(r.data?.message ?? t('plans.promoApplied'));
       setPromoCode('');
-      // Refresh my plan
       const updated = await apiClient.get('/plans/my/');
       setMyPlan(updated.data);
     } catch (e: any) {
-      const err = e?.response?.data?.error ?? 'Xatolik yuz berdi';
+      const err = e?.response?.data?.error ?? '';
       const msgs: Record<string, string> = {
-        invalid_code: "Noto'g'ri promo kod",
-        code_expired_or_exhausted: "Promo kod muddati tugagan yoki tugab ketgan",
+        invalid_code: t('plans.promoInvalid'),
+        code_expired_or_exhausted: t('plans.promoExpired'),
       };
-      toast.error(msgs[err] ?? err);
+      toast.error(msgs[err] ?? t('plans.promoError'));
     } finally {
       setPromoLoading(false);
     }
@@ -135,7 +131,6 @@ export default function PlansPage() {
     });
   };
 
-  // Claim a paid plan using referrals
   const claimWithReferral = async (plan: Plan) => {
     if (!referral) return;
     setPlanLoading(plan.id);
@@ -145,36 +140,27 @@ export default function PlansPage() {
     const have = referral.rewarded_referrals;
 
     if (have < needed) {
-      // Not enough referrals — show how many more needed
       const more = needed - have;
-      const msg = locale === 'ru'
-        ? `Недостаточно рефералов. Нужно ещё ${more} (у вас ${have}/${needed})`
-        : locale === 'en'
-        ? `Not enough referrals. Need ${more} more (you have ${have}/${needed})`
-        : `Referral yetarli emas. Yana ${more} ta kerak (sizda ${have}/${needed} ta)`;
+      const msg = t('plans.notEnoughReferrals')
+        .replace('{n}', String(more))
+        .replace('{have}', String(have))
+        .replace('{needed}', String(needed));
       setPlanMsg({ planId: plan.id, ok: false, text: msg });
       setPlanLoading(null);
       return;
     }
 
-    // Enough referrals — grant the plan via backend
     try {
-      // Use promo endpoint or a dedicated referral-claim endpoint
-      // We'll use the referral use endpoint to trigger plan grant
       await apiClient.post('/plans/referral/claim/', { plan_id: plan.id });
       const updated = await apiClient.get('/plans/my/');
       setMyPlan(updated.data);
-      const msg = locale === 'ru'
-        ? `Тариф "${getPlanName(plan, locale)}" активирован!`
-        : locale === 'en'
-        ? `Plan "${getPlanName(plan, locale)}" activated!`
-        : `"${getPlanName(plan, locale)}" tarifi faollashtirildi!`;
+      const msg = t('plans.planActivated').replace('{name}', getPlanName(plan, locale));
       setPlanMsg({ planId: plan.id, ok: true, text: msg });
     } catch (e: any) {
       const err = e?.response?.data?.error ?? '';
       const msg = err === 'insufficient_referrals'
-        ? (locale === 'ru' ? 'Недостаточно рефералов' : locale === 'en' ? 'Insufficient referrals' : 'Referral yetarli emas')
-        : (locale === 'ru' ? 'Ошибка. Попробуйте снова.' : locale === 'en' ? 'Error. Try again.' : 'Xato yuz berdi.');
+        ? t('plans.insufficientReferrals')
+        : t('plans.errorTryAgain');
       setPlanMsg({ planId: plan.id, ok: false, text: msg });
     } finally {
       setPlanLoading(null);
@@ -194,16 +180,8 @@ export default function PlansPage() {
             className="text-center max-w-2xl mx-auto"
           >
             <p className="text-eyebrow">{t('plans.title')}</p>
-            <h1 className="display-lg mt-3">
-              {locale === 'ru' ? 'Выберите подходящий тариф' :
-               locale === 'en' ? 'Choose your plan' :
-               'Tarifni tanlang'}
-            </h1>
-            <p className="mt-4 text-lg text-fg-muted">
-              {locale === 'ru' ? 'Ежемесячные лимиты объявлений. Никаких скрытых платежей. Сейчас всё бесплатно через рефералы.' :
-               locale === 'en' ? 'Monthly listing limits. No hidden fees. Currently free via referrals.' :
-               "Oylik e'lon limitlari. Hech qanday yashirin to'lov. Hozircha referral orqali bepul."}
-            </p>
+            <h1 className="display-lg mt-3">{t('plans.choosePlan')}</h1>
+            <p className="mt-4 text-lg text-fg-muted">{t('plans.subtitle')}</p>
           </motion.div>
 
           {/* Current plan banner */}
@@ -217,7 +195,7 @@ export default function PlansPage() {
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-wider text-brand-primary">
-                    {locale === 'ru' ? 'Ваш текущий тариф' : locale === 'en' ? 'Your current plan' : 'Joriy tarifingiz'}
+                    {t('plans.currentPlan')}
                   </p>
                   <p className="mt-1 text-2xl font-black text-fg">{getPlanName(myPlan.plan, locale)}</p>
                   <div className="mt-2 flex items-center gap-2">
@@ -229,19 +207,19 @@ export default function PlansPage() {
                     </div>
                     <p className="text-sm text-fg-muted">
                       {myPlan.monthly_listings_used}/{myPlan.plan.monthly_listing_limit}{' '}
-                      {locale === 'ru' ? 'объявлений в этом месяце' : locale === 'en' ? 'listings this month' : "e'lon bu oy"}
+                      {t('plans.listingsThisMonth')}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="text-center">
-                    <p className="text-xs text-fg-muted">{locale === 'ru' ? 'Активных' : locale === 'en' ? 'Active limit' : 'Faol limit'}</p>
+                    <p className="text-xs text-fg-muted">{t('plans.activeLimit')}</p>
                     <p className="font-bold text-fg text-lg">{myPlan.plan.active_listing_limit}</p>
                   </div>
                   {myPlan.expires_at && (
                     <div className="text-center">
-                      <p className="text-xs text-fg-muted">{locale === 'ru' ? 'До' : locale === 'en' ? 'Until' : 'Tugash'}</p>
-                      <p className="font-bold text-fg">{new Date(myPlan.expires_at).toLocaleDateString('uz-UZ')}</p>
+                      <p className="text-xs text-fg-muted">{t('plans.until')}</p>
+                      <p className="font-bold text-fg">{new Date(myPlan.expires_at).toLocaleDateString()}</p>
                     </div>
                   )}
                 </div>
@@ -278,12 +256,12 @@ export default function PlansPage() {
                   >
                     {isCurrent && (
                       <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand-primary px-3 py-1 text-xs font-bold text-white">
-                        Joriy tarif
+                        {t('plans.currentPlanBadge')}
                       </div>
                     )}
                     {plan.is_default && !isCurrent && (
                       <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-fg px-3 py-1 text-xs font-bold text-bg">
-                        Standart
+                        {t('plans.standardBadge')}
                       </div>
                     )}
 
@@ -299,33 +277,33 @@ export default function PlansPage() {
                     <div className="mt-4">
                       <span className="text-3xl font-black text-fg">
                         {plan.price_uzs === 0
-                          ? (locale === 'ru' ? 'Бесплатно' : locale === 'en' ? 'Free' : 'Bepul')
+                          ? t('plans.free')
                           : new Intl.NumberFormat('uz-UZ').format(plan.price_uzs) + " so'm"}
                       </span>
-                      {plan.price_uzs > 0 && <span className="text-sm text-fg-muted"> / {plan.duration_days} {locale === 'ru' ? 'дней' : locale === 'en' ? 'days' : 'kun'}</span>}
+                      {plan.price_uzs > 0 && (
+                        <span className="text-sm text-fg-muted"> / {plan.duration_days} {t('plans.days')}</span>
+                      )}
                     </div>
 
                     {/* Referral notice — only for paid plans */}
                     {plan.price_uzs > 0 && (
                       <div className="mt-3 rounded-xl bg-brand-accent/10 px-3 py-2 text-xs text-brand-accent font-semibold">
-                        🎁 {locale === 'ru' ? 'Сейчас бесплатно через рефералы. Скоро станет платным.' :
-                            locale === 'en' ? 'Currently free via referrals. Paid soon.' :
-                            "Hozircha referral orqali bepul. Tez orada to'lovga o'tadi!"}
+                        🎁 {t('plans.referralNotice')}
                       </div>
                     )}
+
                     {/* Referrals required — with progress bar */}
                     {plan.referrals_required > 0 && (
                       <div className="mt-2 rounded-xl bg-bg-subtle border border-border px-3 py-2.5">
                         <div className="flex items-center justify-between mb-1.5">
                           <span className="text-xs font-semibold text-fg-muted flex items-center gap-1.5">
                             <Users className="h-3.5 w-3.5 text-brand-primary" strokeWidth={2} />
-                            {locale === 'ru' ? 'Нужно рефералов' : locale === 'en' ? 'Referrals needed' : 'Kerakli referrallar'}
+                            {t('plans.referralsNeeded')}
                           </span>
                           <span className="text-xs font-bold text-fg">
                             {referral ? referral.rewarded_referrals : 0}/{plan.referrals_required}
                           </span>
                         </div>
-                        {/* Progress bar */}
                         <div className="h-1.5 w-full rounded-full bg-border overflow-hidden">
                           <div
                             className="h-full rounded-full bg-brand-primary transition-all duration-500"
@@ -334,7 +312,7 @@ export default function PlansPage() {
                         </div>
                         {referral && referral.rewarded_referrals >= plan.referrals_required && (
                           <p className="mt-1 text-[10px] font-semibold text-success">
-                            ✓ {locale === 'ru' ? 'Достаточно рефералов!' : locale === 'en' ? 'Enough referrals!' : 'Referral yetarli!'}
+                            ✓ {t('plans.enoughReferrals')}
                           </p>
                         )}
                       </div>
@@ -343,39 +321,35 @@ export default function PlansPage() {
                     <ul className="mt-5 space-y-2.5 flex-1">
                       <li className="flex items-center gap-2 text-sm text-fg">
                         <Check className="h-4 w-4 flex-shrink-0 text-success" strokeWidth={2.5} />
-                        {locale === 'ru' ? `${plan.monthly_listing_limit} объявлений/мес` :
-                         locale === 'en' ? `${plan.monthly_listing_limit} listings/month` :
-                         `Oyiga ${plan.monthly_listing_limit} ta e'lon`}
+                        {t('plans.listingsPerMonth').replace('{n}', String(plan.monthly_listing_limit))}
                       </li>
                       <li className="flex items-center gap-2 text-sm text-fg">
                         <Check className="h-4 w-4 flex-shrink-0 text-success" strokeWidth={2.5} />
-                        {locale === 'ru' ? `${plan.active_listing_limit} активных одновременно` :
-                         locale === 'en' ? `${plan.active_listing_limit} active at once` :
-                         `Bir vaqtda ${plan.active_listing_limit} ta faol e'lon`}
+                        {t('plans.activeAtOnce').replace('{n}', String(plan.active_listing_limit))}
                       </li>
                       <li className="flex items-center gap-2 text-sm text-fg">
                         <Check className="h-4 w-4 flex-shrink-0 text-success" strokeWidth={2.5} />
-                        {locale === 'ru' ? 'Карта и GPS' : locale === 'en' ? 'Map & GPS' : 'Xarita va GPS joylashuv'}
+                        {t('plans.mapGps')}
                       </li>
                       <li className="flex items-center gap-2 text-sm text-fg">
                         <Check className="h-4 w-4 flex-shrink-0 text-success" strokeWidth={2.5} />
-                        {locale === 'ru' ? 'Сообщения и комментарии' : locale === 'en' ? 'Messages & comments' : 'Xabarlar va izohlar'}
+                        {t('plans.messagesComments')}
                       </li>
                     </ul>
 
                     <div className="mt-6">
                       {!isAuthenticated ? (
                         <Link href="/auth" className="btn btn-primary w-full">
-                          Kirish
+                          {t('plans.signInToStart')}
                           <ArrowRight className="h-4 w-4" strokeWidth={2} />
                         </Link>
                       ) : isCurrent ? (
                         <button disabled className="btn btn-secondary w-full opacity-60 cursor-not-allowed">
-                          {locale === 'ru' ? 'Текущий тариф' : locale === 'en' ? 'Current plan' : 'Joriy tarif'}
+                          {t('plans.currentPlanBadge')}
                         </button>
                       ) : plan.price_uzs === 0 ? (
                         <button disabled className="btn btn-secondary w-full opacity-60 cursor-not-allowed">
-                          {locale === 'ru' ? 'Бесплатный тариф' : locale === 'en' ? 'Free plan' : 'Bepul tarif'}
+                          {t('plans.freePlan')}
                         </button>
                       ) : (
                         <div className="space-y-2">
@@ -387,9 +361,7 @@ export default function PlansPage() {
                             {planLoading === plan.id
                               ? <Loader2 className="h-4 w-4 animate-spin" />
                               : <Gift className="h-4 w-4" strokeWidth={2} />}
-                            {locale === 'ru' ? 'Получить через рефералы' :
-                             locale === 'en' ? 'Claim with referrals' :
-                             'Referral orqali olish'}
+                            {t('plans.claimWithReferrals')}
                             <ArrowRight className="h-4 w-4" strokeWidth={2} />
                           </button>
                           {planMsg?.planId === plan.id && (
@@ -414,14 +386,8 @@ export default function PlansPage() {
               transition={{ duration: 0.4, delay: 0.3 }}
               className="mt-10 surface-elevated p-6"
             >
-              <h2 className="display-sm">
-                {locale === 'ru' ? 'Промо-код' : locale === 'en' ? 'Promo code' : 'Promo kod'}
-              </h2>
-              <p className="mt-1 text-sm text-fg-muted">
-                {locale === 'ru' ? 'Активируйте тариф с помощью промо-кода' :
-                 locale === 'en' ? 'Activate a plan with a promo code' :
-                 "Promo kod orqali tarif yoqing"}
-              </p>
+              <h2 className="display-sm">{t('plans.promoCode')}</h2>
+              <p className="mt-1 text-sm text-fg-muted">{t('plans.promoSubtitle')}</p>
               <div className="mt-4 flex gap-3">
                 <input
                   value={promoCode}
@@ -435,13 +401,13 @@ export default function PlansPage() {
                   disabled={promoLoading || !promoCode.trim()}
                   className="btn btn-primary"
                 >
-                  {promoLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Qo\'llash'}
+                  {promoLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : t('plans.promoApply')}
                 </button>
               </div>
             </motion.div>
           )}
 
-          {/* Referral */}
+          {/* Referral section */}
           {isAuthenticated && referral && (
             <motion.div
               id="referral-section"
@@ -455,42 +421,29 @@ export default function PlansPage() {
                   <Gift className="h-5 w-5" strokeWidth={1.75} />
                 </div>
                 <div>
-                  <h2 className="display-sm">
-                    {locale === 'ru' ? 'Пригласите друзей' : locale === 'en' ? 'Invite friends' : "Do'stingizni taklif qiling"}
-                  </h2>
-                  <p className="text-sm text-fg-muted">
-                    {locale === 'ru' ? 'Получайте бонусы за каждого активного реферала' :
-                     locale === 'en' ? 'Earn rewards for each active referral' :
-                     "Har bir faol taklif uchun mukofot oling"}
-                  </p>
+                  <h2 className="display-sm">{t('plans.inviteFriends')}</h2>
+                  <p className="text-sm text-fg-muted">{t('plans.inviteSubtitle')}</p>
                 </div>
               </div>
               <div className="mt-4 flex items-center gap-3">
                 <div className="flex-1 rounded-xl border border-border bg-bg-subtle px-4 py-3 font-mono text-lg font-bold tracking-widest text-fg">
                   {referral.code}
                 </div>
-                <button
-                  onClick={copyReferral}
-                  className="btn btn-secondary"
-                >
-                  {copied ? <Check className="h-4 w-4 text-success" /> : 'Nusxa'}
+                <button onClick={copyReferral} className="btn btn-secondary">
+                  {copied ? <Check className="h-4 w-4 text-success" /> : t('plans.copyCode')}
                 </button>
               </div>
               <div className="mt-3 flex gap-6 text-sm text-fg-muted">
                 <span>
-                  {locale === 'ru' ? 'Всего приглашений' : locale === 'en' ? 'Total referrals' : 'Jami taklif'}:{' '}
+                  {t('plans.totalReferrals')}:{' '}
                   <strong className="text-fg text-lg">{referral.total_referrals}</strong>
                 </span>
                 <span>
-                  {locale === 'ru' ? 'Вознаграждено' : locale === 'en' ? 'Rewarded' : 'Mukofot olindi'}:{' '}
+                  {t('plans.rewarded')}:{' '}
                   <strong className="text-fg text-lg">{referral.rewarded_referrals}</strong>
                 </span>
               </div>
-              <p className="mt-2 text-xs text-fg-muted">
-                {locale === 'ru' ? 'Стандарт: 3 реферала · Про: 7 рефералов' :
-                 locale === 'en' ? 'Standard: 3 referrals · Pro: 7 referrals' :
-                 'Standart uchun: 3 ta · Pro uchun: 7 ta mukofotlangan referral kerak'}
-              </p>
+              <p className="mt-2 text-xs text-fg-muted">{t('plans.referralHint')}</p>
             </motion.div>
           )}
         </div>
