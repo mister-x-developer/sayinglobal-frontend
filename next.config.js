@@ -44,8 +44,10 @@ const nextConfig = {
   async rewrites() {
     return [
       {
+        // Proxy all /api/* requests to Railway backend
+        // This works for both SSR and client-side requests
         source: '/api/:path*',
-        destination: `${apiOrigin}/api/:path*/`,
+        destination: `${apiOrigin}/api/:path*`,
       },
     ];
   },

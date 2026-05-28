@@ -74,6 +74,11 @@ function shapeAuthError(e: unknown): AuthApiError {
             : 'request_failed';
       return new AuthApiError(discriminator, data, status);
     }
+    // Network error (no response) — e.code gives more detail
+    if (!e.response) {
+      const code = e.code || 'network_error';
+      return new AuthApiError(code, null, null);
+    }
     return new AuthApiError(handleApiError(e), null, status);
   }
   return new AuthApiError(handleApiError(e), null, null);

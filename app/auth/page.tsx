@@ -109,6 +109,9 @@ export default function AuthPage() {
         } else if (err.status === 429) {
           setErrorMessage(t('auth.errorRateLimited'));
         } else if (err.status === null) {
+          // Network error — could be CORS, DNS, or backend down
+          // ERR_NETWORK = CORS blocked, ECONNABORTED = timeout
+          const isTimeout = err.message === 'ECONNABORTED' || err.message === 'ERR_NETWORK';
           setErrorMessage(t('auth.errorNetwork'));
         } else {
           setErrorMessage(t('auth.errorInvalidCode'));

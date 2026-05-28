@@ -13,16 +13,22 @@ const API_ORIGIN = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/ap
 function shouldUseSameOriginProxy(): boolean {
   if (typeof window === 'undefined') return false;
   const { hostname } = window.location;
-  return hostname === 'localhost' || hostname === '127.0.0.1';
+  // Use proxy on localhost AND on Vercel (to avoid CORS issues)
+  // Direct API calls only when explicitly disabled via env var
+  if (process.env.NEXT_PUBLIC_DIRECT_API === 'true') return false;
+  return hostname === 'localhost' || hostname === '127.0.0.1' || hostname.endsWith('.vercel.app') || hostname === 'sayinglobal.com' || hostname === 'www.sayinglobal.com';
 }
 
 function getApiBaseUrl(): string {
-  // Local production smoke tests often point NEXT_PUBLIC_API_URL at the live
-  // backend, which rejects localhost CORS. Use the Next.js rewrite proxy only
-  // on localhost so production deployments keep their direct API origin.
+  // Use Next.js rewrite proxy on localhost and Vercel deployments.
+  // This avoids CORS preflight issues and keeps the API URL consistent.
   return shouldUseSameOriginProxy() ? '' : API_ORIGIN;
 }
 
+// API_BASE_URL is computed at module load time.
+// On SSR (no window), it uses API_ORIGIN directly.
+// On client (Vercel/localhost), it uses '' (proxy via Next.js rewrites).
+// NOTE: Next.js rewrites work for client-side fetch too when baseURL is ''.
 const API_BASE_URL = getApiBaseUrl();
 
 export const apiClient = axios.create({
