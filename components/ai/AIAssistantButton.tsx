@@ -101,7 +101,7 @@ export function AIAssistantButton() {
         message: text.trim(),
         session_id: sessionId,
       });
-      const reply = res.data?.reply || res.data?.message || t('ai.errorReply' as any) ?? 'Kechirasiz, javob bera olmadim.';
+      const reply = (res.data?.reply || res.data?.message || t('ai.errorReply' as any)) ?? 'Kechirasiz, javob bera olmadim.';
       setMessages((prev) => [
         ...prev,
         { id: (Date.now() + 1).toString(), role: 'assistant', text: reply, timestamp: new Date() },

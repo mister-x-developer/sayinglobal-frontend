@@ -85,20 +85,21 @@ export default function PlansPage() {
 
   useEffect(() => {
     let alive = true;
-    apiClient.get('/plans/').then((r) => {
+    setLoading(true);
+
+    const loadPlans = apiClient.get('/plans/').then((r) => {
       if (alive) setPlans(r.data ?? []);
     }).catch(() => {});
 
-    if (isAuthenticated) {
-      apiClient.get('/plans/my/').then((r) => {
-        if (alive) setMyPlan(r.data);
-      }).catch(() => {});
-      apiClient.get('/plans/referral/').then((r) => {
-        if (alive) setReferral(r.data);
-      }).catch(() => {});
-    }
+    const loadAuth = isAuthenticated ? Promise.all([
+      apiClient.get('/plans/my/').then((r) => { if (alive) setMyPlan(r.data); }).catch(() => {}),
+      apiClient.get('/plans/referral/').then((r) => { if (alive) setReferral(r.data); }).catch(() => {}),
+    ]) : Promise.resolve();
 
-    setLoading(false);
+    Promise.all([loadPlans, loadAuth]).finally(() => {
+      if (alive) setLoading(false);
+    });
+
     return () => { alive = false; };
   }, [isAuthenticated]);
 
