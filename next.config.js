@@ -48,10 +48,15 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        // Proxy all /api/* requests to Railway backend
-        // This works for both SSR and client-side requests
+        // Proxy /api/* → Railway backend.
+        // IMPORTANT: destination must end with trailing slash so Django
+        // does not issue a 301 redirect (which drops the POST body and
+        // causes "network error" on the client).
+        // The :path* capture already includes the trailing slash when the
+        // browser sends one; the explicit trailing slash in the destination
+        // pattern ensures it is always present even when Vercel strips it.
         source: '/api/:path*',
-        destination: `${apiOrigin}/api/:path*`,
+        destination: `${apiOrigin}/api/:path*/`,
       },
     ];
   },
