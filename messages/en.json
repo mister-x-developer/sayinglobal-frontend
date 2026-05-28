@@ -1047,6 +1047,27 @@
     }
   },
   "privacy": {
-    "title": "Privacy Policy"
+    "title": "Privacy Policy",
+    "dataCollectionTitle": "Data collection",
+    "dataCollectionBody": "We collect only the data necessary to operate the platform: phone number (via Telegram), name, location (for listings), and platform activity.",
+    "dataUsageTitle": "Data usage",
+    "dataUsageBody": "Your data is used solely to provide platform services. It is never sold or shared with third parties.",
+    "locationTitle": "Location data",
+    "locationBody": "Location data is used only to show nearby listings. Exact coordinates are never shown to other users.",
+    "securityTitle": "Security",
+    "securityBody": "All data is stored encrypted. Security is maintained through JWT tokens and session management.",
+    "rightsTitle": "User rights",
+    "rightsBody": "You can delete your account, request, or correct your data at any time. Contact support@sayinglobal.uz.",
+    "contactTitle": "Contact",
+    "contactBody": "For privacy questions: support@sayinglobal.uz or Telegram: @sayinglobal_support"
+  },
+  "terms": {
+    "title": "Terms of Use",
+    "intro": "By using the SAYIN GLOBAL platform, you accept the following terms. Please read them carefully.",
+    "point1": "Users may only sell animals they actually own. False or misleading information is prohibited.",
+    "point2": "All listings go through moderation. Listings that violate the rules are removed and the account may be restricted.",
+    "point3": "The platform is not responsible for transactions between users. Meet in person for safe trading.",
+    "point4": "Spam, fraud, threats, or illegal activity will result in immediate account blocking.",
+    "disclaimer": "SAYIN GLOBAL provides services 'as is'. We are not responsible for service interruptions or third-party actions."
   }
 }

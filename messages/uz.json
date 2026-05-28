@@ -1047,6 +1047,27 @@
     }
   },
   "privacy": {
-    "title": "Maxfiylik siyosati"
+    "title": "Maxfiylik siyosati",
+    "dataCollectionTitle": "Ma'lumotlar to'plash",
+    "dataCollectionBody": "Biz faqat platformadan foydalanish uchun zarur bo'lgan ma'lumotlarni to'playmiz: telefon raqami (Telegram orqali), ism, joylashuv (e'lon uchun), va platforma faoliyati.",
+    "dataUsageTitle": "Ma'lumotlardan foydalanish",
+    "dataUsageBody": "Ma'lumotlaringiz faqat platforma xizmatlarini ko'rsatish uchun ishlatiladi. Uchinchi tomonlarga sotilmaydi yoki ulashilmaydi.",
+    "locationTitle": "Joylashuv ma'lumotlari",
+    "locationBody": "Joylashuv ma'lumotlari faqat yaqin atrofdagi e'lonlarni ko'rsatish uchun ishlatiladi. Aniq koordinatalar foydalanuvchiga ko'rsatilmaydi.",
+    "securityTitle": "Xavfsizlik",
+    "securityBody": "Barcha ma'lumotlar shifrlangan holda saqlanadi. JWT tokenlar va session management orqali xavfsizlik ta'minlanadi.",
+    "rightsTitle": "Foydalanuvchi huquqlari",
+    "rightsBody": "Siz istalgan vaqtda hisobingizni o'chirishingiz, ma'lumotlaringizni so'rashingiz yoki to'g'rilashingiz mumkin. Buning uchun support@sayinglobal.uz ga murojaat qiling.",
+    "contactTitle": "Bog'lanish",
+    "contactBody": "Maxfiylik siyosati bo'yicha savollar uchun: support@sayinglobal.uz yoki Telegram: @sayinglobal_support"
+  },
+  "terms": {
+    "title": "Foydalanish shartlari",
+    "intro": "SAYIN GLOBAL platformasidan foydalanish orqali siz quyidagi shartlarni qabul qilasiz. Iltimos, ularni diqqat bilan o'qing.",
+    "point1": "Foydalanuvchilar faqat o'zlariga tegishli hayvonlarni sotishlari mumkin. Soxta yoki noto'g'ri ma'lumot berish taqiqlanadi.",
+    "point2": "Barcha e'lonlar moderatsiyadan o'tadi. Qoidalarga zid e'lonlar olib tashlanadi va hisob cheklanishi mumkin.",
+    "point3": "Platforma foydalanuvchilar o'rtasidagi bitimlar uchun javobgar emas. Xavfsiz savdo uchun shaxsan uchrashing.",
+    "point4": "Spam, aldash, tahdid yoki noqonuniy faoliyat uchun hisob darhol bloklanadi.",
+    "disclaimer": "SAYIN GLOBAL platformasi xizmatlarni 'mavjud holda' taqdim etadi. Biz xizmat uzilishlari yoki uchinchi tomon harakatlari uchun javobgar emasmiz."
   }
 }
