@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { ArrowLeft, Home } from 'lucide-react';
+import { ArrowLeft, Home, LayoutDashboard } from 'lucide-react';
 import { Logo } from '@/components/shared/Logo';
 
 export default async function NotFound() {
@@ -21,13 +21,13 @@ export default async function NotFound() {
             {t('errors.notFoundDescription')}
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link href="/" className="btn btn-primary">
-              <Home className="h-4 w-4" strokeWidth={2.25} />
-              {t('errors.goHome')}
+            <Link href="/dashboard" className="btn btn-primary">
+              <LayoutDashboard className="h-4 w-4" strokeWidth={2.25} />
+              {t('nav.home')}
             </Link>
-            <Link href="/dashboard" className="btn btn-secondary">
-              <ArrowLeft className="h-4 w-4" strokeWidth={2.25} />
-              {t('common.back')}
+            <Link href="/" className="btn btn-secondary">
+              <Home className="h-4 w-4" strokeWidth={2.25} />
+              {t('landing.heroTitle')}
             </Link>
           </div>
         </div>

@@ -7,9 +7,9 @@ import { Globe, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const LANGUAGES = [
-  { code: 'uz', label: "Oʻzbekcha", short: 'OʻZ' },
-  { code: 'uz-cyrl', label: 'Ўзбекча', short: 'ЎЗ' },
-  { code: 'ru', label: 'Русский', short: 'РУ' },
+  { code: 'uz', label: "O'zbekcha", short: 'UZ' },
+  { code: 'uz-cyrl', label: 'Ўзбекча', short: 'УЗ' },
+  { code: 'ru', label: 'Русский', short: 'RU' },
   { code: 'en', label: 'English', short: 'EN' },
 ] as const;
 

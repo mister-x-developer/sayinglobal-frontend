@@ -1,9 +1,17 @@
 /**
  * SAYIN GLOBAL Logo
  * Source of truth: /logo.html
+ *
+ * When href is not provided, the logo is auth-aware:
+ * - Authenticated admin → /admin
+ * - Authenticated user → /dashboard
+ * - Unauthenticated → /
  */
 
+'use client';
+
 import Link from 'next/link';
+import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
 
 interface LogoProps {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -49,10 +57,20 @@ function LogoMark({ size }: { size: number }) {
 export function Logo({
   size = 'md',
   showText = true,
-  href = '/',
+  href,
   className = '',
 }: LogoProps) {
   const s = SIZES[size];
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isAdmin = useAuthStore((s) => s.user?.is_admin || s.user?.is_staff);
+  const hydrated = useAuthHydrated();
+
+  // Compute auth-aware href when not explicitly provided
+  const resolvedHref: string | null = href !== undefined
+    ? href  // caller explicitly set href (including null to disable link)
+    : hydrated && isAuthenticated
+      ? isAdmin ? '/admin' : '/dashboard'
+      : '/';
 
   const inner = (
     <span
@@ -79,10 +97,10 @@ export function Logo({
     </span>
   );
 
-  if (href) {
+  if (resolvedHref) {
     return (
       <Link
-        href={href}
+        href={resolvedHref}
         className="inline-flex items-center transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md"
       >
         {inner}

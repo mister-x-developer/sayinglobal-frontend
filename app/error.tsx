@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { RefreshCw, Home } from 'lucide-react';
 import Link from 'next/link';
 import { Logo } from '@/components/shared/Logo';
+import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
 
 export default function GlobalError({
   error,
@@ -14,13 +15,19 @@ export default function GlobalError({
   reset: () => void;
 }) {
   const t = useTranslations();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isAdmin = useAuthStore((s) => s.user?.is_admin || s.user?.is_staff);
+  const hydrated = useAuthHydrated();
+
+  // Auth-aware home link: admin → /admin, user → /dashboard, guest → /
+  const homeHref = hydrated && isAuthenticated
+    ? isAdmin ? '/admin' : '/dashboard'
+    : '/';
 
   useEffect(() => {
-    // Report to monitoring in production — only log locally in dev
     if (process.env.NODE_ENV === 'development') {
       console.error('[GlobalError]', error);
     }
-    // Sentry capture (no-op if Sentry not configured)
     if (typeof window !== 'undefined' && (window as any).__SENTRY__) {
       try {
         const Sentry = (window as any).__SENTRY__;
@@ -33,7 +40,7 @@ export default function GlobalError({
     <div className="flex min-h-screen flex-col">
       <header className="border-b border-border bg-bg-elevated/60 backdrop-blur">
         <div className="container-page flex h-16 items-center">
-          <Logo size="sm" />
+          <Logo size="sm" href={homeHref} />
         </div>
       </header>
       <main className="flex flex-1 items-center justify-center px-6 py-16">
@@ -50,7 +57,7 @@ export default function GlobalError({
               <RefreshCw className="h-4 w-4" strokeWidth={2.25} />
               {t('common.tryAgain')}
             </button>
-            <Link href="/" className="btn btn-secondary">
+            <Link href={homeHref} className="btn btn-secondary">
               <Home className="h-4 w-4" strokeWidth={2.25} />
               {t('errors.goHome')}
             </Link>
