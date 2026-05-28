@@ -5,7 +5,10 @@ const { withSentryConfig } = require('@sentry/nextjs');
 const withNextIntl = createNextIntlPlugin('./lib/i18n.ts');
 
 const isDev = process.env.NODE_ENV === 'development';
-const apiOrigin = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api').replace(/\/api\/?$/, '');
+// Production Railway backend URL — hardcoded as fallback so Vercel rewrites
+// work even if NEXT_PUBLIC_API_URL is not set in the Vercel dashboard.
+const PRODUCTION_API_ORIGIN = 'https://sayinglobal.up.railway.app';
+const apiOrigin = (process.env.NEXT_PUBLIC_API_URL || `${PRODUCTION_API_ORIGIN}/api`).replace(/\/api\/?$/, '');
 
 const nextConfig = {
   reactStrictMode: true,

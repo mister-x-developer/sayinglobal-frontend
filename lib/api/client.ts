@@ -8,7 +8,7 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { useAuthStore } from '../store/auth';
 
-const API_ORIGIN = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api').replace(/\/api\/?$/, '');
+const API_ORIGIN = (process.env.NEXT_PUBLIC_API_URL || 'https://sayinglobal.up.railway.app/api').replace(/\/api\/?$/, '');
 
 function shouldUseSameOriginProxy(): boolean {
   if (typeof window === 'undefined') return false;
