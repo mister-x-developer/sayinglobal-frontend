@@ -45,7 +45,7 @@ function isPlatformAdmin(req: NextRequest): boolean {
   try {
     const parsed = JSON.parse(decodeURIComponent(raw));
     const state = parsed?.state ?? parsed;
-    return !!(state?.isAuthenticated && state?.user?.is_admin);
+    return !!(state?.isAuthenticated && (state?.user?.is_admin || state?.user?.is_staff));
   } catch {
     return false;
   }

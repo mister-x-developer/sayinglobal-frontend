@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+// deploy trigger Thu May 28 2026 — fix: bot username fallback + admin login unblock
 const createNextIntlPlugin = require('next-intl/plugin');
 const { withSentryConfig } = require('@sentry/nextjs');
 const withNextIntl = createNextIntlPlugin('./lib/i18n.ts');

@@ -23,7 +23,7 @@ import { CodeInput } from '@/components/auth/CodeInput';
 import { authApi, AuthApiError } from '@/lib/api/auth';
 import { useAuthStore } from '@/lib/store/auth';
 
-const TG_BOT = process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || 'sayinglobal_bot';
+const TG_BOT = process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || 'sayin_global_bot';
 
 type Stage = 'open-bot' | 'enter-code' | 'success';
 

@@ -66,6 +66,7 @@ function writeAuthCookie(payload: {
   user: User | null;
 }) {
   if (typeof document === 'undefined') return;
+  const isAdminUser = !!(payload.user?.is_admin || payload.user?.is_staff);
   const body = JSON.stringify({
     state: {
       isAuthenticated: payload.isAuthenticated,
@@ -73,7 +74,7 @@ function writeAuthCookie(payload: {
       user: payload.user
         ? {
             public_id: payload.user.public_id,
-            is_admin: !!payload.user.is_admin,
+            is_admin: isAdminUser,
             is_staff: !!payload.user.is_staff,
             terms_accepted_at: payload.user.terms_accepted_at ?? null,
           }

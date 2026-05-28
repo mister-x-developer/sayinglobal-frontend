@@ -66,7 +66,7 @@ export function LandingFooter() {
                 </a>
               </li>
               <li>
-                <a href="https://t.me/sayinglobal_bot" target="_blank" rel="noopener noreferrer" className="hover:text-fg transition-colors">
+                <a href="https://t.me/sayin_global_bot" target="_blank" rel="noopener noreferrer" className="hover:text-fg transition-colors">
                   Telegram Bot
                 </a>
               </li>
