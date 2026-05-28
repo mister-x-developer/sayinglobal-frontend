@@ -11,7 +11,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import {
   ArrowLeft,
   Send,
@@ -26,7 +26,6 @@ import {
 import { AdminLayout } from '@/components/layout/AdminLayout';
 import { Badge } from '@/components/ui/Badge';
 import { toast } from '@/components/ui/Toast';
-import { TranslatableText } from '@/components/shared/TranslateButton';
 import apiClient from '@/lib/api/client';
 import { formatDate, formatRelativeTime } from '@/lib/utils/format';
 
@@ -53,8 +52,15 @@ interface Broadcast {
   read_count: number;
 }
 
+/** Pick the best-available localized title/message for the current UI locale. */
+function localizedField(b: Broadcast, field: 'title' | 'message', locale: string): string {
+  const key = locale.replace('-', '_') as 'uz' | 'uz_cyrl' | 'ru' | 'en';
+  return (b as any)[`${field}_${key}`] || (b as any)[`${field}_uz`] || (b as any)[`${field}_ru`] || (b as any)[`${field}_en`] || b[field] || '';
+}
+
 export default function AdminBroadcastDetailPage() {
   const t = useTranslations();
+  const locale = useLocale();
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const id = Number(params?.id);
@@ -65,7 +71,6 @@ export default function AdminBroadcastDetailPage() {
   const [editing, setEditing] = useState(false);
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
-  const [originalLocale, setOriginalLocale] = useState('uz');
 
   const fetchAll = async () => {
     setLoading(true);
@@ -75,7 +80,6 @@ export default function AdminBroadcastDetailPage() {
       setB(data);
       setTitle(data.title || '');
       setMessage(data.message || '');
-      setOriginalLocale(data.original_locale || 'uz');
     } catch {
       setB(null);
     } finally {
@@ -124,7 +128,7 @@ export default function AdminBroadcastDetailPage() {
       const res = await apiClient.patch(`/notifications/broadcasts/${b.public_id}/`, {
         title: title.trim(),
         message: message.trim(),
-        original_locale: originalLocale,
+        // original_locale is auto-detected on the backend from the text
       });
       setB(res.data);
       setEditing(false);
@@ -197,15 +201,12 @@ export default function AdminBroadcastDetailPage() {
                 <div className="mt-5 space-y-4">
                   <div>
                     <h2 className="text-eyebrow">{t('admin.title' as any) ?? 'Title'}</h2>
-                    <p className="mt-1 font-display text-xl font-semibold text-fg">{b.title}</p>
+                    <p className="mt-1 font-display text-xl font-semibold text-fg">{localizedField(b, 'title', locale)}</p>
                   </div>
                   <div>
                     <h2 className="text-eyebrow">{t('admin.message' as any) ?? 'Message'}</h2>
-                    <p className="mt-1 whitespace-pre-line text-fg-muted leading-relaxed">{b.message}</p>
+                    <p className="mt-1 whitespace-pre-line text-fg-muted leading-relaxed">{localizedField(b, 'message', locale)}</p>
                   </div>
-                  <p className="text-xs text-fg-subtle">
-                    {t('admin.originalLocale' as any) ?? 'Original'}: <strong>{b.original_locale}</strong>
-                  </p>
                 </div>
               ) : (
                 <div className="mt-5 space-y-4">
@@ -222,21 +223,9 @@ export default function AdminBroadcastDetailPage() {
                     rows={6}
                     className="input-base h-auto w-full py-3"
                   />
-                  <div>
-                    <label className="text-xs text-fg-subtle">
-                      {t('admin.originalLocale' as any) ?? 'Original locale'}
-                    </label>
-                    <select
-                      value={originalLocale}
-                      onChange={(e) => setOriginalLocale(e.target.value)}
-                      className="input-base h-11 w-32 mt-1"
-                    >
-                      <option value="uz">uz</option>
-                      <option value="uz_cyrl">uz-cyrl</option>
-                      <option value="ru">ru</option>
-                      <option value="en">en</option>
-                    </select>
-                  </div>
+                  <p className="text-xs text-fg-subtle">
+                    {t('admin.autoTranslateHint' as any) ?? 'Content will be auto-translated to all 4 languages.'}
+                  </p>
                 </div>
               )}
             </div>
