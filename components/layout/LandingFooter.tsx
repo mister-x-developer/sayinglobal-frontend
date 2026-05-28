@@ -111,6 +111,14 @@ export function LandingFooter() {
             <a href="https://t.me/sayinglobal_support" target="_blank" rel="noopener noreferrer" className="hover:text-fg transition-colors">
               {t('common.help')}
             </a>
+            <span className="text-fg-subtle/40">·</span>
+            <Link href="/terms" className="hover:text-fg transition-colors">
+              {t('terms.title')}
+            </Link>
+            <span className="text-fg-subtle/40">·</span>
+            <Link href="/privacy" className="hover:text-fg transition-colors">
+              {t('privacy.title' as any) ?? 'Maxfiylik'}
+            </Link>
           </div>
         </div>
       </div>

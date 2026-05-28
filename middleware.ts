@@ -65,6 +65,8 @@ function isPublicPath(pathname: string): boolean {
   if (pathname.startsWith('/sellers')) return true;
   // Individual listing detail pages are public
   if (/^\/listings\/\d+$/.test(pathname)) return true;
+  // Legal pages are public
+  if (pathname === '/terms' || pathname === '/privacy') return true;
   return false;
 }
 

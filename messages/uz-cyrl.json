@@ -1045,5 +1045,8 @@
       "priceCheck": "Нарх текшириш",
       "nearbyListings": "Яқин эълонлар"
     }
+  },
+  "privacy": {
+    "title": "Maxfiylik siyosati"
   }
 }
