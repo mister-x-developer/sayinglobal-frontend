@@ -9,6 +9,7 @@ import { TermsGate } from '@/components/providers/TermsGate';
 import { NotificationSocketProvider } from '@/components/providers/NotificationSocketProvider';
 import { HydrationReady } from '@/components/providers/HydrationReady';
 import { OnboardingModal } from '@/components/shared/OnboardingModal';
+import { AIAssistantButton } from '@/components/ai/AIAssistantButton';
 import './globals.css';
 
 const inter = Inter({
@@ -106,6 +107,7 @@ export default async function RootLayout({
             <NotificationSocketProvider />
             <MobileBottomNav />
             <OnboardingModal />
+            <AIAssistantButton />
             <ToastContainer />
           </NextIntlClientProvider>
         </ThemeProvider>

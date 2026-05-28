@@ -240,7 +240,7 @@ export function AppNav() {
       {/* ── Sticky header bar ── */}
       <header className="sticky top-0 z-40 border-b border-border/60 bg-bg/80 backdrop-blur-xl backdrop-saturate-150 transition-shadow duration-300">
         <div className="container-page">
-          <div className="flex h-16 items-center gap-3">
+          <div className="flex h-16 items-center gap-2 overflow-hidden">
             {/* Mobile menu trigger */}
             <button
               type="button"
@@ -254,8 +254,8 @@ export function AppNav() {
 
             <Logo size="sm" href={logoHref} />
 
-            {/* Desktop links */}
-            <nav className="ml-6 hidden items-center gap-1 md:flex" aria-label="Main navigation">
+            {/* Desktop links — overflow-safe */}
+            <nav className="ml-4 hidden min-w-0 flex-1 items-center gap-0.5 md:flex lg:ml-6 lg:gap-1" aria-label="Main navigation">
               {links.map((l) => {
                 const active = isActive(l.href);
                 const Icon = l.icon;
@@ -264,14 +264,14 @@ export function AppNav() {
                     key={l.href}
                     href={l.href}
                     aria-current={active ? 'page' : undefined}
-                    className={`group inline-flex h-10 items-center gap-2 rounded-full px-4 text-sm font-medium transition-colors ${
+                    className={`group inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3 text-sm font-medium transition-colors lg:px-4 ${
                       active
                         ? 'bg-brand-primary/10 text-brand-primary'
                         : 'text-fg-muted hover:bg-bg-subtle hover:text-fg'
                     }`}
                   >
-                    <Icon className="h-[16px] w-[16px]" strokeWidth={1.75} />
-                    <span>{l.label}</span>
+                    <Icon className="h-[15px] w-[15px] shrink-0" strokeWidth={1.75} />
+                    <span className="hidden lg:inline">{l.label}</span>
                   </Link>
                 );
               })}
@@ -279,13 +279,14 @@ export function AppNav() {
 
             <div className="flex-1" />
 
-            <div className="flex items-center gap-1.5 sm:gap-2">
+            <div className="flex shrink-0 items-center gap-1 sm:gap-1.5">
               <Link
                 href="/listings/new"
-                className="hidden md:inline-flex btn btn-primary btn-sm"
+                className="hidden md:inline-flex btn btn-primary btn-sm gap-1.5"
               >
-                <Plus className="h-4 w-4" strokeWidth={2.25} />
-                <span>{t('nav.createListing')}</span>
+                <Plus className="h-4 w-4 shrink-0" strokeWidth={2.25} />
+                <span className="hidden lg:inline">{t('nav.createListing')}</span>
+                <span className="lg:hidden">{t('common.new' as any) ?? 'New'}</span>
               </Link>
 
               <Link
@@ -301,7 +302,7 @@ export function AppNav() {
                 )}
               </Link>
 
-              <div className="flex items-center gap-1.5">
+              <div className="flex shrink-0 items-center gap-1">
                 <LanguageSwitcher />
                 <ThemeSwitcher />
               </div>

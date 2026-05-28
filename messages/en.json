@@ -47,8 +47,7 @@
     "error": "An error occurred",
     "empty": "Empty",
     "skip": "Skip",
-    "later": "Later",
-    "confirm": "Confirm"
+    "later": "Later"
   },
   "landing": {
     "heroTitle": "Digital Livestock Marketplace",
@@ -952,16 +951,12 @@
     "accepted": "Terms accepted!"
   },
   "referral": {
-    "title": "Referral code",
-    "subtitle": "Enter a code if a friend gave you one",
-    "description": "If you join via a referral code, your friend earns a reward. Skip if you don't have one.",
-    "plansWelcome": "Welcome to SAYIN GLOBAL! Explore our plans.",
-    "freeNote": "All plans are currently free via referrals.",
-    "systemTitle": "Referral system",
-    "systemDesc": "Invite friends → when they post a listing, you get a higher plan.",
-    "tier1": "3 referrals → Standard plan",
-    "tier2": "7 referrals → Pro plan",
-    "viewPlans": "View plans"
+    "title": "Referral system",
+    "myCode": "My referral code",
+    "useCode": "Use referral code",
+    "reward": "Reward: after first active listing",
+    "pending": "Pending",
+    "rewarded": "Rewarded"
   },
   "nearby": {
     "eyebrow": "Nearby",
@@ -1009,18 +1004,17 @@
     "limitReached": "Monthly limit reached",
     "activeLimitReached": "Active listing limit reached"
   },
-  "referral": {
-    "title": "Referral system",
-    "myCode": "My referral code",
-    "useCode": "Use referral code",
-    "reward": "Reward: after first active listing",
-    "pending": "Pending",
-    "rewarded": "Rewarded"
-  },
   "ai": {
-    "moderationScore": "AI moderation score",
-    "flagged": "Flagged by AI",
-    "clean": "AI: no issues",
-    "alreadySoldDetected": "AI: already-sold signal detected"
+    "openAssistant": "AI Assistant",
+    "subtitle": "Livestock marketplace assistant",
+    "greeting": "👋 Hello! Do you have questions about the livestock marketplace?",
+    "inputPlaceholder": "Type your question...",
+    "errorReply": "Temporary error. Please try again.",
+    "prompt": {
+      "findCattle": "Find cattle",
+      "findHorse": "Find horses",
+      "priceCheck": "Check prices",
+      "nearbyListings": "Nearby listings"
+    }
   }
 }

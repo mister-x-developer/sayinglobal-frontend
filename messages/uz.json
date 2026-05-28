@@ -47,8 +47,7 @@
     "error": "Xatolik yuz berdi",
     "empty": "Boʻsh",
     "skip": "Oʻtkazib yuborish",
-    "later": "Keyinroq",
-    "confirm": "Tasdiqlash"
+    "later": "Keyinroq"
   },
   "landing": {
     "heroTitle": "Raqamli Chorva Bozori",
@@ -952,16 +951,12 @@
     "accepted": "Shartlarga rozisiz!"
   },
   "referral": {
-    "title": "Referral kod",
-    "subtitle": "Agar doʻstingiz sizga kod bergan boʻlsa, kiriting",
-    "description": "Referral kod orqali platformaga qoʻshilsangiz, doʻstingiz mukofot oladi. Kod yoʻq boʻlsa, oʻtkazib yuboring.",
-    "plansWelcome": "Platformaga xush kelibsiz! Tariflarimiz bilan tanishing.",
-    "freeNote": "Hozirda barcha tariflar referral tizimi orqali bepul.",
-    "systemTitle": "Referral tizimi",
-    "systemDesc": "Doʻstlaringizni taklif qiling → ular eʼlon joylashganda siz yuqori tarif olasiz.",
-    "tier1": "3 ta referral → Standart tarif",
-    "tier2": "7 ta referral → Pro tarif",
-    "viewPlans": "Tariflarni koʻrish"
+    "title": "Referal tizimi",
+    "myCode": "Mening referal kodim",
+    "useCode": "Referal kodni ishlatish",
+    "reward": "Mukofot: birinchi faol e'londan keyin",
+    "pending": "Kutilmoqda",
+    "rewarded": "Mukofot berildi"
   },
   "nearby": {
     "eyebrow": "Yaqin atrof",
@@ -1009,18 +1004,17 @@
     "limitReached": "Oylik limitga yetdingiz",
     "activeLimitReached": "Faol e'lonlar limitiga yetdingiz"
   },
-  "referral": {
-    "title": "Referal tizimi",
-    "myCode": "Mening referal kodim",
-    "useCode": "Referal kodni ishlatish",
-    "reward": "Mukofot: birinchi faol e'londan keyin",
-    "pending": "Kutilmoqda",
-    "rewarded": "Mukofot berildi"
-  },
   "ai": {
-    "moderationScore": "AI moderatsiya bali",
-    "flagged": "AI tomonidan belgilangan",
-    "clean": "AI: muammo yo'q",
-    "alreadySoldDetected": "AI: sotilgan signal aniqlandi"
+    "openAssistant": "AI Yordamchi",
+    "subtitle": "Chorva bozori yordamchisi",
+    "greeting": "👋 Salom! Chorva bozori haqida savollaringiz bormi?",
+    "inputPlaceholder": "Savol yozing...",
+    "errorReply": "Vaqtinchalik xatolik. Qayta urinib ko'ring.",
+    "prompt": {
+      "findCattle": "Qoramol topish",
+      "findHorse": "Ot topish",
+      "priceCheck": "Narx tekshirish",
+      "nearbyListings": "Yaqin e'lonlar"
+    }
   }
 }
