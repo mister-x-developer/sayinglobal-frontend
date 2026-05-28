@@ -33,6 +33,7 @@ import { Avatar } from '@/components/ui/Avatar';
 import { ThemeSwitcher } from '@/components/shared/ThemeSwitcher';
 import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher';
 import { useAuthStore } from '@/lib/store/auth';
+import { AIAssistantButton } from '@/components/ai/AIAssistantButton';
 
 const NAV_GROUPS = [
   {
@@ -332,6 +333,9 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
           {children}
         </main>
       </div>
+
+      {/* AI Assistant — available on all admin pages */}
+      <AIAssistantButton />
     </div>
   );
 }
