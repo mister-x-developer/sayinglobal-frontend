@@ -37,22 +37,6 @@ export const apiClient = axios.create({
   timeout: 30000,
 });
 
-// ── Trailing-slash normalizer ───────────────────────────────────────────────
-// Django's APPEND_SLASH=True (default) issues a 301 redirect for URLs that
-// lack a trailing slash. A 301 on a POST request causes browsers and axios
-// to re-issue the request as GET, dropping the body — this is the root cause
-// of the "network error" on the auth page.
-//
-// Fix: ensure every outgoing request URL ends with a trailing slash BEFORE
-// it hits the network. This interceptor runs first, before the auth header
-// interceptor, so it applies to all requests including OTP endpoints.
-apiClient.interceptors.request.use((config) => {
-  if (config.url && !config.url.includes('?') && !config.url.endsWith('/')) {
-    config.url = config.url + '/';
-  }
-  return config;
-});
-
 // ── Token reader (race-safe) ────────────────────────────────────────────────
 // During the brief window between page load and Zustand persist hydration,
 // the in-memory store reads as `null` even though localStorage has valid
