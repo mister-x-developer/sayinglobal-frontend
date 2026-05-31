@@ -58,6 +58,7 @@ export function TrustSection() {
         </div>
 
         <motion.div
+          data-motion
           variants={container}
           initial="hidden"
           whileInView="show"
@@ -67,7 +68,7 @@ export function TrustSection() {
           {features.map((f) => {
             const Icon = f.icon;
             return (
-              <motion.div key={f.title} variants={item}>
+              <motion.div data-motion key={f.title} variants={item}>
                 <div className="surface-elevated h-full p-7 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift sm:p-8">
                   <div className={`inline-flex h-12 w-12 items-center justify-center rounded-xl ${f.tone}`}>
                     <Icon className="h-5.5 w-5.5" strokeWidth={1.75} />

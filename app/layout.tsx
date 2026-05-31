@@ -1,16 +1,21 @@
+// FIRST: global CSS — must be imported before any component that may
+// import its own CSS so the global cascade order is deterministic across
+// SSR and client renders (premium-launch-readiness Req 1.4, design §3.1 R1).
+import './globals.css';
+
 import type { Metadata, Viewport } from 'next';
 import { Inter, Poppins } from 'next/font/google';
-import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
+import { IntlClientProvider } from '@/components/providers/IntlClientProvider';
 import { ToastContainer } from '@/components/ui/Toast';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { TermsGate } from '@/components/providers/TermsGate';
 import { NotificationSocketProvider } from '@/components/providers/NotificationSocketProvider';
 import { HydrationReady } from '@/components/providers/HydrationReady';
+import { MotionProvider } from '@/components/providers/MotionProvider';
 import { OnboardingModal } from '@/components/shared/OnboardingModal';
 import { AIAssistantButton } from '@/components/ai/AIAssistantButton';
-import './globals.css';
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic'],
@@ -101,15 +106,17 @@ export default async function RootLayout({
       <body className="antialiased min-h-screen bg-bg text-fg pb-[72px] md:pb-0 overflow-x-hidden">
         <HydrationReady />
         <ThemeProvider>
-          <NextIntlClientProvider messages={messages} locale={locale}>
-            {children}
-            <TermsGate />
-            <NotificationSocketProvider />
-            <MobileBottomNav />
-            <OnboardingModal />
-            <AIAssistantButton />
-            <ToastContainer />
-          </NextIntlClientProvider>
+          <IntlClientProvider messages={messages} locale={locale}>
+            <MotionProvider>
+              {children}
+              <TermsGate />
+              <NotificationSocketProvider />
+              <MobileBottomNav />
+              <OnboardingModal />
+              <AIAssistantButton />
+              <ToastContainer />
+            </MotionProvider>
+          </IntlClientProvider>
         </ThemeProvider>
       </body>
     </html>

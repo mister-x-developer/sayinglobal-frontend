@@ -12,6 +12,7 @@ export function FinalCTA() {
     <section className="relative pb-32 pt-20 sm:pb-40 lg:pb-48">
       <div className="container-page">
         <motion.div
+          data-motion
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}

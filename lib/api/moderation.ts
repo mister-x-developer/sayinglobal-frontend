@@ -237,6 +237,7 @@ export interface AdminQueueParams {
   severity?: ReportSeverity;
   report_type?: 'listing' | 'seller';
   reason_code?: string;
+  ordering?: string;
   page?: number;
   page_size?: number;
 }

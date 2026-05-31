@@ -47,7 +47,10 @@
     "error": "Xatolik yuz berdi",
     "empty": "Boʻsh",
     "skip": "Oʻtkazib yuborish",
-    "later": "Keyinroq"
+    "later": "Keyinroq",
+    "new": "Yangi",
+    "page": "{current} / {total}",
+    "deleteConfirm": "Haqiqatan ham oʻchirmoqchimisiz?"
   },
   "landing": {
     "heroTitle": "Raqamli Chorva Bozori",
@@ -82,6 +85,7 @@
   },
   "auth": {
     "title": "Kirish",
+    "login": "Kirish",
     "subtitle": "Telegram bot orqali xavfsiz kirish",
     "openBotTitle": "1-qadam: Telegram botni oching",
     "openBotDescription": "Quyidagi tugmani bosib Telegram botimizni oching, agarda roʻyxatdan oʻtmagan boʻlsangiz telefon raqamingizni ulashing va 5 xonalik kodni oling. Agarda roʻyxatdan oʻtgan boʻlsangiz, \"Kodni olish\" tugmasini bosing.",
@@ -235,7 +239,8 @@
     "female": "Urgʻochi",
     "weight": "Vazni",
     "breed": "Zot",
-    "healthStatus": "Sogʻligʻi"
+    "healthStatus": "Sogʻligʻi",
+    "statusActive": "Faol"
   },
   "categories": {
     "all": "Barchasi",
@@ -412,7 +417,8 @@
     "beFirst": "Birinchi izoh qoldiring",
     "edited": "tahrirlangan",
     "deleted": "Izoh oʻchirilgan",
-    "report": "Shikoyat qilish"
+    "report": "Shikoyat qilish",
+    "loginToComment": "Izoh qoldirish uchun tizimga kiring"
   },
   "chat": {
     "title": "Xabarlar",
@@ -439,7 +445,9 @@
     "yesterday": "Kecha",
     "messageCopied": "Xabar nusxalandi",
     "send": "Yuborish",
-    "placeholder": "Xabar yozing..."
+    "placeholder": "Xabar yozing...",
+    "sendFailed": "Yuborilmadi",
+    "retry": "Qayta urinish"
   },
   "notifications": {
     "title": "Bildirishnomalar",
@@ -628,7 +636,8 @@
     "totalSearches": "Jami qidiruvlar",
     "topCategories": "Eng yaxshi kategoriyalar",
     "topRegions": "Eng faol viloyatlar",
-    "topSellers": "Eng yaxshi sotuvchilar"
+    "topSellers": "Eng yaxshi sotuvchilar",
+    "days": "kun"
   },
   "complaints": {
     "title": "Shikoyatlar",
@@ -937,21 +946,17 @@
     "reason_impersonation": "Soxta shaxsiyat",
     "reason_listing_already_sold": "Sotilgan lekin hali sotuvda"
   },
-  "terms": {
-    "title": "Foydalanish shartlari",
-    "subtitle": "Davom etishdan oldin shartlarni qabul qiling",
-    "intro": "SAYIN GLOBAL platformasidan foydalanish uchun quyidagi shartlarga rozilik bildirishingiz lozim.",
-    "point1": "SAYIN GLOBAL — chorva eʼlonlari bozori platformasi. Sotuvchi va xaridor oʻrtasidagi bitim ikki tomonning shaxsiy masʼuliyatidir.",
-    "point2": "Platforma sotuvchining halolligi, hayvon sifati yoki bitim natijasi uchun javobgar emas.",
-    "point3": "Firibgarlik, soxta eʼlon yoki sifatsiz mahsulot uchun platforma yoki maʼmuriyat huquqiy javobgar emas.",
-    "point4": "Foydalanuvchi shaxsan ehtiyot boʻlishi, sotuvchini tekshirishi va xavfsizlik choralarini koʻrishi shart.",
-    "disclaimer": "Platforma faqat sotuvchi va xaridor oʻrtasida muloqot vositasi boʻlib xizmat qiladi. Hech qanday bitim platforma orqali rasmiylashtirilmaydi.",
-    "checkboxLabel": "Yuqoridagi shartlarni oʻqib chiqdim va toʻliq qabul qilaman.",
-    "accept": "Roziman va davom etaman",
-    "accepted": "Shartlarga rozisiz!"
-  },
   "referral": {
     "title": "Referal tizimi",
+    "subtitle": "Agar doʻstingiz sizga kod bergan boʻlsa, kiriting",
+    "description": "Referral kod orqali platformaga qoʻshilsangiz, doʻstingiz mukofot oladi. Kod yoʻq boʻlsa, oʻtkazib yuboring.",
+    "plansWelcome": "Platformaga xush kelibsiz! Tariflarimiz bilan tanishing.",
+    "freeNote": "Hozirda barcha tariflar referral tizimi orqali bepul.",
+    "systemTitle": "Referral tizimi",
+    "systemDesc": "Doʻstlaringizni taklif qiling → ular eʼlon joylashganda siz yuqori tarif olasiz.",
+    "tier1": "3 ta referral → Standart tarif",
+    "tier2": "7 ta referral → Pro tarif",
+    "viewPlans": "Tariflarni koʻrish",
     "myCode": "Mening referal kodim",
     "useCode": "Referal kodni ishlatish",
     "reward": "Mukofot: birinchi faol e'londan keyin",
@@ -995,6 +1000,11 @@
   "plans": {
     "title": "Tariflar",
     "choosePlan": "Tarifni tanlang",
+    "systemTitle": "Bu qanday ishlaydi",
+    "systemDesc": "Doʻstlaringizni taklif qiling. Ular faol eʼlon joylashtirsa, sizning tarifingiz yuqoriroqqa koʻtariladi.",
+    "tier1": "3 ta referral → Standart tarif",
+    "tier2": "7 ta referral → Pro tarif",
+    "viewPlans": "Tariflarni koʻrish",
     "subtitle": "Oylik e'lon limitlari. Hech qanday yashirin to'lov. Hozircha referral orqali bepul.",
     "currentPlan": "Joriy tarifingiz",
     "listingsThisMonth": "e'lon bu oy",
@@ -1068,6 +1078,23 @@
     "point2": "Barcha e'lonlar moderatsiyadan o'tadi. Qoidalarga zid e'lonlar olib tashlanadi va hisob cheklanishi mumkin.",
     "point3": "Platforma foydalanuvchilar o'rtasidagi bitimlar uchun javobgar emas. Xavfsiz savdo uchun shaxsan uchrashing.",
     "point4": "Spam, aldash, tahdid yoki noqonuniy faoliyat uchun hisob darhol bloklanadi.",
-    "disclaimer": "SAYIN GLOBAL platformasi xizmatlarni 'mavjud holda' taqdim etadi. Biz xizmat uzilishlari yoki uchinchi tomon harakatlari uchun javobgar emasmiz."
+    "disclaimer": "SAYIN GLOBAL platformasi xizmatlarni 'mavjud holda' taqdim etadi. Biz xizmat uzilishlari yoki uchinchi tomon harakatlari uchun javobgar emasmiz.",
+    "subtitle": "Davom etishdan oldin shartlarni qabul qiling",
+    "checkboxLabel": "Yuqoridagi shartlarni oʻqib chiqdim va toʻliq qabul qilaman.",
+    "accept": "Roziman va davom etaman",
+    "accepted": "Shartlarga rozisiz!"
+  },
+  "validation": {
+    "titleTooLong": "Sarlavha 100 belgidan oshmasligi kerak",
+    "descriptionTooLong": "Tavsif 2000 belgidan oshmasligi kerak",
+    "minImages": "Kamida 1 ta rasm yuklash kerak",
+    "monthlyLimitReached": "Oylik e'lon limiti tugagan. Keyingi oyda qayta urinib ko'ring.",
+    "activeLimitReached": "Faol e'lonlar limiti tugagan. Ba'zi e'lonlarni o'chiring.",
+    "cannotCreateListing": "E'lon yaratish hozircha mumkin emas",
+    "atLeastOneFieldRequired": "Kamida bitta maydonni to'ldiring",
+    "regionRequired": "Hududni tanlash majburiy",
+    "openOnMap": "Xaritada ochish",
+    "openDirections": "Yo'nalishlarni ochish",
+    "messageTooLong": "Xabar 1000 belgidan oshmasligi kerak"
   }
 }

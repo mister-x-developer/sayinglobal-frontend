@@ -58,31 +58,31 @@ export default function AdminUsersPage() {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const pageSize = 20;
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await apiClient.get('/users/admin/list/', { params: { page_size: 100 } });
+      const res = await apiClient.get('/users/admin/list/', { params: { page, page_size: pageSize, search: search || undefined, status: statusFilter === 'all' ? undefined : statusFilter } });
       const data = res.data;
       setUsers(Array.isArray(data) ? data : data?.results ?? []);
+      setTotalCount(data?.count ?? (Array.isArray(data) ? data.length : 0));
     } catch {
       setUsers([]);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [page, search, statusFilter]);
 
   useEffect(() => { load(); }, [load]);
 
   const filtered = useMemo(() => {
-    return users.filter((u) => {
-      const matchSearch = !search ||
-        u.full_name.toLowerCase().includes(search.toLowerCase()) ||
-        (u.phone && u.phone.includes(search));
-      const matchStatus = statusFilter === 'all' || u.status === statusFilter;
-      return matchSearch && matchStatus;
-    });
-  }, [users, search, statusFilter]);
+    return users;
+  }, [users]);
+
+  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
 
   const handleAction = async (userId: number, action: 'warn' | 'restrict' | 'block' | 'unblock') => {
     setActionLoading(true);
@@ -123,7 +123,7 @@ export default function AdminUsersPage() {
           <div>
             <p className="text-eyebrow">{t('admin.title')}</p>
             <h1 className="display-md mt-2">{t('admin.users')}</h1>
-            <p className="mt-2 text-fg-muted">{filtered.length} {t('admin.totalUsers').toLowerCase()}</p>
+            <p className="mt-2 text-fg-muted">{totalCount} {t('admin.totalUsers').toLowerCase()}</p>
           </div>
           <button
             type="button"
@@ -142,18 +142,19 @@ export default function AdminUsersPage() {
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') { setPage(1); load(); } }}
               placeholder={t('search.placeholder')}
               className="input-base h-11 w-full pl-11"
             />
             {search && (
-              <button type="button" onClick={() => setSearch('')} className="absolute right-2 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-fg-subtle hover:bg-bg-subtle">
+              <button type="button" onClick={() => { setSearch(''); setPage(1); load(); }} className="absolute right-2 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-fg-subtle hover:bg-bg-subtle">
                 <X className="h-4 w-4" strokeWidth={2} />
               </button>
             )}
           </div>
           <select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={(e) => { setStatusFilter(e.target.value); setPage(1); load(); }}
             className="input-base h-11 cursor-pointer"
           >
             <option value="all">{t('common.all')}</option>
@@ -162,6 +163,14 @@ export default function AdminUsersPage() {
             <option value="restricted">{t('userStatus.restricted')}</option>
             <option value="blocked">{t('userStatus.blocked')}</option>
           </select>
+          <button
+            type="button"
+            onClick={() => { setPage(1); load(); }}
+            className="btn btn-secondary btn-sm"
+          >
+            <Search className="h-4 w-4" strokeWidth={1.75} />
+            {t('common.search')}
+          </button>
         </div>
 
         {/* Table */}
@@ -263,6 +272,37 @@ export default function AdminUsersPage() {
             </div>
           )}
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-5 flex items-center justify-center gap-2">
+            <button
+              type="button"
+              onClick={() => { setPage((p) => p - 1); load(); }}
+              disabled={page <= 1}
+              className={`inline-flex h-10 items-center rounded-lg border px-4 text-sm font-medium transition-all ${
+                page > 1
+                  ? 'border-border bg-bg-elevated text-fg hover:bg-bg-subtle'
+                  : 'cursor-not-allowed border-border/50 text-fg-subtle'
+              }`}
+            >
+              {t('common.previous')}
+            </button>
+            <span className="mx-2 text-sm text-fg-muted">{page} / {totalPages}</span>
+            <button
+              type="button"
+              onClick={() => { setPage((p) => p + 1); load(); }}
+              disabled={page >= totalPages}
+              className={`inline-flex h-10 items-center rounded-lg border px-4 text-sm font-medium transition-all ${
+                page < totalPages
+                  ? 'border-border bg-bg-elevated text-fg hover:bg-bg-subtle'
+                  : 'cursor-not-allowed border-border/50 text-fg-subtle'
+              }`}
+            >
+              {t('common.next')}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* User detail modal */}

@@ -29,6 +29,7 @@ interface Message {
   is_read?: boolean;
   translating?: boolean;
   translated?: boolean;
+  failed?: boolean;
 }
 
 export default function ChatPage() {
@@ -184,6 +185,7 @@ export default function ChatPage() {
       content,
       created_at: new Date().toISOString(),
       is_read: false,
+      failed: false,
     };
     setMessages((prev) => [...prev, optimistic]);
     setText('');
@@ -201,7 +203,6 @@ export default function ChatPage() {
           setMessages((prev) => prev.map((m) =>
             m.id === optimistic.id ? { ...m, id: sentId } : m
           ));
-          // Update conversation last_message
           setConversations((prev) => prev.map((c) =>
             c.public_id === activeConv.public_id
               ? { ...c, last_message: content, last_message_time: new Date().toISOString() }
@@ -209,7 +210,9 @@ export default function ChatPage() {
           ));
         }
       } catch {
-        // Keep optimistic — user sees it, can retry
+        setMessages((prev) => prev.map((m) =>
+          m.id === optimistic.id ? { ...m, failed: true } : m
+        ));
       } finally {
         setSending(false);
         inputRef.current?.focus();
@@ -217,6 +220,31 @@ export default function ChatPage() {
     }
     inputRef.current?.focus();
   }, [text, activeConv, sending, myId]);
+
+  const retryMessage = useCallback(async (msgId: string, content: string) => {
+    if (!activeConv) return;
+    setMessages((prev) => prev.map((m) =>
+      m.id === msgId ? { ...m, failed: false } : m
+    ));
+    try {
+      const sent = await chatApi.sendMessage(activeConv.id ?? activeConv.public_id, content);
+      if (sent) {
+        const sentId = String((sent as any).public_id ?? (sent as any).id ?? msgId);
+        setMessages((prev) => prev.map((m) =>
+          m.id === msgId ? { ...m, id: sentId, failed: false } : m
+        ));
+        setConversations((prev) => prev.map((c) =>
+          c.public_id === activeConv.public_id
+            ? { ...c, last_message: content, last_message_time: new Date().toISOString() }
+            : c
+        ));
+      }
+    } catch {
+      setMessages((prev) => prev.map((m) =>
+        m.id === msgId ? { ...m, failed: true } : m
+      ));
+    }
+  }, [activeConv]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -526,18 +554,32 @@ export default function ChatPage() {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
                             className={`relative px-3.5 py-2 text-sm leading-relaxed break-words ${
-                              isMe
-                                ? `bg-brand-primary text-white ${isFirstInGroup ? 'rounded-t-2xl' : 'rounded-t-lg'} ${isLastInGroup ? 'rounded-bl-2xl rounded-br-sm' : 'rounded-b-lg'}`
-                                : `bg-bg-elevated border border-border text-fg ${isFirstInGroup ? 'rounded-t-2xl' : 'rounded-t-lg'} ${isLastInGroup ? 'rounded-br-2xl rounded-bl-sm' : 'rounded-b-lg'}`
+                              msg.failed
+                                ? 'bg-danger/10 border border-danger/30 text-danger rounded-t-2xl rounded-br-2xl rounded-bl-sm'
+                                : isMe
+                                  ? `bg-brand-primary text-white ${isFirstInGroup ? 'rounded-t-2xl' : 'rounded-t-lg'} ${isLastInGroup ? 'rounded-bl-2xl rounded-br-sm' : 'rounded-b-lg'}`
+                                  : `bg-bg-elevated border border-border text-fg ${isFirstInGroup ? 'rounded-t-2xl' : 'rounded-t-lg'} ${isLastInGroup ? 'rounded-br-2xl rounded-bl-sm' : 'rounded-b-lg'}`
                             }`}
                           >
                             {msg.content}
+                            {msg.failed && (
+                              <span className="ml-1 text-[10px] opacity-70">{t('chat.sendFailed' as any) ?? 'Yuborilmadi'}</span>
+                            )}
                             {msg.translated && (
                               <span className={`ml-1 text-[10px] opacity-70 ${isMe ? 'text-white' : 'text-fg-muted'}`}>
                                 (tarjima)
                               </span>
                             )}
                           </motion.div>
+                          {msg.failed && (
+                            <button
+                              type="button"
+                              onClick={() => retryMessage(msg.id, msg.content)}
+                              className="mt-1 inline-flex items-center gap-1 rounded-md px-2 py-1 text-[10px] font-medium text-danger hover:bg-danger/10 transition-colors"
+                            >
+                              {t('chat.retry' as any) ?? 'Qayta urinish'}
+                            </button>
+                          )}
                           {/* Translate button — always visible below bubble */}
                           <div className={`flex items-center gap-1 ${isMe ? 'justify-end' : 'justify-start'} pl-1`}>
                             <button

@@ -48,28 +48,40 @@ export default function ListingsPage() {
   const initialCategory = (searchParams.get('category') ?? 'all') as string;
 
   const [items, setItems] = useState<Listing[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState<string>(initialCategory);
   const [region, setRegion] = useState<string | null>(null);
+  const [status, setStatus] = useState<string>('active');
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState<typeof SORTS[number]>('newestFirst');
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const pageSize = 20;
 
   useEffect(() => {
     let alive = true;
     setLoading(true);
+    setPage(1);
     listingsApi
-      .list({ category: category === 'all' ? undefined : category, region: region ?? undefined })
+      .list({
+        category: category === 'all' ? undefined : category,
+        region: region ?? undefined,
+        status: status === 'all' ? undefined : status,
+        page: 1,
+        page_size: pageSize,
+      })
       .then((res) => {
         if (!alive) return;
         setItems(res.results ?? []);
+        setTotalCount(res.count ?? 0);
       })
       .catch(() => alive && setItems([]))
       .finally(() => alive && setLoading(false));
     return () => {
       alive = false;
     };
-  }, [category, region]);
+  }, [category, region, status]);
 
   const filtered = useMemo(() => {
     let arr = items;
@@ -102,6 +114,31 @@ export default function ListingsPage() {
     }
     return arr;
   }, [items, search, sort]);
+
+  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+  const hasNextPage = page < totalPages;
+  const hasPrevPage = page > 1;
+
+  const loadPage = async (nextPage: number) => {
+    if (nextPage < 1 || nextPage > totalPages) return;
+    setLoading(true);
+    setPage(nextPage);
+    try {
+      const res = await listingsApi.list({
+        category: category === 'all' ? undefined : category,
+        region: region ?? undefined,
+        status: status === 'all' ? undefined : status,
+        page: nextPage,
+        page_size: pageSize,
+      });
+      setItems(res.results ?? []);
+      setTotalCount(res.count ?? 0);
+    } catch {
+      setItems([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -194,6 +231,27 @@ export default function ListingsPage() {
             })}
           </div>
 
+          {/* Status filter chips */}
+          <div className="mt-3 flex gap-2">
+            {[
+              { key: 'active', label: t('listings.statusActive') },
+              { key: 'all', label: t('common.all') },
+            ].map((s) => (
+              <button
+                key={s.key}
+                type="button"
+                onClick={() => setStatus(s.key)}
+                className={`inline-flex h-8 items-center rounded-full border px-4 text-xs font-medium transition-all ${
+                  status === s.key
+                    ? 'border-brand-primary bg-brand-primary/10 text-brand-primary'
+                    : 'border-border bg-bg-elevated text-fg hover:bg-bg-subtle'
+                }`}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+
           {/* Region filter — collapsible */}
           {filtersOpen && (
             <motion.div
@@ -254,9 +312,42 @@ export default function ListingsPage() {
                   aria-live="polite"
                   aria-atomic="true"
                 >
-                  {t('marketplace.showResults', { count: filtered.length })}
+                  {t('marketplace.showResults', { count: totalCount })}
                 </p>
                 <ListingGrid listings={filtered as any} />
+
+                {/* Pagination controls */}
+                {totalPages > 1 && (
+                  <div className="mt-8 flex items-center justify-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => loadPage(page - 1)}
+                      disabled={!hasPrevPage || loading}
+                      className={`inline-flex h-10 items-center rounded-lg border px-4 text-sm font-medium transition-all ${
+                        hasPrevPage
+                          ? 'border-border bg-bg-elevated text-fg hover:bg-bg-subtle'
+                          : 'cursor-not-allowed border-border/50 text-fg-subtle'
+                      }`}
+                    >
+                      {t('common.previous')}
+                    </button>
+                    <span className="mx-2 text-sm text-fg-muted">
+                      {t('common.page', { current: page, total: totalPages })}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => loadPage(page + 1)}
+                      disabled={!hasNextPage || loading}
+                      className={`inline-flex h-10 items-center rounded-lg border px-4 text-sm font-medium transition-all ${
+                        hasNextPage
+                          ? 'border-border bg-bg-elevated text-fg hover:bg-bg-subtle'
+                          : 'cursor-not-allowed border-border/50 text-fg-subtle'
+                      }`}
+                    >
+                      {t('common.next')}
+                    </button>
+                  </div>
+                )}
               </>
             )}
           </div>
@@ -273,7 +364,7 @@ export default function ListingsPage() {
         >
           <Link
             href={`/listings/nearby${category !== 'all' ? `?category=${category}` : ''}`}
-            className="group flex items-center gap-3 rounded-2xl bg-brand-primary px-5 py-3.5 text-white shadow-[0_8px_32px_rgba(31,122,82,0.45)] transition-all hover:bg-brand-primary/90 hover:shadow-[0_12px_40px_rgba(31,122,82,0.55)] hover:scale-105 active:scale-95"
+            className="group flex items-center gap-3 rounded-2xl bg-brand-primary px-5 py-3.5 text-white shadow-lift transition-all hover:bg-brand-primary/90 hover:shadow-premium hover:scale-105 active:scale-95"
             aria-label={t('nearby.title' as any) ?? 'Nearby listings'}
           >
             <div className="relative">

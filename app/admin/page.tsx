@@ -389,7 +389,7 @@ function PendingListings() {
   if (items.length === 0) return (
     <div className="flex flex-col items-center justify-center py-10 gap-2">
       <CheckCircle2 className="h-8 w-8 text-success" strokeWidth={1.5} />
-      <p className="text-sm text-fg-muted">Kutilayotgan e'lonlar yo'q</p>
+      <p className="text-sm text-fg-muted">Kutilayotgan eʼlonlar yoʻq</p>
     </div>
   );
 
@@ -438,7 +438,7 @@ function RecentComplaints() {
   if (items.length === 0) return (
     <div className="flex flex-col items-center justify-center py-10 gap-2">
       <CheckCircle2 className="h-8 w-8 text-success" strokeWidth={1.5} />
-      <p className="text-sm text-fg-muted">Shikoyatlar yo'q</p>
+      <p className="text-sm text-fg-muted">Shikoyatlar yoʻq</p>
     </div>
   );
 

@@ -9,6 +9,7 @@ import { motion } from 'framer-motion'
 import {
   Users, Package, MessageCircle, Eye,
   TrendingUp, BarChart3, Loader2, Activity,
+  UserCheck,
 } from 'lucide-react'
 import { AdminLayout } from '@/components/layout/AdminLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
@@ -153,6 +154,7 @@ export default function AdminAnalyticsPage() {
   const [categories, setCategories] = useState<CategoryStat[]>([])
   const [activity, setActivity] = useState<ActivityAnalytics | null>(null)
   const [growth, setGrowth] = useState<GrowthAnalytics | null>(null)
+  const [listingStats, setListingStats] = useState<{ status: string; count: number }[]>([])
 
   useEffect(() => {
     let cancelled = false
@@ -163,13 +165,15 @@ export default function AdminAnalyticsPage() {
       analyticsApi.listingsByCategory(),
       analyticsApi.activity(days),
       analyticsApi.growth(days).catch(() => null),
+      analyticsApi.listings().catch(() => null),
     ])
-      .then(([d, c, a, g]) => {
+      .then(([d, c, a, g, ls]) => {
         if (cancelled) return
         setDashboard(d)
         setCategories(c)
         setActivity(a)
         setGrowth(g)
+        setListingStats(ls?.status_distribution ?? [])
       })
       .catch((e: any) => {
         if (cancelled) return
@@ -181,9 +185,9 @@ export default function AdminAnalyticsPage() {
 
   const stats = dashboard ? [
     { label: 'Jami foydalanuvchilar', value: dashboard.users.total, sub: `+${dashboard.users.new_today} bugun`, icon: Users, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+    { label: 'Faol foydalanuvchilar (30 kun)', value: dashboard.users.active, sub: `${Math.round((dashboard.users.active / Math.max(dashboard.users.total, 1)) * 100)}% faol`, icon: UserCheck, color: 'text-green-500', bg: 'bg-green-500/10' },
     { label: "Faol e'lonlar", value: dashboard.listings.active, sub: `${formatNumber(dashboard.listings.total)} jami`, icon: Package, color: 'text-brand-primary', bg: 'bg-brand-primary/10' },
     { label: "Ko'rishlar", value: dashboard.engagement.total_views, sub: `+${dashboard.engagement.views_today} bugun`, icon: Eye, color: 'text-purple-500', bg: 'bg-purple-500/10' },
-    { label: 'Xabarlar', value: dashboard.messages.total, sub: `+${dashboard.messages.today} bugun`, icon: MessageCircle, color: 'text-green-500', bg: 'bg-green-500/10' },
   ] : []
 
   // Prepare chart data
@@ -226,10 +230,10 @@ export default function AdminAnalyticsPage() {
             </div>
             <select value={days} onChange={(e) => setDays(Number(e.target.value))}
               className="h-10 rounded-xl border border-border bg-bg-elevated px-4 text-sm text-fg">
-              <option value={7}>So'nggi 7 kun</option>
-              <option value={30}>So'nggi 30 kun</option>
-              <option value={90}>So'nggi 90 kun</option>
-              <option value={365}>So'nggi yil</option>
+              <option value={7}>Soʻnggi 7 kun</option>
+              <option value={30}>Soʻnggi 30 kun</option>
+              <option value={90}>Soʻnggi 90 kun</option>
+              <option value={365}>Soʻnggi yil</option>
             </select>
           </div>
         </motion.div>
@@ -266,12 +270,39 @@ export default function AdminAnalyticsPage() {
               ))}
             </div>
 
+            {/* Listing status distribution */}
+            {listingStats.length > 0 && (
+              <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
+                <Card className="mb-8">
+                  <CardHeader><CardTitle className="flex items-center gap-2"><Package className="h-4 w-4 text-brand-primary" strokeWidth={1.75} />Eʼlonlar holati boʻyicha</CardTitle></CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {listingStats.map((s) => {
+                        const total = listingStats.reduce((sum, x) => sum + x.count, 0) || 1
+                        const pct = Math.round((s.count / total) * 100)
+                        const colorMap: Record<string, string> = { active: 'bg-brand-primary', pending: 'bg-amber-500', rejected: 'bg-red-500', sold: 'bg-blue-500', expired: 'bg-gray-500' }
+                        return (
+                          <div key={s.status} className="flex items-center gap-3">
+                            <span className="w-24 text-xs font-medium text-fg-muted capitalize">{s.status}</span>
+                            <div className="flex-1 h-2 rounded-full bg-bg-subtle overflow-hidden">
+                              <div className={`h-full rounded-full ${colorMap[s.status] ?? 'bg-fg-subtle'}`} style={{ width: `${pct}%` }} />
+                            </div>
+                            <span className="w-16 text-right text-xs font-semibold text-fg">{s.count} ({pct}%)</span>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+
             <div className="grid gap-6 lg:grid-cols-2">
               {/* Users growth line chart */}
               {usersGrowthData.length > 1 && (
                 <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
                   <Card>
-                    <CardHeader><CardTitle className="flex items-center gap-2"><Users className="h-4 w-4 text-blue-500" strokeWidth={1.75} />Foydalanuvchilar o'sishi (so'nggi {days} kun)</CardTitle></CardHeader>
+                    <CardHeader><CardTitle className="flex items-center gap-2"><Users className="h-4 w-4 text-blue-500" strokeWidth={1.75} />Foydalanuvchilar oʻsishi (soʻnggi {days} kun)</CardTitle></CardHeader>
                     <CardContent className="pb-6">
                       <LineChart data={usersGrowthData} color="#3b82f6" />
                     </CardContent>
@@ -283,7 +314,7 @@ export default function AdminAnalyticsPage() {
               {listingsGrowthData.length > 1 && (
                 <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.28 }}>
                   <Card>
-                    <CardHeader><CardTitle className="flex items-center gap-2"><Package className="h-4 w-4 text-brand-primary" strokeWidth={1.75} />E'lonlar o'sishi (so'nggi {days} kun)</CardTitle></CardHeader>
+                    <CardHeader><CardTitle className="flex items-center gap-2"><Package className="h-4 w-4 text-brand-primary" strokeWidth={1.75} />Eʼlonlar oʻsishi (soʻnggi {days} kun)</CardTitle></CardHeader>
                     <CardContent className="pb-6">
                       <LineChart data={listingsGrowthData} color="#1f7a52" />
                     </CardContent>
@@ -295,7 +326,7 @@ export default function AdminAnalyticsPage() {
               {dailyViewsData.length > 1 && (
                 <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
                   <Card>
-                    <CardHeader><CardTitle className="flex items-center gap-2"><TrendingUp className="h-4 w-4 text-brand-primary" strokeWidth={1.75} />Ko'rishlar (so'nggi {Math.min(days, 14)} kun)</CardTitle></CardHeader>
+                    <CardHeader><CardTitle className="flex items-center gap-2"><TrendingUp className="h-4 w-4 text-brand-primary" strokeWidth={1.75} />Koʻrishlar (soʻnggi {Math.min(days, 14)} kun)</CardTitle></CardHeader>
                     <CardContent className="pb-6">
                       <LineChart data={dailyViewsData} color="#1f7a52" />
                     </CardContent>
@@ -307,7 +338,7 @@ export default function AdminAnalyticsPage() {
               {dailyMsgData.length > 1 && (
                 <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
                   <Card>
-                    <CardHeader><CardTitle className="flex items-center gap-2"><MessageCircle className="h-4 w-4 text-blue-500" strokeWidth={1.75} />Xabarlar (so'nggi {Math.min(days, 14)} kun)</CardTitle></CardHeader>
+                    <CardHeader><CardTitle className="flex items-center gap-2"><MessageCircle className="h-4 w-4 text-blue-500" strokeWidth={1.75} />Xabarlar (soʻnggi {Math.min(days, 14)} kun)</CardTitle></CardHeader>
                     <CardContent className="pb-6">
                       <LineChart data={dailyMsgData} color="#3b82f6" />
                     </CardContent>
@@ -319,7 +350,7 @@ export default function AdminAnalyticsPage() {
               {categoryDonutData.length > 0 && (
                 <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
                   <Card>
-                    <CardHeader><CardTitle className="flex items-center gap-2"><Activity className="h-4 w-4 text-amber-500" strokeWidth={1.75} />Kategoriyalar bo'yicha</CardTitle></CardHeader>
+                    <CardHeader><CardTitle className="flex items-center gap-2"><Activity className="h-4 w-4 text-amber-500" strokeWidth={1.75} />Kategoriyalar boʻyicha</CardTitle></CardHeader>
                     <CardContent>
                       <DonutChart data={categoryDonutData} />
                       {/* Also show progress bars */}

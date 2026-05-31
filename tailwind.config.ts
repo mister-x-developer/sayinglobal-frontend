@@ -133,9 +133,9 @@ const config: Config = {
       },
       boxShadow: {
         'soft': '0 1px 2px rgb(0 0 0 / 0.04), 0 8px 24px -12px rgb(0 0 0 / 0.08)',
-        'lift': '0 1px 2px rgb(0 0 0 / 0.06), 0 18px 36px -16px rgb(0 0 0 / 0.18)',
+        'lift': '0 1px 2px rgb(0 0 0 / 0.05), 0 16px 32px -18px rgb(0 0 0 / 0.14)',
         'inset-soft': 'inset 0 1px 0 rgb(255 255 255 / 0.08)',
-        'premium': '0 25px 50px -12px rgb(0 0 0 / 0.25)',
+        'premium': '0 18px 40px -16px rgb(0 0 0 / 0.16)',
       },
       keyframes: {
         'fade-in': {

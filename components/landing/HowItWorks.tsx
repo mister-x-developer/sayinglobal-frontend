@@ -55,6 +55,7 @@ export function HowItWorks() {
         </div>
 
         <motion.div
+          data-motion
           variants={container}
           initial="hidden"
           whileInView="show"
@@ -64,7 +65,7 @@ export function HowItWorks() {
           {steps.map((step) => {
             const Icon = step.icon;
             return (
-              <motion.div key={step.number} variants={item}>
+              <motion.div data-motion key={step.number} variants={item}>
                 <div className="surface-elevated group h-full p-8 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift sm:p-10">
                   <div className="flex items-start justify-between">
                     <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary transition-colors group-hover:bg-brand-primary group-hover:text-white">

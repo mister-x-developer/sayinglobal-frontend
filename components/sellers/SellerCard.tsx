@@ -26,6 +26,7 @@ export function SellerCard({ seller }: { seller: SellerCardData }) {
 
   return (
     <motion.article
+      data-motion
       initial={{ opacity: 0, y: 8 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}

@@ -184,13 +184,11 @@ export const useAuthStore = create<AuthState>()(
         // (previous-user-data + unauthenticated). Imports are deferred to
         // avoid a circular import (the stores may import from `./auth`).
         try {
-          // eslint-disable-next-line @typescript-eslint/no-require-imports
           const notif = require('./notifications') as
             typeof import('./notifications');
           notif.useNotificationsStore.getState().reset();
         } catch {/* never block sign-out on store reset failures */}
         try {
-          // eslint-disable-next-line @typescript-eslint/no-require-imports
           const follow = require('./follow') as typeof import('./follow');
           follow.useFollowStore.getState().reset();
         } catch {/* never block sign-out on store reset failures */}

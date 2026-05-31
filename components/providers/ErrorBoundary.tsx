@@ -55,6 +55,10 @@ export class ErrorBoundary extends Component<Props, State> {
               <RefreshCw className="h-4 w-4" strokeWidth={2.25} />
               Qayta urinish
             </button>
+            {/* Hard navigation is intentional: after a render crash we want a
+                full page reload to reset any corrupt client state rather than
+                client-side routing via <Link>. */}
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
             <a href="/" className="btn btn-secondary btn-sm">
               <Home className="h-4 w-4" strokeWidth={1.75} />
               Bosh sahifa

@@ -189,7 +189,7 @@ export default function ReportDetailPage() {
                     </div>
 
                     <div className="surface-elevated p-6">
-                      <h3 className="text-eyebrow">{t('report.status' as any) ?? 'Status'}</h3>
+                      <h3 className="text-eyebrow">{t('report.statusLabel' as any) ?? 'Status'}</h3>
                       <ul className="mt-3 space-y-3 text-sm">
                         <li className="flex items-center gap-2 text-fg-muted">
                           <span className="inline-block h-2 w-2 rounded-full bg-fg-subtle" />

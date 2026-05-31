@@ -53,6 +53,8 @@ const STATUS_BADGE: Record<string, any> = {
   scheduled: 'warning',
   sent: 'success',
   cancelled: 'error',
+  sending: 'warning',
+  failed: 'error',
 };
 
 export default function AdminBroadcastsPage() {
@@ -86,6 +88,14 @@ export default function AdminBroadcastsPage() {
   const create = async () => {
     if (!newTitle.trim() || !newMessage.trim()) {
       toast.error(t('errors.required'));
+      return;
+    }
+    if (newMessage.trim().length > 1000) {
+      toast.error(t('validation.messageTooLong' as any) ?? 'Message must be 1000 characters or less');
+      return;
+    }
+    if (newTitle.trim().length > 1000) {
+      toast.error(t('validation.titleTooLong' as any) ?? 'Title must be 1000 characters or less');
       return;
     }
     setCreating(true);
@@ -177,6 +187,7 @@ export default function AdminBroadcastsPage() {
                 rows={5}
                 className="input-base h-auto w-full py-3"
               />
+              <p className="text-xs text-fg-subtle">{newMessage.length}/1000</p>
               <p className="text-xs text-fg-muted">
                 {t('admin.autoTranslateHint' as any) ?? 'Content will be auto-translated to all 4 languages.'}
               </p>

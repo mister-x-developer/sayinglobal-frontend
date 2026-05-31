@@ -86,6 +86,7 @@ export function NearbyListingsSection({ listing }: Props) {
 
   return (
     <motion.div
+      data-motion
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.22 }}

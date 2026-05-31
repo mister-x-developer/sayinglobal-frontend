@@ -48,11 +48,6 @@ interface ReferralCode {
 }
 
 const PLAN_ICONS = [Tag, Zap, Crown];
-const PLAN_COLORS = [
-  'from-emerald-500/10 to-teal-500/10 border-emerald-500/20',
-  'from-blue-500/10 to-indigo-500/10 border-blue-500/20',
-  'from-amber-500/10 to-orange-500/10 border-amber-500/20',
-];
 const PLAN_ICON_COLORS = ['text-emerald-500', 'text-blue-500', 'text-amber-500'];
 
 function getPlanName(plan: Plan, locale: string): string {
@@ -241,7 +236,6 @@ export default function PlansPage() {
             ) : (
               plans.map((plan, i) => {
                 const Icon = PLAN_ICONS[i % PLAN_ICONS.length];
-                const colorClass = PLAN_COLORS[i % PLAN_COLORS.length];
                 const iconColor = PLAN_ICON_COLORS[i % PLAN_ICON_COLORS.length];
                 const isCurrent = myPlan
                   ? (myPlan.plan.name === plan.name && myPlan.plan.monthly_listing_limit === plan.monthly_listing_limit)
@@ -253,7 +247,7 @@ export default function PlansPage() {
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: i * 0.08 }}
-                    className={`relative surface-elevated bg-gradient-to-br ${colorClass} p-6 flex flex-col ${isCurrent ? 'ring-2 ring-brand-primary' : ''}`}
+                    className={`relative surface-elevated p-6 flex flex-col ${isCurrent ? 'ring-2 ring-brand-primary' : ''}`}
                   >
                     {isCurrent && (
                       <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand-primary px-3 py-1 text-xs font-bold text-white">

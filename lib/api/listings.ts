@@ -80,6 +80,7 @@ export interface ListingFilters {
   min_price?: number;
   max_price?: number;
   region?: string;
+  status?: string;
   gender?: string;
   search?: string;
   page?: number;

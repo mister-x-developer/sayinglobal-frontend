@@ -158,7 +158,7 @@ function SellerStatusBadge({ status }: { status: string }) {
 
 export default function AdminModerationPage() {
   const t = useTranslations();
-  const [filters, setFilters] = useState<AdminQueueParams>({ page: 1, page_size: 30 });
+  const [filters, setFilters] = useState<AdminQueueParams>({ page: 1, page_size: 20, status: 'pending', ordering: 'created_at' });
   const [items, setItems] = useState<AdminReportRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [count, setCount] = useState(0);

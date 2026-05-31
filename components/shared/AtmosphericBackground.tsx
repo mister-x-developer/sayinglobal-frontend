@@ -13,6 +13,12 @@ interface AtmosphericBackgroundProps {
  * Day: warm sunlight, sky gradient, green hills.
  * Night: stars, moon glow, deep valley.
  * Smooth 600ms transition between modes.
+ *
+ * SCOPING (WS-C, R7.3): This component renders the heavy atmosphere effects
+ * (sun/moon orb, stars, hills). It MUST only be mounted on the landing page
+ * (`app/page.tsx` via `Hero`) and the auth pages (`app/auth/*`). Functional
+ * and admin pages use the calm, low-contrast `bg`/`surface-subtle` background
+ * instead — do NOT mount this on listings, chat, profile, dashboard or admin.
  */
 export function AtmosphericBackground({
   variant = 'hero',

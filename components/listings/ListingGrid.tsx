@@ -44,13 +44,14 @@ export function ListingGrid({
 }: ListingGridProps) {
   return (
     <motion.div
+      data-motion
       variants={container}
       initial="hidden"
       animate="show"
       className={`grid gap-4 ${GRID_CLASSES[columns]}`}
     >
       {listings.map((listing) => (
-        <motion.div key={listing.public_id} variants={item}>
+        <motion.div data-motion key={listing.public_id} variants={item}>
           <ListingCard listing={listing} onFavorite={onFavorite} />
         </motion.div>
       ))}

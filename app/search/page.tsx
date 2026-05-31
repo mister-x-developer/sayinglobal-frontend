@@ -107,7 +107,7 @@ export default function SearchPage() {
 
   const handleSubmit = (q: string) => {
     const trimmed = q.trim();
-    if (!trimmed) return;
+    if (!trimmed || trimmed.length < 1 || trimmed.length > 200) return;
     setCommitted(trimmed);
     saveRecent(trimmed);
     setRecent(getRecent());

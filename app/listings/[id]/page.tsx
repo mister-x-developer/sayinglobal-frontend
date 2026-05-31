@@ -155,6 +155,7 @@ export default function ListingDetailPage() {
                 <div className="space-y-6">
                   {/* Gallery */}
                   <motion.div
+                    data-motion
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}

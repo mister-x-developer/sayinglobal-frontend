@@ -47,7 +47,10 @@
     "error": "An error occurred",
     "empty": "Empty",
     "skip": "Skip",
-    "later": "Later"
+    "later": "Later",
+    "new": "New",
+    "page": "{current} / {total}",
+    "deleteConfirm": "Are you sure you want to delete?"
   },
   "landing": {
     "heroTitle": "Digital Livestock Marketplace",
@@ -82,6 +85,7 @@
   },
   "auth": {
     "title": "Sign in",
+    "login": "Sign in",
     "subtitle": "Secure sign-in via the Telegram bot",
     "openBotTitle": "Step 1: Open the Telegram bot",
     "openBotDescription": "Tap the button to open our Telegram bot. If you are not registered, share your phone number and get a 5-digit code. If you are already registered, tap the \"Get code\" button.",
@@ -235,7 +239,8 @@
     "female": "Female",
     "weight": "Weight",
     "breed": "Breed",
-    "healthStatus": "Health"
+    "healthStatus": "Health",
+    "statusActive": "Active"
   },
   "categories": {
     "all": "All",
@@ -412,7 +417,8 @@
     "beFirst": "Be the first to comment",
     "edited": "edited",
     "deleted": "Comment deleted",
-    "report": "Report"
+    "report": "Report",
+    "loginToComment": "Sign in to leave a comment"
   },
   "chat": {
     "title": "Messages",
@@ -439,7 +445,9 @@
     "yesterday": "Yesterday",
     "messageCopied": "Message copied",
     "send": "Send",
-    "placeholder": "Type a message..."
+    "placeholder": "Type a message...",
+    "sendFailed": "Send failed",
+    "retry": "Retry"
   },
   "notifications": {
     "title": "Notifications",
@@ -628,7 +636,8 @@
     "totalSearches": "Total searches",
     "topCategories": "Top categories",
     "topRegions": "Top regions",
-    "topSellers": "Top sellers"
+    "topSellers": "Top sellers",
+    "days": "days"
   },
   "complaints": {
     "title": "Complaints",
@@ -937,21 +946,17 @@
     "reason_impersonation": "Impersonation",
     "reason_listing_already_sold": "Already sold but still listed"
   },
-  "terms": {
-    "title": "Platform Terms",
-    "subtitle": "Accept the terms to continue",
-    "intro": "To use the SAYIN GLOBAL platform you must accept the following terms.",
-    "point1": "SAYIN GLOBAL is a livestock-listings marketplace. Any transaction between seller and buyer is the personal responsibility of both parties.",
-    "point2": "The platform is not responsible for the seller’s honesty, the quality of the animal, or the outcome of the transaction.",
-    "point3": "The platform and its administration bear no legal responsibility for fraud, false listings, or substandard goods.",
-    "point4": "Users must exercise their own caution, verify the seller, and take their own safety measures.",
-    "disclaimer": "The platform serves only as a communication channel between sellers and buyers. No transactions are processed through the platform.",
-    "checkboxLabel": "I have read the terms above and fully accept them.",
-    "accept": "Accept and continue",
-    "accepted": "Terms accepted!"
-  },
   "referral": {
     "title": "Referral system",
+    "subtitle": "If a friend gave you a code, enter it here",
+    "description": "If you join the platform with a referral code, your friend earns a reward. If you don't have a code, skip this step.",
+    "plansWelcome": "Welcome to the platform! Explore our plans.",
+    "freeNote": "All plans are currently free through the referral system.",
+    "systemTitle": "Referral system",
+    "systemDesc": "Invite your friends → when they post a listing, you move up to a higher plan.",
+    "tier1": "3 referrals → Standard plan",
+    "tier2": "7 referrals → Pro plan",
+    "viewPlans": "View plans",
     "myCode": "My referral code",
     "useCode": "Use referral code",
     "reward": "Reward: after first active listing",
@@ -995,6 +1000,11 @@
   "plans": {
     "title": "Plans",
     "choosePlan": "Choose your plan",
+    "systemTitle": "How it works",
+    "systemDesc": "Invite your friends. When they post an active listing, your plan is upgraded.",
+    "tier1": "3 referrals → Standard plan",
+    "tier2": "7 referrals → Pro plan",
+    "viewPlans": "View plans",
     "subtitle": "Monthly listing limits. No hidden fees. Currently free via referrals.",
     "currentPlan": "Your current plan",
     "listingsThisMonth": "listings this month",
@@ -1068,6 +1078,23 @@
     "point2": "All listings go through moderation. Listings that violate the rules are removed and the account may be restricted.",
     "point3": "The platform is not responsible for transactions between users. Meet in person for safe trading.",
     "point4": "Spam, fraud, threats, or illegal activity will result in immediate account blocking.",
-    "disclaimer": "SAYIN GLOBAL provides services 'as is'. We are not responsible for service interruptions or third-party actions."
+    "disclaimer": "SAYIN GLOBAL provides services 'as is'. We are not responsible for service interruptions or third-party actions.",
+    "subtitle": "Accept the terms to continue",
+    "checkboxLabel": "I have read the terms above and fully accept them.",
+    "accept": "Accept and continue",
+    "accepted": "Terms accepted!"
+  },
+  "validation": {
+    "titleTooLong": "Title must not exceed 100 characters",
+    "descriptionTooLong": "Description must not exceed 2000 characters",
+    "minImages": "At least 1 image is required",
+    "monthlyLimitReached": "Monthly listing limit reached. Try again next month.",
+    "activeLimitReached": "Active listings limit reached. Remove some listings.",
+    "cannotCreateListing": "Creating listings is currently unavailable",
+    "atLeastOneFieldRequired": "Fill in at least one field",
+    "regionRequired": "Region selection is required",
+    "openOnMap": "Open on map",
+    "openDirections": "Open directions",
+    "messageTooLong": "Message must not exceed 1000 characters"
   }
 }

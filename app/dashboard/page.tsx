@@ -59,6 +59,7 @@ export default function DashboardPage() {
       <main className="flex-1">
         <div className="container-page py-8 sm:py-10">
           <motion.div
+            data-motion
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}

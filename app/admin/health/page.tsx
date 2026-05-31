@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 import {
   Activity,
   Database,
@@ -213,9 +214,9 @@ export default function AdminHealthPage() {
             <AlertTriangle className="h-4 w-4 flex-shrink-0 text-warning" strokeWidth={2} />
             <p className="text-sm text-fg">
               <span className="font-semibold">{ops.platform.listings_pending}</span> listing(s) awaiting moderation review.{' '}
-              <a href="/admin/listings" className="font-semibold text-brand-primary hover:underline">
+              <Link href="/admin/listings" className="font-semibold text-brand-primary hover:underline">
                 Review now →
-              </a>
+              </Link>
             </p>
           </motion.div>
         )}

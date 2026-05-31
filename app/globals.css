@@ -9,10 +9,10 @@
 
 @layer base {
   :root {
-    /* Brand */
+    /* Brand — calm, premium, lower-saturation palette (was neon: 242 177 0 / 0 184 159) */
     --brand-primary: 31 122 82;
-    --brand-secondary: 242 177 0;
-    --brand-accent: 0 184 159;
+    --brand-secondary: 202 158 74;
+    --brand-accent: 48 138 128;
 
     /* DAY MODE */
     --bg: 250 251 250;
@@ -87,7 +87,7 @@
 
     --border: 32 42 50;
     --border-strong: 48 60 70;
-    --ring: 0 184 159;
+    --ring: 48 138 128;
 
     --card: 17 24 31;
     --card-fg: 234 240 236;
@@ -305,17 +305,17 @@
     background: linear-gradient(180deg, rgb(var(--brand-primary)) 0%, rgb(28 110 75) 100%);
     color: rgb(255 255 255);
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.12),
-      0 1px 0 rgb(var(--brand-primary) / 0.4),
-      0 6px 14px -4px rgb(var(--brand-primary) / 0.45);
+      inset 0 1px 0 rgb(255 255 255 / 0.10),
+      0 1px 2px rgb(var(--shadow-color) / 0.06),
+      0 4px 10px -6px rgb(var(--brand-primary) / 0.25);
   }
 
   .btn-primary:hover:not(:disabled) {
     transform: translateY(-1px);
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.18),
-      0 2px 0 rgb(var(--brand-primary) / 0.5),
-      0 12px 22px -6px rgb(var(--brand-primary) / 0.55);
+      inset 0 1px 0 rgb(255 255 255 / 0.14),
+      0 1px 2px rgb(var(--shadow-color) / 0.08),
+      0 8px 16px -8px rgb(var(--brand-primary) / 0.32);
   }
 
   .btn-primary:active:not(:disabled) {
@@ -517,15 +517,15 @@
 
   .atmosphere-day {
     background:
-      radial-gradient(900px 480px at 80% -10%, rgb(255 213 113 / 0.45), transparent 60%),
-      radial-gradient(700px 420px at 10% 0%, rgb(140 200 168 / 0.35), transparent 60%),
+      radial-gradient(900px 480px at 80% -10%, rgb(255 213 113 / 0.28), transparent 60%),
+      radial-gradient(700px 420px at 10% 0%, rgb(140 200 168 / 0.22), transparent 60%),
       linear-gradient(180deg, rgb(var(--sky-top)) 0%, rgb(var(--sky-mid)) 55%, rgb(var(--sky-bottom)) 100%);
   }
 
   .atmosphere-night {
     background:
-      radial-gradient(800px 500px at 78% -8%, rgb(190 200 230 / 0.18), transparent 60%),
-      radial-gradient(700px 400px at 12% 0%, rgb(0 184 159 / 0.10), transparent 60%),
+      radial-gradient(800px 500px at 78% -8%, rgb(190 200 230 / 0.14), transparent 60%),
+      radial-gradient(700px 400px at 12% 0%, rgb(48 138 128 / 0.08), transparent 60%),
       linear-gradient(180deg, rgb(var(--sky-top)) 0%, rgb(var(--sky-mid)) 50%, rgb(var(--sky-bottom)) 100%);
   }
 
@@ -574,8 +574,8 @@
       rgb(220 226 235) 50%,
       rgb(160 175 195) 100%);
     box-shadow:
-      0 0 80px 20px rgb(220 226 240 / 0.18),
-      0 0 200px 60px rgb(170 200 230 / 0.06);
+      0 0 60px 12px rgb(220 226 240 / 0.10),
+      0 0 140px 40px rgb(170 200 230 / 0.04);
   }
 
   .hills {
@@ -685,8 +685,8 @@
   /* Premium shadow lift — used on hover */
   .shadow-lift {
     box-shadow:
-      0 1px 2px rgb(var(--shadow-color) / 0.06),
-      0 18px 36px -16px rgb(var(--shadow-color) / 0.18);
+      0 1px 2px rgb(var(--shadow-color) / 0.05),
+      0 16px 32px -18px rgb(var(--shadow-color) / 0.14);
   }
 
   /* Soft shadow */
@@ -758,7 +758,8 @@ html:not(.js-ready) [style*='opacity:0'] {
 
 @media (prefers-reduced-motion: reduce) {
   [style*='opacity: 0'],
-  [style*='opacity:0'] {
+  [style*='opacity:0'],
+  [data-motion] {
     opacity: 1 !important;
     transform: none !important;
     animation: none !important;
@@ -786,4 +787,17 @@ html:not(.js-ready) [style*='opacity:0'] {
 }
 .sg-listing-popup .leaflet-popup-close-button {
   display: none;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Anti-flash motion gate — premium-launch-readiness Req 1.6, design §3.1 R3.
+   While JavaScript is still hydrating, force motion-managed elements to
+   their final visual state so the SSR markup matches the post-hydration
+   first paint. The `html.js-ready` class is added by HydrationReady (or
+   equivalent) after the first commit; this rule is automatically lifted
+   once that class is present.
+   ───────────────────────────────────────────────────────────────────────── */
+html:not(.js-ready) [data-motion] {
+  opacity: 1 !important;
+  transform: none !important;
 }

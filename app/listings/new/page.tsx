@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
@@ -21,6 +21,7 @@ import { LocationPicker } from '@/components/shared/LocationPicker';
 import { toast } from '@/components/ui/Toast';
 import { listingsApi } from '@/lib/api/listings';
 import apiClient from '@/lib/api/client';
+import { useAuthStore } from '@/lib/store/auth';
 
 const GENDERS = [
   { value: 'male', key: 'animal.male' },
@@ -41,6 +42,13 @@ export default function NewListingPage() {
   const t = useTranslations();
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
+  const { isAuthenticated } = useAuthStore();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/auth');
+    }
+  }, [isAuthenticated, router]);
 
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -79,8 +87,11 @@ export default function NewListingPage() {
     const e: Record<string, string> = {};
     if (!form.category) e.category = t('errors.required');
     if (!form.title.trim()) e.title = t('errors.required');
+    else if (form.title.trim().length > 100) e.title = t('validation.titleTooLong');
     if (!form.description.trim()) e.description = t('errors.required');
-    if (!form.price || isNaN(Number(form.price)) || Number(form.price) <= 0) e.price = t('errors.required');
+    else if (form.description.trim().length > 2000) e.description = t('validation.descriptionTooLong');
+    const priceNum = Number(form.price);
+    if (!form.price || isNaN(priceNum) || priceNum < 0.01 || priceNum > 999999999.99) e.price = t('errors.required');
     if (!form.region) e.region = t('errors.required');
     if (!form.district) e.district = t('errors.required');
     if (!form.health_status) e.health_status = t('errors.required');
@@ -89,14 +100,14 @@ export default function NewListingPage() {
     if (!form.weight_kg || isNaN(Number(form.weight_kg)) || Number(form.weight_kg) <= 0) e.weight_kg = t('errors.required');
     if (form.latitude == null || form.longitude == null) e.location = t('errors.required');
     if (!age.years && !age.months && !age.days) e.age = t('validation.atLeastOneFieldRequired');
-    if (images.length < 3) e.images = t('validation.minImages');
+    if (images.length < 1) e.images = t('validation.minImages');
     setErrors(e);
     return Object.keys(e).length === 0;
   };
 
   const handleImages = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
-    const remaining = 5 - images.length;
+    const remaining = 10 - images.length;
     const toAdd = files.slice(0, remaining);
     const previews: ImagePreview[] = toAdd.map((file, i) => ({
       id: `${Date.now()}-${i}`,
@@ -377,7 +388,7 @@ export default function NewListingPage() {
                     ))}
                   </div>
                 )}
-                {images.length < 5 && (
+                {images.length < 10 && (
                   <button
                     type="button"
                     onClick={() => fileRef.current?.click()}
@@ -389,7 +400,7 @@ export default function NewListingPage() {
                   </button>
                 )}
                 <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={handleImages} className="hidden" />
-                <p className="mt-2 text-xs text-fg-subtle">{images.length}/5 · {t('validation.minImages')}</p>
+                <p className="mt-2 text-xs text-fg-subtle">{images.length}/10 · {t('validation.minImages')}</p>
                 {errors.images && <p className="mt-1 text-xs text-danger">{errors.images}</p>}
               </div>
 

@@ -77,6 +77,7 @@ export default function EditListingPage() {
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [listing, setListing] = useState<Listing | null>(null);
   const [form, setForm] = useState<EditForm | null>(null);
@@ -154,6 +155,20 @@ export default function EditListingPage() {
   const update = (patch: Partial<EditForm>) =>
     setForm((prev) => (prev ? { ...prev, ...patch } : prev));
 
+  const validateEdit = (): boolean => {
+    if (!form) return false;
+    const e: Record<string, string> = {};
+    if (!form.title.trim()) e.title = t('errors.required');
+    else if (form.title.trim().length > 100) e.title = t('validation.titleTooLong');
+    if (!form.description.trim()) e.description = t('errors.required');
+    else if (form.description.trim().length > 2000) e.description = t('validation.descriptionTooLong');
+    const priceNum = Number(form.price);
+    if (!form.price || isNaN(priceNum) || priceNum < 0.01 || priceNum > 999999999.99) e.price = t('errors.required');
+    if (existingImages.length + newImages.length < 1) e.images = t('validation.minImages');
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
+
   const handleAddImages = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
     const totalExisting = existingImages.length + newImages.length;
@@ -185,12 +200,13 @@ export default function EditListingPage() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form || !listing) return;
+    if (!validateEdit()) return;
     setSaving(true);
     try {
       const payload: any = {
         title: form.title.trim(),
         description: form.description.trim(),
-        price: Number(form.price) || 0,
+        price: Number(form.price),
         currency: form.currency,
         is_negotiable: form.is_negotiable,
         age_years: form.age_years ? Number(form.age_years) : undefined,

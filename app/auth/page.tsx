@@ -175,6 +175,7 @@ function OpenBotStage({ onContinue }: { onContinue: () => void }) {
 
   return (
     <motion.div
+      data-motion
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
@@ -244,6 +245,7 @@ function EnterCodeStage({
 
   return (
     <motion.div
+      data-motion
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}

@@ -66,6 +66,7 @@ export default function MyListingsPage() {
   const [filter, setFilter] = useState<StatusFilter>('all');
   const [openMenu, setOpenMenu] = useState<number | null>(null);
   const [soldConfirm, setSoldConfirm] = useState<number | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
 
   useEffect(() => { setHydrated(true); }, []);
   /* auth gating handled by middleware */
@@ -87,8 +88,11 @@ export default function MyListingsPage() {
 
   const handleDelete = async (id: number) => {
     setOpenMenu(null);
-    setItems((prev) => prev.filter((l) => l.public_id !== id));
-    try { await listingsApi.remove(id); } catch { load(); }
+    setDeleteConfirm(null);
+    try {
+      await listingsApi.remove(id);
+      setItems((prev) => prev.filter((l) => l.public_id !== id));
+    } catch { load(); }
   };
 
   const handleMarkSold = async (id: number) => {
@@ -436,7 +440,7 @@ export default function MyListingsPage() {
                                 <div className="my-1 h-px bg-border" />
                                 <button
                                   type="button"
-                                  onClick={() => handleDelete(l.public_id)}
+                                  onClick={() => { setOpenMenu(null); setDeleteConfirm(l.public_id); }}
                                   className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-danger hover:bg-danger/10"
                                 >
                                   <Trash2 className="h-4 w-4" strokeWidth={1.75} />
@@ -496,6 +500,53 @@ export default function MyListingsPage() {
                   className="btn btn-primary flex-1 bg-success hover:bg-success/90"
                 >
                   {t('common.confirm')}
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Delete confirmation modal */}
+      <AnimatePresence>
+        {deleteConfirm !== null && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
+              onClick={() => setDeleteConfirm(null)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 8 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              className="fixed left-1/2 top-1/2 z-50 w-full max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-bg-elevated p-6 shadow-lift"
+            >
+              <div className="flex items-center gap-3">
+                <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-danger/12">
+                  <Trash2 className="h-6 w-6 text-danger" strokeWidth={1.75} />
+                </div>
+                <div>
+                  <h3 className="font-display text-lg font-semibold">{t('common.delete')}</h3>
+                  <p className="text-sm text-fg-muted">{t('listings.deleteConfirm' as any) ?? t('common.deleteConfirm')}</p>
+                </div>
+              </div>
+              <div className="mt-6 flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setDeleteConfirm(null)}
+                  className="btn btn-secondary flex-1"
+                >
+                  {t('common.cancel')}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(deleteConfirm)}
+                  className="btn btn-danger flex-1"
+                >
+                  {t('common.delete')}
                 </button>
               </div>
             </motion.div>
