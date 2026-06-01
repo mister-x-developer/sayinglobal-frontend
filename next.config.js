@@ -109,17 +109,36 @@ const nextConfig = {
   },
 };
 
-module.exports = withSentryConfig(
-  withNextIntl(nextConfig),
-  {
-    // Sentry build-time options
-    org: 'o4511396260478976',
-    project: 'sayinglobal-frontend',
-    silent: true,               // suppress Sentry CLI output during build
-    widenClientFileUpload: true, // upload more source maps for better stack traces
-    hideSourceMaps: true,       // hide source maps from browser
-    sourcemaps: { deleteSourcemapsAfterUpload: true },
-    disableLogger: true,        // remove Sentry debug logs from bundle
-    automaticVercelMonitors: false,
-  }
-);
+const baseConfig = withNextIntl(nextConfig);
+
+// Sentry build-time source-map upload is OPT-IN. It only runs when a valid
+// SENTRY_AUTH_TOKEN is present (set in the Vercel dashboard). Without it we
+// export the plain config so `next build` never invokes the Sentry CLI —
+// which previously crashed the whole build with "Project not found" when the
+// org/project slug or auth token was missing.
+//
+// NOTE: client-side error reporting still works regardless of this plugin,
+// because it is configured at runtime via NEXT_PUBLIC_SENTRY_DSN.
+const sentryEnabled = Boolean(process.env.SENTRY_AUTH_TOKEN);
+
+module.exports = sentryEnabled
+  ? withSentryConfig(baseConfig, {
+      // Sentry build-time options. `org`/`project` must be the SLUGS from your
+      // Sentry dashboard (Settings → General), not the numeric IDs. Override
+      // via env so a wrong hardcoded value can't break the build.
+      org: process.env.SENTRY_ORG || 'sayinglobal',
+      project: process.env.SENTRY_PROJECT || 'sayinglobal-frontend',
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      silent: true,               // suppress Sentry CLI output during build
+      widenClientFileUpload: true, // upload more source maps for better stack traces
+      hideSourceMaps: true,       // hide source maps from browser
+      sourcemaps: { deleteSourcemapsAfterUpload: true },
+      disableLogger: true,        // remove Sentry debug logs from bundle
+      automaticVercelMonitors: false,
+      // Do not fail the production build if a release/upload step errors.
+      errorHandler: (err) => {
+        // eslint-disable-next-line no-console
+        console.warn('[sentry] build step skipped:', err && err.message);
+      },
+    })
+  : baseConfig;
