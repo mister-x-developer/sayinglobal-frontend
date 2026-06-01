@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 // deploy trigger Thu May 28 2026 — fix: bot username fallback + admin login unblock
 const createNextIntlPlugin = require('next-intl/plugin');
-const { withSentryConfig } = require('@sentry/nextjs');
 const withNextIntl = createNextIntlPlugin('./lib/i18n.ts');
 
 const isDev = process.env.NODE_ENV === 'development';
@@ -37,11 +36,23 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
 
-  // Webpack: suppress benign "Critical dependency" warning from Sentry
+  // Webpack: suppress benign "Critical dependency" warnings emitted by
+  // @sentry/node + @opentelemetry/require-in-the-middle during server bundling.
+  // These are not errors and never break the build, but we filter them so the
+  // Vercel/CI logs stay clean.
   webpack(config, { isServer }) {
     if (isServer) {
       config.externals = config.externals || [];
     }
+    config.ignoreWarnings = [
+      ...(config.ignoreWarnings || []),
+      { module: /@opentelemetry\/instrumentation/ },
+      { module: /require-in-the-middle/ },
+      { module: /@prisma\/instrumentation/ },
+      { module: /@sentry\/node/ },
+      /Critical dependency: the request of a dependency is an expression/,
+      /Critical dependency: require function is used in a way/,
+    ];
     return config;
   },
 
@@ -109,36 +120,15 @@ const nextConfig = {
   },
 };
 
-const baseConfig = withNextIntl(nextConfig);
-
-// Sentry build-time source-map upload is OPT-IN. It only runs when a valid
-// SENTRY_AUTH_TOKEN is present (set in the Vercel dashboard). Without it we
-// export the plain config so `next build` never invokes the Sentry CLI —
-// which previously crashed the whole build with "Project not found" when the
-// org/project slug or auth token was missing.
+// IMPORTANT: We intentionally do NOT wrap the config with `withSentryConfig`.
+// The Sentry build plugin runs `sentry-cli releases new ...` during
+// `next build`, which crashes the whole Vercel build with "Project not found"
+// when the org/project slug or auth token is missing. We removed it so the
+// build NEVER touches the Sentry CLI and can never fail because of it.
 //
-// NOTE: client-side error reporting still works regardless of this plugin,
-// because it is configured at runtime via NEXT_PUBLIC_SENTRY_DSN.
-const sentryEnabled = Boolean(process.env.SENTRY_AUTH_TOKEN);
+// Runtime error reporting is unaffected — it is configured separately at
+// runtime via NEXT_PUBLIC_SENTRY_DSN in `sentry.client.config.ts` and
+// `instrumentation.ts`. Source-map upload (build-time) is simply skipped;
+// errors are still captured, just with minified stack traces.
+module.exports = withNextIntl(nextConfig);
 
-module.exports = sentryEnabled
-  ? withSentryConfig(baseConfig, {
-      // Sentry build-time options. `org`/`project` must be the SLUGS from your
-      // Sentry dashboard (Settings → General), not the numeric IDs. Override
-      // via env so a wrong hardcoded value can't break the build.
-      org: process.env.SENTRY_ORG || 'sayinglobal',
-      project: process.env.SENTRY_PROJECT || 'sayinglobal-frontend',
-      authToken: process.env.SENTRY_AUTH_TOKEN,
-      silent: true,               // suppress Sentry CLI output during build
-      widenClientFileUpload: true, // upload more source maps for better stack traces
-      hideSourceMaps: true,       // hide source maps from browser
-      sourcemaps: { deleteSourcemapsAfterUpload: true },
-      disableLogger: true,        // remove Sentry debug logs from bundle
-      automaticVercelMonitors: false,
-      // Do not fail the production build if a release/upload step errors.
-      errorHandler: (err) => {
-        // eslint-disable-next-line no-console
-        console.warn('[sentry] build step skipped:', err && err.message);
-      },
-    })
-  : baseConfig;
