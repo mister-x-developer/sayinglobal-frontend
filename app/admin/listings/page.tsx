@@ -392,6 +392,7 @@ export default function AdminListingsPage() {
                         <td className="px-4 py-4">
                           <div className="flex items-center gap-3">
                             {primaryImg ? (
+                              /* eslint-disable-next-line @next/next/no-img-element */
                               <img
                                 src={primaryImg}
                                 alt={l.title}

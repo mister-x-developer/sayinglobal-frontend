@@ -79,7 +79,7 @@ export function NearbyListingsSection({ listing }: Props) {
 
     fetchNearby();
     return () => { alive = false; };
-  }, [listing.public_id, listing.latitude, listing.longitude, listing.region, listing.district]);
+  }, [listing.public_id, listing.latitude, listing.longitude, listing.region, listing.district, listing.category]);
 
   if (loading) return null;
   if (items.length === 0) return null;

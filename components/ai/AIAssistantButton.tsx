@@ -77,7 +77,7 @@ export function AIAssistantButton() {
     setInput('');
     setLoading(true);
     try {
-      const res = await apiClient.post('/ai-moderation/chat/', {
+      const res = await apiClient.post('/ai-moderation/assistant/', {
         message: text.trim(),
         session_id: sessionId,
       });

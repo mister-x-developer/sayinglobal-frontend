@@ -122,7 +122,9 @@ export default function NewListingPage() {
   const removeImage = (id: string) => {
     setImages((prev) => {
       const next = prev.filter((img) => img.id !== id);
-      if (next.length > 0 && !next.some((img) => img.isPrimary)) next[0].isPrimary = true;
+      if (next.length > 0 && !next.some((img) => img.isPrimary)) {
+        next[0] = { ...next[0], isPrimary: true };
+      }
       return next;
     });
   };
@@ -170,8 +172,8 @@ export default function NewListingPage() {
         vaccination_status: form.vaccination_status || undefined,
         region: form.region_name || form.region,
         district: form.district_name || form.district,
-        // location = "Viloyat, Tuman" — ko'cha nomi yo'q
-        location: [form.region_name || form.region, form.district_name || form.district]
+        // Prefer the explicitly entered location text, otherwise fallback to region, district
+        location: form.location.trim() || [form.region_name || form.region, form.district_name || form.district]
           .filter(Boolean).join(', ') || form.region_name || form.region,
         latitude: form.latitude ?? undefined,
         longitude: form.longitude ?? undefined,
