@@ -18,6 +18,16 @@ export interface VerifyCodeResponse {
   tokens: { access: string; refresh: string };
 }
 
+export interface AdminLoginRequest {
+  username: string;
+  password: string;
+}
+
+export interface AdminLoginResponse {
+  user: User;
+  tokens: { access: string; refresh: string };
+}
+
 export interface PhonePrefix {
   prefix: string;
   country_code: string;
@@ -129,6 +139,15 @@ export const authApi = {
       await apiClient.post('/users/auth/logout/');
     } catch {
       // ignore
+    }
+  },
+
+  async adminLogin(data: AdminLoginRequest): Promise<AdminLoginResponse> {
+    try {
+      const res = await apiClient.post<AdminLoginResponse>('/users/auth/admin-login/', data);
+      return res.data;
+    } catch (e) {
+      throw shapeAuthError(e);
     }
   },
 

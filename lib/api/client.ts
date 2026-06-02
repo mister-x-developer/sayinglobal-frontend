@@ -211,13 +211,13 @@ export function handleApiError(error: unknown): string {
     if (data?.error) return data.error;
     if (data?.message) return data.message;
     if (data?.detail) return data.detail;
-    if (error.response?.status === 404) return 'Topilmadi';
-    if (error.response?.status === 403) return 'Ruxsat yoʻq';
-    if (error.response?.status === 500) return 'Server xatosi. Keyinroq urinib koʻring.';
-    if (error.code === 'ECONNABORTED') return 'Soʻrov vaqti tugadi';
+    if (error.response?.status === 404) return 'Not found';
+    if (error.response?.status === 403) return 'Permission denied';
+    if (error.response?.status === 500) return 'Server error. Please try again later.';
+    if (error.code === 'ECONNABORTED') return 'Request timed out';
     if (error.message) return error.message;
   }
-  return 'Kutilmagan xato yuz berdi';
+  return 'An unexpected error occurred';
 }
 
 export default apiClient;

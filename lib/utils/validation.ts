@@ -33,11 +33,11 @@ export function validateImage(file: File): { valid: boolean; error?: string } {
   const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
   
   if (!allowedTypes.includes(file.type)) {
-    return { valid: false, error: 'Faqat JPG, PNG, WEBP formatdagi rasmlar qabul qilinadi' }
+    return { valid: false, error: 'Only JPG, PNG, WEBP image formats are accepted' }
   }
   
   if (file.size > maxSize) {
-    return { valid: false, error: 'Rasm hajmi 5MB dan oshmasligi kerak' }
+    return { valid: false, error: 'Image size must not exceed 5MB' }
   }
   
   return { valid: true }

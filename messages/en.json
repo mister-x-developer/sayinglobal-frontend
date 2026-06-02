@@ -761,7 +761,10 @@
     "activeLimitReached": "Active listings limit reached.",
     "cannotCreateListing": "Cannot create listing.",
     "openDirections": "Get directions",
-    "openOnMap": "Open on map"
+    "openOnMap": "Open on map",
+    "titleTooLong": "Title must not exceed 100 characters",
+    "descriptionTooLong": "Description must not exceed 2000 characters",
+    "messageTooLong": "Message must not exceed 1000 characters"
   },
   "profileInfo": {
     "title": "Important information",
@@ -1085,18 +1088,5 @@
     "checkboxLabel": "I have read the terms above and fully accept them.",
     "accept": "Accept and continue",
     "accepted": "Terms accepted!"
-  },
-  "validation": {
-    "titleTooLong": "Title must not exceed 100 characters",
-    "descriptionTooLong": "Description must not exceed 2000 characters",
-    "minImages": "At least 1 image is required",
-    "monthlyLimitReached": "Monthly listing limit reached. Try again next month.",
-    "activeLimitReached": "Active listings limit reached. Remove some listings.",
-    "cannotCreateListing": "Creating listings is currently unavailable",
-    "atLeastOneFieldRequired": "Fill in at least one field",
-    "regionRequired": "Region selection is required",
-    "openOnMap": "Open on map",
-    "openDirections": "Open directions",
-    "messageTooLong": "Message must not exceed 1000 characters"
   }
 }
