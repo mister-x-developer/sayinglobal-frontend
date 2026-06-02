@@ -756,12 +756,15 @@
     "atLeastOneFieldRequired": "Kamida bitta maydon toʻldirilishi shart",
     "regionRequired": "Avval viloyatni tanlang",
     "required": "Majburiy maydon",
-    "minImages": "Kamida 3 ta rasm yuklang (maksimal 5 ta)",
+    "minImages": "Kamida 1 ta rasm yuklash kerak",
     "monthlyLimitReached": "Oylik limitingiz tugadi. Tarifni yangilang.",
     "activeLimitReached": "Faol eʼlonlar limitiga yetdingiz.",
     "cannotCreateListing": "Eʼlon yaratib boʻlmaydi.",
     "openDirections": "Yoʻnalish koʻrsatish",
-    "openOnMap": "Xaritada ochish"
+    "openOnMap": "Xaritada ochish",
+    "titleTooLong": "Sarlavha 100 belgidan oshmasligi kerak",
+    "descriptionTooLong": "Tavsif 2000 belgidan oshmasligi kerak",
+    "messageTooLong": "Xabar 2000 belgidan oshmasligi kerak"
   },
   "profileInfo": {
     "title": "Muhim maʼlumot",
@@ -1085,18 +1088,5 @@
     "checkboxLabel": "Yuqoridagi shartlarni oʻqib chiqdim va toʻliq qabul qilaman.",
     "accept": "Roziman va davom etaman",
     "accepted": "Shartlarga rozisiz!"
-  },
-  "validation": {
-    "titleTooLong": "Sarlavha 100 belgidan oshmasligi kerak",
-    "descriptionTooLong": "Tavsif 2000 belgidan oshmasligi kerak",
-    "minImages": "Kamida 1 ta rasm yuklash kerak",
-    "monthlyLimitReached": "Oylik e'lon limiti tugagan. Keyingi oyda qayta urinib ko'ring.",
-    "activeLimitReached": "Faol e'lonlar limiti tugagan. Ba'zi e'lonlarni o'chiring.",
-    "cannotCreateListing": "E'lon yaratish hozircha mumkin emas",
-    "atLeastOneFieldRequired": "Kamida bitta maydonni to'ldiring",
-    "regionRequired": "Hududni tanlash majburiy",
-    "openOnMap": "Xaritada ochish",
-    "openDirections": "Yo'nalishlarni ochish",
-    "messageTooLong": "Xabar 1000 belgidan oshmasligi kerak"
   }
 }

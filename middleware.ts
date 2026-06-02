@@ -117,18 +117,6 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(dashboardUrl);
   }
 
-  // Platform admin routing — is_admin=True users land on /admin, not marketplace
-  // Allow them to access /admin/* freely; redirect away from marketplace pages.
-  if (isAuthenticated(req) && isPlatformAdmin(req)) {
-    const isAdminPath = pathname.startsWith('/admin');
-    const isAllowedForAdmin = isAdminPath || pathname === '/profile' || pathname === '/profile/settings' || pathname === '/notifications' || pathname === '/auth';
-    if (!isAllowedForAdmin) {
-      const adminUrl = req.nextUrl.clone();
-      adminUrl.pathname = '/admin';
-      return NextResponse.redirect(adminUrl);
-    }
-  }
-
   return res;
 }
 
