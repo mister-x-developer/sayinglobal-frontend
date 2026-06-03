@@ -61,6 +61,18 @@ export default function AuthPage() {
     setStage('enter-code');
   };
 
+  // Auto-advance to code entry when user comes back to the tab
+  // after opening the bot (they may have already received the code)
+  useEffect(() => {
+    if (stage !== 'open-bot') return;
+    const onFocus = () => {
+      // If user switched to Telegram and came back, move to code entry
+      setStage('enter-code');
+    };
+    window.addEventListener('focus', onFocus, { once: true });
+    return () => window.removeEventListener('focus', onFocus);
+  }, [stage]);
+
   const handleVerify = async () => {
     if (code.length !== 5) {
       setErrorMessage(t('auth.errorInvalidCode'));
