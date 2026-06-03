@@ -10,19 +10,9 @@ import { useAuthStore } from '../store/auth';
 
 const API_ORIGIN = (process.env.NEXT_PUBLIC_API_URL || 'https://sayinglobal.up.railway.app/api').replace(/\/api\/?$/, '');
 
-function shouldUseSameOriginProxy(): boolean {
-  if (typeof window === 'undefined') return false;
-  const { hostname } = window.location;
-  // Use proxy on localhost AND on Vercel (to avoid CORS issues)
-  // Direct API calls only when explicitly disabled via env var
-  if (process.env.NEXT_PUBLIC_DIRECT_API === 'true') return false;
-  return hostname === 'localhost' || hostname === '127.0.0.1' || hostname.endsWith('.vercel.app') || hostname === 'sayinglobal.com' || hostname === 'www.sayinglobal.com';
-}
-
 function getApiBaseUrl(): string {
-  // Use Next.js rewrite proxy on localhost and Vercel deployments.
-  // This avoids CORS preflight issues and keeps the API URL consistent.
-  return shouldUseSameOriginProxy() ? '' : API_ORIGIN;
+  // Always use the Railway backend directly to avoid Vercel proxy/rewrite issues.
+  return API_ORIGIN;
 }
 
 // API_BASE_URL is computed at module load time.
