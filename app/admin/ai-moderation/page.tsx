@@ -39,6 +39,7 @@ export default function AdminAIModerationPage() {
     try {
       const params: Record<string, string> = {};
       if (f === 'needs_review') params.needs_review = 'true';
+      if (f === 'reviewed') params.reviewed = 'true';
       const { data } = await apiClient.get('/ai-moderation/results/', { params });
       setResults((data as any).results ?? []);
     } catch {
