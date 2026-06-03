@@ -39,6 +39,7 @@ export default function AuthPage() {
 
   // If the user is already authenticated, do not display the auth screen.
   // Redirect to the appropriate landing page immediately.
+  // NOTE: Only redirect after hydration to avoid false redirects on cold start.
   useEffect(() => {
     if (!isAuthenticated) return;
     const target = nextPath || (currentUser?.is_admin ? '/admin' : '/dashboard');
@@ -60,18 +61,6 @@ export default function AuthPage() {
     window.open(url, '_blank', 'noopener,noreferrer');
     setStage('enter-code');
   };
-
-  // Auto-advance to code entry when user comes back to the tab
-  // after opening the bot (they may have already received the code)
-  useEffect(() => {
-    if (stage !== 'open-bot') return;
-    const onFocus = () => {
-      // If user switched to Telegram and came back, move to code entry
-      setStage('enter-code');
-    };
-    window.addEventListener('focus', onFocus, { once: true });
-    return () => window.removeEventListener('focus', onFocus);
-  }, [stage]);
 
   const handleVerify = async () => {
     if (code.length !== 5) {
