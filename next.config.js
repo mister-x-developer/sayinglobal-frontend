@@ -7,7 +7,9 @@ const isDev = process.env.NODE_ENV === 'development';
 // Production Railway backend URL — hardcoded as fallback so Vercel rewrites
 // work even if NEXT_PUBLIC_API_URL is not set in the Vercel dashboard.
 const PRODUCTION_API_ORIGIN = 'https://sayinglobal.up.railway.app';
-const apiOrigin = (process.env.NEXT_PUBLIC_API_URL || `${PRODUCTION_API_ORIGIN}/api`).replace(/\/api\/?$/, '');
+// IMPORTANT: rewrites() runs at BUILD time on Vercel. NEXT_PUBLIC_API_URL
+// may not be available during build. Always fall back to the hardcoded origin.
+const apiOrigin = PRODUCTION_API_ORIGIN;
 
 const nextConfig = {
   reactStrictMode: true,
