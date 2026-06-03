@@ -114,7 +114,6 @@ export default function AuthPage() {
         if (err.message === 'invalid_or_expired_code' || err.status === 400) {
           setErrorMessage(t('auth.errorInvalidOrExpiredCode'));
         } else if (err.message === 'admin_blocked' || err.status === 403) {
-          // Old backend behavior — now admin can log in. Show generic error.
           setErrorMessage(t('auth.errorInvalidCode'));
         } else if (err.message === 'otp_locked' && typeof err.data?.retry_after === 'number') {
           setLockRetryAfter(err.data.retry_after as number);
@@ -202,6 +201,7 @@ function OpenBotStage({ onContinue }: { onContinue: () => void }) {
         <p className="mt-2 text-sm text-fg-muted">{t('auth.subtitle')}</p>
       </div>
 
+      {/* Step 1 */}
       <div className="mt-8 rounded-2xl border border-border bg-bg-subtle p-5">
         <div className="flex items-start gap-3">
           <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-brand-primary text-xs font-bold text-white">
@@ -211,6 +211,36 @@ function OpenBotStage({ onContinue }: { onContinue: () => void }) {
             <h2 className="font-semibold text-fg">{t('auth.openBotTitle')}</h2>
             <p className="mt-1 text-sm text-fg-muted">
               {t('auth.openBotDescription')}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Step 2 — phone share instruction (critical for new users) */}
+      <div className="mt-3 rounded-2xl border border-border bg-bg-subtle p-5">
+        <div className="flex items-start gap-3">
+          <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-brand-primary text-xs font-bold text-white">
+            2
+          </span>
+          <div>
+            <h2 className="font-semibold text-fg">{t('auth.sharePhoneTitle')}</h2>
+            <p className="mt-1 text-sm text-fg-muted">
+              {t('auth.sharePhoneDescription')}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Step 3 — enter code */}
+      <div className="mt-3 rounded-2xl border border-border bg-bg-subtle p-5">
+        <div className="flex items-start gap-3">
+          <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-brand-primary text-xs font-bold text-white">
+            3
+          </span>
+          <div>
+            <h2 className="font-semibold text-fg">{t('auth.enterCodeStepTitle')}</h2>
+            <p className="mt-1 text-sm text-fg-muted">
+              {t('auth.enterCodeStepDescription')}
             </p>
           </div>
         </div>
@@ -254,6 +284,7 @@ function EnterCodeStage({
   const t = useTranslations();
 
   const verifyDisabled = code.length !== 5 || submitting || lockRetryAfter > 0;
+  const isInvalidCode = errorMessage === t('auth.errorInvalidOrExpiredCode');
 
   return (
     <motion.div
@@ -322,13 +353,22 @@ function EnterCodeStage({
               animate={{ opacity: 1, y: 0, height: 'auto' }}
               exit={{ opacity: 0, y: -6, height: 0 }}
               transition={{ duration: 0.22 }}
-              className="mt-4 flex items-start gap-2 rounded-xl border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-sm text-danger"
+              className="mt-4 rounded-xl border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-sm text-danger"
             >
-              <AlertCircle
-                className="mt-0.5 h-4 w-4 flex-shrink-0"
-                strokeWidth={2.25}
-              />
-              <span>{errorMessage}</span>
+              <div className="flex items-start gap-2">
+                <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0" strokeWidth={2.25} />
+                <span>{errorMessage}</span>
+              </div>
+              {isInvalidCode && (
+                <button
+                  type="button"
+                  onClick={onResend}
+                  className="mt-2 ml-6 inline-flex items-center gap-1.5 font-semibold underline underline-offset-2 text-danger hover:text-danger/80"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" strokeWidth={2.25} />
+                  {t('auth.openBotButton')}
+                </button>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
