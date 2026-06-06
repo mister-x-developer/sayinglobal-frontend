@@ -52,7 +52,9 @@
   "overrides": {
     "rimraf": "^5.0.10",
     "glob": "^10.4.5",
-    "flat-cache": "^4.0.1"
+    "flat-cache": "^4.0.1",
+    "react-leaflet": "^4.2.1",
+    "@react-leaflet/core": "^2.1.0"
   },
   "engines": {
     "node": "22.x",
