@@ -19,14 +19,21 @@ export function MobileBottomNav() {
   const { isAuthenticated } = useAuthStore();
   const hydrated = useAuthHydrated();
 
-  // Don't show on admin pages
-  if (pathname?.startsWith('/admin')) return null;
+  // Hide entirely on auth pages, chat detail, or admin routes
+  if (
+    pathname === '/' ||
+    pathname.startsWith('/auth') ||
+    pathname.startsWith('/admin') ||
+    /^\/chat\/[^/]+$/.test(pathname)
+  ) {
+    return null;
+  }
 
-  // Don't show on landing or auth pages
-  if (pathname === '/' || pathname?.startsWith('/auth')) return null;
+  // Wait for hydration to avoid flashing on public pages
+  if (!hydrated) return null;
 
-  // Don't show for unauthenticated users (after hydration)
-  if (hydrated && !isAuthenticated) return null;
+  // Don't show for unauthenticated users
+  if (!isAuthenticated) return null;
 
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + '/');

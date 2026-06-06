@@ -32,6 +32,7 @@ import {
 
 import { Avatar } from '@/components/ui/Avatar';
 import { TranslatableText } from '@/components/shared/TranslateButton';
+import { ReportDialog } from '@/components/shared/ReportDialog';
 import { toast } from '@/components/ui/Toast';
 import { ratingsApi, type RatingRecord } from '@/lib/api/ratings';
 import { useAuthStore } from '@/lib/store/auth';
@@ -63,6 +64,7 @@ export function SellerRatingsThread({ sellerPublicId, listingPublicId }: ThreadP
   const [composeBody, setComposeBody] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [reportTarget, setReportTarget] = useState<any>(null);
 
   const isSelfSeller = me?.public_id === sellerPublicId;
 
@@ -157,19 +159,12 @@ export function SellerRatingsThread({ sellerPublicId, listingPublicId }: ThreadP
     }
   };
 
-  const handleReport = async (r: RatingRecord) => {
-    const reason = window.prompt(
-      t('reviews.reportPrompt' as any) ?? 'Sabab: spam / abuse / off_topic / false_info / other',
-      'spam',
-    );
-    if (!reason) return;
-    try {
-      await ratingsApi.report(r.public_id, { reason });
-      toast.success(t('reviews.reportSent' as any) ?? 'Reported');
-      await reload();
-    } catch {
-      toast.error(t('errors.generic'));
-    }
+  const handleReport = (r: RatingRecord) => {
+    setReportTarget({
+      kind: 'rating',
+      publicId: r.public_id,
+      fullName: r.buyer?.full_name ?? 'Foydalanuvchi',
+    });
   };
 
   const handleReply = async (r: RatingRecord) => {
@@ -318,9 +313,11 @@ export function SellerRatingsThread({ sellerPublicId, listingPublicId }: ThreadP
           <p className="mt-3 font-display text-lg font-semibold text-fg">
             {t('sellers.noReviews')}
           </p>
-          <p className="mt-1 text-sm text-fg-muted">
-            {t('sellers.beFirstToReview')}
-          </p>
+          {!isSelfSeller && (
+            <p className="mt-1 text-sm text-fg-muted">
+              {t('sellers.beFirstToReview')}
+            </p>
+          )}
         </div>
       ) : (
         <ul className="mt-4 space-y-3">
@@ -339,6 +336,13 @@ export function SellerRatingsThread({ sellerPublicId, listingPublicId }: ThreadP
           ))}
         </ul>
       )}
+
+      <ReportDialog
+        open={!!reportTarget}
+        target={reportTarget}
+        onClose={() => setReportTarget(null)}
+        onSubmitted={() => reload()}
+      />
     </div>
   );
 }
@@ -363,21 +367,12 @@ function RatingCard({
   onDelete: () => void;
 }) {
   const t = useTranslations();
-  const locale = useLocale();
   const isAuthor = rating.buyer?.public_id === myPublicId;
 
-  // Best-available localized review for the current interface language.
-  const localizedReview = useMemo(() => {
-    const norm = (locale || 'uz').replace('-', '_').toLowerCase();
-    const r: any = rating;
-    return (
-      (norm === 'uz_cyrl' ? r.review_uz_cyrl : null)
-      || (norm === 'ru' ? r.review_ru : null)
-      || (norm === 'en' ? r.review_en : null)
-      || (norm === 'uz' ? r.review_uz : null)
-      || r.review || ''
-    );
-  }, [locale, rating]);
+  // Always feed the original review text to TranslatableText so the
+  // "translate" button actually switches between author wording and UI-lang version.
+  // (Pre-translated review_xx exist but on-demand client translate makes the
+  // toggle button functional and consistent with comments.)
 
   return (
     <li className="surface-elevated p-4">
@@ -406,10 +401,10 @@ function RatingCard({
               ))}
             </div>
           )}
-          {localizedReview ? (
+          {rating.review ? (
             <div className="mt-2">
               <TranslatableText
-                text={localizedReview}
+                text={rating.review}
                 sourceLocale={rating.original_locale}
                 textClassName="text-sm leading-relaxed text-fg-muted whitespace-pre-line"
               />

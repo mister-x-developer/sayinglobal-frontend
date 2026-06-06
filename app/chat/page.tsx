@@ -257,7 +257,7 @@ export default function ChatPage() {
   const translateMessage = async (msgId: string, content: string) => {
     setMessages((prev) => prev.map((m) => m.id === msgId ? { ...m, translating: true } : m));
     try {
-      const targetLang = locale === 'ru' ? 'ru' : locale === 'en' ? 'en' : 'uz';
+      const targetLang = locale === 'ru' ? 'ru' : locale === 'en' ? 'en' : locale === 'uz-cyrl' ? 'uz-cyrl' : 'uz';
       const res = await apiClient.post('/listings/translate/', { text: content, target_lang: targetLang });
       const translated = res.data?.translated_text ?? res.data?.text ?? content;
       setMessages((prev) => prev.map((m) =>
@@ -580,8 +580,8 @@ export default function ChatPage() {
                               {t('chat.retry' as any) ?? 'Qayta urinish'}
                             </button>
                           )}
-                          {/* Translate button — always visible below bubble */}
-                          <div className={`flex items-center gap-1 ${isMe ? 'justify-end' : 'justify-start'} pl-1`}>
+                          {/* Actions: Translate + Report */}
+                          <div className={`flex items-center gap-2 ${isMe ? 'justify-end' : 'justify-start'} px-1`}>
                             <button
                               type="button"
                               onClick={() => msg.translated ? revertTranslation(msg.id) : translateMessage(msg.id, msg.original ?? msg.content)}
@@ -595,6 +595,21 @@ export default function ChatPage() {
                                   ? (locale === 'ru' ? 'Оригинал' : locale === 'en' ? 'Original' : 'Asl')
                                   : (locale === 'ru' ? 'Перевести' : locale === 'en' ? 'Translate' : 'Tarjima')}
                             </button>
+                            {/* Report message button */}
+                            {!isMe && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  // Open report dialog specifically for this user
+                                  setReportOpen(true);
+                                }}
+                                className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-medium text-fg-subtle hover:text-danger hover:bg-danger/10 transition-colors"
+                                title={t('chat.reportUser')}
+                              >
+                                <Flag className="h-3 w-3" strokeWidth={2} />
+                                {locale === 'ru' ? 'Пожаловаться' : locale === 'en' ? 'Report' : 'Shikoyat'}
+                              </button>
+                            )}
                           </div>
                         </div>
                       </div>

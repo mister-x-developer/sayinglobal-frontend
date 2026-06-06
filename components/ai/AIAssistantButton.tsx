@@ -8,8 +8,9 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-import { X, Send, Loader2, Sparkles, ChevronDown } from 'lucide-react';
+import { X, Send, Loader2, Sparkles, ChevronDown, Menu, MessageSquarePlus, MessageSquare, Clock } from 'lucide-react';
 import { useAuthStore } from '@/lib/store/auth';
 import apiClient from '@/lib/api/client';
 
@@ -19,11 +20,24 @@ interface Message {
   text: string;
 }
 
-const QUICK_PROMPTS = [
-  { key: 'findCattle', icon: '🐄' },
-  { key: 'findHorse', icon: '🐎' },
-  { key: 'priceCheck', icon: '💰' },
-  { key: 'nearbyListings', icon: '📍' },
+interface ChatSession {
+  id: string;
+  title: string;
+  updated_at: string;
+}
+
+const ADMIN_QUICK_PROMPTS = [
+  { key: 'adminCheckNew', icon: '🔍', text: "Yangi e'lonlarni tekshirish" },
+  { key: 'adminComplaints', icon: '⚠️', text: "Shikoyatlarni ko'rib chiqish" },
+  { key: 'adminStats', icon: '📈', text: 'Tizim statistikasi' },
+  { key: 'adminSpam', icon: '🛡️', text: "Spam va shubhali e'lonlar" },
+];
+
+const USER_QUICK_PROMPTS = [
+  { key: 'findCattle', icon: '🐄', text: 'Qoramol topish' },
+  { key: 'findHorse', icon: '🐎', text: 'Ot topish' },
+  { key: 'priceCheck', icon: '💰', text: 'Narx tekshirish' },
+  { key: 'nearbyListings', icon: '📍', text: "Yaqin e'lonlar" },
 ];
 
 export function AIAssistantButton() {
@@ -31,12 +45,17 @@ export function AIAssistantButton() {
 
   // ── ALL hooks must be at the top — no conditional hooks ──────────────────
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const user = useAuthStore((s) => s.user);
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [sessionId] = useState(() => Math.random().toString(36).slice(2));
+  const [sessionId, setSessionId] = useState(() => Math.random().toString(36).slice(2));
+  
+  const [sessions, setSessions] = useState<ChatSession[]>([]);
+  const [showHistory, setShowHistory] = useState(false);
+
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
   const dragStart = useRef({ mx: 0, my: 0, bx: 0, by: 0 });
@@ -45,13 +64,22 @@ export function AIAssistantButton() {
   useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
-    if (open) {
+    if (open && !showHistory) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages, open]);
+  }, [messages, open, showHistory]);
 
-  // ── Guard: only render after mount and when authenticated ─────────────────
-  if (!mounted || !isAuthenticated) return null;
+  // Fetch sessions when opening history or the chat
+  useEffect(() => {
+    if (open) {
+      apiClient.get('/ai-moderation/assistant/sessions/')
+        .then(res => setSessions(res.data))
+        .catch(() => {});
+    }
+  }, [open]);
+
+  // ── Guard: only render after mount and when authenticated and terms accepted
+  if (!mounted || !isAuthenticated || !user?.terms_accepted_at) return null;
 
   // ── Drag ──────────────────────────────────────────────────────────────────
   const onPointerDown = (e: React.PointerEvent) => {
@@ -83,6 +111,9 @@ export function AIAssistantButton() {
       });
       const reply = res.data?.reply || res.data?.message || (t('ai.errorReply' as any) ?? 'Xatolik yuz berdi.');
       setMessages((prev) => [...prev, { id: (Date.now() + 1).toString(), role: 'assistant', text: reply }]);
+      
+      // Refresh session list quietly so the new session appears with its auto-title
+      apiClient.get('/ai-moderation/assistant/sessions/').then(r => setSessions(r.data)).catch(()=>{});
     } catch {
       setMessages((prev) => [
         ...prev,
@@ -93,19 +124,208 @@ export function AIAssistantButton() {
     }
   };
 
+  // ── History actions ───────────────────────────────────────────────────────
+  const loadSession = async (id: string) => {
+    try {
+      const res = await apiClient.get(`/ai-moderation/assistant/sessions/${id}/`);
+      setSessionId(id);
+      setMessages(res.data.messages || []);
+      setShowHistory(false);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const createNewChat = () => {
+    setSessionId(Math.random().toString(36).slice(2));
+    setMessages([]);
+    setShowHistory(false);
+  };
+
+  const isAdmin = user?.is_admin || user?.is_staff;
+  const aiLogo = isAdmin ? '/images/admin_ai_logo.png' : '/images/user_ai_logo.png';
+
   return (
-    <>
+    <motion.div
+      className="fixed bottom-24 right-5 md:bottom-8 md:right-8 z-[900] flex flex-col items-end"
+      style={{ x: pos.x, y: pos.y }}
+    >
+      {/* ── Chat panel ── */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.3, y: 40 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.3, y: 40 }}
+            transition={{ type: "spring", stiffness: 260, damping: 25 }}
+            className="absolute bottom-[calc(100%+12px)] right-0 flex w-[min(380px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-3xl border border-border bg-bg-elevated shadow-[0_24px_64px_-12px_rgb(0_0_0/0.35)]"
+            style={{ originX: 1, originY: 1, maxHeight: 'min(520px, calc(100dvh - 8rem))' }}
+          >
+            {/* Header */}
+            <div className="flex items-center gap-3 border-b border-border bg-brand-primary/5 px-4 py-3.5">
+              <div className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-primary text-white shadow-sm overflow-hidden">
+                <Image src={aiLogo} alt="AI" width={36} height={36} className="h-full w-full object-cover pointer-events-none select-none" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-bold text-fg">SAYIN AI {isAdmin && <span className="ml-1 text-[10px] bg-brand-primary/20 text-brand-primary px-1.5 py-0.5 rounded-full">{t('nav.admin')}</span>}</p>
+                <p className="text-[11px] text-fg-subtle">{isAdmin ? 'Platforma nazoratchisi' : (t('ai.subtitle' as any) ?? 'Chorva bozori yordamchisi')}</p>
+              </div>
+              
+              <button 
+                type="button" 
+                onClick={() => setShowHistory(!showHistory)} 
+                className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors ${showHistory ? 'bg-brand-primary text-white' : 'text-fg-subtle hover:bg-bg-subtle hover:text-fg'}`}
+                title="Chatlar tarixi"
+              >
+                <Menu className="h-4 w-4" strokeWidth={2} />
+              </button>
+              
+              <button type="button" onClick={() => setOpen(false)} className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-fg-subtle hover:bg-bg-subtle hover:text-fg transition-colors">
+                <X className="h-4 w-4" strokeWidth={2} />
+              </button>
+            </div>
+
+            {/* Body */}
+            {showHistory ? (
+              <div className="flex-1 overflow-y-auto px-4 py-4 bg-bg-canvas flex flex-col gap-3">
+                <button
+                  onClick={createNewChat}
+                  className="flex items-center gap-3 w-full p-3 rounded-xl border border-dashed border-border text-fg hover:border-brand-primary hover:bg-brand-primary/5 transition-colors"
+                >
+                  <div className="h-8 w-8 rounded-full bg-brand-primary/10 text-brand-primary flex items-center justify-center">
+                    <MessageSquarePlus className="h-4 w-4" strokeWidth={2} />
+                  </div>
+                  <span className="font-medium text-sm">{t('ai.newChat')}</span>
+                </button>
+                
+                <div className="text-xs font-semibold text-fg-subtle mt-2 uppercase tracking-wider">{t('ai.chatHistory')}</div>
+                {sessions.length === 0 ? (
+                  <p className="text-sm text-fg-muted text-center mt-4">{t('ai.noChats')}</p>
+                ) : (
+                  <div className="space-y-2">
+                    {sessions.map(s => (
+                      <button
+                        key={s.id}
+                        onClick={() => loadSession(s.id)}
+                        className={`flex items-start gap-3 w-full p-3 rounded-xl border transition-colors text-left ${s.id === sessionId ? 'border-brand-primary bg-brand-primary/5' : 'border-border bg-bg-elevated hover:bg-bg-subtle'}`}
+                      >
+                        <MessageSquare className={`h-5 w-5 mt-0.5 shrink-0 ${s.id === sessionId ? 'text-brand-primary' : 'text-fg-muted'}`} strokeWidth={1.5} />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-fg truncate">{s.title}</p>
+                          <div className="flex items-center gap-1.5 mt-1 text-xs text-fg-subtle">
+                            <Clock className="h-3 w-3" />
+                            <span>{new Date(s.updated_at).toLocaleDateString()}</span>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex-1 flex flex-col overflow-hidden">
+                {/* Messages */}
+                <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-bg-elevated">
+                  {messages.length === 0 && (
+                    <div className="space-y-3">
+                      <p className="text-center text-sm text-fg-muted">
+                        {isAdmin 
+                          ? (t('ai.adminGreeting' as any) ?? '👋 Assalomu alaykum! Platformani boshqarish bo\'yicha savollaringiz bormi?')
+                          : (t('ai.greeting' as any) ?? '👋 Salom! Chorva bozori haqida savollaringiz bormi?')}
+                      </p>
+                      <div className="grid grid-cols-2 gap-2">
+                        {(isAdmin ? ADMIN_QUICK_PROMPTS : USER_QUICK_PROMPTS).map((p) => (
+                          <button
+                            key={p.key}
+                            type="button"
+                            onClick={() => sendMessage(t(`ai.prompt.${p.key}` as any) ?? p.text)}
+                            className="flex items-center gap-2 rounded-xl border border-border bg-bg-subtle px-3 py-2.5 text-left text-xs font-medium text-fg hover:border-brand-primary/40 hover:bg-brand-primary/5 transition-colors"
+                          >
+                            <span>{p.icon}</span>
+                            <span className="line-clamp-2">{t(`ai.prompt.${p.key}` as any) ?? p.text}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {messages.map((msg) => (
+                    <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                      {msg.role === 'assistant' && (
+                        <div className="mr-2 mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-brand-primary/15 text-brand-primary overflow-hidden">
+                          <Image src={aiLogo} alt="AI" width={36} height={36} className="h-full w-full object-cover pointer-events-none select-none" />
+                        </div>
+                      )}
+                      <div className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-wrap ${
+                        msg.role === 'user'
+                          ? 'bg-brand-primary text-white rounded-br-sm'
+                          : 'bg-bg-subtle text-fg rounded-bl-sm border border-border/60'
+                      }`}>
+                        {msg.text}
+                      </div>
+                    </div>
+                  ))}
+                  {loading && (
+                    <div className="flex justify-start">
+                      <div className="mr-2 mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-brand-primary/15 text-brand-primary overflow-hidden">
+                        <Image src={aiLogo} alt="AI" width={36} height={36} className="h-full w-full object-cover pointer-events-none select-none" />
+                      </div>
+                      <div className="rounded-2xl rounded-bl-sm border border-border/60 bg-bg-subtle px-4 py-3">
+                        <div className="flex items-center gap-1.5">
+                          <span className="h-1.5 w-1.5 rounded-full bg-brand-primary/60 animate-bounce [animation-delay:0ms]" />
+                          <span className="h-1.5 w-1.5 rounded-full bg-brand-primary/60 animate-bounce [animation-delay:150ms]" />
+                          <span className="h-1.5 w-1.5 rounded-full bg-brand-primary/60 animate-bounce [animation-delay:300ms]" />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  <div ref={messagesEndRef} />
+                </div>
+
+                {/* Input */}
+                <form
+                  onSubmit={(e) => { e.preventDefault(); sendMessage(input); }}
+                  className="border-t border-border px-3 py-3 bg-bg-elevated"
+                >
+                  <div className="flex items-end gap-2">
+                    <textarea
+                      value={input}
+                      onChange={(e) => {
+                        setInput(e.target.value);
+                        e.target.style.height = 'auto';
+                        e.target.style.height = Math.min(e.target.scrollHeight, 96) + 'px';
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(input); }
+                      }}
+                      placeholder={t('ai.inputPlaceholder' as any) ?? 'Savol yozing...'}
+                      rows={1}
+                      disabled={loading}
+                      className="flex-1 resize-none rounded-xl border border-border bg-bg-subtle px-3 py-2 text-sm text-fg placeholder:text-fg-subtle focus:border-brand-primary/50 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 disabled:opacity-50 transition-all"
+                      style={{ minHeight: '38px', maxHeight: '96px' }}
+                    />
+                    <button
+                      type="submit"
+                      disabled={!input.trim() || loading}
+                      className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-primary text-white shadow-sm transition-all hover:bg-brand-primary/90 disabled:opacity-40 disabled:cursor-not-allowed active:scale-95"
+                    >
+                      {loading ? <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2} /> : <Send className="h-4 w-4 translate-x-0.5" strokeWidth={2.25} />}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* ── Floating button ── */}
-      <motion.button
+      <button
         type="button"
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onClick={() => { if (!dragging) setOpen((v) => !v); }}
-        style={{ x: pos.x, y: pos.y }}
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.94 }}
-        className={`fixed bottom-24 right-5 z-[900] flex h-14 w-14 items-center justify-center rounded-2xl shadow-[0_8px_24px_-4px_rgb(31_122_82/0.55)] transition-colors md:bottom-8 md:right-8 ${
+        className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl shadow-[0_8px_24px_-4px_rgb(31_122_82/0.55)] transition-all hover:scale-105 active:scale-95 overflow-hidden z-[900] ${
           open ? 'bg-bg-elevated border border-border text-fg' : 'bg-brand-primary text-white'
         }`}
         aria-label={open ? t('common.close') : (t('ai.openAssistant' as any) ?? 'AI Assistant')}
@@ -116,127 +336,12 @@ export function AIAssistantButton() {
               <ChevronDown className="h-6 w-6" strokeWidth={2} />
             </motion.span>
           ) : (
-            <motion.span key="ai" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.18 }}>
-              <Sparkles className="h-6 w-6" strokeWidth={1.75} />
+            <motion.span key="ai" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.18 }} className="h-full w-full pointer-events-none">
+              <img src={aiLogo} alt="AI" className="h-full w-full object-cover pointer-events-none select-none" draggable={false} />
             </motion.span>
           )}
         </AnimatePresence>
-      </motion.button>
-
-      {/* ── Chat panel ── */}
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: 24, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 24, scale: 0.96 }}
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed bottom-[calc(6rem+1rem)] right-5 z-[899] flex w-[min(380px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-3xl border border-border bg-bg-elevated shadow-[0_24px_64px_-12px_rgb(0_0_0/0.35)] md:bottom-[calc(5rem+1rem)] md:right-8"
-            style={{ maxHeight: 'min(520px, calc(100dvh - 10rem))' }}
-          >
-            {/* Header */}
-            <div className="flex items-center gap-3 border-b border-border bg-brand-primary/5 px-4 py-3.5">
-              <div className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-primary text-white shadow-sm">
-                <Sparkles className="h-4 w-4" strokeWidth={1.75} />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-bold text-fg">SAYIN AI</p>
-                <p className="text-[11px] text-fg-subtle">{t('ai.subtitle' as any) ?? 'Chorva bozori yordamchisi'}</p>
-              </div>
-              <button type="button" onClick={() => setOpen(false)} className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-fg-subtle hover:bg-bg-subtle hover:text-fg transition-colors">
-                <X className="h-4 w-4" strokeWidth={2} />
-              </button>
-            </div>
-
-            {/* Messages */}
-            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
-              {messages.length === 0 && (
-                <div className="space-y-3">
-                  <p className="text-center text-sm text-fg-muted">
-                    {t('ai.greeting' as any) ?? '👋 Salom! Chorva bozori haqida savollaringiz bormi?'}
-                  </p>
-                  <div className="grid grid-cols-2 gap-2">
-                    {QUICK_PROMPTS.map((p) => (
-                      <button
-                        key={p.key}
-                        type="button"
-                        onClick={() => sendMessage(t(`ai.prompt.${p.key}` as any) ?? p.key)}
-                        className="flex items-center gap-2 rounded-xl border border-border bg-bg-subtle px-3 py-2.5 text-left text-xs font-medium text-fg hover:border-brand-primary/40 hover:bg-brand-primary/5 transition-colors"
-                      >
-                        <span>{p.icon}</span>
-                        <span className="line-clamp-2">{t(`ai.prompt.${p.key}` as any) ?? p.key}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {messages.map((msg) => (
-                <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  {msg.role === 'assistant' && (
-                    <div className="mr-2 mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-brand-primary/15 text-brand-primary">
-                      <Sparkles className="h-3 w-3" strokeWidth={2} />
-                    </div>
-                  )}
-                  <div className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-wrap ${
-                    msg.role === 'user'
-                      ? 'bg-brand-primary text-white rounded-br-sm'
-                      : 'bg-bg-subtle text-fg rounded-bl-sm border border-border/60'
-                  }`}>
-                    {msg.text}
-                  </div>
-                </div>
-              ))}
-              {loading && (
-                <div className="flex justify-start">
-                  <div className="mr-2 mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-brand-primary/15 text-brand-primary">
-                    <Sparkles className="h-3 w-3" strokeWidth={2} />
-                  </div>
-                  <div className="rounded-2xl rounded-bl-sm border border-border/60 bg-bg-subtle px-4 py-3">
-                    <div className="flex items-center gap-1.5">
-                      <span className="h-1.5 w-1.5 rounded-full bg-brand-primary/60 animate-bounce [animation-delay:0ms]" />
-                      <span className="h-1.5 w-1.5 rounded-full bg-brand-primary/60 animate-bounce [animation-delay:150ms]" />
-                      <span className="h-1.5 w-1.5 rounded-full bg-brand-primary/60 animate-bounce [animation-delay:300ms]" />
-                    </div>
-                  </div>
-                </div>
-              )}
-              <div ref={messagesEndRef} />
-            </div>
-
-            {/* Input */}
-            <form
-              onSubmit={(e) => { e.preventDefault(); sendMessage(input); }}
-              className="border-t border-border px-3 py-3"
-            >
-              <div className="flex items-end gap-2">
-                <textarea
-                  value={input}
-                  onChange={(e) => {
-                    setInput(e.target.value);
-                    e.target.style.height = 'auto';
-                    e.target.style.height = Math.min(e.target.scrollHeight, 96) + 'px';
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(input); }
-                  }}
-                  placeholder={t('ai.inputPlaceholder' as any) ?? 'Savol yozing...'}
-                  rows={1}
-                  disabled={loading}
-                  className="flex-1 resize-none rounded-xl border border-border bg-bg-subtle px-3 py-2 text-sm text-fg placeholder:text-fg-subtle focus:border-brand-primary/50 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 disabled:opacity-50 transition-all"
-                  style={{ minHeight: '38px', maxHeight: '96px' }}
-                />
-                <button
-                  type="submit"
-                  disabled={!input.trim() || loading}
-                  className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-primary text-white shadow-sm transition-all hover:bg-brand-primary/90 disabled:opacity-40 disabled:cursor-not-allowed active:scale-95"
-                >
-                  {loading ? <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2} /> : <Send className="h-4 w-4 translate-x-0.5" strokeWidth={2.25} />}
-                </button>
-              </div>
-            </form>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+      </button>
+    </motion.div>
   );
 }

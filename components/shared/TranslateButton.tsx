@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Languages, Loader2, RotateCcw } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -31,15 +31,17 @@ export function TranslateButton({
   const t = useTranslations();
   const { isTranslated, state, toggle, displayText } = useTranslation(text, sourceLocale);
 
+  // Keep external display (e.g. CommentItem's translatedContent) in sync with internal toggle.
+  // This was missing: previously only reverted on parent, never pushed the translated text.
+  useEffect(() => {
+    onTranslated?.(isTranslated ? displayText : null);
+  }, [isTranslated, displayText, onTranslated]);
+
   return (
     <button
       type="button"
       onClick={async () => {
-        const wasTranslated = isTranslated;
         await toggle();
-        if (wasTranslated) {
-          onTranslated?.(null);
-        }
       }}
       disabled={state === 'loading'}
       className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-all duration-200 ${

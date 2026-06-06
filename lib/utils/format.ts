@@ -28,6 +28,27 @@ export function formatNumber(num: number): string {
   return new Intl.NumberFormat('uz-UZ').format(num);
 }
 
+/**
+ * Return the best pre-translated title for the current UI locale.
+ * Falls back to the canonical `title` (original language).
+ * Used for e'lon sarlavhalari so they appear in the interface language.
+ */
+export function getLocalizedListingTitle(
+  listing: {
+    title: string;
+    title_uz?: string;
+    title_uz_cyrl?: string;
+    title_ru?: string;
+    title_en?: string;
+  },
+  locale: string
+): string {
+  const norm = (locale || 'uz').replace('-', '_');
+  const field = `title_${norm}` as keyof typeof listing;
+  const val = listing[field] as string | undefined;
+  return val || listing.title || '';
+}
+
 export function formatPhone(phone: string): string {
   const digits = phone.replace(/\D/g, '');
   if (digits.length >= 12 && digits.startsWith('998')) {

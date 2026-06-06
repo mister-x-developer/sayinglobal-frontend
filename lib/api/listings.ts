@@ -122,6 +122,15 @@ export const listingsApi = {
     }
   },
 
+  async adminList(filters?: ListingFilters): Promise<ListingsResponse> {
+    try {
+      const res = await apiClient.get<ListingsResponse>('/listings/admin/', { params: filters });
+      return res.data;
+    } catch {
+      return { results: [], count: 0 };
+    }
+  },
+
   async my(): Promise<Listing[]> {
     try {
       const res = await apiClient.get<Listing[]>('/listings/my/');
@@ -299,6 +308,29 @@ export const listingsApi = {
       locale,
     });
     return res.data;
+  },
+
+  /** Buyer confirms purchase with the code received from seller.
+   *  Optionally provide star rating (1-5) and review.
+   *  This makes the sale "confirmed" and contributes to seller's trust_score.
+   */
+  async confirmPurchase(code: string, score?: number, review?: string) {
+    const res = await apiClient.post('/listings/confirm-purchase/', {
+      code: code.toUpperCase(),
+      score,
+      review,
+    });
+    return res.data;
+  },
+
+  /** Admin only: pending buyer confirmations (codes not yet claimed by buyer) */
+  async adminPendingConfirmations() {
+    try {
+      const res = await apiClient.get('/listings/admin/pending-confirmations/');
+      return res.data?.results || [];
+    } catch {
+      return [];
+    }
   },
 
   /** Public: list seller ratings + reviews thread. */

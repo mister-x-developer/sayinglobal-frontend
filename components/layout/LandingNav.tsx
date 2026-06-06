@@ -46,7 +46,9 @@ export function LandingNav() {
           <div className="flex items-center gap-2 sm:gap-3">
             <LanguageSwitcher />
             <ThemeSwitcher />
-            {hydrated && isAuthenticated ? (
+            {!hydrated ? (
+              <div className="h-9 w-24 rounded-full bg-border/50 animate-pulse" />
+            ) : isAuthenticated ? (
               <Link
                 href="/dashboard"
                 className="btn btn-primary btn-sm gap-1.5 group"

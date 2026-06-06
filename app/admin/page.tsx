@@ -7,6 +7,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import {
@@ -332,9 +333,9 @@ export default function AdminDashboardPage() {
             </div>
 
             {/* 30-day trends */}
-            {growth && (growth.users_by_day.length > 1 || growth.listings_by_day.length > 1) && (
+            {growth && ((growth.users_by_day?.length ?? 0) > 1 || (growth.listings_by_day?.length ?? 0) > 1) && (
               <div className="mt-6 grid gap-6 lg:grid-cols-2">
-                {growth.users_by_day.length > 1 && (
+                {(growth.users_by_day?.length ?? 0) > 1 && (
                   <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.45 }} className="surface-elevated overflow-hidden">
                     <div className="border-b border-border px-5 py-4 flex items-center gap-2">
@@ -343,13 +344,13 @@ export default function AdminDashboardPage() {
                     </div>
                     <div className="p-4">
                       <LineChart
-                        data={growth.users_by_day.slice(-30).map((r) => ({ label: r.date.slice(5), value: r.count }))}
+                        data={growth.users_by_day?.slice(-30).map((r: any) => ({ label: r.date.slice(5), value: r.count })) ?? []}
                         color="#3b82f6"
                       />
                     </div>
                   </motion.div>
                 )}
-                {growth.listings_by_day.length > 1 && (
+                {(growth.listings_by_day?.length ?? 0) > 1 && (
                   <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }} className="surface-elevated overflow-hidden">
                     <div className="border-b border-border px-5 py-4 flex items-center gap-2">
@@ -358,7 +359,7 @@ export default function AdminDashboardPage() {
                     </div>
                     <div className="p-4">
                       <LineChart
-                        data={growth.listings_by_day.slice(-30).map((r) => ({ label: r.date.slice(5), value: r.count }))}
+                        data={growth.listings_by_day?.slice(-30).map((r: any) => ({ label: r.date.slice(5), value: r.count })) ?? []}
                         color="#1f7a52"
                       />
                     </div>
@@ -401,7 +402,7 @@ function PendingListings() {
           <div className="flex-shrink-0 h-10 w-10 rounded-xl bg-bg-subtle overflow-hidden">
             {item.primary_image?.image ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={item.primary_image.image} alt="" className="h-full w-full object-cover" />
+              <Image src={item.primary_image.image} alt="" width={48} height={48} className="h-full w-full object-cover" />
             ) : (
               <div className="h-full w-full flex items-center justify-center text-fg-subtle">
                 <Package className="h-4 w-4" strokeWidth={1.75} />
@@ -451,8 +452,8 @@ function RecentComplaints() {
 
   return (
     <div className="divide-y divide-border">
-      {items.map((item: any) => (
-        <Link key={item.id} href={`/admin/moderation/${item.id}`}
+      {items.map((item: any, index: number) => (
+        <Link key={item.public_id || index} href={`/admin/moderation/${item.public_id}`}
           className="flex items-center gap-3 px-5 py-3.5 hover:bg-bg-subtle transition-colors group">
           <div className={`flex-shrink-0 inline-flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold ${severityColor[item.severity] ?? severityColor.low}`}>
             {(item.severity || 'L')[0].toUpperCase()}

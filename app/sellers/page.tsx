@@ -68,6 +68,9 @@ export default function SellersDirectoryPage() {
         params.hasActive = true;
       } else {
         params.hasActive = tab !== 'new';
+        if (tab === 'top' || tab === 'new') {
+          params.sort = tab;
+        }
       }
       usersApi
         .listSellers(params)
@@ -183,8 +186,8 @@ export default function SellersDirectoryPage() {
             {!hydrated ? null : filtered.length === 0 ? (
               <EmptyState
                 icon={Users}
-                title={t('marketplace.noResults')}
-                description={t('marketplace.tryAdjusting')}
+                title={t('sellers.noResults' as any) ?? 'Sotuvchilar topilmadi'}
+                description={t('sellers.tryAdjusting' as any) ?? 'Boshqa qidiruv so\'zlarini sinab ko\'ring yoki joylashuvni o\'zgartiring'}
               />
             ) : (
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

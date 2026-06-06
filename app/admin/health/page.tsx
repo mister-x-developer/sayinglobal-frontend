@@ -74,16 +74,28 @@ export default function AdminHealthPage() {
       // apiClient.baseURL is /api, so we need to reach /health/deep/ differently
       const backendBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api')
         .replace(/\/api\/?$/, '');
+      const getToken = () => {
+        if (typeof window === 'undefined') return '';
+        try {
+          const s = JSON.parse(localStorage.getItem('sayin-auth-store') || '{}');
+          if (s?.state?.accessToken) return s.state.accessToken;
+          return localStorage.getItem('access_token') || '';
+        } catch { return ''; }
+      };
+      
       const [healthRes, opsRes] = await Promise.allSettled([
         fetch(`${backendBase}/health/deep/`, {
-          headers: { Authorization: `Bearer ${typeof window !== 'undefined' ? (() => { try { const s = JSON.parse(localStorage.getItem('auth-store') || '{}'); return s?.state?.accessToken || ''; } catch { return ''; } })() : '' }` },
+          headers: { Authorization: `Bearer ${getToken()}` },
         }).then(r => r.json()),
         fetch(`${backendBase}/health/status/`, {
-          headers: { Authorization: `Bearer ${typeof window !== 'undefined' ? (() => { try { const s = JSON.parse(localStorage.getItem('auth-store') || '{}'); return s?.state?.accessToken || ''; } catch { return ''; } })() : '' }` },
-        }).then(r => r.json()),
+          headers: { Authorization: `Bearer ${getToken()}` },
+        }).then(r => {
+          if (!r.ok) throw new Error('Unauthorized');
+          return r.json();
+        }),
       ]);
-      if (healthRes.status === 'fulfilled') setHealth(healthRes.value as HealthDeep);
-      if (opsRes.status === 'fulfilled') setOps(opsRes.value as OperationalStatus);
+      if (healthRes.status === 'fulfilled' && !healthRes.value.error) setHealth(healthRes.value as HealthDeep);
+      if (opsRes.status === 'fulfilled' && !opsRes.value.error) setOps(opsRes.value as OperationalStatus);
       setLastRefresh(new Date());
     } catch {
       // silently handle — show last known state
@@ -147,15 +159,22 @@ export default function AdminHealthPage() {
           </div>
           {health ? (
             <div className="grid gap-3 sm:grid-cols-3">
-              {Object.entries(health.checks).map(([name, value]) => (
+              {Object.entries(health.checks).map(([name, value]) => {
+                const translatedName = {
+                  database: "Ma'lumotlar bazasi",
+                  cache: "Kesh",
+                  broker: "Broker"
+                }[name.toLowerCase()] || name;
+                return (
                 <div key={name} className="flex items-center justify-between rounded-xl bg-bg-subtle px-4 py-3">
                   <div className="flex items-center gap-2">
                     <Database className="h-4 w-4 text-fg-muted" strokeWidth={1.75} />
-                    <span className="text-sm font-medium text-fg capitalize">{name}</span>
+                    <span className="text-sm font-medium text-fg capitalize">{translatedName}</span>
                   </div>
                   <StatusBadge value={value} />
                 </div>
-              ))}
+                );
+              })}
               <div className="flex items-center justify-between rounded-xl bg-bg-subtle px-4 py-3 sm:col-span-3">
                 <span className="text-xs text-fg-subtle">Response time</span>
                 <span className="text-sm font-semibold text-fg">{health.response_ms}ms</span>

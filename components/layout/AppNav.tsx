@@ -240,7 +240,7 @@ export function AppNav() {
       {/* ── Sticky header bar ── */}
       <header className="sticky top-0 z-40 border-b border-border/60 bg-bg/80 backdrop-blur-xl backdrop-saturate-150 transition-shadow duration-300">
         <div className="container-page">
-          <div className="flex h-16 items-center gap-2 overflow-hidden">
+          <div className="flex h-16 items-center gap-2">
             {/* Mobile menu trigger */}
             <button
               type="button"
@@ -307,7 +307,9 @@ export function AppNav() {
                 <ThemeSwitcher />
               </div>
 
-              {isAuthenticated && user ? (
+              {!hydrated ? (
+                <div className="h-10 w-10 rounded-full bg-border/50 animate-pulse" />
+              ) : isAuthenticated && user ? (
                 <div ref={profileRef} className="relative">
                   <button
                     onClick={() => setProfileOpen((v) => !v)}

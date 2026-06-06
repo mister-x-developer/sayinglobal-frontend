@@ -84,8 +84,8 @@ export function TermsGate() {
     } catch (e: any) {
       const err = e?.response?.data?.error ?? 'error';
       const msgs: Record<string, string> = {
-        invalid_code: "Noto'g'ri referral kod",
-        cannot_use_own_code: "O'z kodingizni ishlatib bo'lmaydi",
+        invalid_code: "Notoʻgʻri referral kod",
+        cannot_use_own_code: "Oʻz kodingizni ishlatib boʻlmaydi",
         already_used_referral: "Referral kod allaqachon ishlatilgan",
       };
       setReferralMsg({ ok: false, text: msgs[err] ?? err });
@@ -118,7 +118,7 @@ export function TermsGate() {
             <div className="max-h-[50vh] overflow-y-auto px-6 py-5 text-sm leading-relaxed text-fg">
               <p className="text-fg-muted">{t('terms.intro')}</p>
               <ol className="mt-4 space-y-3 text-fg">
-                {[1,2,3,4].map((n) => (
+                {[1,2,3,4,5,6,7,8].map((n) => (
                   <li key={n} className="flex gap-3">
                     <span className="mt-0.5 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-bg-subtle text-[11px] font-bold text-fg-muted">{n}</span>
                     <span>{t(`terms.point${n}` as any)}</span>

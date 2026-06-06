@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { Users, Package, MessageSquareText } from 'lucide-react';
 import { Avatar } from '@/components/ui/Avatar';
 import { RatingDisplay } from '@/components/shared/RatingDisplay';
+import { useAuthStore } from '@/lib/store/auth';
 import { FollowButton } from './FollowButton';
 
 export interface SellerCardData {
@@ -23,6 +24,7 @@ export interface SellerCardData {
 
 export function SellerCard({ seller }: { seller: SellerCardData }) {
   const t = useTranslations();
+  const { user } = useAuthStore();
 
   return (
     <motion.article
@@ -34,12 +36,12 @@ export function SellerCard({ seller }: { seller: SellerCardData }) {
       className="surface-elevated overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift"
     >
       {/* Top section */}
-      <Link href={`/sellers/${seller.public_id}`} className="block p-5 group">
+      <Link href={user?.public_id === seller.public_id ? '/profile' : `/sellers/${seller.public_id}`} className="block p-5 group">
         <div className="flex items-start gap-4">
           <Avatar src={seller.avatar_url} name={seller.full_name} size="lg" ring />
           <div className="min-w-0 flex-1">
             <div className="flex items-center justify-between gap-2">
-              <h3 className="font-display text-base font-semibold text-fg group-hover:text-brand-primary transition-colors truncate">
+              <h3 className="font-display text-base font-semibold text-fg group-hover:text-brand-primary transition-colors break-words">
                 {seller.full_name}
               </h3>
               {typeof seller.distance_km === 'number' && (

@@ -7,9 +7,9 @@ import { Globe, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const LANGUAGES = [
-  { code: 'uz', label: "O'zbekcha", short: 'UZ' },
-  { code: 'uz-cyrl', label: 'Ўзбекча', short: 'УЗ' },
-  { code: 'ru', label: 'Русский', short: 'RU' },
+  { code: 'uz', label: 'Oʻzbekcha', short: 'OʻZ' },
+  { code: 'uz-cyrl', label: 'Ўзбекча', short: 'ЎЗ' },
+  { code: 'ru', label: 'Русский', short: 'РУ' },
   { code: 'en', label: 'English', short: 'EN' },
 ] as const;
 
@@ -42,7 +42,6 @@ export function LanguageSwitcher() {
   const switchTo = (code: string) => {
     setOpen(false);
     setLocaleCookie(code);
-    // Force full page reload so Next.js server reads the new cookie
     window.location.reload();
   };
 

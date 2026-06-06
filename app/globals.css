@@ -9,42 +9,42 @@
 
 @layer base {
   :root {
-    /* Brand — calm, premium, lower-saturation palette (was neon: 242 177 0 / 0 184 159) */
+    /* REFINED PREMIUM CALM — Classy, serious, luxurious, calming */
     --brand-primary: 31 122 82;
-    --brand-secondary: 202 158 74;
-    --brand-accent: 48 138 128;
+    --brand-secondary: 180 148 88;
+    --brand-accent: 46 118 108;
 
-    /* DAY MODE */
-    --bg: 250 251 250;
+    /* DAY MODE — calm, airy, highly readable */
+    --bg: 248 250 248;
     --bg-elevated: 255 255 255;
-    --bg-subtle: 244 247 245;
+    --bg-subtle: 242 245 243;
     --bg-overlay: 255 255 255;
 
-    --fg: 17 27 22;
-    --fg-muted: 84 100 91;
-    --fg-subtle: 130 144 137;
+    --fg: 18 24 22;
+    --fg-muted: 78 92 85;
+    --fg-subtle: 118 132 124;
 
-    --border: 226 232 228;
-    --border-strong: 200 210 204;
+    --border: 220 226 223;
+    --border-strong: 190 200 194;
     --ring: 31 122 82;
 
     --card: 255 255 255;
-    --card-fg: 17 27 22;
+    --card-fg: 18 24 22;
 
     --input: 255 255 255;
-    --input-border: 220 226 222;
+    --input-border: 210 218 214;
 
     --shadow-color: 17 27 22;
 
-    --sky-top: 196 224 240;
-    --sky-mid: 215 232 222;
-    --sky-bottom: 244 247 245;
-    --sun: 255 213 113;
+    --sky-top: 200 225 240;
+    --sky-mid: 220 235 225;
+    --sky-bottom: 248 250 248;
+    --sun: 255 215 120;
 
     --success: 34 134 87;
-    --warning: 217 119 6;
-    --danger: 191 35 35;
-    --info: 14 116 144;
+    --warning: 200 140 55;
+    --danger: 175 50 50;
+    --info: 65 125 155;
   }
 
   /* Day mode is also explicitly applied for safety —
@@ -75,37 +75,47 @@
     --info: 14 116 144;
   }
 
+  /* ============================================================
+     REFINED PREMIUM CALM THEME (2026)
+     Classy · Serious · Luxurious · Pleasant & Calming
+     (Replaced previous cyberpunk/neon heavy effects)
+     ============================================================ */
   [data-theme='night'] {
-    --bg: 9 14 19;
-    --bg-elevated: 17 24 31;
-    --bg-subtle: 13 19 25;
-    --bg-overlay: 13 19 25;
+    --bg: 10 13 16;
+    --bg-elevated: 18 22 27;
+    --bg-subtle: 14 17 21;
+    --bg-overlay: 14 17 21;
 
-    --fg: 234 240 236;
-    --fg-muted: 159 173 167;
-    --fg-subtle: 110 124 119;
+    --fg: 236 240 243;
+    --fg-muted: 162 172 180;
+    --fg-subtle: 112 122 130;
 
-    --border: 32 42 50;
-    --border-strong: 48 60 70;
-    --ring: 48 138 128;
+    --border: 34 40 47;
+    --border-strong: 52 60 68;
+    --ring: 31 122 82;
 
-    --card: 17 24 31;
-    --card-fg: 234 240 236;
+    --card: 18 22 27;
+    --card-fg: 236 240 243;
 
-    --input: 13 19 25;
-    --input-border: 38 48 56;
+    --input: 14 17 21;
+    --input-border: 42 49 56;
 
     --shadow-color: 0 0 0;
 
-    --sky-top: 9 14 19;
-    --sky-mid: 14 22 30;
-    --sky-bottom: 17 24 31;
-    --sun: 230 232 240;
+    /* Calm elegant green — luxurious without screaming */
+    --brand-primary: 31 122 82;
+    --brand-secondary: 180 148 88;
+    --brand-accent: 46 118 108;
 
-    --success: 52 189 119;
-    --warning: 245 158 11;
-    --danger: 239 68 68;
-    --info: 56 189 248;
+    --success: 46 140 95;
+    --warning: 200 140 60;
+    --danger: 180 55 55;
+    --info: 70 130 160;
+
+    --sky-top: 10 13 16;
+    --sky-mid: 14 17 21;
+    --sky-bottom: 18 22 27;
+    --sun: 235 238 242;
   }
 
   /* Reduced motion */
@@ -225,41 +235,49 @@
   }
 
   /* ============================================================
-     SURFACES — premium depth on hover
+     SURFACES — calm, classy, luxurious through restraint
      ============================================================ */
   .surface {
     background-color: rgb(var(--bg-elevated));
     border: 1px solid rgb(var(--border));
-    border-radius: 16px;
+    border-radius: 12px;
+    box-shadow: 0 1px 2px rgb(var(--shadow-color) / 0.03);
   }
 
   .surface-subtle {
     background-color: rgb(var(--bg-subtle));
     border: 1px solid rgb(var(--border));
-    border-radius: 16px;
+    border-radius: 12px;
   }
 
   .surface-elevated {
     background-color: rgb(var(--bg-elevated));
     border: 1px solid rgb(var(--border));
-    border-radius: 16px;
+    border-radius: 12px;
     box-shadow:
       0 1px 2px rgb(var(--shadow-color) / 0.04),
-      0 8px 24px -12px rgb(var(--shadow-color) / 0.08);
+      0 10px 28px -14px rgb(var(--shadow-color) / 0.10);
     transition:
-      box-shadow 300ms cubic-bezier(0.16, 1, 0.3, 1),
-      transform 300ms cubic-bezier(0.16, 1, 0.3, 1),
-      border-color 200ms ease;
+      box-shadow 280ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 180ms ease;
+  }
+
+  /* Admin uses even calmer surfaces */
+  .admin-surface {
+    background-color: rgb(var(--bg-elevated));
+    border: 1px solid rgb(var(--border));
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgb(var(--shadow-color) / 0.05);
   }
 
   /* ============================================================
-     GLASS
+     GLASS — toned down for calm feel
      ============================================================ */
   .glass {
-    background-color: rgb(var(--bg-elevated) / 0.72);
-    backdrop-filter: blur(24px) saturate(140%);
-    -webkit-backdrop-filter: blur(24px) saturate(140%);
-    border: 1px solid rgb(var(--border) / 0.6);
+    background-color: rgb(var(--bg-elevated) / 0.88);
+    backdrop-filter: blur(12px) saturate(110%);
+    -webkit-backdrop-filter: blur(12px) saturate(110%);
+    border: 1px solid rgb(var(--border) / 0.7);
   }
 
   /* ============================================================
@@ -302,20 +320,18 @@
   }
 
   .btn-primary {
-    background: linear-gradient(180deg, rgb(var(--brand-primary)) 0%, rgb(28 110 75) 100%);
-    color: rgb(255 255 255);
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.10),
-      0 1px 2px rgb(var(--shadow-color) / 0.06),
-      0 4px 10px -6px rgb(var(--brand-primary) / 0.25);
+    background-color: rgb(var(--brand-primary));
+    color: #fff;
+    border: 1px solid rgb(var(--brand-primary) / 0.9);
+    box-shadow: 0 1px 2px rgb(var(--shadow-color) / 0.12);
+    font-weight: 600;
+    letter-spacing: -0.01em;
   }
 
   .btn-primary:hover:not(:disabled) {
+    background-color: rgb(var(--brand-primary) / 0.92);
     transform: translateY(-1px);
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.14),
-      0 1px 2px rgb(var(--shadow-color) / 0.08),
-      0 8px 16px -8px rgb(var(--brand-primary) / 0.32);
+    box-shadow: 0 4px 14px rgb(var(--brand-primary) / 0.16);
   }
 
   .btn-primary:active:not(:disabled) {
@@ -800,4 +816,70 @@ html:not(.js-ready) [style*='opacity:0'] {
 html:not(.js-ready) [data-motion] {
   opacity: 1 !important;
   transform: none !important;
+}
+
+/* ============================================================
+   ADMIN — Classy, serious, data-dense, calming professional
+   ============================================================ */
+.admin-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 14px;
+}
+
+.admin-table th {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgb(var(--fg-subtle));
+  padding: 12px 14px;
+  background: rgb(var(--bg-subtle));
+  border-bottom: 1px solid rgb(var(--border));
+  white-space: nowrap;
+}
+
+.admin-table td {
+  padding: 13px 14px;
+  border-bottom: 1px solid rgb(var(--border));
+  vertical-align: middle;
+  color: rgb(var(--fg));
+}
+
+.admin-table tr:hover td {
+  background: rgb(var(--bg-subtle) / 0.6);
+}
+
+.admin-table .cell-title {
+  font-weight: 600;
+  color: rgb(var(--fg));
+  line-height: 1.25;
+}
+
+.admin-table .cell-subtle {
+  font-size: 12px;
+  color: rgb(var(--fg-subtle));
+}
+
+/* Calm, elegant toast (replaces previous heavy version) */
+.toast {
+  background: rgb(var(--bg-elevated));
+  border: 1px solid rgb(var(--border-strong));
+  color: rgb(var(--fg));
+  box-shadow: 0 10px 30px -15px rgb(var(--shadow-color) / 0.25);
+  border-radius: 12px;
+}
+
+.toast-success { border-left: 4px solid rgb(var(--success)); }
+.toast-error   { border-left: 4px solid rgb(var(--danger)); }
+.toast-warning { border-left: 4px solid rgb(var(--warning)); }
+.toast-info    { border-left: 4px solid rgb(var(--info)); }
+
+/* Better focus for admin forms */
+.admin-input:focus {
+  border-color: rgb(var(--brand-primary));
+  box-shadow: 0 0 0 3px rgb(var(--brand-primary) / 0.08);
+  outline: none;
 }

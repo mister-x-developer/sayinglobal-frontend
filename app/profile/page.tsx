@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import {
   Edit,
   Settings,
@@ -27,12 +27,13 @@ import { Badge } from '@/components/ui/Badge';
 import { ListingCard } from '@/components/listings/ListingCard';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { RatingDisplay } from '@/components/shared/RatingDisplay';
+import { SellerRatingsThread } from '@/components/sellers/SellerRatingsThread';
 import { useAuthStore } from '@/lib/store/auth';
 import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
-import { formatPrice, formatRelativeTime } from '@/lib/utils/format';
+import { formatPrice, formatRelativeTime, getLocalizedListingTitle } from '@/lib/utils/format';
 
-type Tab = 'listings' | 'favorites' | 'activity';
+type Tab = 'listings' | 'favorites' | 'activity' | 'reviews';
 
 export default function ProfilePage() {
   const t = useTranslations();
@@ -93,6 +94,7 @@ export default function ProfilePage() {
     { key: 'listings', label: t('profile.myListings') },
     { key: 'favorites', label: t('profile.favorites') },
     { key: 'activity', label: t('profile.activity') },
+    { key: 'reviews', label: t('sellers.reviews' as any) ?? 'Reviews' },
   ];
 
   return (
@@ -121,10 +123,34 @@ export default function ProfilePage() {
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
-                    <div className="flex flex-wrap items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-3">
                       <h1 className="display-md">{profile.full_name}</h1>
+                      {profile.status === 'good' && (
+                        <div className="inline-flex items-center gap-1.5 rounded-full bg-success/15 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-success">
+                          <ShieldCheck className="h-4 w-4" strokeWidth={2.5} />
+                          {t('userStatus.good')}
+                        </div>
+                      )}
+                      {profile.status === 'warning' && (
+                        <div className="inline-flex items-center gap-1.5 rounded-full bg-warning/15 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-warning">
+                          <ShieldCheck className="h-4 w-4" strokeWidth={2.5} />
+                          {t('userStatus.warning')}
+                        </div>
+                      )}
+                      {profile.status === 'restricted' && (
+                        <div className="inline-flex items-center gap-1.5 rounded-full bg-danger/15 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-danger">
+                          <ShieldCheck className="h-4 w-4" strokeWidth={2.5} />
+                          {t('userStatus.restricted')}
+                        </div>
+                      )}
+                      {profile.status === 'blocked' && (
+                        <div className="inline-flex items-center gap-1.5 rounded-full bg-danger/15 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-danger">
+                          <ShieldCheck className="h-4 w-4" strokeWidth={2.5} />
+                          {t('userStatus.blocked')}
+                        </div>
+                      )}
                     </div>
-                    <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-fg-muted">
+                    <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-fg-muted">
                       <RatingDisplay
                         score={profile.trust_score}
                         count={(profile as any).rating_count}
@@ -284,6 +310,12 @@ export default function ProfilePage() {
                 {tab === 'activity' && (
                   <ActivityTimeline />
                 )}
+
+                {tab === 'reviews' && user?.public_id && (
+                  <div className="surface-elevated p-6">
+                    <SellerRatingsThread sellerPublicId={user.public_id} />
+                  </div>
+                )}
               </div>
             </div>
 
@@ -355,6 +387,7 @@ function ActivityTimeline() {
   // it didn't reflect real platform activity.
   const t = useTranslations();
   const router = useRouter();
+  const locale = useLocale();
   const [items, setItems] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -402,7 +435,7 @@ function ActivityTimeline() {
             <Package className="h-4 w-4" strokeWidth={1.75} />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-fg line-clamp-1">{l.title}</p>
+            <p className="text-sm font-semibold text-fg line-clamp-1">{getLocalizedListingTitle(l, locale)}</p>
             <p className="mt-0.5 text-sm text-fg-muted">
               {t(`listings.${l.status}` as any) ?? l.status}
             </p>

@@ -13,6 +13,8 @@ import { EmptyState } from '@/components/shared/EmptyState';
 import { useAuthStore } from '@/lib/store/auth';
 import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
+import { useLocale } from 'next-intl';
+import { getLocalizedListingTitle } from '@/lib/utils/format';
 
 type ViewMode = 'grid' | 'list';
 
@@ -20,6 +22,7 @@ export default function FavoritesPage() {
   const t = useTranslations();
   const router = useRouter();
   const { isAuthenticated } = useAuthStore();
+  const locale = useLocale();
   const [hydrated, setHydrated] = useState(false);
   const [items, setItems] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
@@ -153,7 +156,7 @@ export default function FavoritesPage() {
                         </div>
                       </div>
                       <div className="min-w-0 flex-1">
-                        <h3 className="font-display text-base font-semibold text-fg">{l.title}</h3>
+                        <h3 className="font-display text-base font-semibold text-fg">{getLocalizedListingTitle(l, locale)}</h3>
                         <p className="mt-1 text-sm text-fg-muted">{l.location}</p>
                         <p className="mt-2 font-display text-lg font-bold text-fg">
                           {new Intl.NumberFormat('uz-UZ').format(l.price)} soʻm

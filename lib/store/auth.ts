@@ -158,10 +158,12 @@ export const useAuthStore = create<AuthState>()(
       },
 
       updateUser: (data) => {
-        const next = get().user ? { ...get().user!, ...data } : null;
+        const currentUser = get().user;
+        if (!currentUser) return;
+        const next = { ...currentUser, ...data };
         set({ user: next });
         writeAuthCookie({
-          isAuthenticated: !!next,
+          isAuthenticated: true,
           accessToken: get().accessToken,
           user: next,
         });
@@ -215,7 +217,7 @@ export const useAuthStore = create<AuthState>()(
         isAuthenticated: state.isAuthenticated,
         // _hasHydrated is intentionally excluded — it must always start false
       }),
-      onRehydrateStorage: () => (state) => {
+      onRehydrateStorage: () => (state, error) => {
         if (state && typeof document !== 'undefined') {
           if (state.isAuthenticated && state.accessToken) {
             writeAuthCookie({
@@ -226,7 +228,13 @@ export const useAuthStore = create<AuthState>()(
           }
         }
         // Mark hydration complete — prevents premature navigation guards
-        useAuthStore.getState().setHasHydrated(true);
+        if (state && state.setHasHydrated) {
+          state.setHasHydrated(true);
+        } else {
+          setTimeout(() => {
+            useAuthStore.getState().setHasHydrated(true);
+          }, 0);
+        }
       },
     }
   )
@@ -239,24 +247,7 @@ export const useAuthStore = create<AuthState>()(
  * /auth during the brief boot window.
  */
 export function useAuthHydrated(): boolean {
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => {
-    // Zustand persist v4 exposes hasHydrated() on the store.
-    const hasHydrated = (useAuthStore as any).persist?.hasHydrated;
-    if (typeof hasHydrated === 'function' && hasHydrated()) {
-      setHydrated(true);
-      return;
-    }
-    const onFinishHydration = (useAuthStore as any).persist?.onFinishHydration;
-    if (typeof onFinishHydration === 'function') {
-      const unsub = onFinishHydration(() => setHydrated(true));
-      return () => { try { unsub?.(); } catch {} };
-    }
-    // Fallback: assume hydrated after first paint.
-    const t = setTimeout(() => setHydrated(true), 0);
-    return () => clearTimeout(t);
-  }, []);
-  return hydrated;
+  return useAuthStore((s) => s._hasHydrated);
 }
 
 /**

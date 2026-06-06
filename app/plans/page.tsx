@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
-import { Check, Crown, Zap, Gift, ArrowRight, Loader2, Tag, Users } from 'lucide-react';
+import { Check, Crown, Zap, Gift, ArrowRight, Loader2, Tag, Users, Clock } from 'lucide-react';
 
 import { AppNav } from '@/components/layout/AppNav';
 import { useAuthStore } from '@/lib/store/auth';
@@ -30,6 +30,7 @@ interface Plan {
   is_default: boolean;
   order: number;
   referrals_required: number;
+  is_coming_soon?: boolean;
 }
 
 interface MyPlan {
@@ -270,25 +271,33 @@ export default function PlansPage() {
                     )}
 
                     <div className="mt-4">
-                      <span className="text-3xl font-black text-fg">
-                        {plan.price_uzs === 0
-                          ? t('plans.free')
-                          : new Intl.NumberFormat('uz-UZ').format(plan.price_uzs) + " so'm"}
-                      </span>
-                      {plan.price_uzs > 0 && (
-                        <span className="text-sm text-fg-muted"> / {plan.duration_days} {t('plans.days')}</span>
+                      {plan.is_coming_soon ? (
+                        <span className="text-xl font-bold text-fg">
+                          {t('plans.flexiblePricing') ?? 'Moslashuvchan narx'}
+                        </span>
+                      ) : (
+                        <>
+                          <span className="text-3xl font-black text-fg">
+                            {plan.price_uzs === 0
+                              ? t('plans.free')
+                              : new Intl.NumberFormat('uz-UZ').format(plan.price_uzs) + " so'm"}
+                          </span>
+                          {plan.price_uzs > 0 && (
+                            <span className="text-sm text-fg-muted"> / {plan.duration_days} {t('plans.days')}</span>
+                          )}
+                        </>
                       )}
                     </div>
 
                     {/* Referral notice — only for paid plans */}
-                    {plan.price_uzs > 0 && (
+                    {plan.price_uzs > 0 && !plan.is_coming_soon && (
                       <div className="mt-3 rounded-xl bg-brand-accent/10 px-3 py-2 text-xs text-brand-accent font-semibold">
                         🎁 {t('plans.referralNotice')}
                       </div>
                     )}
 
                     {/* Referrals required — with progress bar */}
-                    {plan.referrals_required > 0 && (
+                    {plan.referrals_required > 0 && !plan.is_coming_soon && (
                       <div className="mt-2 rounded-xl bg-bg-subtle border border-border px-3 py-2.5">
                         <div className="flex items-center justify-between mb-1.5">
                           <span className="text-xs font-semibold text-fg-muted flex items-center gap-1.5">
@@ -314,14 +323,23 @@ export default function PlansPage() {
                     )}
 
                     <ul className="mt-5 space-y-2.5 flex-1">
-                      <li className="flex items-center gap-2 text-sm text-fg">
-                        <Check className="h-4 w-4 flex-shrink-0 text-success" strokeWidth={2.5} />
-                        {t('plans.listingsPerMonth').replace('{n}', String(plan.monthly_listing_limit))}
-                      </li>
-                      <li className="flex items-center gap-2 text-sm text-fg">
-                        <Check className="h-4 w-4 flex-shrink-0 text-success" strokeWidth={2.5} />
-                        {t('plans.activeAtOnce').replace('{n}', String(plan.active_listing_limit))}
-                      </li>
+                      {plan.is_coming_soon ? (
+                        <li className="flex items-center gap-2 text-sm text-fg">
+                          <Check className="h-4 w-4 flex-shrink-0 text-success" strokeWidth={2.5} />
+                          {t('plans.flexibleLimits') ?? 'Moslashuvchan limitlar'}
+                        </li>
+                      ) : (
+                        <>
+                          <li className="flex items-center gap-2 text-sm text-fg">
+                            <Check className="h-4 w-4 flex-shrink-0 text-success" strokeWidth={2.5} />
+                            {t('plans.listingsPerMonth', { n: plan.monthly_listing_limit })}
+                          </li>
+                          <li className="flex items-center gap-2 text-sm text-fg">
+                            <Check className="h-4 w-4 flex-shrink-0 text-success" strokeWidth={2.5} />
+                            {t('plans.activeAtOnce', { n: plan.active_listing_limit })}
+                          </li>
+                        </>
+                      )}
                       <li className="flex items-center gap-2 text-sm text-fg">
                         <Check className="h-4 w-4 flex-shrink-0 text-success" strokeWidth={2.5} />
                         {t('plans.mapGps')}
@@ -338,6 +356,13 @@ export default function PlansPage() {
                           {t('plans.signInToStart')}
                           <ArrowRight className="h-4 w-4" strokeWidth={2} />
                         </Link>
+                      ) : plan.is_coming_soon ? (
+                        <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-brand-primary/20 via-brand-accent/20 to-brand-primary/20 p-[1px]">
+                          <div className="flex h-[42px] w-full items-center justify-center gap-2 rounded-xl bg-bg-elevated/80 backdrop-blur-sm text-sm font-bold text-fg-muted cursor-not-allowed">
+                            <Clock className="h-4 w-4 text-brand-accent animate-pulse" strokeWidth={2.5} />
+                            {t('plans.comingSoon')}
+                          </div>
+                        </div>
                       ) : isCurrent ? (
                         <button disabled className="btn btn-secondary w-full opacity-60 cursor-not-allowed">
                           {t('plans.currentPlanBadge')}
@@ -359,7 +384,7 @@ export default function PlansPage() {
                             {t('plans.claimWithReferrals')}
                             <ArrowRight className="h-4 w-4" strokeWidth={2} />
                           </button>
-                          {planMsg?.planId === plan.id && (
+                          {planMsg && planMsg.planId === plan.id && (
                             <p className={`text-xs font-semibold text-center ${planMsg.ok ? 'text-success' : 'text-danger'}`}>
                               {planMsg.ok ? '✓ ' : '✗ '}{planMsg.text}
                             </p>

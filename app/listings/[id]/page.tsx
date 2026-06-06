@@ -26,6 +26,7 @@ import {
 
 import { AppNav } from '@/components/layout/AppNav';
 import { Avatar } from '@/components/ui/Avatar';
+import { useAuthStore } from '@/lib/store/auth';
 
 import { ListingImage } from '@/components/listings/ListingImage';
 import { ListingGrid } from '@/components/listings/ListingGrid';
@@ -40,7 +41,7 @@ import { SellerRatingsThread } from '@/components/sellers/SellerRatingsThread';
 import { AgeDisplay } from '@/components/listings/AgeInput';
 import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
-import { formatPrice, formatRelativeTime } from '@/lib/utils/format';
+import { formatPrice, formatRelativeTime, getLocalizedListingTitle } from '@/lib/utils/format';
 
 export default function ListingDetailPage() {
   const t = useTranslations();
@@ -58,6 +59,7 @@ export default function ListingDetailPage() {
   const [comments, setComments] = useState<any[]>([]);
   const [related, setRelated] = useState<Listing[]>([]);
   const [reportOpen, setReportOpen] = useState(false);
+  const { user } = useAuthStore();
 
   useEffect(() => {
     if (!id) return;
@@ -93,19 +95,13 @@ export default function ListingDetailPage() {
   const visibleImage = images[imgIndex];
 
   // Get localized title based on current UI locale
-  const localizedTitle = (() => {
-    if (!listing) return '';
-    const norm = (locale || 'uz').replace('-', '_');
-    const field = `title_${norm}` as keyof typeof listing;
-    const val = listing[field] as string | undefined;
-    return val || listing.title;
-  })();
+  const localizedTitle = listing ? getLocalizedListingTitle(listing, locale) : '';
 
   const handleShare = async () => {
     const url = typeof window !== 'undefined' ? window.location.href : '';
     try {
       if (typeof navigator !== 'undefined' && (navigator as any).share) {
-        await (navigator as any).share({ title: listing?.title, url });
+        await (navigator as any).share({ title: localizedTitle || listing?.title, url });
       } else if (typeof navigator !== 'undefined' && navigator.clipboard) {
         await navigator.clipboard.writeText(url);
         setShareOk(true);
@@ -252,9 +248,17 @@ export default function ListingDetailPage() {
                     <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-sm text-fg-muted">
                       <span className="inline-flex items-center gap-1.5">
                         <MapPin className="h-4 w-4" strokeWidth={1.75} />
-                        {listing.region
-                          ? `${listing.region}${listing.district ? ' · ' + listing.district : ''}`
-                          : listing.location}
+                        {(() => {
+                          const normalizeLocale = (loc: string) => loc.replace('-', '_');
+                          const locKey = `name_${normalizeLocale(locale)}` as 'name_uz' | 'name_uz_cyrl' | 'name_ru' | 'name_en';
+                          if ((listing as any).region_data) {
+                            const reg = (listing as any).region_data[locKey] || (listing as any).region_data.name_uz;
+                            const dist = (listing as any).district_data ? ((listing as any).district_data[locKey] || (listing as any).district_data.name_uz) : '';
+                            if (reg && dist) return `${reg}, ${dist}`;
+                            if (reg) return reg;
+                          }
+                          return listing.location;
+                        })()}
                       </span>
                       {listing.created_at && (
                         <span className="inline-flex items-center gap-1.5">
@@ -391,7 +395,17 @@ export default function ListingDetailPage() {
                       />
                       <p className="mt-3 text-sm text-fg-muted inline-flex items-center gap-1.5">
                         <MapPin className="h-3.5 w-3.5" strokeWidth={1.75} />
-                        {listing.location}
+                        {(() => {
+                          const normalizeLocale = (loc: string) => loc.replace('-', '_');
+                          const locKey = `name_${normalizeLocale(locale)}` as 'name_uz' | 'name_uz_cyrl' | 'name_ru' | 'name_en';
+                          if ((listing as any).region_data) {
+                            const reg = (listing as any).region_data[locKey] || (listing as any).region_data.name_uz;
+                            const dist = (listing as any).district_data ? ((listing as any).district_data[locKey] || (listing as any).district_data.name_uz) : '';
+                            if (reg && dist) return `${reg}, ${dist}`;
+                            if (reg) return reg;
+                          }
+                          return listing.location;
+                        })()}
                       </p>
                     </motion.div>
                   )}
@@ -526,7 +540,7 @@ export default function ListingDetailPage() {
 
                     <div className="p-5">
                       <Link
-                        href={`/sellers/${listing.seller.public_id}`}
+                        href={user?.public_id === listing.seller.public_id ? '/profile' : `/sellers/${listing.seller.public_id}`}
                         className="flex items-start gap-3 group"
                       >
                         <Avatar
@@ -567,7 +581,7 @@ export default function ListingDetailPage() {
 
                       <div className="mt-4 grid grid-cols-2 gap-2">
                         <Link
-                          href={`/sellers/${listing.seller.public_id}`}
+                          href={user?.public_id === listing.seller.public_id ? '/profile' : `/sellers/${listing.seller.public_id}`}
                           className="btn btn-secondary btn-sm"
                         >
                           {t('common.view')}
@@ -575,7 +589,7 @@ export default function ListingDetailPage() {
                         <FollowButton sellerId={listing.seller.public_id} size="sm" />
                       </div>
                       <Link
-                        href={`/sellers/${listing.seller.public_id}?tab=reviews`}
+                        href={user?.public_id === listing.seller.public_id ? '/profile' : `/sellers/${listing.seller.public_id}?tab=reviews`}
                         className="mt-2 block w-full rounded-xl border border-border bg-bg-subtle/60 px-3 py-2 text-center text-xs font-semibold text-fg-muted hover:bg-bg-subtle"
                       >
                         {t('reviews.viewAll' as any) ?? 'View all reviews'}

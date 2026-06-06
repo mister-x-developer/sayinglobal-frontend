@@ -11,6 +11,7 @@ export function ThemeSwitcher() {
     <button
       onClick={toggle}
       type="button"
+      suppressHydrationWarning
       aria-label={mode === 'day' ? 'Tungi rejimga oʻtish' : 'Kunduzgi rejimga oʻtish'}
       className="relative inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-bg-elevated text-fg transition-colors hover:bg-bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
     >

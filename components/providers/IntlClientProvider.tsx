@@ -24,16 +24,19 @@ import {
 export function IntlClientProvider({
   locale,
   messages,
+  timeZone = 'Asia/Tashkent',
   children,
 }: {
   locale: string;
   messages: AbstractIntlMessages;
+  timeZone?: string;
   children: ReactNode;
 }) {
   return (
     <NextIntlClientProvider
       locale={locale}
       messages={messages}
+      timeZone={timeZone}
       getMessageFallback={({ namespace, key }) => {
         const path = namespace ? `${namespace}.${key}` : key;
         return path.split('.').pop() || path;

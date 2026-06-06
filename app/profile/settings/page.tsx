@@ -68,7 +68,7 @@ function SettingRow({
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="surface-elevated overflow-hidden">
+    <div className="surface-elevated">
       <div className="border-b border-border px-5 py-4">
         <h2 className="text-sm font-semibold uppercase tracking-wider text-fg-subtle">{title}</h2>
       </div>

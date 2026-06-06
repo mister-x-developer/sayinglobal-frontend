@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/Badge';
 import { TranslateButton } from '@/components/shared/TranslateButton';
 import { ReportDialog } from '@/components/shared/ReportDialog';
 import { toast } from '@/components/ui/Toast';
+import { useAuthStore } from '@/lib/store/auth';
 import { formatRelativeTime } from '@/lib/utils/format';
 
 export interface Comment {
@@ -38,6 +39,7 @@ export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentIt
   const [translatedContent, setTranslatedContent] = useState<string | null>(null);
   const [reportOpen, setReportOpen] = useState(false);
 
+  const { user } = useAuthStore();
   const isSeller = comment.user.public_id === sellerId;
   const hasReplies = (comment.replies?.length ?? 0) > 0;
 
@@ -56,7 +58,7 @@ export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentIt
   return (
     <div className={depth > 0 ? 'ml-8 border-l-2 border-border pl-4' : ''}>
       <div className="group flex gap-3 py-3">
-        <Link href={`/sellers/${comment.user.public_id}`} className="flex-shrink-0">
+        <Link href={user?.public_id == comment.user.public_id ? '/profile' : `/sellers/${comment.user.public_id}`} className="flex-shrink-0">
           <Avatar src={comment.user.avatar_url} name={comment.user.full_name} size="sm" />
         </Link>
 
@@ -64,7 +66,7 @@ export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentIt
           {/* Name row */}
           <div className="flex flex-wrap items-center gap-2">
             <Link
-              href={`/sellers/${comment.user.public_id}`}
+              href={user?.public_id === comment.user.public_id ? '/profile' : `/sellers/${comment.user.public_id}`}
               className="text-sm font-semibold text-fg hover:underline"
             >
               {comment.user.full_name}

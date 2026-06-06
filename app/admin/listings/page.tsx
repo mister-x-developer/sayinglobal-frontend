@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 import {
   Search, X, Eye, CheckCircle2, XCircle, LayoutGrid, RefreshCw,
   Trash2, Square, CheckSquare, MinusSquare,
@@ -15,6 +16,7 @@ import { toast } from '@/components/ui/Toast';
 import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
 import apiClient from '@/lib/api/client';
+import { moderationApi } from '@/lib/api/moderation';
 import { formatPrice, formatRelativeTime } from '@/lib/utils/format';
 import { cn } from '@/lib/utils/cn';
 
@@ -37,6 +39,8 @@ export default function AdminListingsPage() {
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState<Array<{ id: number; name: string }>>([]);
+  const [pendingConfirmations, setPendingConfirmations] = useState<any[]>([]);
+  const [pendingLoading, setPendingLoading] = useState(false);
 
   // Bulk selection
   const [selected, setSelected] = useState<Set<number>>(new Set());
@@ -65,6 +69,22 @@ export default function AdminListingsPage() {
   useEffect(() => {
     listingsApi.categories().then(setCategories).catch(() => {});
   }, []);
+
+  const fetchPendingConfirmations = useCallback(async () => {
+    setPendingLoading(true);
+    try {
+      const data = await listingsApi.adminPendingConfirmations();
+      setPendingConfirmations(data || []);
+    } catch {
+      setPendingConfirmations([]);
+    } finally {
+      setPendingLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchPendingConfirmations();
+  }, [fetchPendingConfirmations]);
 
   // Clear selection when filter changes
   useEffect(() => { setSelected(new Set()); }, [statusFilter, categoryFilter]);
@@ -253,6 +273,28 @@ export default function AdminListingsPage() {
           </button>
         </div>
 
+        {/* Pending Buyer Confirmations (Admin) */}
+        {pendingConfirmations.length > 0 && (
+          <div className="mt-4 p-4 rounded-xl border border-warning/30 bg-warning/5">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="font-semibold text-sm">Pending Buyer Confirmations ({pendingConfirmations.length})</h3>
+              <button onClick={fetchPendingConfirmations} className="text-xs text-fg-subtle hover:text-fg">Refresh</button>
+            </div>
+            <div className="space-y-2 max-h-40 overflow-auto text-xs">
+              {pendingConfirmations.slice(0, 5).map((c, i) => (
+                <div key={i} className="flex justify-between bg-bg p-2 rounded">
+                  <div>
+                    <span className="font-mono">{c.code}</span> — {c.seller} for listing #{c.listing_public_id}
+                  </div>
+                  <div className="text-fg-subtle">{new Date(c.created_at).toLocaleDateString()}</div>
+                </div>
+              ))}
+              {pendingConfirmations.length > 5 && <div className="text-center text-fg-subtle">... and {pendingConfirmations.length - 5} more</div>}
+            </div>
+            <p className="text-[10px] mt-1 text-fg-subtle">Buyers can confirm at /confirm-purchase using the code to make the sale count for trust_score.</p>
+          </div>
+        )}
+
         {/* Bulk actions bar */}
         <AnimatePresence>
           {someSelected && (
@@ -278,21 +320,42 @@ export default function AdminListingsPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => { setRejectReason(''); setShowRejectModal('bulk'); }}
+                  onClick={async () => {
+                    setBulkLoading('approve'); // reusing bulk loading state to disable buttons
+                    const ids = Array.from(selected);
+                    let ok = 0;
+                    for (const id of ids) {
+                      try {
+                        const res = await moderationApi.adminAIReviewListing(id);
+                        if (!res.is_flagged) {
+                          await listingsApi.approve(id);
+                          ok++;
+                        }
+                      } catch { /* continue */ }
+                    }
+                    if (ok > 0) {
+                      setListings((prev) => prev.map((l) =>
+                        selected.has(l.public_id) && l.status === 'pending' ? { ...l, status: 'active' } : l
+                      ));
+                    }
+                    setSelected(new Set());
+                    setBulkLoading(null);
+                    toast.success(`${ok}/${ids.length} AI tomonidan tasdiqlandi`);
+                  }}
                   disabled={!!bulkLoading}
-                  className="btn btn-sm bg-warning/12 text-warning hover:bg-warning/20 disabled:opacity-50"
+                  className="btn btn-sm bg-brand-accent/12 text-brand-accent hover:bg-brand-accent/20 disabled:opacity-50"
                 >
-                  <XCircle className="h-3.5 w-3.5" strokeWidth={2.25} />
-                  Reject selected
+                  <RefreshCw className="h-3.5 w-3.5" strokeWidth={2.25} />
+                  AI Analysis
                 </button>
                 <button
                   type="button"
-                  onClick={bulkRemove}
+                  onClick={() => { setRejectReason(''); setShowRejectModal('bulk'); }}
                   disabled={!!bulkLoading}
                   className="btn btn-sm bg-danger/12 text-danger hover:bg-danger/20 disabled:opacity-50"
                 >
-                  <Trash2 className="h-3.5 w-3.5" strokeWidth={2.25} />
-                  Remove selected
+                  <XCircle className="h-3.5 w-3.5" strokeWidth={2.25} />
+                  Reject selected
                 </button>
               </div>
               <button
@@ -392,12 +455,12 @@ export default function AdminListingsPage() {
                         <td className="px-4 py-4">
                           <div className="flex items-center gap-3">
                             {primaryImg ? (
-                              /* eslint-disable-next-line @next/next/no-img-element */
-                              <img
+                              <Image
                                 src={primaryImg}
                                 alt={l.title}
+                                width={40}
+                                height={40}
                                 className="h-10 w-10 rounded-lg object-cover flex-shrink-0"
-                                loading="lazy"
                               />
                             ) : (
                               <div className="h-10 w-10 rounded-lg bg-bg-subtle flex items-center justify-center flex-shrink-0">
@@ -441,24 +504,47 @@ export default function AdminListingsPage() {
                               <Eye className="h-3.5 w-3.5" strokeWidth={1.75} />
                             </button>
                             {l.status === 'pending' && (
-                              <button
-                                type="button"
-                                onClick={(e) => handleApprove(l.public_id, e)}
-                                className="btn btn-sm bg-success/12 text-success hover:bg-success/20"
-                                aria-label="Approve"
-                              >
-                                <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={2.25} />
-                              </button>
-                            )}
-                            {l.status !== 'rejected' && (
-                              <button
-                                type="button"
-                                onClick={(e) => { e.stopPropagation(); setRejectReason(''); setShowRejectModal(l.public_id); }}
-                                className="btn btn-sm bg-danger/12 text-danger hover:bg-danger/20"
-                                aria-label="Reject"
-                              >
-                                <XCircle className="h-3.5 w-3.5" strokeWidth={2.25} />
-                              </button>
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={async (e) => {
+                                    e.stopPropagation();
+                                    try {
+                                      toast.info('AI tahlil qilmoqda...');
+                                      const res = await moderationApi.adminAIReviewListing(l.public_id);
+                                      if (!res.is_flagged) {
+                                        await listingsApi.approve(l.public_id);
+                                        setListings((prev) => prev.map((item) => item.public_id === l.public_id ? { ...item, status: 'active' } : item));
+                                        toast.success('AI tomonidan tasdiqlandi!');
+                                      } else {
+                                        toast.error(`AI rad etdi: ${res.explanation}`);
+                                      }
+                                    } catch {
+                                      toast.error('AI xatosi');
+                                    }
+                                  }}
+                                  className="btn btn-sm bg-brand-accent/12 text-brand-accent hover:bg-brand-accent/20"
+                                  aria-label="AI Review"
+                                >
+                                  <RefreshCw className="h-3.5 w-3.5" strokeWidth={2.25} />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={(e) => handleApprove(l.public_id, e)}
+                                  className="btn btn-sm bg-success/12 text-success hover:bg-success/20"
+                                  aria-label="Approve"
+                                >
+                                  <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={2.25} />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={(e) => { e.stopPropagation(); setRejectReason(''); setShowRejectModal(l.public_id); }}
+                                  className="btn btn-sm bg-danger/12 text-danger hover:bg-danger/20"
+                                  aria-label="Reject"
+                                >
+                                  <XCircle className="h-3.5 w-3.5" strokeWidth={2.25} />
+                                </button>
+                              </>
                             )}
                           </div>
                         </td>
@@ -484,7 +570,7 @@ export default function AdminListingsPage() {
             <textarea
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
-              placeholder={t('admin.rejectionReasonPlaceholder') ?? 'Rejection reason (optional)'}
+              placeholder={t('admin.rejectionReasonPlaceholder') ?? 'Rad etish sababi (Majburiy)'}
               rows={3}
               className="input-base h-auto w-full py-3"
             />

@@ -30,7 +30,7 @@ import { TranslatableText } from '@/components/shared/TranslateButton';
 import { useAuthStore } from '@/lib/store/auth';
 import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
-import { formatPrice, formatRelativeTime } from '@/lib/utils/format';
+import { formatPrice, formatRelativeTime, getLocalizedListingTitle } from '@/lib/utils/format';
 import apiClient from '@/lib/api/client';
 
 type StatusFilter = 'all' | 'active' | 'pending' | 'sold' | 'rejected' | 'expired';
@@ -67,6 +67,7 @@ export default function MyListingsPage() {
   const [openMenu, setOpenMenu] = useState<number | null>(null);
   const [soldConfirm, setSoldConfirm] = useState<number | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
+  const [soldCode, setSoldCode] = useState<{ id: number; code: string } | null>(null);
 
   useEffect(() => { setHydrated(true); }, []);
   /* auth gating handled by middleware */
@@ -108,6 +109,9 @@ export default function MyListingsPage() {
           scheduled_delete_at: result?.scheduled_delete_at ?? null,
         } : l)
       );
+      if (result?.confirmation_code) {
+        setSoldCode({ id, code: result.confirmation_code });
+      }
     } catch { load(); }
   };
 
@@ -310,7 +314,7 @@ export default function MyListingsPage() {
                         <div className="flex flex-wrap items-start justify-between gap-2">
                           <div className="min-w-0 flex-1">
                             <Link href={`/listings/${l.public_id}`} className="font-display text-base font-semibold text-fg hover:underline line-clamp-1">
-                              {l.title}
+                              {getLocalizedListingTitle(l, locale)}
                             </Link>
                             <p className="mt-1 text-sm text-fg-muted">
                               {(l as any).region
@@ -500,6 +504,68 @@ export default function MyListingsPage() {
                   className="btn btn-primary flex-1 bg-success hover:bg-success/90"
                 >
                   {t('common.confirm')}
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Sold confirmation code display */}
+      <AnimatePresence>
+        {soldCode !== null && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
+              onClick={() => setSoldCode(null)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 8 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-bg-elevated p-6 shadow-lift"
+            >
+              <div className="text-center">
+                <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-success/12">
+                  <CheckCircle2 className="h-7 w-7 text-success" />
+                </div>
+                <h3 className="mt-4 font-display text-xl font-semibold">{t('listings.soldSuccessTitle') ?? 'E\'lon sotilgan deb belgilandi!'}</h3>
+                <p className="mt-2 text-sm text-fg-muted">
+                  {t('listings.soldCodeShare') ?? 'Xaridorga quyidagi kodni bering. U kod orqali tasdiqlashi mumkin.'}
+                </p>
+
+                <div className="mt-4 rounded-xl border border-success/30 bg-success/5 p-4">
+                  <div className="text-xs text-fg-subtle">{t('listings.confirmationCode') ?? 'Tasdiqlash kodi'}</div>
+                  <div className="mt-1 font-mono text-3xl font-bold tracking-[4px] text-success select-all">{soldCode.code}</div>
+                </div>
+
+                <p className="mt-3 text-xs text-fg-muted">
+                  {t('listings.soldCodeNote') ?? 'Xaridor bu kodni kiritib, 1-5 yulduz baho qo\'yishi va izoh yozishi mumkin. Tasdiqlangandan keyin savdo sizning ishonch balingizga qo\'shiladi.'}
+                </p>
+                <div className="mt-2 text-[10px] text-success/80">
+                  Buyer confirmation page: /confirm-purchase?code={soldCode.code}
+                </div>
+              </div>
+
+              <div className="mt-6 flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard?.writeText(soldCode.code);
+                  }}
+                  className="btn btn-secondary flex-1"
+                >
+                  {t('common.copy') ?? 'Nusxa olish'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSoldCode(null)}
+                  className="btn btn-primary flex-1"
+                >
+                  {t('common.done') ?? 'Tayyor'}
                 </button>
               </div>
             </motion.div>

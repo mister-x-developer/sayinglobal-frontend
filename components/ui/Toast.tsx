@@ -28,19 +28,26 @@ export const useToastStore = create<ToastStore>((set) => ({
   add: (t) => {
     const id = Math.random().toString(36).slice(2, 9);
     set((s) => ({ toasts: [...s.toasts, { ...t, id }] }));
+    // Slightly longer for calm reading
     setTimeout(() => {
       set((s) => ({ toasts: s.toasts.filter((x) => x.id !== id) }));
-    }, t.duration ?? 4500);
+    }, t.duration ?? 5200);
   },
   remove: (id) => set((s) => ({ toasts: s.toasts.filter((x) => x.id !== id) })),
 }));
 
-const ICON = { success: CheckCircle2, error: XCircle, warning: AlertCircle, info: Info };
-const TONE: Record<ToastType, string> = {
-  success: 'border-success/30 bg-success/10 text-success',
-  error: 'border-danger/30 bg-danger/10 text-danger',
-  warning: 'border-warning/30 bg-warning/10 text-warning',
-  info: 'border-info/30 bg-info/10 text-info',
+const ICON: Record<ToastType, React.ComponentType<any>> = {
+  success: CheckCircle2,
+  error: XCircle,
+  warning: AlertCircle,
+  info: Info,
+};
+
+const TONE_CLASS: Record<ToastType, string> = {
+  success: 'toast-success',
+  error: 'toast-error',
+  warning: 'toast-warning',
+  info: 'toast-info',
 };
 
 export function ToastContainer() {
@@ -48,47 +55,58 @@ export function ToastContainer() {
   const router = useRouter();
 
   return (
-    <div className="pointer-events-none fixed bottom-20 right-4 z-[1600] flex flex-col gap-2 sm:bottom-6 sm:right-6 md:bottom-6">
+    <div className="pointer-events-none fixed bottom-20 right-4 z-[2000] flex flex-col gap-2.5 sm:bottom-5 sm:right-5">
       <AnimatePresence>
         {toasts.map((t) => {
           const Icon = ICON[t.type];
-          const isClickable = !!(t.href || t.onClick);
+          const isActionable = !!(t.href || t.onClick);
 
-          const handleClick = () => {
-            if (t.onClick) {
-              t.onClick();
-            }
-            if (t.href) {
-              router.push(t.href);
-            }
+          const handleAction = () => {
+            if (t.onClick) t.onClick();
+            if (t.href) router.push(t.href);
             remove(t.id);
           };
 
           return (
             <motion.div
               key={t.id}
-              initial={{ opacity: 0, y: 12, scale: 0.96 }}
+              initial={{ opacity: 0, y: 10, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, x: 60, scale: 0.96 }}
-              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-              className={`pointer-events-auto flex w-80 max-w-[calc(100vw-2rem)] items-start gap-3 rounded-2xl border p-4 shadow-lift backdrop-blur-xl ${TONE[t.type]} ${isClickable ? 'cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200' : ''}`}
-              onClick={isClickable ? handleClick : undefined}
-              role={isClickable ? 'button' : undefined}
-              tabIndex={isClickable ? 0 : undefined}
-              onKeyDown={isClickable ? (e) => { if (e.key === 'Enter' || e.key === ' ') handleClick(); } : undefined}
+              exit={{ opacity: 0, x: 40, scale: 0.98 }}
+              transition={{ duration: 0.22, ease: [0.2, 1, 0.3, 1] }}
+              onClick={isActionable ? handleAction : undefined}
+              role={isActionable ? 'button' : undefined}
+              tabIndex={isActionable ? 0 : undefined}
+              onKeyDown={(e) => {
+                if (isActionable && (e.key === 'Enter' || e.key === ' ')) {
+                  e.preventDefault();
+                  handleAction();
+                }
+              }}
+              className={`toast pointer-events-auto group flex w-[320px] max-w-[calc(100vw-2rem)] items-start gap-3 border p-4 shadow-xl ${TONE_CLASS[t.type]} ${isActionable ? 'cursor-pointer active:opacity-95' : ''}`}
             >
-              <Icon className="mt-0.5 h-5 w-5 flex-shrink-0" strokeWidth={1.75} />
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold">{t.title}</p>
-                {t.message && <p className="mt-0.5 text-xs opacity-80">{t.message}</p>}
+              <div className="mt-0.5 flex-shrink-0">
+                <Icon className="h-5 w-5" strokeWidth={2} />
               </div>
+
+              <div className="min-w-0 flex-1 pt-0.5">
+                <div className="text-[14.5px] font-semibold leading-snug tracking-[-0.1px] text-fg">
+                  {t.title}
+                </div>
+                {t.message && (
+                  <div className="mt-1 text-[13px] leading-snug text-fg-muted">
+                    {t.message}
+                  </div>
+                )}
+              </div>
+
               <button
                 type="button"
                 onClick={(e) => { e.stopPropagation(); remove(t.id); }}
-                className="flex-shrink-0 rounded-full p-1 opacity-60 hover:opacity-100"
-                aria-label="Close"
+                className="ml-1 mt-0.5 flex-shrink-0 rounded-full p-1 text-fg-subtle opacity-60 transition hover:bg-black/5 hover:opacity-100 dark:hover:bg-white/5"
+                aria-label="Yopish"
               >
-                <X className="h-4 w-4" strokeWidth={2} />
+                <X className="h-4 w-4" strokeWidth={2.25} />
               </button>
             </motion.div>
           );
@@ -113,7 +131,7 @@ export const toast = {
       title,
       message,
       href,
-      duration: 6000,
+      duration: 6500,
       onClick: onRead ? () => { onRead(); } : undefined,
     }),
 };

@@ -15,7 +15,7 @@
  */
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { AlertTriangle, CheckCircle2, Flag, MessageSquareText, Package, ShieldAlert, User as UserIcon, MessageSquare } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, Flag, MessageSquareText, Package, ShieldAlert, User as UserIcon, MessageSquare, Star } from 'lucide-react';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import {
@@ -29,7 +29,8 @@ export type ReportTarget =
   | { kind: 'listing'; publicId: number; title?: string }
   | { kind: 'seller'; publicId: number; fullName?: string }
   | { kind: 'chat'; publicId: number; fullName?: string }
-  | { kind: 'comment'; publicId: number | string; fullName?: string };
+  | { kind: 'comment'; publicId: number | string; fullName?: string }
+  | { kind: 'rating'; publicId: number | string; fullName?: string };
 
 interface Props {
   open: boolean;
@@ -50,6 +51,7 @@ const KIND_ICON = {
   seller: UserIcon,
   chat: MessageSquareText,
   comment: MessageSquare,
+  rating: Star,
 };
 
 export function ReportDialog({ open, target, onClose, onSubmitted }: Props) {
@@ -101,10 +103,11 @@ export function ReportDialog({ open, target, onClose, onSubmitted }: Props) {
       } else if (target.kind === 'seller') {
         await moderationApi.reportSeller(target.publicId, payload);
       } else if (target.kind === 'comment') {
-        // Report comment as a chat/content report using the comment's public_id
-        await moderationApi.reportChat(target.publicId as number, payload);
+        await moderationApi.reportComment(target.publicId as number, payload);
+      } else if ((target as any).kind === 'rating') {
+        await moderationApi.reportRating(target.publicId as number, payload);
       } else {
-        await moderationApi.reportChat(target.publicId, payload);
+        await moderationApi.reportChat(target.publicId as number, payload);
       }
       setSubmitted(true);
       onSubmitted?.();
@@ -127,6 +130,7 @@ export function ReportDialog({ open, target, onClose, onSubmitted }: Props) {
     target.kind === 'listing' ? 'report.titleListing' :
     target.kind === 'seller'  ? 'report.titleSeller' :
     target.kind === 'comment' ? 'report.titleComment' :
+    (target as any).kind === 'rating' ? 'report.titleRating' :
                                 'report.titleChat';
   const title = t(titleKey as any) ?? (target.kind === 'comment' ? 'Izohni shikoyat qilish' : 'Shikoyat');
 

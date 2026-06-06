@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { LayoutGrid, MapPin, Search as SearchIcon, X, SlidersHorizontal } from 'lucide-react';
 
@@ -146,18 +146,13 @@ export default function ListingsPage() {
 
       <main className="flex-1">
         <div className="container-page py-8 sm:py-10">
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45 }}
-            className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between"
-          >
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-eyebrow">{t('marketplace.title')}</p>
               <h1 className="display-md mt-2">{t('listings.title')}</h1>
               <p className="mt-2 text-fg-muted">{t('marketplace.feed')}</p>
             </div>
-          </motion.div>
+          </div>
 
           {/* Search + filters */}
           <div className="mt-6 flex flex-wrap items-center gap-3">
@@ -354,29 +349,19 @@ export default function ListingsPage() {
         </div>
       </main>
 
-      {/* Floating Nearby Button */}
-      <AnimatePresence>
-        <motion.div
-          initial={{ opacity: 0, y: 24, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed bottom-8 left-6 z-40 sm:bottom-10 sm:left-8"
+      {/* Floating Nearby Button — calm */}
+      <div className="fixed bottom-8 left-6 z-40 sm:bottom-10 sm:left-8">
+        <Link
+          href={`/listings/nearby${category !== 'all' ? `?category=${category}` : ''}`}
+          className="group flex items-center gap-3 rounded-2xl bg-brand-primary px-5 py-3.5 text-white shadow-sm transition-all hover:bg-brand-primary/90 active:scale-[0.985]"
+          aria-label={t('nearby.title' as any) ?? 'Nearby listings'}
         >
-          <Link
-            href={`/listings/nearby${category !== 'all' ? `?category=${category}` : ''}`}
-            className="group flex items-center gap-3 rounded-2xl bg-brand-primary px-5 py-3.5 text-white shadow-lift transition-all hover:bg-brand-primary/90 hover:shadow-premium hover:scale-105 active:scale-95"
-            aria-label={t('nearby.title' as any) ?? 'Nearby listings'}
-          >
-            <div className="relative">
-              <MapPin className="h-5 w-5" strokeWidth={2} />
-              <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-brand-secondary ring-2 ring-brand-primary" />
-            </div>
-            <span className="text-sm font-bold tracking-wide">
-              {t('nearby.title' as any) ?? 'Yaqin atrofda'}
-            </span>
-          </Link>
-        </motion.div>
-      </AnimatePresence>
+          <MapPin className="h-5 w-5" strokeWidth={2} />
+          <span className="text-sm font-semibold tracking-wide">
+            {t('nearby.title' as any) ?? 'Yaqin atrofda'}
+          </span>
+        </Link>
+      </div>
     </div>
   );
 }

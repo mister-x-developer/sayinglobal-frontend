@@ -21,7 +21,7 @@ const inter = Inter({
   subsets: ['latin', 'cyrillic'],
   variable: '--font-inter',
   display: 'swap',
-  preload: true,
+  preload: false,
   adjustFontFallback: true,
   fallback: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
 });
@@ -31,7 +31,7 @@ const poppins = Poppins({
   subsets: ['latin'],
   variable: '--font-poppins',
   display: 'swap',
-  preload: true,
+  preload: false,
   adjustFontFallback: true,
   fallback: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
 });
@@ -106,7 +106,7 @@ export default async function RootLayout({
       <body className="antialiased min-h-screen bg-bg text-fg pb-[72px] md:pb-0 overflow-x-hidden">
         <HydrationReady />
         <ThemeProvider>
-          <IntlClientProvider messages={messages} locale={locale}>
+          <IntlClientProvider messages={messages} locale={locale} timeZone="Asia/Tashkent">
             <MotionProvider>
               {children}
               <TermsGate />

@@ -65,8 +65,6 @@ function isPublicPath(pathname: string): boolean {
   if (pathname.startsWith('/sellers')) return true;
   // Individual listing detail pages are public
   if (/^\/listings\/\d+$/.test(pathname)) return true;
-  // Admin login page is public
-  if (pathname === '/admin/login') return true;
   // Legal pages are public
   if (pathname === '/terms' || pathname === '/privacy') return true;
   return false;
@@ -92,7 +90,7 @@ export function middleware(req: NextRequest) {
 
   // If the user is already authenticated, do not show the auth screen.
   // Send admins to /admin, marketplace users to ?next or /dashboard.
-  if ((pathname === '/auth' || pathname === '/admin/login') && isAuthenticated(req)) {
+  if (pathname === '/auth' && isAuthenticated(req)) {
     const nextUrl = req.nextUrl.clone();
     const target = isPlatformAdmin(req)
       ? '/admin'
@@ -112,12 +110,19 @@ export function middleware(req: NextRequest) {
   }
 
   // Admin route guard — non-admin authenticated users cannot access /admin/*
-  // (except /admin/login which is public)
-  if (isAdminPath(pathname) && pathname !== '/admin/login' && isAuthenticated(req) && !isPlatformAdmin(req)) {
+  if (isAdminPath(pathname) && isAuthenticated(req) && !isPlatformAdmin(req)) {
     const dashboardUrl = req.nextUrl.clone();
     dashboardUrl.pathname = '/dashboard';
     dashboardUrl.search = '';
     return NextResponse.redirect(dashboardUrl);
+  }
+
+  // User route guard for Admins — admins should strictly use the admin panel
+  if (isAuthenticated(req) && isPlatformAdmin(req) && !isAdminPath(pathname)) {
+    const adminUrl = req.nextUrl.clone();
+    adminUrl.pathname = '/admin';
+    adminUrl.search = '';
+    return NextResponse.redirect(adminUrl);
   }
 
   return res;

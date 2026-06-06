@@ -8,7 +8,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { Avatar } from '@/components/ui/Avatar';
 import { RatingDisplay } from '@/components/shared/RatingDisplay';
 import { ListingImage } from './ListingImage';
-import { formatPrice, formatRelativeTime } from '@/lib/utils/format';
+import { formatPrice, formatRelativeTime, getLocalizedListingTitle } from '@/lib/utils/format';
 import { cn } from '@/lib/utils/cn';
 
 export interface ListingCardData {
@@ -55,13 +55,8 @@ export function ListingCard({ listing, onFavorite }: Props) {
   const imageSrc =
     primary?.image && !primary.image.startsWith('/placeholder') ? primary.image : null;
 
-  // Get localized title
-  const localizedTitle = (() => {
-    const norm = (locale || 'uz').replace('-', '_');
-    const field = `title_${norm}` as keyof typeof listing;
-    const val = listing[field] as string | undefined;
-    return val || listing.title;
-  })();
+  // Get localized title for current UI language
+  const localizedTitle = getLocalizedListingTitle(listing, locale);
 
   // Category display: prefer t('categories.{slug}') over raw name_uz
   const categorySlug = listing.category?.name;
@@ -136,8 +131,15 @@ export function ListingCard({ listing, onFavorite }: Props) {
             <MapPin className="h-3.5 w-3.5 flex-shrink-0" strokeWidth={1.75} />
             <span className="truncate">
               {(() => {
-                const parts = [listing.region, listing.district].filter(Boolean);
-                if (parts.length > 0) return parts.join(' · ');
+                if (!listing) return '';
+                const normalizeLocale = (loc: string) => loc.replace('-', '_');
+                const locKey = `name_${normalizeLocale(locale)}` as 'name_uz' | 'name_uz_cyrl' | 'name_ru' | 'name_en';
+                if ((listing as any).region_data) {
+                  const reg = (listing as any).region_data[locKey] || (listing as any).region_data.name_uz;
+                  const dist = (listing as any).district_data ? ((listing as any).district_data[locKey] || (listing as any).district_data.name_uz) : '';
+                  if (reg && dist) return `${reg}, ${dist}`;
+                  if (reg) return reg;
+                }
                 return listing.location || '';
               })()}
             </span>
@@ -173,8 +175,8 @@ export function ListingCard({ listing, onFavorite }: Props) {
               name={listing.seller.full_name}
               size="xs"
             />
-            <span className="flex-1 truncate text-xs font-medium text-fg-muted">
-              {listing.seller.full_name}
+            <span className="flex-1 line-clamp-2 text-xs font-medium text-fg-muted">
+              {listing.seller.full_name || (t('sellers.anonymous' as any) ?? 'Sotuvchi')}
             </span>
             <RatingDisplay
               score={listing.seller.trust_score}

@@ -54,43 +54,70 @@ const USER_PIN_HTML = `
   </div>
 `;
 
-// Listing pin — branded green with image
-function buildListingPinHtml(imageUrl?: string): string {
+// Listing pin — rich marker with image, title, price, and distance
+function buildListingPinHtml(m: MapMarker): string {
+  const imageUrl = m.imageUrl;
   const img = imageUrl
     ? `<img src="${imageUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.style.display='none'" />`
     : `<div style="width:100%;height:100%;background:#e8f5ee;border-radius:50%;display:flex;align-items:center;justify-content:center;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1F7A52" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
        </div>`;
 
+  const distText = m.distanceKm != null 
+    ? (m.distanceKm < 1 ? '< 1 km' : m.distanceKm.toFixed(1) + ' km') 
+    : '';
+
   return `
-    <div style="position:relative;width:48px;height:58px;cursor:pointer;">
-      <!-- Pin body -->
-      <div style="
-        position:absolute;top:0;left:50%;transform:translateX(-50%);
-        width:48px;height:48px;
-        border-radius:50% 50% 50% 0;
-        transform:translateX(-50%) rotate(-45deg);
-        background:#1F7A52;
-        box-shadow:0 4px 12px rgba(31,122,82,0.4);
-      "></div>
-      <!-- Image circle -->
-      <div style="
-        position:absolute;top:4px;left:50%;transform:translateX(-50%);
-        width:40px;height:40px;
-        border-radius:50%;
-        overflow:hidden;
-        border:2.5px solid #fff;
-        box-shadow:0 2px 6px rgba(0,0,0,0.15);
-        z-index:1;
-      ">${img}</div>
-      <!-- Pin tail -->
-      <div style="
-        position:absolute;bottom:0;left:50%;transform:translateX(-50%);
-        width:0;height:0;
-        border-left:6px solid transparent;
-        border-right:6px solid transparent;
-        border-top:12px solid #1F7A52;
-      "></div>
+    <div style="position:absolute; bottom:0; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; width:max-content; pointer-events:none;">
+      
+      <!-- Top Title & Price (Above or over the pin body? Wait, requirement says "pastida nom va narx, lokatsiya belgisining pastida... masofa") -->
+      <!-- Let's put Title & Price just below the pin bubble, before the tip? No, it says "dumaloq ichida rasm, pastida nom va narx". So below the circle. Then "uchli joyida esa masofa". -->
+      
+      <div style="position:relative; width:48px; height:58px; pointer-events:auto; cursor:pointer;">
+        <!-- Pin body -->
+        <div style="
+          position:absolute;top:0;left:50%;transform:translateX(-50%);
+          width:48px;height:48px;
+          border-radius:50% 50% 50% 0;
+          transform:translateX(-50%) rotate(-45deg);
+          background:#1F7A52;
+          box-shadow:0 4px 12px rgba(31,122,82,0.4);
+        "></div>
+        <!-- Image circle -->
+        <div style="
+          position:absolute;top:4px;left:50%;transform:translateX(-50%);
+          width:40px;height:40px;
+          border-radius:50%;
+          overflow:hidden;
+          border:2.5px solid #fff;
+          box-shadow:0 2px 6px rgba(0,0,0,0.15);
+          z-index:1;
+        ">${img}</div>
+        <!-- Pin tail -->
+        <div style="
+          position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+          width:0;height:0;
+          border-left:6px solid transparent;
+          border-right:6px solid transparent;
+          border-top:12px solid #1F7A52;
+        "></div>
+      </div>
+
+      <!-- Distance at the sharp tip -->
+      ${distText ? `
+      <div style="margin-top:-6px; z-index:2; background:#fff; border:1px solid #1F7A52; color:#1F7A52; font-size:10px; font-weight:800; padding:2px 6px; border-radius:12px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+        ${distText}
+      </div>
+      ` : ''}
+
+      <!-- Title and Price below everything -->
+      <div style="margin-top:4px; display:flex; flex-direction:column; align-items:center; background:rgba(255,255,255,0.95); padding:4px 8px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); border:1px solid #e5e7eb; pointer-events:auto;">
+        <div style="font-size:11px; font-weight:600; color:#374151; max-width:120px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+          ${m.label || ''}
+        </div>
+        ${m.price ? `<div style="font-size:12px; font-weight:800; color:#1F7A52;">${m.price}</div>` : ''}
+      </div>
+
     </div>
   `;
 }
@@ -211,10 +238,10 @@ export function NearbyMapWithUserPin({
       for (const m of markers) {
         const listingIcon = L.divIcon({
           className: 'sg-listing-pin',
-          html: buildListingPinHtml(m.imageUrl),
-          iconSize: [48, 58],
-          iconAnchor: [24, 58],
-          popupAnchor: [0, -60],
+          html: buildListingPinHtml(m),
+          iconSize: [0, 0], // The marker is completely styled via absolute positioning in the HTML
+          iconAnchor: [0, 0], // Anchor at center
+          popupAnchor: [0, -70],
         });
 
         const marker = L.marker([m.lat, m.lng], { icon: listingIcon }).addTo(layerRef.current);

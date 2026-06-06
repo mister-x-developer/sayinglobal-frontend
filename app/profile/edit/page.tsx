@@ -84,8 +84,8 @@ export default function EditProfilePage() {
       const fd = new FormData();
       fd.append('full_name', form.full_name.trim());
       if (form.bio) fd.append('bio', form.bio);
-      if (form.region_name) fd.append('region', form.region_name);
-      if (form.district_name) fd.append('district', form.district_name);
+      if (form.region) fd.append('region', form.region);
+      if (form.district) fd.append('district', form.district);
       if (form.location) fd.append('location', form.location);
       if (avatarFile) fd.append('avatar', avatarFile);
 

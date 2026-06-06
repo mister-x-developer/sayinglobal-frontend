@@ -35,7 +35,7 @@ const SLIDES: Slide[] = [
       en: 'Welcome to SAYIN GLOBAL!',
     },
     body: {
-      uz: "O'zbekistondagi eng yirik raqamli chorva bozori. Sotuvchilar va xaridorlarni bevosita bog'laymiz.",
+      uz: "Oʻzbekistondagi eng yirik raqamli chorva bozori. Sotuvchilar va xaridorlarni bevosita bogʻlaymiz.",
       'uz-cyrl': "Ўзбекистондаги энг йирик рақамли чорва бозори. Сотувчилар ва харидорларни бевосита боғлаймиз.",
       ru: 'Крупнейший цифровой рынок скота в Узбекистане. Соединяем продавцов и покупателей напрямую.',
       en: "Uzbekistan's largest digital livestock marketplace. We connect sellers and buyers directly.",
@@ -116,19 +116,19 @@ const BTN_LABELS = {
 
 export function OnboardingModal() {
   const locale = useLocale();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
   const [visible, setVisible] = useState(false);
   const [step, setStep] = useState(0);
 
   useEffect(() => {
-    if (!isAuthenticated) return;
+    if (!isAuthenticated || !user?.terms_accepted_at) return;
     const done = localStorage.getItem(STORAGE_KEY);
     if (!done) {
       // Small delay so the page loads first
       const t = setTimeout(() => setVisible(true), 800);
       return () => clearTimeout(t);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user?.terms_accepted_at]);
 
   const dismiss = () => {
     localStorage.setItem(STORAGE_KEY, '1');

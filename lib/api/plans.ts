@@ -25,6 +25,8 @@ export interface Plan {
   order: number;
   is_default: boolean;
   status: 'active' | 'archived';
+  is_coming_soon?: boolean;
+  popular?: boolean;
 }
 
 export interface UserPlan {

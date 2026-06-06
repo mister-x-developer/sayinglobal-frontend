@@ -8,11 +8,10 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { useAuthStore } from '../store/auth';
 
-const API_ORIGIN = (process.env.NEXT_PUBLIC_API_URL || 'https://sayinglobal.up.railway.app/api').replace(/\/api\/?$/, '');
-
 function getApiBaseUrl(): string {
-  // Always use the Railway backend directly to avoid Vercel proxy/rewrite issues.
-  return API_ORIGIN;
+  // Use explicit backend URL to bypass Next.js proxy trailing-slash bugs.
+  // Next.js rewrites strip trailing slashes which breaks Django POST requests.
+  return (process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api').replace(/\/api\/?$/, '');
 }
 
 // API_BASE_URL is computed at module load time.
@@ -105,8 +104,17 @@ async function refreshAccessToken(): Promise<string> {
 // ── Request interceptor ─────────────────────────────────────────────────────
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    // Do NOT attach a stale Bearer token to OTP/auth endpoints.
-    const isOtpEndpoint = config.url?.includes('/auth/');
+    // Ensure all requests have a trailing slash for Django
+    if (config.url) {
+      const [pathPart, queryPart] = config.url.split('?');
+      if (!pathPart.endsWith('/')) {
+        config.url = queryPart !== undefined ? `${pathPart}/?${queryPart}` : `${pathPart}/`;
+      }
+    }
+
+    // Do NOT attach a stale Bearer token to OTP/auth login endpoints.
+    // Allow /users/auth/terms/ and similar authenticated endpoints.
+    const isOtpEndpoint = config.url?.includes('/auth/login') || config.url?.includes('/auth/verify');
     if (!isOtpEndpoint) {
       // Race-safe: prefer in-memory store, fall back to localStorage
       // during the brief Zustand persist hydration window. Without this
@@ -149,6 +157,13 @@ apiClient.interceptors.request.use(
         config.headers['X-Platform'] = platform;
         config.headers['X-Os-Version'] = os;
         config.headers['X-App-Version'] = 'web-1.0.0';
+
+        const match = document.cookie.match(new RegExp('(^| )sayin-locale=([^;]+)'));
+        if (match) {
+          let locale = match[2];
+          if (locale === 'uz-cyrl') locale = 'uz-cyrl,uz;q=0.9'; // fallback to uz
+          config.headers['Accept-Language'] = locale;
+        }
       } catch {}
     }
     return config;

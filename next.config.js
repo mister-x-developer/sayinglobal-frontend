@@ -7,9 +7,12 @@ const isDev = process.env.NODE_ENV === 'development';
 // Production Railway backend URL — hardcoded as fallback so Vercel rewrites
 // work even if NEXT_PUBLIC_API_URL is not set in the Vercel dashboard.
 const PRODUCTION_API_ORIGIN = 'https://sayinglobal.up.railway.app';
-// IMPORTANT: rewrites() runs at BUILD time on Vercel. NEXT_PUBLIC_API_URL
-// may not be available during build. Always fall back to the hardcoded origin.
-const apiOrigin = PRODUCTION_API_ORIGIN;
+
+// In development, we use the NEXT_PUBLIC_API_URL (which defaults to localhost).
+// In production (Vercel build), we use the hardcoded Railway origin to prevent build errors.
+const apiOrigin = isDev 
+  ? (process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000').replace(/\/api\/?$/, '')
+  : PRODUCTION_API_ORIGIN;
 
 const nextConfig = {
   reactStrictMode: true,
@@ -61,13 +64,19 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        // Proxy /api/* → Railway backend.
-        // NOTE: destination does NOT add a trailing slash — the client-side
-        // axios interceptor already ensures every request URL ends with '/'.
-        // Adding another '/' here would create double-slash URLs (/api/listings//)
-        // which Django rejects with 404.
+        // Proxy /api/* → Railway/Django backend.
+        // We need two rules: one for paths with trailing slashes, one without,
+        // to ensure the trailing slash is preserved. Django REQUIRES trailing slashes.
+        source: '/api/:path*/',
+        destination: `${apiOrigin}/api/:path*/`,
+      },
+      {
         source: '/api/:path*',
-        destination: `${apiOrigin}/api/:path*`,
+        destination: `${apiOrigin}/api/:path*/`,
+      },
+      {
+        source: '/media/:path*',
+        destination: `${apiOrigin}/media/:path*`,
       },
     ];
   },

@@ -80,7 +80,7 @@ export const analyticsApi = {
   },
 
   async growth(days = 30): Promise<GrowthAnalytics> {
-    const { data } = await apiClient.get<GrowthAnalytics>('/analytics/growth/', {
+    const { data } = await apiClient.get<GrowthAnalytics>('/analytics/users/growth/', {
       params: { days },
     });
     return data;

@@ -193,21 +193,6 @@ export function LocationSelector({
         {errors.district && <p className="mt-1 text-xs text-danger">{errors.district}</p>}
       </div>
 
-      {/* Exact Location Text Input */}
-      <div>
-        <label className="mb-1.5 block text-sm font-medium text-fg">
-          {t('listings.address' as any) || 'Toʻliq manzil'}
-          {required && <span className="ml-1 text-danger">*</span>}
-        </label>
-        <input
-          type="text"
-          value={locationValue}
-          onChange={(e) => onLocationChange(e.target.value)}
-          placeholder={t('create.addressPlaceholder' as any) || 'Tuman, qishloq, koʻcha...'}
-          className="input-base w-full"
-        />
-        {errors.location && <p className="mt-1 text-xs text-danger">{errors.location}</p>}
-      </div>
     </div>
   );
 }

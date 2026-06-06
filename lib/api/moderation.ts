@@ -98,6 +98,30 @@ export const moderationApi = {
     }
   },
 
+  async reportComment(publicId: number, payload: SubmitReportInput): Promise<ReportRecord> {
+    try {
+      const res = await apiClient.post<ReportRecord>(
+        `/moderation/v2/reports/comment/${publicId}/`,
+        payload,
+      );
+      return res.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  async reportRating(publicId: number, payload: SubmitReportInput): Promise<ReportRecord> {
+    try {
+      const res = await apiClient.post<ReportRecord>(
+        `/moderation/v2/reports/rating/${publicId}/`,
+        payload,
+      );
+      return res.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+
   async adminRestoreStatus(
     userPublicId: number,
     targetStatus: 'good' | 'warning' | 'restricted',
@@ -201,6 +225,34 @@ export const moderationApi = {
         `/moderation/v2/admin/reports/${publicId}/resolve-invalid/`,
         { moderator_notes: moderatorNotes },
       );
+      return res.data;
+    } catch (e) {
+      throw new Error(handleApiError(e));
+    }
+  },
+
+  async adminAIReviewListing(listingPublicId: number): Promise<{
+    listing_id: number;
+    confidence_score: number;
+    flags: string[];
+    explanation: string;
+    is_flagged: boolean;
+  }> {
+    try {
+      const res = await apiClient.post(`/ai-moderation/run/listing/${listingPublicId}/`);
+      return res.data;
+    } catch (e) {
+      throw new Error(handleApiError(e));
+    }
+  },
+
+  async adminAIReviewReport(reportPublicId: number): Promise<{
+    report_id: number;
+    priority_score: number;
+    explanation: string;
+  }> {
+    try {
+      const res = await apiClient.post(`/ai-moderation/run/report/${reportPublicId}/`);
       return res.data;
     } catch (e) {
       throw new Error(handleApiError(e));

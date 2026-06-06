@@ -28,6 +28,7 @@ import {
   RefreshCw,
   Loader2,
   Flag,
+  Bot,
 } from 'lucide-react';
 
 import { AdminLayout } from '@/components/layout/AdminLayout';
@@ -36,6 +37,8 @@ import { Badge } from '@/components/ui/Badge';
 import { toast } from '@/components/ui/Toast';
 import { TranslatableText, TranslateButton } from '@/components/shared/TranslateButton';
 import { MapView } from '@/components/shared/MapView';
+import { CommentSection } from '@/components/listings/CommentThread';
+import { SellerRatingsThread } from '@/components/sellers/SellerRatingsThread';
 import { listingsApi, type ListingDetail } from '@/lib/api/listings';
 import { moderationApi, type AdminReportRecord } from '@/lib/api/moderation';
 import { formatPrice, formatRelativeTime } from '@/lib/utils/format';
@@ -48,21 +51,25 @@ export default function AdminListingDetailPage() {
 
   const [listing, setListing] = useState<ListingDetail | null>(null);
   const [reports, setReports] = useState<AdminReportRecord[]>([]);
+  const [comments, setComments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState<'approve' | 'reject' | 'restore' | null>(null);
   const [rejectionReason, setRejectionReason] = useState('');
   const [showRejectBox, setShowRejectBox] = useState(false);
+  const [aiReviewResult, setAiReviewResult] = useState<string | null>(null);
 
   const fetchAll = async () => {
     setLoading(true);
     try {
-      const [detail, reportsResp] = await Promise.all([
+      const [detail, reportsResp, commentsData] = await Promise.all([
         listingsApi.detail(id),
         moderationApi
           .adminList({ report_type: 'listing', page_size: 50 })
           .catch(() => ({ results: [], count: 0, page: 1, page_size: 0 })),
+        listingsApi.listComments(id).catch(() => []),
       ]);
       setListing(detail ?? null);
+      setComments(commentsData ?? []);
       // Filter on the client to those reports targeting THIS listing public_id.
       const all = (reportsResp as any)?.results ?? [];
       const filtered = all.filter((r: any) => r?.listing?.public_id === id);
@@ -70,6 +77,7 @@ export default function AdminListingDetailPage() {
     } catch {
       setListing(null);
       setReports([]);
+      setComments([]);
     } finally {
       setLoading(false);
     }
@@ -167,7 +175,7 @@ export default function AdminListingDetailPage() {
                 {heroImage ? (
                   <div className="relative aspect-[16/9] w-full bg-bg-subtle">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={heroImage} alt={listing.title} className="h-full w-full object-cover" />
+                    <Image src={heroImage} alt={listing.title} width={800} height={400} className="h-full w-full object-cover" />
                   </div>
                 ) : (
                   <div className="aspect-[16/9] w-full bg-bg-subtle" />
@@ -323,6 +331,57 @@ export default function AdminListingDetailPage() {
                   </ul>
                 )}
               </div>
+              {/* Comments */}
+              <div className="surface-elevated p-6">
+                <CommentSection
+                  listingId={listing.public_id}
+                  sellerId={listing.seller.public_id}
+                  initialComments={comments}
+                />
+              </div>
+
+              {/* Public seller reviews */}
+              <div className="surface-elevated p-6">
+                <h2 className="display-sm mb-4">{t('sellers.reviews')}</h2>
+                <SellerRatingsThread
+                  sellerPublicId={listing.seller.public_id}
+                  listingPublicId={listing.public_id}
+                />
+              </div>
+              {/* Comments */}
+              <div className="surface-elevated p-6">
+                <CommentSection
+                  listingId={listing.public_id}
+                  sellerId={listing.seller.public_id}
+                  initialComments={comments}
+                />
+              </div>
+
+              {/* Public seller reviews */}
+              <div className="surface-elevated p-6">
+                <h2 className="display-sm mb-4">{t('sellers.reviews')}</h2>
+                <SellerRatingsThread
+                  sellerPublicId={listing.seller.public_id}
+                  listingPublicId={listing.public_id}
+                />
+              </div>
+              {/* Comments */}
+              <div className="surface-elevated p-6">
+                <CommentSection
+                  listingId={listing.public_id}
+                  sellerId={listing.seller.public_id}
+                  initialComments={comments}
+                />
+              </div>
+
+              {/* Public seller reviews */}
+              <div className="surface-elevated p-6">
+                <h2 className="display-sm mb-4">{t('sellers.reviews')}</h2>
+                <SellerRatingsThread
+                  sellerPublicId={listing.seller.public_id}
+                  listingPublicId={listing.public_id}
+                />
+              </div>
             </div>
 
             {/* Sidebar */}
@@ -380,6 +439,40 @@ export default function AdminListingDetailPage() {
               <div className="surface-elevated p-6">
                 <h3 className="text-eyebrow">{t('admin.actions' as any) ?? 'Actions'}</h3>
                 <div className="mt-3 space-y-2">
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      if (!listing) return;
+                      setSubmitting('approve'); // misuse just for loading spinner visually
+                      setAiReviewResult(null);
+                      try {
+                        const res = await moderationApi.adminAIReviewListing(listing.public_id);
+                        setAiReviewResult(res.explanation);
+                        if (res.is_flagged) {
+                          setRejectionReason(`[AI xulosasi]:\
+${res.explanation}`);
+                          setShowRejectBox(true);
+                        }
+                      } catch (e: any) {
+                        toast.error(e.message || t('common.error'));
+                      } finally {
+                        setSubmitting(null);
+                      }
+                    }}
+                    disabled={submitting !== null}
+                    className="btn btn-secondary w-full bg-brand-accent/10 text-brand-accent hover:bg-brand-accent/20 border-brand-accent/20"
+                  >
+                    <Bot className="h-4 w-4" strokeWidth={2.25}/>
+                    {t('admin.aiModeration' as any) ?? 'AI Review'}
+                  </button>
+
+                  {aiReviewResult && (
+                    <div className="rounded-lg bg-bg-subtle p-3 text-xs text-fg-muted whitespace-pre-line mb-3">
+                      <strong>AI maslahati:</strong><br />
+                      {aiReviewResult}
+                    </div>
+                  )}
+
                   {(listing.status === 'pending' || listing.status === 'pending_review') && (
                     <button
                       type="button"
