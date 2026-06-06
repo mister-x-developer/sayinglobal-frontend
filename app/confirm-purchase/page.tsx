@@ -31,7 +31,7 @@ export default function ConfirmPurchasePage() {
       await listingsApi.confirmPurchase(code.trim(), score, review.trim() || undefined);
       setSuccess(true);
     } catch (e: any) {
-      setError(e?.message || t('errors.generic') ?? 'Xatolik yuz berdi');
+      setError(e?.message || t('errors.generic') || 'Xatolik yuz berdi');
     } finally {
       setLoading(false);
     }

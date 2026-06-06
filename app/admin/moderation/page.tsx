@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
@@ -20,7 +20,7 @@ export default function AdminModerationPage() {
   const [notes, setNotes] = useState('');
   const [aiLoading, setAiLoading] = useState<number | null>(null);
 
-  const fetchReports = async () => {
+  const fetchReports = useCallback(async () => {
     setLoading(true);
     try {
       const data = await moderationApi.adminList({ page_size: 100, status: statusFilter === 'all' ? undefined : statusFilter as any });
@@ -30,9 +30,9 @@ export default function AdminModerationPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [statusFilter]);
 
-  useEffect(() => { fetchReports(); }, [statusFilter, fetchReports]);
+  useEffect(() => { fetchReports(); }, [fetchReports]);
 
   const startReview = async (r: AdminReportRecord) => {
     try {

@@ -337,7 +337,7 @@ export function AIAssistantButton() {
             </motion.span>
           ) : (
             <motion.span key="ai" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.18 }} className="h-full w-full pointer-events-none">
-              <img src={aiLogo} alt="AI" className="h-full w-full object-cover pointer-events-none select-none" draggable={false} />
+              <Image src={aiLogo} alt="AI" width={56} height={56} className="h-full w-full object-cover pointer-events-none select-none" />
             </motion.span>
           )}
         </AnimatePresence>
