@@ -7,13 +7,11 @@ import { useTranslations } from 'next-intl';
 import {
   AlertCircle,
   AlertTriangle,
-  ArrowLeft,
   ArrowRight,
   CheckCircle2,
   ExternalLink,
   Loader2,
   RefreshCw,
-  ShieldCheck,
 } from 'lucide-react';
 
 import { LandingNav } from '@/components/layout/LandingNav';
@@ -25,7 +23,7 @@ import { useAuthStore } from '@/lib/store/auth';
 
 const TG_BOT = process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || 'sayin_global_bot';
 
-type Stage = 'open-bot' | 'enter-code' | 'success';
+// Simplified to only code entry as per requirements (open bot via Telegram to receive code, then enter code only)
 
 export default function AuthPage() {
   const t = useTranslations();
@@ -130,35 +128,112 @@ export default function AuthPage() {
 
         <div className="container-page relative z-10 py-12 sm:py-20">
           <div className="mx-auto w-full max-w-md">
-            <AnimatePresence mode="wait">
-              {stage === 'open-bot' && (
-                <OpenBotStage key="open" onContinue={openTelegramBot} />
-              )}
+            <div className="surface-elevated p-8 sm:p-10">
+              <div className="text-center">
+                <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-accent/10 text-brand-accent">
+                  <CheckCircle2 className="h-6 w-6" strokeWidth={1.75} />
+                </div>
+                <h1 className="display-md mt-6">{t('auth.enterCodeTitle')}</h1>
+                <p className="mt-2 text-sm text-fg-muted">
+                  {t('auth.enterCodeDescription')}
+                </p>
+              </div>
 
-              {stage === 'enter-code' && (
-                <EnterCodeStage
-                  key="code"
-                  code={code}
-                  setCode={(v) => {
+              <div className="mt-6">
+                <button
+                  type="button"
+                  onClick={openTelegramBot}
+                  className="btn btn-secondary w-full mb-4"
+                >
+                  {t('auth.openBotButton')} <ExternalLink className="h-4 w-4" />
+                </button>
+              </div>
+
+              <div className="mt-4">
+                {/* OTP lock banner */}
+                <AnimatePresence>
+                  {lockRetryAfter > 0 && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -6, height: 0 }}
+                      animate={{ opacity: 1, y: 0, height: 'auto' }}
+                      exit={{ opacity: 0, y: -6, height: 0 }}
+                      transition={{ duration: 0.22 }}
+                      className="mb-4 flex items-start gap-2 rounded-xl border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-sm text-danger"
+                      role="alert"
+                    >
+                      <AlertTriangle
+                        className="mt-0.5 h-4 w-4 flex-shrink-0"
+                        strokeWidth={2.25}
+                      />
+                      <span className="font-semibold">
+                        {t('auth.otpLocked')}
+                      </span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <CodeInput
+                  value={code}
+                  onChange={(v) => {
                     setCode(v);
                     if (errorMessage) setErrorMessage(null);
                   }}
-                  submitting={submitting}
-                  errorMessage={errorMessage}
-                  lockRetryAfter={lockRetryAfter}
-                  onSubmit={handleVerify}
-                  onBack={() => {
-                    setStage('open-bot');
-                    setCode('');
-                    setErrorMessage(null);
-                    setLockRetryAfter(0);
-                  }}
-                  onResend={openTelegramBot}
+                  length={5}
+                  disabled={submitting}
+                  hasError={!!errorMessage}
+                  autoFocus
                 />
-              )}
 
-              {stage === 'success' && <SuccessStage key="success" />}
-            </AnimatePresence>
+                <AnimatePresence>
+                  {errorMessage && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -6, height: 0 }}
+                      animate={{ opacity: 1, y: 0, height: 'auto' }}
+                      exit={{ opacity: 0, y: -6, height: 0 }}
+                      transition={{ duration: 0.22 }}
+                      className="mt-4 rounded-xl border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-sm text-danger"
+                    >
+                      <div className="flex items-start gap-2">
+                        <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0" strokeWidth={2.25} />
+                        <span>{errorMessage}</span>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleVerify}
+                disabled={code.length !== 5 || submitting || lockRetryAfter > 0}
+                className="btn btn-primary btn-lg mt-6 w-full"
+              >
+                {submitting ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2.25} />
+                    {t('auth.verifying')}
+                  </>
+                ) : (
+                  <>
+                    {t('auth.verifyButton')}
+                    <ArrowRight className="h-4 w-4" strokeWidth={2.25} />
+                  </>
+                )}
+              </button>
+
+              <div className="mt-5 flex flex-col items-center gap-1.5 text-center text-sm">
+                <span className="text-fg-muted">{t('auth.didntReceiveCode')}</span>
+                <button
+                  onClick={openTelegramBot}
+                  type="button"
+                  disabled={submitting}
+                  className="inline-flex items-center gap-1.5 font-semibold text-brand-primary transition-opacity hover:underline disabled:opacity-50"
+                >
+                  <RefreshCw className="h-3.5 w-3.5" strokeWidth={2.25} />
+                  {t('auth.resendCode')}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </main>
@@ -168,261 +243,3 @@ export default function AuthPage() {
   );
 }
 
-function OpenBotStage({ onContinue }: { onContinue: () => void }) {
-  const t = useTranslations();
-
-  return (
-    <motion.div
-      data-motion
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
-      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className="surface-elevated p-8 sm:p-10"
-    >
-      <div className="text-center">
-        <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary">
-          <ShieldCheck className="h-6 w-6" strokeWidth={1.75} />
-        </div>
-        <h1 className="display-md mt-6">{t('auth.title')}</h1>
-        <p className="mt-2 text-sm text-fg-muted">{t('auth.subtitle')}</p>
-      </div>
-
-      {/* Step 1 */}
-      <div className="mt-8 rounded-2xl border border-border bg-bg-subtle p-5">
-        <div className="flex items-start gap-3">
-          <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-brand-primary text-xs font-bold text-white">
-            1
-          </span>
-          <div>
-            <h2 className="font-semibold text-fg">{t('auth.openBotTitle')}</h2>
-            <p className="mt-1 text-sm text-fg-muted">
-              {t('auth.openBotDescription')}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Step 2 — phone share instruction (critical for new users) */}
-      <div className="mt-3 rounded-2xl border border-border bg-bg-subtle p-5">
-        <div className="flex items-start gap-3">
-          <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-brand-primary text-xs font-bold text-white">
-            2
-          </span>
-          <div>
-            <h2 className="font-semibold text-fg">{t('auth.sharePhoneTitle')}</h2>
-            <p className="mt-1 text-sm text-fg-muted">
-              {t('auth.sharePhoneDescription')}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Step 3 — enter code */}
-      <div className="mt-3 rounded-2xl border border-border bg-bg-subtle p-5">
-        <div className="flex items-start gap-3">
-          <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-brand-primary text-xs font-bold text-white">
-            3
-          </span>
-          <div>
-            <h2 className="font-semibold text-fg">{t('auth.enterCodeStepTitle')}</h2>
-            <p className="mt-1 text-sm text-fg-muted">
-              {t('auth.enterCodeStepDescription')}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <button onClick={onContinue} className="btn btn-primary btn-lg mt-6 w-full group">
-        {t('auth.openBotButton')}
-        <ExternalLink
-          className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5"
-          strokeWidth={2}
-        />
-      </button>
-
-      <div className="mt-6 flex items-start gap-2 rounded-xl bg-bg-subtle/60 p-3 text-xs text-fg-subtle">
-        <ShieldCheck className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-brand-accent" strokeWidth={2} />
-        <p>{t('auth.securityDescription')}</p>
-      </div>
-    </motion.div>
-  );
-}
-
-function EnterCodeStage({
-  code,
-  setCode,
-  submitting,
-  errorMessage,
-  lockRetryAfter,
-  onSubmit,
-  onBack,
-  onResend,
-}: {
-  code: string;
-  setCode: (v: string) => void;
-  submitting: boolean;
-  errorMessage: string | null;
-  lockRetryAfter: number;
-  onSubmit: () => void;
-  onBack: () => void;
-  onResend: () => void;
-}) {
-  const t = useTranslations();
-
-  const verifyDisabled = code.length !== 5 || submitting || lockRetryAfter > 0;
-  const isInvalidCode = errorMessage === t('auth.errorInvalidOrExpiredCode');
-
-  return (
-    <motion.div
-      data-motion
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
-      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className="surface-elevated p-8 sm:p-10"
-    >
-      <button
-        type="button"
-        onClick={onBack}
-        className="btn btn-ghost btn-sm -ml-2 mb-2"
-      >
-        <ArrowLeft className="h-4 w-4" strokeWidth={2} />
-        {t('common.back')}
-      </button>
-
-      <div className="text-center">
-        <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-accent/10 text-brand-accent">
-          <CheckCircle2 className="h-6 w-6" strokeWidth={1.75} />
-        </div>
-        <h1 className="display-md mt-6">{t('auth.enterCodeTitle')}</h1>
-        <p className="mt-2 text-sm text-fg-muted">
-          {t('auth.enterCodeDescription')}
-        </p>
-      </div>
-
-      <div className="mt-8">
-        {/* OTP brute-force lock banner */}
-        <AnimatePresence>
-          {lockRetryAfter > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: -6, height: 0 }}
-              animate={{ opacity: 1, y: 0, height: 'auto' }}
-              exit={{ opacity: 0, y: -6, height: 0 }}
-              transition={{ duration: 0.22 }}
-              className="mb-4 flex items-start gap-2 rounded-xl border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-sm text-danger"
-              role="alert"
-            >
-              <AlertTriangle
-                className="mt-0.5 h-4 w-4 flex-shrink-0"
-                strokeWidth={2.25}
-              />
-              <span className="font-semibold">
-                {t('auth.otpLocked')}
-              </span>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <CodeInput
-          value={code}
-          onChange={setCode}
-          length={5}
-          disabled={submitting}
-          hasError={!!errorMessage}
-          autoFocus
-        />
-
-        <AnimatePresence>
-          {errorMessage && (
-            <motion.div
-              initial={{ opacity: 0, y: -6, height: 0 }}
-              animate={{ opacity: 1, y: 0, height: 'auto' }}
-              exit={{ opacity: 0, y: -6, height: 0 }}
-              transition={{ duration: 0.22 }}
-              className="mt-4 rounded-xl border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-sm text-danger"
-            >
-              <div className="flex items-start gap-2">
-                <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0" strokeWidth={2.25} />
-                <span>{errorMessage}</span>
-              </div>
-              {isInvalidCode && (
-                <button
-                  type="button"
-                  onClick={onResend}
-                  className="mt-2 ml-6 inline-flex items-center gap-1.5 font-semibold underline underline-offset-2 text-danger hover:text-danger/80"
-                >
-                  <ExternalLink className="h-3.5 w-3.5" strokeWidth={2.25} />
-                  {t('auth.openBotButton')}
-                </button>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      <button
-        type="submit"
-        onClick={onSubmit}
-        disabled={verifyDisabled}
-        className="btn btn-primary btn-lg mt-6 w-full"
-      >
-        {submitting ? (
-          <>
-            <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2.25} />
-            {t('auth.verifying')}
-          </>
-        ) : (
-          <>
-            {t('auth.verifyButton')}
-            <ArrowRight className="h-4 w-4" strokeWidth={2.25} />
-          </>
-        )}
-      </button>
-
-      {/* Resend — always active, just reopens the Telegram bot.
-          No countdown timer. OTP validity is 10 minutes and the
-          backend enforces a 60s cooldown; the bot itself notifies
-          the user when cooldown is active. */}
-      <div className="mt-5 flex flex-col items-center gap-1.5 text-center text-sm">
-        <span className="text-fg-muted">{t('auth.didntReceiveCode')}</span>
-        <button
-          onClick={onResend}
-          type="button"
-          disabled={submitting}
-          className="inline-flex items-center gap-1.5 font-semibold text-brand-primary transition-opacity hover:underline disabled:opacity-50"
-        >
-          <RefreshCw className="h-3.5 w-3.5" strokeWidth={2.25} />
-          {t('auth.resendCode')}
-        </button>
-      </div>
-    </motion.div>
-  );
-}
-
-function SuccessStage() {
-  const t = useTranslations();
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.96 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.96 }}
-      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className="surface-elevated p-10 text-center"
-    >
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 0.5, type: 'spring', stiffness: 240, damping: 18 }}
-        className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-success/10 text-success"
-      >
-        <CheckCircle2 className="h-8 w-8" strokeWidth={1.75} />
-      </motion.div>
-      <h1 className="display-md mt-6">{t('auth.successTitle')}</h1>
-      <p className="mt-2 text-sm text-fg-muted">{t('auth.successDescription')}</p>
-      <div className="mt-6 flex justify-center">
-        <Loader2 className="h-5 w-5 animate-spin text-brand-primary" strokeWidth={2} />
-      </div>
-    </motion.div>
-  );
-}
