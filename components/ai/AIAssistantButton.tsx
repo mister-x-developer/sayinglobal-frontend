@@ -60,6 +60,7 @@ export function AIAssistantButton() {
   const [dragging, setDragging] = useState(false);
   const dragStart = useRef({ mx: 0, my: 0, bx: 0, by: 0 });
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const dragHasMoved = useRef(false);
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -83,7 +84,6 @@ export function AIAssistantButton() {
 
   // ── Drag (desktop pointer + mobile touch friendly) ─────────────────────────
   const DRAG_THRESHOLD = 6;
-  const dragHasMoved = useRef(false);
 
   const clampPosition = (nx: number, ny: number) => {
     // Keep button fully visible with safe margins (above bottom nav, below header, sides)

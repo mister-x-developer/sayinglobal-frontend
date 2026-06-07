@@ -66,7 +66,7 @@ export default function NearbyListingsPage() {
         if (defaultReg?.slug) setRegion(defaultReg.slug);
       }
     }).catch(() => setRegions([]));
-  }, []);
+  }, [region]);
 
   useEffect(() => {
     if (geo.kind === 'requesting' || geo.kind === 'idle') return;
