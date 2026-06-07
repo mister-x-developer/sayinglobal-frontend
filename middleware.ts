@@ -4,13 +4,10 @@ import { locales, defaultLocale, type Locale } from './lib/i18n';
 const LOCALE_COOKIE = 'sayin-locale';
 const AUTH_COOKIE = 'sayin-auth';
 
-// Routes accessible without authentication — marketplace browsing is public
+// Routes accessible without authentication — ONLY landing, auth, and legal pages.
+// Per user request: Loginsiz hech narsa ko'rinmasin! (marketplace, listings, etc. require login)
 const PUBLIC_PREFIXES = [
   '/auth',
-  '/listings',
-  '/sellers',
-  '/search',
-  '/listings/nearby',
 ];
 
 function pickLocale(req: NextRequest): Locale {
@@ -52,20 +49,10 @@ function isPlatformAdmin(req: NextRequest): boolean {
 }
 
 function isPublicPath(pathname: string): boolean {
-  // Landing page
+  // Per strict requirement: Loginsiz hech narsa ko'rinmasin!
+  // Only landing page, auth flows, and legal pages are public.
   if (pathname === '/') return true;
-  // Auth pages
   if (pathname.startsWith('/auth')) return true;
-  // Public marketplace pages — browsing without login
-  // Note: /listings/new and /listings/:id/edit require auth
-  if (pathname === '/listings') return true;
-  if (pathname === '/listings/nearby') return true;
-  if (pathname === '/search') return true;
-  if (pathname === '/plans') return true;
-  if (pathname.startsWith('/sellers')) return true;
-  // Individual listing detail pages are public
-  if (/^\/listings\/\d+$/.test(pathname)) return true;
-  // Legal pages are public
   if (pathname === '/terms' || pathname === '/privacy') return true;
   return false;
 }
@@ -89,7 +76,7 @@ export function middleware(req: NextRequest) {
   }
 
   // If the user is already authenticated, do not show the auth screen.
-  // Send admins to /admin, marketplace users to ?next or /dashboard.
+  // Strict: non-admins to /dashboard or next, admins to /admin.
   if (pathname === '/auth' && isAuthenticated(req)) {
     const nextUrl = req.nextUrl.clone();
     const target = isPlatformAdmin(req)
@@ -100,7 +87,7 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(nextUrl);
   }
 
-  // Auth guard — redirect unauthenticated users to /auth
+  // Auth guard — redirect unauthenticated users to /auth. Loginsiz hech narsa ko'rinmasin!
   if (!isPublicPath(pathname) && !isAuthenticated(req)) {
     const loginUrl = req.nextUrl.clone();
     loginUrl.pathname = '/auth';
