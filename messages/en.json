@@ -374,7 +374,9 @@
     "listingNotifDescription": "Activity on your listings",
     "themeLight": "Light",
     "themeDark": "Dark",
-    "themeSystem": "System"
+    "themeSystem": "System",
+    "telegramOtp": "Telegram OTP",
+    "telegramOtpDescription": "The only way to sign in with a code"
   },
   "sellers": {
     "title": "Sellers",
@@ -533,6 +535,8 @@
     "systemHealth": "System Health",
     "settings": "Settings",
     "guide": "Guide",
+    "superAdmin": "Super Admin",
+    "adminRole": "Admin",
     "totalUsers": "Total users",
     "activeUsers": "Active users",
     "totalListings": "Total listings",
@@ -876,7 +880,31 @@
     "sessionAnomalies": "Session Anomalies (>5 IPs)",
     "noAnomalies": "No anomalies detected.",
     "distinctIps": "Distinct IPs",
-    "userId": "User ID"
+    "userId": "User ID",
+    "userLabel": "User",
+    "unknown": "Unknown",
+    "activeSessions": "Active sessions",
+    "signOutAllOthers": "Sign out all others",
+    "noOtherSessions": "No other sessions",
+    "currentDevice": "This device",
+    "lastActivity": "Last activity",
+    "revokeSession": "Revoke",
+    "recentEvents": "Recent security events",
+    "allOthersRevoked": "All other sessions have been signed out",
+    "eventTypes": {
+      "otp_requested": "OTP requested",
+      "otp_success": "OTP success",
+      "otp_failed": "OTP failed",
+      "otp_locked": "OTP locked",
+      "session_created": "New session created",
+      "session_revoked": "Session revoked",
+      "all_sessions_revoked": "All other sessions revoked",
+      "suspicious_activity": "Suspicious activity",
+      "login_success": "Login successful",
+      "login_failure": "Login failed",
+      "verify_success": "Verification successful",
+      "verify_attempt": "Verification attempt"
+    }
   },
   "adminMod": {
     "title": "Reports",

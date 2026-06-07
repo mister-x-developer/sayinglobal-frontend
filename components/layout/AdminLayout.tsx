@@ -108,7 +108,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
   const isActive = (href: string, exact?: boolean) =>
     exact ? pathname === href : pathname === href || pathname.startsWith(href + '/');
 
-  const roleBadge = user?.is_staff ? 'Super Admin' : 'Admin';
+  const roleBadge = user?.is_staff ? t('admin.superAdmin') : t('admin.adminRole');
 
   const Sidebar = ({ isDrawer = false }: { isDrawer?: boolean }) => (
     <nav className="flex h-full flex-col bg-bg-elevated border-r border-border relative">

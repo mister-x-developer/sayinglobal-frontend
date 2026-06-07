@@ -81,21 +81,77 @@ export function AIAssistantButton() {
   // ── Guard: only render after mount and when authenticated and terms accepted
   if (!mounted || !isAuthenticated || !user?.terms_accepted_at) return null;
 
-  // ── Drag ──────────────────────────────────────────────────────────────────
+  // ── Drag (desktop pointer + mobile touch friendly) ─────────────────────────
+  const DRAG_THRESHOLD = 6;
+  const dragHasMoved = useRef(false);
+
+  const clampPosition = (nx: number, ny: number) => {
+    // Keep button fully visible with safe margins (above bottom nav, below header, sides)
+    const margin = 12;
+    const btn = 56;
+    const minX = -window.innerWidth + btn + margin + 60; // don't go too far left
+    const maxX = window.innerWidth - btn - margin - 20;
+    const minY = -window.innerHeight + 120; // below top header area
+    const maxY = window.innerHeight - btn - 90; // above bottom nav + safe
+    return {
+      x: Math.max(minX, Math.min(maxX, nx)),
+      y: Math.max(minY, Math.min(maxY, ny)),
+    };
+  };
+
   const onPointerDown = (e: React.PointerEvent) => {
     if (open) return;
     e.currentTarget.setPointerCapture(e.pointerId);
     setDragging(true);
+    dragHasMoved.current = false;
     dragStart.current = { mx: e.clientX, my: e.clientY, bx: pos.x, by: pos.y };
   };
+
   const onPointerMove = (e: React.PointerEvent) => {
     if (!dragging) return;
-    setPos({
-      x: dragStart.current.bx + (e.clientX - dragStart.current.mx),
-      y: dragStart.current.by + (e.clientY - dragStart.current.my),
-    });
+    const nx = dragStart.current.bx + (e.clientX - dragStart.current.mx);
+    const ny = dragStart.current.by + (e.clientY - dragStart.current.my);
+    const clamped = clampPosition(nx, ny);
+    setPos(clamped);
+
+    const dx = Math.abs(e.clientX - dragStart.current.mx);
+    const dy = Math.abs(e.clientY - dragStart.current.my);
+    if (dx > DRAG_THRESHOLD || dy > DRAG_THRESHOLD) {
+      dragHasMoved.current = true;
+    }
   };
-  const onPointerUp = () => setDragging(false);
+
+  const onPointerUp = (e: React.PointerEvent) => {
+    e.currentTarget.releasePointerCapture?.(e.pointerId);
+    setDragging(false);
+    // small timeout so the click handler (which fires after) sees the flag
+    setTimeout(() => { dragHasMoved.current = false; }, 0);
+  };
+
+  // Touch fallbacks for reliable mobile drag (prevent scroll while dragging the FAB)
+  const onTouchStart = (e: React.TouchEvent) => {
+    if (open) return;
+    setDragging(true);
+    dragHasMoved.current = false;
+    const t = e.touches[0];
+    dragStart.current = { mx: t.clientX, my: t.clientY, bx: pos.x, by: pos.y };
+  };
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (!dragging) return;
+    e.preventDefault(); // stop page scroll while dragging the button
+    const t = e.touches[0];
+    const nx = dragStart.current.bx + (t.clientX - dragStart.current.mx);
+    const ny = dragStart.current.by + (t.clientY - dragStart.current.my);
+    setPos(clampPosition(nx, ny));
+
+    const dx = Math.abs(t.clientX - dragStart.current.mx);
+    const dy = Math.abs(t.clientY - dragStart.current.my);
+    if (dx > DRAG_THRESHOLD || dy > DRAG_THRESHOLD) dragHasMoved.current = true;
+  };
+  const onTouchEnd = () => {
+    setDragging(false);
+    setTimeout(() => { dragHasMoved.current = false; }, 0);
+  };
 
   // ── Send ──────────────────────────────────────────────────────────────────
   const sendMessage = async (text: string) => {
@@ -147,7 +203,7 @@ export function AIAssistantButton() {
 
   return (
     <motion.div
-      className="fixed bottom-24 right-5 md:bottom-8 md:right-8 z-[900] flex flex-col items-end"
+      className="fixed bottom-40 right-4 md:bottom-8 md:right-8 z-50 flex flex-col items-end"
       style={{ x: pos.x, y: pos.y }}
     >
       {/* ── Chat panel ── */}
@@ -324,8 +380,15 @@ export function AIAssistantButton() {
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
-        onClick={() => { if (!dragging) setOpen((v) => !v); }}
-        className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl shadow-[0_8px_24px_-4px_rgb(31_122_82/0.55)] transition-all hover:scale-105 active:scale-95 overflow-hidden z-[900] ${
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+        onClick={() => {
+          // Only toggle if it was not a real drag (prevents accidental open after drag)
+          if (!dragging && !dragHasMoved.current) setOpen((v) => !v);
+        }}
+        style={{ touchAction: dragging ? 'none' : 'manipulation' }}
+        className={`flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-2xl shadow-[0_8px_24px_-4px_rgb(31_122_82/0.55)] transition-all hover:scale-105 active:scale-95 overflow-hidden z-50 ${
           open ? 'bg-bg-elevated border border-border text-fg' : 'bg-brand-primary text-white'
         }`}
         aria-label={open ? t('common.close') : (t('ai.openAssistant' as any) ?? 'AI Assistant')}

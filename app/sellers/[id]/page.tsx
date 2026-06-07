@@ -100,7 +100,7 @@ export default function SellerDetailPage() {
       <AppNav />
 
       <main className="flex-1">
-        <div className="container-page pt-6 pb-16">
+        <div className="container-page pt-4 pb-24 sm:pt-6 sm:pb-16"> {/* extra mobile bottom padding for full visibility above bottom nav */}
           <button
             type="button"
             onClick={() => router.back()}
@@ -228,33 +228,35 @@ export default function SellerDetailPage() {
                 })}
               </div>
 
-              {/* TABS */}
-              <div className="mt-8 flex gap-2 border-b border-border">
-                {[
-                  { key: 'listings', label: t('listings.title') },
-                  { key: 'reviews', label: t('sellers.reviews') },
-                  { key: 'activity', label: t('profile.activity') },
-                ].map((tt) => {
-                  const active = tab === (tt.key as Tab);
-                  return (
-                    <button
-                      key={tt.key}
-                      type="button"
-                      onClick={() => setTab(tt.key as Tab)}
-                      className={`relative h-11 px-4 text-sm font-semibold transition-colors ${
-                        active ? 'text-brand-primary' : 'text-fg-muted hover:text-fg'
-                      }`}
-                    >
-                      {tt.label}
-                      {active && (
-                        <motion.span
-                          layoutId="seller-tab"
-                          className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-brand-primary"
-                        />
-                      )}
-                    </button>
-                  );
-                })}
+              {/* TABS — scrollable on mobile so full labels visible */}
+              <div className="mt-6 overflow-x-auto -mx-4 px-4 pb-1 sm:mx-0 sm:mt-8 sm:px-0">
+                <div className="flex gap-1 border-b border-border min-w-max sm:min-w-0">
+                  {[
+                    { key: 'listings', label: t('listings.title') },
+                    { key: 'reviews', label: t('sellers.reviews') },
+                    { key: 'activity', label: t('profile.activity') },
+                  ].map((tt) => {
+                    const active = tab === (tt.key as Tab);
+                    return (
+                      <button
+                        key={tt.key}
+                        type="button"
+                        onClick={() => setTab(tt.key as Tab)}
+                        className={`relative h-11 flex-shrink-0 snap-start px-3 text-xs font-semibold transition-colors sm:px-4 sm:text-sm ${
+                          active ? 'text-brand-primary' : 'text-fg-muted hover:text-fg'
+                        }`}
+                      >
+                        {tt.label}
+                        {active && (
+                          <motion.span
+                            layoutId="seller-tab"
+                            className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-brand-primary"
+                          />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* TAB CONTENT */}

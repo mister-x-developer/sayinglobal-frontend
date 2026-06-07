@@ -70,6 +70,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
+  viewportFit: 'cover',
 };
 
 const themeInitScript = `
@@ -103,7 +104,7 @@ export default async function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className="antialiased min-h-screen bg-bg text-fg pb-[72px] md:pb-0 overflow-x-hidden">
+      <body className="antialiased min-h-[100dvh] bg-bg text-fg pb-[calc(72px+env(safe-area-inset-bottom))] md:pb-0 overflow-x-hidden">
         <HydrationReady />
         <ThemeProvider>
           <IntlClientProvider messages={messages} locale={locale} timeZone="Asia/Tashkent">

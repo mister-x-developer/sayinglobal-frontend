@@ -102,14 +102,14 @@ export default function ProfilePage() {
       <AppNav />
 
       <main className="flex-1">
-        <div className="container-page py-8 sm:py-10">
+        <div className="container-page py-4 pb-40 sm:py-8 sm:pb-10"> {/* very generous pb-40 on mobile so ALL "Muhim ma'lumot" cards (E'lon hayotiy davri, Shikoyatlar, Sotuvchi mas'uliyati etc.) are fully visible without being covered by the fixed AI button or bottom nav */}
 
-          {/* PROFILE HEADER */}
+          {/* PROFILE HEADER — more compact on mobile for full visibility of stats + tabs */}
           <motion.section
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="surface-elevated p-6 sm:p-8"
+            className="surface-elevated p-4 sm:p-6 lg:p-8"
           >
             <div className="flex flex-col gap-6 md:flex-row md:items-start">
               <Avatar
@@ -226,32 +226,34 @@ export default function ProfilePage() {
           </div>
 
           {/* SIDEBAR + TABS LAYOUT */}
-          <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_280px]">
+          <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_280px] pb-8 md:pb-0"> {/* extra padding on mobile for full visibility of stacked sidebar content vs fixed AI + nav */}
             {/* MAIN */}
             <div>
-              {/* Tabs */}
-              <div className="flex gap-2 border-b border-border">
-                {TABS.map((tt) => {
-                  const active = tab === tt.key;
-                  return (
-                    <button
-                      key={tt.key}
-                      type="button"
-                      onClick={() => setTab(tt.key)}
-                      className={`relative h-11 px-4 text-sm font-semibold transition-colors ${
-                        active ? 'text-brand-primary' : 'text-fg-muted hover:text-fg'
-                      }`}
-                    >
-                      {tt.label}
-                      {active && (
-                        <motion.span
-                          layoutId="profile-tab"
-                          className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-brand-primary"
-                        />
-                      )}
-                    </button>
-                  );
-                })}
+              {/* Tabs — horizontal scroll on mobile so all labels (incl. long "Mening e'lonlarim") are fully visible */}
+              <div className="overflow-x-auto -mx-4 px-4 pb-1 sm:mx-0 sm:px-0">
+                <div className="flex gap-1 border-b border-border min-w-max sm:min-w-0">
+                  {TABS.map((tt) => {
+                    const active = tab === tt.key;
+                    return (
+                      <button
+                        key={tt.key}
+                        type="button"
+                        onClick={() => setTab(tt.key)}
+                        className={`relative h-11 flex-shrink-0 snap-start px-3 text-xs font-semibold transition-colors sm:px-4 sm:text-sm ${
+                          active ? 'text-brand-primary' : 'text-fg-muted hover:text-fg'
+                        }`}
+                      >
+                        {tt.label}
+                        {active && (
+                          <motion.span
+                            layoutId="profile-tab"
+                            className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-brand-primary"
+                          />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               <div className="mt-6">
@@ -320,7 +322,7 @@ export default function ProfilePage() {
             </div>
 
             {/* SIDEBAR */}
-            <aside className="space-y-4">
+            <aside className="space-y-4 pb-32 md:pb-0"> {/* extra bottom space on mobile so last card (Muhim ma'lumot) text is not covered by fixed AI button or bottom nav */}
               {/* Account summary */}
               <div className="surface-elevated p-5">
                 <h3 className="display-sm">{t('profile.accountSummary' as any) ?? t('profile.title')}</h3>
@@ -473,9 +475,9 @@ function ImportantInfoCard() {
       <p className="mb-4 text-sm text-fg-muted">{t('profileInfo.lead')}</p>
       <div className="space-y-3">
         {sections.map((s) => (
-          <div key={s.title} className="rounded-xl bg-bg-subtle p-3">
-            <p className="text-sm font-semibold text-fg">{s.title}</p>
-            <p className="mt-1 text-xs leading-relaxed text-fg-muted whitespace-pre-line">{s.body}</p>
+          <div key={s.title} className="rounded-xl bg-bg-subtle p-3.5 sm:p-3 overflow-visible">
+            <p className="text-sm font-semibold text-fg break-words">{s.title}</p>
+            <p className="mt-1 text-[13px] sm:text-xs leading-relaxed text-fg-muted whitespace-pre-line break-words">{s.body}</p>
           </div>
         ))}
       </div>

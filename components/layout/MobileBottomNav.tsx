@@ -51,7 +51,7 @@ export function MobileBottomNav() {
       className="fixed bottom-0 left-0 right-0 z-30 border-t border-border bg-bg-elevated/92 backdrop-blur-xl md:hidden"
       aria-label="Mobile navigation"
     >
-      <div className="flex items-center justify-around px-1 pb-safe pt-1" role="list">
+      <div className="flex items-center justify-around px-1 pb-safe pt-1 bg-bg-elevated/95 backdrop-blur" role="list">
         {links.map((l) => {
           const Icon = l.icon;
           const active = isActive(l.href);

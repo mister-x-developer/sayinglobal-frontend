@@ -39,6 +39,8 @@ function MobileDrawer({
   isActive,
   unreadCount,
   t,
+  user,
+  onLogout,
 }: {
   open: boolean;
   onClose: () => void;
@@ -46,6 +48,8 @@ function MobileDrawer({
   isActive: (href: string) => boolean;
   unreadCount: number;
   t: (key: any) => string;
+  user?: any;
+  onLogout?: () => void;
 }) {
   // Lock body scroll while drawer is open
   useEffect(() => {
@@ -99,6 +103,19 @@ function MobileDrawer({
                 <X className="h-5 w-5" strokeWidth={1.75} />
               </button>
             </div>
+
+            {/* User header - mobile app like */}
+            {user && (
+              <div className="px-4 py-3 border-b border-border bg-bg-subtle/50">
+                <div className="flex items-center gap-3">
+                  <Avatar src={user.avatar_url ?? user.avatar ?? null} name={user.full_name} size="md" />
+                  <div className="min-w-0 flex-1">
+                    <div className="text-sm font-semibold text-fg truncate">{user.full_name}</div>
+                    <div className="text-xs text-fg-muted truncate">{user.phone}</div>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <nav className="p-2">
               {links.map((l) => {
@@ -167,6 +184,20 @@ function MobileDrawer({
                   </span>
                 )}
               </Link>
+
+              {/* Logout - app like at bottom */}
+              {onLogout && (
+                <>
+                  <div className="my-2 h-px bg-border" />
+                  <button
+                    onClick={() => { onClose(); onLogout(); }}
+                    className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-danger hover:bg-danger/10 transition-colors"
+                  >
+                    <LogOut className="h-[18px] w-[18px]" strokeWidth={1.75} />
+                    {t('nav.logout')}
+                  </button>
+                </>
+              )}
             </nav>
           </motion.aside>
         </>
@@ -240,7 +271,7 @@ export function AppNav() {
       {/* ── Sticky header bar ── */}
       <header className="sticky top-0 z-40 border-b border-border/60 bg-bg/80 backdrop-blur-xl backdrop-saturate-150 transition-shadow duration-300">
         <div className="container-page">
-          <div className="flex h-16 items-center gap-2">
+          <div className="flex h-14 md:h-16 items-center gap-2">
             {/* Mobile menu trigger */}
             <button
               type="button"
@@ -302,7 +333,7 @@ export function AppNav() {
                 )}
               </Link>
 
-              <div className="flex shrink-0 items-center gap-1">
+              <div className="flex shrink-0 items-center gap-1 hidden sm:flex">
                 <LanguageSwitcher />
                 <ThemeSwitcher />
               </div>
@@ -400,6 +431,8 @@ export function AppNav() {
           isActive={isActive}
           unreadCount={unreadCount}
           t={t}
+          user={user}
+          onLogout={handleLogout}
         />
       )}
     </>

@@ -25,12 +25,13 @@ export function CodeInput({
     if (autoFocus) inputs.current[0]?.focus();
   }, [autoFocus]);
 
-  const digits = value.padEnd(length, ' ').slice(0, length).split('');
+  const clean = (value || '').replace(/\D/g, '').slice(0, length);
+  const digits = clean.split('').concat(Array.from({ length: length - clean.length }, () => ''));
 
   const setAt = (index: number, char: string) => {
     const arr = digits.slice();
-    arr[index] = char || ' ';
-    const next = arr.join('').replace(/\s+$/g, '').replace(/\s/g, '');
+    arr[index] = char || '';
+    const next = arr.join('').replace(/\D/g, '').slice(0, length);
     onChange(next);
   };
 
@@ -44,14 +45,14 @@ export function CodeInput({
       setAt(i, v);
       if (i < length - 1) inputs.current[i + 1]?.focus();
     } else {
-      // Pasted multiple
+      // Pasted multiple (safety net, though maxLength=1 + paste handler should catch most)
       const trimmed = v.slice(0, length - i);
       const arr = digits.slice();
       for (let k = 0; k < trimmed.length; k++) {
         arr[i + k] = trimmed[k];
       }
-      const next = arr.join('').replace(/\s+/g, '');
-      onChange(next.slice(0, length));
+      const next = arr.join('').replace(/\D/g, '').slice(0, length);
+      onChange(next);
       const focusIdx = Math.min(i + trimmed.length, length - 1);
       inputs.current[focusIdx]?.focus();
     }
@@ -59,7 +60,7 @@ export function CodeInput({
 
   const handleKeyDown = (i: number, e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace') {
-      if (digits[i] === ' ' || digits[i] === undefined) {
+      if (!digits[i]) {
         if (i > 0) {
           inputs.current[i - 1]?.focus();
           setAt(i - 1, '');
@@ -93,14 +94,14 @@ export function CodeInput({
       aria-describedby={hasError ? 'code-error' : undefined}
     >
       {Array.from({ length }).map((_, i) => {
-        const ch = digits[i] === ' ' ? '' : digits[i];
+        const ch = digits[i] || '';
         return (
           <input
             key={i}
             ref={(el) => { inputs.current[i] = el; }}
             inputMode="numeric"
             pattern="[0-9]*"
-            maxLength={length}
+            maxLength={1}
             autoComplete={i === 0 ? 'one-time-code' : 'off'}
             disabled={disabled}
             value={ch ?? ''}

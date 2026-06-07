@@ -105,6 +105,7 @@ export function LocationPicker({
   const [locating, setLocating] = useState(false);
   const [geocoding, setGeocoding] = useState(false);
   const [resolvedName, setResolvedName] = useState<string>('');
+  const [locationError, setLocationError] = useState<string>('');
 
   const lat = value.lat;
   const lng = value.lng;
@@ -234,15 +235,27 @@ export function LocationPicker({
   }, []);
 
   const useMyLocation = () => {
-    if (typeof navigator === 'undefined' || !navigator.geolocation) return;
+    if (typeof navigator === 'undefined' || !navigator.geolocation) {
+      setLocationError(t('marketplace.geolocationUnsupported' as any) ?? 'Joylashuv aniqlash qo‘llab-quvvatlanmaydi');
+      return;
+    }
+    setLocationError('');
     setLocating(true);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setLocating(false);
         handleCoords(pos.coords.latitude, pos.coords.longitude);
       },
-      () => setLocating(false),
-      { enableHighAccuracy: true, timeout: 8000, maximumAge: 60_000 },
+      (err) => {
+        setLocating(false);
+        const msg = err.code === 1
+          ? (t('marketplace.geolocationPermission' as any) ?? 'Joylashuv ruxsati berilmadi. Ilova sozlamalaridan yoqing.')
+          : (t('marketplace.geolocationError' as any) ?? 'Joylashuvni aniqlab bo‘lmadi. Qayta urining.');
+        setLocationError(msg);
+        // Auto clear error after a bit
+        setTimeout(() => setLocationError(''), 4000);
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 30_000 },
     );
   };
 
@@ -260,7 +273,9 @@ export function LocationPicker({
   }
 
   // Status label: GPS belgisi qo'yilgan yoki yo'qligini ko'rsatadi — ko'cha nomi emas
-  const statusLabel = geocoding
+  const statusLabel = locationError
+    ? locationError
+    : geocoding
     ? (t('marketplace.geocoding' as any) ?? 'Joylashuv aniqlanmoqda...')
     : hasPin
     ? (t('marketplace.locationSet' as any) ?? 'GPS joylashuv belgilandi')
@@ -280,7 +295,7 @@ export function LocationPicker({
           )}
           <span
             className={`text-sm truncate ${
-              hasPin && !geocoding ? 'font-semibold text-success' : 'text-fg-muted'
+              locationError ? 'text-danger' : hasPin && !geocoding ? 'font-semibold text-success' : 'text-fg-muted'
             }`}
           >
             {statusLabel}
@@ -290,14 +305,14 @@ export function LocationPicker({
           type="button"
           onClick={useMyLocation}
           disabled={locating || geocoding}
-          className="btn btn-secondary btn-sm flex-shrink-0"
+          className="btn btn-secondary btn-sm flex-shrink-0 gap-1.5"
         >
           {locating ? (
             <Loader2 className="h-3.5 w-3.5 animate-spin" strokeWidth={2} />
           ) : (
             <Crosshair className="h-3.5 w-3.5" strokeWidth={2} />
           )}
-          <span className="hidden sm:inline">
+          <span className="text-[11px] sm:text-xs font-medium">
             {t('marketplace.useMyLocation' as any) ?? 'Mening joyim'}
           </span>
         </button>

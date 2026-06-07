@@ -57,7 +57,15 @@ export default function NearbyListingsPage() {
   }, []);
 
   useEffect(() => {
-    referenceApi.getRegions().then(setRegions).catch(() => setRegions([]));
+    referenceApi.getRegions().then((r) => {
+      setRegions(r || []);
+      // Auto-select first region (Tashkent preferred) if GPS denied and no region yet.
+      // This ensures "yaqin atrofdagi" shows results + map immediately in WebView/mobile where GPS often denied.
+      if ((r || []).length > 0 && !region) {
+        const defaultReg = (r || []).find((x: any) => (x.slug || '').includes('tashkent')) || (r || [])[0];
+        if (defaultReg?.slug) setRegion(defaultReg.slug);
+      }
+    }).catch(() => setRegions([]));
   }, []);
 
   useEffect(() => {
@@ -231,8 +239,8 @@ export default function NearbyListingsPage() {
         </div>
 
         <div className="container-page py-8">
-          {/* Map */}
-          {(mapMarkers.length > 0 || center) && (
+          {/* Map — show whenever we have markers (works for both GPS and region mode) */}
+          {mapMarkers.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
@@ -241,7 +249,7 @@ export default function NearbyListingsPage() {
             >
               <NearbyMapWithUserPin
                 center={center}
-                zoom={geo.kind === 'granted' ? 11 : 6}
+                zoom={geo.kind === 'granted' ? 11 : 8}
                 markers={mapMarkers}
                 userLocation={geo.kind === 'granted' ? [geo.lat, geo.lng] : null}
                 className="h-72 w-full sm:h-96"

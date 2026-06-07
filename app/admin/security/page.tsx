@@ -91,19 +91,19 @@ export default function AdminSecurityPage() {
             {/* OTP Locked Users */}
             <SecurityCard
               icon={Lock}
-              title="OTP Locked Users"
+              title={t('security.otpLockedUsers')}
               count={data.otp_locked_users.length}
               tone="text-danger"
             >
               {data.otp_locked_users.length === 0 ? (
-                <p className="text-sm text-fg-muted">No locked users.</p>
+                <p className="text-sm text-fg-muted">{t('security.noLockedUsers')}</p>
               ) : (
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border text-xs font-semibold uppercase tracking-wide text-fg-subtle">
-                      <th className="pb-2 text-left">Phone prefix</th>
-                      <th className="pb-2 text-left">Attempts</th>
-                      <th className="pb-2 text-left">Locked until</th>
+                      <th className="pb-2 text-left">{t('security.phonePrefix')}</th>
+                      <th className="pb-2 text-left">{t('security.attempts')}</th>
+                      <th className="pb-2 text-left">{t('security.lockedUntil')}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
@@ -122,18 +122,18 @@ export default function AdminSecurityPage() {
             {/* High Failure Users */}
             <SecurityCard
               icon={AlertTriangle}
-              title="High Failure Users (≥3 attempts)"
+              title={t('security.highFailureUsers')}
               count={data.high_failure_users.length}
               tone="text-warning"
             >
               {data.high_failure_users.length === 0 ? (
-                <p className="text-sm text-fg-muted">No high-failure users.</p>
+                <p className="text-sm text-fg-muted">{t('security.noHighFailureUsers')}</p>
               ) : (
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border text-xs font-semibold uppercase tracking-wide text-fg-subtle">
-                      <th className="pb-2 text-left">Phone prefix</th>
-                      <th className="pb-2 text-left">Attempts</th>
+                      <th className="pb-2 text-left">{t('security.phonePrefix')}</th>
+                      <th className="pb-2 text-left">{t('security.attempts')}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
@@ -151,22 +151,22 @@ export default function AdminSecurityPage() {
             {/* Recent Suspicious Events */}
             <SecurityCard
               icon={ShieldAlert}
-              title="Recent Suspicious Events"
+              title={t('security.recentSuspiciousEvents')}
               count={data.recent_suspicious_events.length}
               tone="text-danger"
             >
               {data.recent_suspicious_events.length === 0 ? (
-                <p className="text-sm text-fg-muted">No suspicious events.</p>
+                <p className="text-sm text-fg-muted">{t('security.noSuspiciousEvents')}</p>
               ) : (
                 <div className="space-y-2">
                   {data.recent_suspicious_events.map((e, i) => (
                     <div key={i} className="rounded-xl bg-bg-subtle p-3 text-sm">
                       <div className="flex items-center justify-between gap-2">
-                        <span className="font-mono text-xs text-fg-muted">{e.ip_address ?? 'unknown'}</span>
+                        <span className="font-mono text-xs text-fg-muted">{e.ip_address ?? t('security.unknown')}</span>
                         <span className="text-xs text-fg-subtle">{new Date(e.created_at).toLocaleString()}</span>
                       </div>
                       {e.user_public_id && (
-                        <p className="mt-1 text-xs text-fg-muted">User: {e.user_public_id}</p>
+                        <p className="mt-1 text-xs text-fg-muted">{t('security.userLabel')}: {e.user_public_id}</p>
                       )}
                     </div>
                   ))}
@@ -177,18 +177,18 @@ export default function AdminSecurityPage() {
             {/* Session Anomalies */}
             <SecurityCard
               icon={Activity}
-              title="Session Anomalies (>5 IPs)"
+              title={t('security.sessionAnomalies')}
               count={data.session_anomalies.length}
               tone="text-warning"
             >
               {data.session_anomalies.length === 0 ? (
-                <p className="text-sm text-fg-muted">No anomalies detected.</p>
+                <p className="text-sm text-fg-muted">{t('security.noAnomalies')}</p>
               ) : (
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border text-xs font-semibold uppercase tracking-wide text-fg-subtle">
-                      <th className="pb-2 text-left">User ID</th>
-                      <th className="pb-2 text-left">Distinct IPs</th>
+                      <th className="pb-2 text-left">{t('security.userId')}</th>
+                      <th className="pb-2 text-left">{t('security.distinctIps')}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">

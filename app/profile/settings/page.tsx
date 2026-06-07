@@ -20,6 +20,8 @@ import { AppNav } from '@/components/layout/AppNav';
 import { Badge } from '@/components/ui/Badge';
 import { useTheme } from '@/components/providers/ThemeProvider';
 import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher';
+import apiClient from '@/lib/api/client';
+import { useAuthStore } from '@/lib/store/auth';
 
 function Toggle({ on, onToggle, disabled = false }: { on: boolean; onToggle: () => void; disabled?: boolean }) {
   return (
@@ -81,6 +83,7 @@ export default function SettingsPage() {
   const t = useTranslations();
   const router = useRouter();
   const { mode, setMode } = useTheme();
+  const { logout } = useAuthStore();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteInput, setDeleteInput] = useState('');
 
@@ -88,6 +91,22 @@ export default function SettingsPage() {
   const [pushNotifs, setPushNotifs] = useState(true);
   const [msgNotifs, setMsgNotifs] = useState(true);
   const [listingNotifs, setListingNotifs] = useState(true);
+
+  const handleConfirmDelete = async () => {
+    if (deleteInput !== 'OʻCHIRISH') return;
+    try {
+      await apiClient.delete('/api/users/me/delete/');
+      logout();
+      router.replace('/');
+    } catch (err: any) {
+      const detail = err?.response?.data?.detail || t('errors.somethingWrong') || 'Hisobni oʻchirib boʻlmadi.';
+      // Simple alert for now; in real would use toast
+      alert(detail);
+    } finally {
+      setShowDeleteConfirm(false);
+      setDeleteInput('');
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -192,8 +211,8 @@ export default function SettingsPage() {
                       <MessageSquareText className="h-5 w-5" strokeWidth={1.75} />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-fg">Telegram OTP</p>
-                      <p className="text-xs text-fg-muted">Kod orqali kirishning yagona usuli</p>
+                      <p className="text-sm font-semibold text-fg">{t('settings.telegramOtp')}</p>
+                      <p className="text-xs text-fg-muted">{t('settings.telegramOtpDescription')}</p>
                     </div>
                   </div>
                   <Badge variant="success">
@@ -230,7 +249,7 @@ export default function SettingsPage() {
 
       {/* Delete confirm */}
       {showDeleteConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
           <div
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => setShowDeleteConfirm(false)}
@@ -257,7 +276,7 @@ export default function SettingsPage() {
               <button type="button" onClick={() => setShowDeleteConfirm(false)} className="btn btn-secondary flex-1">
                 {t('common.cancel')}
               </button>
-              <button type="button" disabled={deleteInput !== 'OʻCHIRISH'} className="btn btn-danger flex-1">
+              <button type="button" onClick={handleConfirmDelete} disabled={deleteInput !== 'OʻCHIRISH'} className="btn btn-danger flex-1">
                 {t('common.delete')}
               </button>
             </div>
