@@ -50,7 +50,6 @@ export default function AuthPage() {
     }
   }, [isAuthenticated, currentUser?.is_admin, nextPath, router]);
 
-  const [stage, setStage] = useState<Stage>('open-bot');
   const [code, setCode] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -59,7 +58,6 @@ export default function AuthPage() {
   const openTelegramBot = () => {
     const url = `https://t.me/${TG_BOT}?start=auth`;
     window.open(url, '_blank', 'noopener,noreferrer');
-    setStage('enter-code');
   };
 
   const handleVerify = async () => {
