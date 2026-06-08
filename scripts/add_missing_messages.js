@@ -69,6 +69,8 @@ const ADD = {
       followers: 'Obunachilar',
       directory: 'Sotuvchilar katalogi',
       trustedSellers: 'Tasdiqlangan sotuvchilar',
+      noResults: 'Sotuvchilar topilmadi',
+      tryAdjusting: 'Boshqa qidiruv so\'zlarini sinab ko\'ring yoki joylashuvni o\'zgartiring',
     },
     notifications: {
       title: 'Bildirishnomalar',
@@ -103,6 +105,7 @@ const ADD = {
       recent: 'So\'nggi qidiruvlar',
       popular: 'Mashhur qidiruvlar',
       sellers: 'Sotuvchilar',
+      tryDifferent: 'Boshqa so\'zlar bilan qidirib ko\'ring',
     },
     listings: {
       title: 'E\'lonlar',
@@ -469,6 +472,9 @@ const cyrOverrides = {
   'report.status.under_review': 'Кўриб чиқилмоқда',
   'report.status.resolved_valid': 'Тасдиқланди',
   'report.status.resolved_invalid': 'Рад этилди',
+  'sellers.noResults': 'Сотувчилар топилмади',
+  'sellers.tryAdjusting': 'Бошқа қидирув сўзларини синаб кўринг ёки жойлашувни ўзгартиринг',
+  'search.tryDifferent': 'Бошқа сўзлар билан қидириб кўринг',
 };
 deepMerge(uc, ucAdd);
 uc.report = uc.report || {};
@@ -538,6 +544,9 @@ const ruOverrides = {
   'sellers.followers': 'Подписчики',
   'sellers.directory': 'Каталог продавцов',
   'sellers.trustedSellers': 'Проверенные продавцы',
+  'sellers.noResults': 'Продавцы не найдены',
+  'sellers.tryAdjusting': 'Попробуйте изменить параметры поиска или местоположение',
+  'search.tryDifferent': 'Попробуйте поискать с другими ключевыми словами',
   'notifications.title': 'Уведомления',
   'notifications.empty': 'Уведомлений нет',
   'notifications.markAllRead': 'Отметить все прочитанными',
@@ -620,6 +629,9 @@ const enOverrides = {
   'sellers.followers': 'Followers',
   'sellers.directory': 'Sellers Directory',
   'sellers.trustedSellers': 'Trusted sellers',
+  'sellers.noResults': 'No sellers found',
+  'sellers.tryAdjusting': 'Try adjusting your search or location',
+  'search.tryDifferent': 'Try searching with different keywords',
   'notifications.title': 'Notifications',
   'notifications.empty': 'No notifications',
   'notifications.markAllRead': 'Mark all as read',

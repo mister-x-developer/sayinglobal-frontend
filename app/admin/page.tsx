@@ -13,7 +13,7 @@ import { useTranslations } from 'next-intl';
 import {
   Users, Package, Flag, TrendingUp, ArrowRight, Megaphone, BarChart3,
   MessageCircle, Eye, Loader2, RefreshCw, AlertTriangle, CheckCircle2,
-  Clock, Bot, Shield, Activity, Zap, ChevronRight, Bell,
+  Clock, Bot, Shield, Activity, Zap, ChevronRight, Bell, Star,
 } from 'lucide-react';
 import { AdminLayout } from '@/components/layout/AdminLayout';
 import { formatNumber, formatRelativeTime } from '@/lib/utils/format';
@@ -219,6 +219,7 @@ export default function AdminDashboardPage() {
                   <QuickAction href="/admin/users" icon={Users} label={t('admin.users')} color="bg-blue-500/10 text-blue-500" />
                   <QuickAction href="/admin/listings" icon={Package} label={t('admin.listings')} badge={pendingListings} color="bg-brand-primary/10 text-brand-primary" />
                   <QuickAction href="/admin/moderation" icon={Flag} label={t('admin.complaints')} badge={pendingComplaints} color="bg-danger/10 text-danger" />
+                  <QuickAction href="/admin/ratings" icon={Star} label={t('admin.ratingsModeration' as any) ?? 'Sharhlar'} color="bg-warning/10 text-warning" />
                   <QuickAction href="/admin/broadcasts" icon={Megaphone} label={t('admin.broadcasts')} color="bg-purple-500/10 text-purple-500" />
                   <QuickAction href="/admin/analytics" icon={BarChart3} label={t('admin.analytics')} color="bg-green-500/10 text-green-500" />
                   <QuickAction href="/admin/ai-moderation" icon={Bot} label={t('admin.aiModeration' as any) ?? 'AI Moderatsiya'} color="bg-brand-accent/10 text-brand-accent" />

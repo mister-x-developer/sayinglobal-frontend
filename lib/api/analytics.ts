@@ -11,6 +11,7 @@ export interface DashboardStats {
     total: number;
     active: number;
     sold: number;
+    pending: number;
     new_today: number;
   };
   messages: { total: number; today: number };

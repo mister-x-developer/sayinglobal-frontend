@@ -25,6 +25,7 @@ import {
   Bell,
   PanelLeftClose,
   PanelLeftOpen,
+  Bot,
 } from 'lucide-react';
 
 import { Logo } from '@/components/shared/Logo';
@@ -46,12 +47,14 @@ const NAV_GROUPS = [
     items: [
       { href: '/admin/listings', icon: LayoutGrid, label: 'admin.listings' },
       { href: '/admin/moderation', icon: Flag, label: 'admin.complaints' },
+      { href: '/admin/ai-moderation', icon: Bot, label: 'admin.aiModeration' },
     ],
   },
   {
     labelKey: 'admin.users',
     items: [
       { href: '/admin/users', icon: Users, label: 'admin.users' },
+      { href: '/admin/ratings', icon: Star, label: 'admin.ratingsModeration' },
       { href: '/admin/security', icon: ShieldAlert, label: 'security.title' },
     ],
   },

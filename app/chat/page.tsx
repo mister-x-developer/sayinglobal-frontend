@@ -92,7 +92,10 @@ export default function ChatPage() {
       c.participants?.some((p: any) => p.public_id === sellerId)
     );
     if (existing) {
-      openConversation(existing);
+      if (activeConv?.public_id !== existing.public_id) {
+        openConversation(existing);
+        window.history.replaceState(null, '', '/chat');
+      }
     } else {
       chatApi.startConversation(sellerId).then((conv) => {
         if (!conv) return;
@@ -103,6 +106,7 @@ export default function ChatPage() {
         };
         setConversations((prev) => prev.some((c) => c.public_id === norm.public_id) ? prev : [norm, ...prev]);
         openConversation(norm);
+        window.history.replaceState(null, '', '/chat');
       }).catch(() => {});
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

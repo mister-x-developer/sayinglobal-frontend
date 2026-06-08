@@ -19,6 +19,7 @@ import {
   ShieldCheck,
   Plus,
   Flag,
+  BookOpen,
 } from 'lucide-react';
 
 import { AppNav } from '@/components/layout/AppNav';
@@ -357,6 +358,7 @@ export default function ProfilePage() {
                     { href: '/profile/reports', icon: Flag, label: t('profile.myReports' as any) ?? 'Reports' },
                     { href: '/sellers/following', icon: Users, label: t('profile.followedSellers') },
                     { href: '/chat', icon: MessageSquareText, label: t('nav.chat') },
+                    { href: '/profile/guide', icon: BookOpen, label: 'Platforma Qoidalari va Qo\'llanma' },
                   ].map((l) => {
                     const Icon = l.icon;
                     return (
@@ -372,9 +374,6 @@ export default function ProfilePage() {
                   })}
                 </div>
               </div>
-
-              {/* Important information */}
-              <ImportantInfoCard />
             </aside>
           </div>
         </div>
@@ -452,35 +451,4 @@ function ActivityTimeline() {
 }
 
 
-/**
- * ImportantInfoCard — explains the 4-status trust system, ratings, moderation
- * lifecycle, complaints, and account responsibilities. Detailed and truthful.
- */
-function ImportantInfoCard() {
-  const t = useTranslations();
-  const sections: { title: string; body: string }[] = [
-    { title: t('profileInfo.statusTitle'),      body: t('profileInfo.statusBody') },
-    { title: t('profileInfo.ratingTitle'),      body: t('profileInfo.ratingBody') },
-    { title: t('profileInfo.moderationTitle'),  body: t('profileInfo.moderationBody') },
-    { title: t('profileInfo.lifecycleTitle'),   body: t('profileInfo.lifecycleBody') },
-    { title: t('profileInfo.complaintTitle'),   body: t('profileInfo.complaintBody') },
-    { title: t('profileInfo.rulesTitle'),       body: t('profileInfo.rulesBody') },
-  ];
-  return (
-    <div className="surface-elevated p-5">
-      <div className="mb-3 flex items-center gap-2">
-        <ShieldCheck className="h-4 w-4 text-brand-accent" strokeWidth={2} />
-        <h3 className="display-sm">{t('profileInfo.title')}</h3>
-      </div>
-      <p className="mb-4 text-sm text-fg-muted">{t('profileInfo.lead')}</p>
-      <div className="space-y-3">
-        {sections.map((s) => (
-          <div key={s.title} className="rounded-xl bg-bg-subtle p-3.5 sm:p-3 overflow-visible">
-            <p className="text-sm font-semibold text-fg break-words">{s.title}</p>
-            <p className="mt-1 text-[13px] sm:text-xs leading-relaxed text-fg-muted whitespace-pre-line break-words">{s.body}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+

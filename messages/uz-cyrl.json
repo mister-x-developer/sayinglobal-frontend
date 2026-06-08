@@ -406,7 +406,9 @@
     "trustedSellers": "Ишончли сотувчилар",
     "followers": "Обуначилар",
     "totalReviews": "шарҳ",
-    "trustNotice": "Платформа харидор ва сотувчи ўртасидаги битим учун жавобгар эмас"
+    "trustNotice": "Платформа харидор ва сотувчи ўртасидаги битим учун жавобгар эмас",
+    "noResults": "Sotuvchilar topilmadi",
+    "tryAdjusting": "Boshqa qidiruv so'zlarini sinab ko'ring yoki joylashuvni o'zgartiring"
   },
   "comments": {
     "title": "Изоҳлар",
@@ -864,7 +866,11 @@
     "titleChat": "Чат орқали шикоят",
     "descriptionMinLength": "Камида 10 та белги керак",
     "titleComment": "Izohni shikoyat qilish",
-    "titleRating": "Sharhni shikoyat qilish"
+    "titleRating": "Sharhni shikoyat qilish",
+    "status.pending": "Kutilmoqda",
+    "status.under_review": "Ko'rib chiqilmoqda",
+    "status.resolved_valid": "Tasdiqlandi",
+    "status.resolved_invalid": "Rad etildi"
   },
   "security": {
     "title": "Хавфсизлик",
@@ -904,7 +910,10 @@
       "login_failure": "Кириш муваффақиятсиз",
       "verify_success": "Тасдиқлаш муваффақиятли",
       "verify_attempt": "Тасдиқлаш уриниш"
-    }
+    },
+    "sessions": "Seanslat",
+    "revokeAllOthers": "Boshqa seanslarga ruxsatni qaytarib olish",
+    "events": "Xavfsizlik voqealari"
   },
   "adminMod": {
     "title": "Шикоятлар",

@@ -406,7 +406,9 @@
     "trustedSellers": "Надёжные продавцы",
     "followers": "Подписчики",
     "totalReviews": "отзывов",
-    "trustNotice": "Платформа не несёт ответственности за сделки между покупателями и продавцами"
+    "trustNotice": "Платформа не несёт ответственности за сделки между покупателями и продавцами",
+    "noResults": "Sotuvchilar topilmadi",
+    "tryAdjusting": "Boshqa qidiruv so'zlarini sinab ko'ring yoki joylashuvni o'zgartiring"
   },
   "comments": {
     "title": "Комментарии",
@@ -850,8 +852,8 @@
     "status": {
       "pending": "Ожидает",
       "under_review": "На рассмотрении",
-      "resolved_valid": "Подтверждено",
-      "resolved_invalid": "Отклонено"
+      "resolved_valid": "Подтверждена",
+      "resolved_invalid": "Отклонена"
     },
     "complainant": "Заявитель",
     "title": "Жалоба",
@@ -864,7 +866,11 @@
     "titleChat": "Жалоба на чат",
     "descriptionMinLength": "Минимум 10 символов",
     "titleComment": "Izohni shikoyat qilish",
-    "titleRating": "Sharhni shikoyat qilish"
+    "titleRating": "Sharhni shikoyat qilish",
+    "status.pending": "Kutilmoqda",
+    "status.under_review": "Ko'rib chiqilmoqda",
+    "status.resolved_valid": "Tasdiqlandi",
+    "status.resolved_invalid": "Rad etildi"
   },
   "security": {
     "title": "Безопасность",
@@ -904,7 +910,10 @@
       "login_failure": "Вход не выполнен",
       "verify_success": "Верификация успешна",
       "verify_attempt": "Попытка верификации"
-    }
+    },
+    "sessions": "Seanslat",
+    "revokeAllOthers": "Boshqa seanslarga ruxsatni qaytarib olish",
+    "events": "Xavfsizlik voqealari"
   },
   "adminMod": {
     "title": "Жалобы",

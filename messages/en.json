@@ -406,7 +406,9 @@
     "trustedSellers": "Trusted sellers",
     "followers": "Followers",
     "totalReviews": "reviews",
-    "trustNotice": "The platform is not responsible for transactions between buyers and sellers"
+    "trustNotice": "The platform is not responsible for transactions between buyers and sellers",
+    "noResults": "Sotuvchilar topilmadi",
+    "tryAdjusting": "Boshqa qidiruv so'zlarini sinab ko'ring yoki joylashuvni o'zgartiring"
   },
   "comments": {
     "title": "Comments",
@@ -864,7 +866,11 @@
     "titleChat": "Report chat",
     "descriptionMinLength": "At least 10 characters required",
     "titleComment": "Izohni shikoyat qilish",
-    "titleRating": "Sharhni shikoyat qilish"
+    "titleRating": "Sharhni shikoyat qilish",
+    "status.pending": "Kutilmoqda",
+    "status.under_review": "Ko'rib chiqilmoqda",
+    "status.resolved_valid": "Tasdiqlandi",
+    "status.resolved_invalid": "Rad etildi"
   },
   "security": {
     "title": "Security",
@@ -904,7 +910,10 @@
       "login_failure": "Login failed",
       "verify_success": "Verification successful",
       "verify_attempt": "Verification attempt"
-    }
+    },
+    "sessions": "Seanslat",
+    "revokeAllOthers": "Boshqa seanslarga ruxsatni qaytarib olish",
+    "events": "Xavfsizlik voqealari"
   },
   "adminMod": {
     "title": "Reports",
