@@ -48,7 +48,7 @@ export function MobileBottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-30 border-t border-border bg-bg-elevated/92 backdrop-blur-xl md:hidden"
+      className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-bg-elevated/92 backdrop-blur-xl md:hidden touch-manipulation"
       aria-label="Mobile navigation"
     >
       <div className="flex items-center justify-around px-1 pb-safe pt-1 bg-bg-elevated/95 backdrop-blur" role="list">
@@ -59,12 +59,12 @@ export function MobileBottomNav() {
           if (l.primary) {
             return (
               <Link
-                key={l.href}
-                href={l.href}
-                role="listitem"
-                aria-label={l.label}
-                className="flex flex-col items-center justify-center py-1"
-              >
+                    key={l.href}
+                    href={l.href}
+                    role="listitem"
+                    aria-label={l.label}
+                    className="flex flex-col items-center justify-center py-1 touch-manipulation"
+                  >
                 <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-primary text-white shadow-[0_4px_14px_0_rgb(31_122_82/0.45)] transition-transform active:scale-95">
                   <Icon className="h-5 w-5" strokeWidth={2.25} />
                 </span>
@@ -77,15 +77,15 @@ export function MobileBottomNav() {
 
           return (
             <Link
-              key={l.href}
-              href={l.href}
-              role="listitem"
-              aria-label={l.label}
-              aria-current={active ? 'page' : undefined}
-              className={`relative flex min-w-[56px] flex-col items-center justify-center gap-1 py-2 px-2 transition-colors ${
-                active ? 'text-brand-primary' : 'text-fg-subtle'
-              }`}
-            >
+                key={l.href}
+                href={l.href}
+                role="listitem"
+                aria-label={l.label}
+                aria-current={active ? 'page' : undefined}
+                className={`relative flex min-w-[56px] flex-col items-center justify-center gap-1 py-2 px-2 transition-colors touch-manipulation ${
+                  active ? 'text-brand-primary' : 'text-fg-subtle'
+                }`}
+              >
               <Icon
                 className={`h-[22px] w-[22px] transition-transform active:scale-90 ${
                   active ? 'scale-110' : ''

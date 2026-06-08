@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
-import { Check, Crown, Zap, Gift, ArrowRight, Loader2, Tag, Users, Clock } from 'lucide-react';
+import { Check, Crown, Zap, Gift, ArrowRight, Loader2, Tag, Users, Clock, BadgeCheck, Gem } from 'lucide-react';
 
 import { AppNav } from '@/components/layout/AppNav';
 import { useAuthStore } from '@/lib/store/auth';
@@ -48,8 +48,8 @@ interface ReferralCode {
   rewarded_referrals: number;
 }
 
-const PLAN_ICONS = [Tag, Zap, Crown];
-const PLAN_ICON_COLORS = ['text-emerald-500', 'text-blue-500', 'text-amber-500'];
+const PLAN_ICONS = [Tag, Zap, BadgeCheck, Crown, Gem];
+const PLAN_ICON_COLORS = ['text-emerald-500', 'text-blue-500', 'text-cyan-500', 'text-amber-500', 'text-fuchsia-500'];
 
 function getPlanName(plan: Plan, locale: string): string {
   if (locale === 'uz-cyrl' && plan.name_uz_cyrl) return plan.name_uz_cyrl;
@@ -290,9 +290,12 @@ export default function PlansPage() {
                     </div>
 
                     {/* Referral notice — only for paid plans */}
-                    {plan.price_uzs > 0 && !plan.is_coming_soon && (
-                      <div className="mt-3 rounded-xl bg-brand-accent/10 px-3 py-2 text-xs text-brand-accent font-semibold">
-                        🎁 {t('plans.referralNotice')}
+                    {plan.price_uzs > 0 && !plan.is_coming_soon && plan.referrals_required > 0 && (
+                      <div className="mt-3 rounded-xl bg-brand-accent/10 px-3 py-2 text-xs text-brand-accent font-semibold flex items-center justify-between">
+                        <span>🎁 {t('plans.referralNotice')}</span>
+                        <span className="bg-brand-accent text-white px-2 py-0.5 rounded-full text-[10px]">
+                          {plan.referrals_required} ta kerak
+                        </span>
                       </div>
                     )}
 

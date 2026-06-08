@@ -183,7 +183,7 @@ export default function AdminPlansPage() {
             <p className="text-eyebrow">Admin</p>
             <h1 className="display-md mt-1">Tariflar boshqaruvi</h1>
             <p className="mt-1 text-sm text-fg-muted">
-              Har bir tarif oylik va faol eʼlon limitiga ega. Limitsiz tariflar yoʻq.
+              Har bir tarif oylik va faol e'lon limitiga ega. Limitsiz tariflar yo'q.
             </p>
           </div>
           {tab === 'plans' && (
@@ -322,7 +322,7 @@ export default function AdminPlansPage() {
             ) : promos.length === 0 ? (
               <div className="py-16 text-center text-fg-muted">
                 <Ticket className="mx-auto h-8 w-8 opacity-30" strokeWidth={1.5} />
-                <p className="mt-3 text-sm">Promo kodlar yoʻq</p>
+                <p className="mt-3 text-sm">Promo kodlar yo'q</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -495,7 +495,7 @@ export default function AdminPlansPage() {
                     onChange={(e) => setForm((p) => ({ ...p, monthly_listing_limit: Number(e.target.value) }))}
                     className="input-base mt-1 w-full"
                   />
-                  <p className="mt-1 text-[11px] text-fg-subtle">Min: 1 (limitsiz tariflar yoʻq)</p>
+                  <p className="mt-1 text-[11px] text-fg-subtle">Min: 1 (limitsiz tariflar yo'q)</p>
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-fg-subtle">
@@ -686,7 +686,7 @@ function AdminReferralsList() {
     return (
       <div className="surface-elevated py-16 text-center text-fg-muted">
         <Users className="mx-auto h-8 w-8 opacity-30" strokeWidth={1.5} />
-        <p className="mt-3 text-sm">Referrallar yoʻq</p>
+        <p className="mt-3 text-sm">Referrallar yo'q</p>
       </div>
     );
   }

@@ -84,8 +84,8 @@ export function TermsGate() {
     } catch (e: any) {
       const err = e?.response?.data?.error ?? 'error';
       const msgs: Record<string, string> = {
-        invalid_code: "Notoʻgʻri referral kod",
-        cannot_use_own_code: "Oʻz kodingizni ishlatib boʻlmaydi",
+        invalid_code: "Noto'g'ri referral kod",
+        cannot_use_own_code: "O'z kodingizni ishlatib bo'lmaydi",
         already_used_referral: "Referral kod allaqachon ishlatilgan",
       };
       setReferralMsg({ ok: false, text: msgs[err] ?? err });
@@ -207,8 +207,8 @@ export function TermsGate() {
                 <p className="text-sm font-semibold text-fg">🎁 {t('referral.systemTitle' as any) ?? 'Referral tizimi'}</p>
                 <p className="text-xs text-fg-muted mt-1">{t('referral.systemDesc' as any) ?? "Do'stlaringizni taklif qiling → ular e'lon joylashganda siz yuqori tarif olasiz."}</p>
                 <ul className="mt-2 space-y-1 text-xs text-fg-muted">
-                  <li>• {t('referral.tier1' as any) ?? '3 ta referral → Standart tarif'}</li>
-                  <li>• {t('referral.tier2' as any) ?? '7 ta referral → Pro tarif'}</li>
+                  <li>• {t('referral.tier1' as any) ?? '10 ta referral → Standart tarif'}</li>
+                  <li>• {t('referral.tier2' as any) ?? '25 ta referral → Plus tarif'}</li>
                 </ul>
               </div>
             </div>

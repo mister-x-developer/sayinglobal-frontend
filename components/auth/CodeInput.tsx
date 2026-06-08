@@ -20,6 +20,16 @@ export function CodeInput({
   autoFocus = true,
 }: CodeInputProps) {
   const inputs = useRef<Array<HTMLInputElement | null>>([]);
+  const lastValue = useRef(value);
+
+  // Update focus when value changes (from paste or other updates)
+  useEffect(() => {
+    if (value.length > lastValue.current.length) {
+      const nextFocus = Math.min(value.length, length - 1);
+      inputs.current[nextFocus]?.focus();
+    }
+    lastValue.current = value;
+  }, [value, length]);
 
   useEffect(() => {
     if (autoFocus) inputs.current[0]?.focus();
@@ -28,46 +38,41 @@ export function CodeInput({
   const clean = (value || '').replace(/\D/g, '').slice(0, length);
   const digits = clean.split('').concat(Array.from({ length: length - clean.length }, () => ''));
 
-  const setAt = (index: number, char: string) => {
-    const arr = digits.slice();
-    arr[index] = char || '';
-    const next = arr.join('').replace(/\D/g, '').slice(0, length);
-    onChange(next);
-  };
-
   const handleChange = (i: number, e: ChangeEvent<HTMLInputElement>) => {
     const v = e.target.value.replace(/\D/g, '');
     if (!v) {
-      setAt(i, '');
+      // Handle backspace (empty)
+      const newValue = clean.slice(0, i) + clean.slice(i + 1);
+      onChange(newValue);
+      if (i > 0) inputs.current[i - 1]?.focus();
       return;
     }
     if (v.length === 1) {
-      setAt(i, v);
+      // Single digit typed
+      const newValue = (clean.slice(0, i) + v + clean.slice(i + 1)).slice(0, length);
+      onChange(newValue);
       if (i < length - 1) inputs.current[i + 1]?.focus();
     } else {
-      // Pasted multiple (safety net, though maxLength=1 + paste handler should catch most)
-      const trimmed = v.slice(0, length - i);
-      const arr = digits.slice();
-      for (let k = 0; k < trimmed.length; k++) {
-        arr[i + k] = trimmed[k];
-      }
-      const next = arr.join('').replace(/\D/g, '').slice(0, length);
-      onChange(next);
-      const focusIdx = Math.min(i + trimmed.length, length - 1);
+      // Multiple digits typed (rare, but handle)
+      const newValue = (clean.slice(0, i) + v + clean.slice(i)).slice(0, length);
+      onChange(newValue);
+      const focusIdx = Math.min(i + v.length, length - 1);
       inputs.current[focusIdx]?.focus();
     }
   };
 
   const handleKeyDown = (i: number, e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace') {
-      if (!digits[i]) {
-        if (i > 0) {
-          inputs.current[i - 1]?.focus();
-          setAt(i - 1, '');
-          e.preventDefault();
-        }
-      } else {
-        setAt(i, '');
+      if (!digits[i] && i > 0) {
+        // If current is empty, move back and delete previous
+        const newValue = clean.slice(0, i - 1) + clean.slice(i);
+        onChange(newValue);
+        inputs.current[i - 1]?.focus();
+        e.preventDefault();
+      } else if (digits[i]) {
+        // Delete current digit
+        const newValue = clean.slice(0, i) + clean.slice(i + 1);
+        onChange(newValue);
       }
     } else if (e.key === 'ArrowLeft' && i > 0) {
       inputs.current[i - 1]?.focus();
@@ -81,8 +86,6 @@ export function CodeInput({
     const text = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, length);
     if (text) {
       onChange(text);
-      const focusIdx = Math.min(text.length, length - 1);
-      inputs.current[focusIdx]?.focus();
     }
   };
 

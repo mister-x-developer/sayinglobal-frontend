@@ -11,7 +11,7 @@ export function formatPrice(price: number, currency: string = 'UZS'): string {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(price);
-    return `${formatted}${NBSP}soʻm`;
+    return `${formatted}${NBSP}so'm`;
   }
   try {
     return new Intl.NumberFormat('uz-UZ', {

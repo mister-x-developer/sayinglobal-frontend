@@ -35,7 +35,7 @@ const SLIDES: Slide[] = [
       en: 'Welcome to SAYIN GLOBAL!',
     },
     body: {
-      uz: "Oʻzbekistondagi eng yirik raqamli chorva bozori. Sotuvchilar va xaridorlarni bevosita bogʻlaymiz.",
+      uz: "O'zbekistondagi eng yirik raqamli chorva bozori. Sotuvchilar va xaridorlarni bevosita bog'laymiz.",
       'uz-cyrl': "Ўзбекистондаги энг йирик рақамли чорва бозори. Сотувчилар ва харидорларни бевосита боғлаймиз.",
       ru: 'Крупнейший цифровой рынок скота в Узбекистане. Соединяем продавцов и покупателей напрямую.',
       en: "Uzbekistan's largest digital livestock marketplace. We connect sellers and buyers directly.",

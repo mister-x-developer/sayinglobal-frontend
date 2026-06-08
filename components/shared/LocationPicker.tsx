@@ -93,7 +93,7 @@ export function LocationPicker({
   value,
   onChange,
   onAddress,
-  className = 'h-80 w-full',
+  className = 'h-64 w-full', // Smaller default height for mobile
 }: LocationPickerProps) {
   const t = useTranslations();
   const containerRef = useRef<HTMLDivElement | null>(null);

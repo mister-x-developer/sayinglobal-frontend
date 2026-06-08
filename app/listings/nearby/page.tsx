@@ -127,7 +127,7 @@ export default function NearbyListingsPage() {
             </Link>
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
-                <h1 className="display-md">{t('nearby.title' as any) ?? 'Yaqin atrofdagi eʼlonlar'}</h1>
+                <h1 className="display-md">{t('nearby.title' as any) ?? "Yaqin atrofdagi e'lonlar"}</h1>
                 <p className="mt-1.5 text-sm text-fg-muted inline-flex items-center gap-2">
                   <MapPin className="h-4 w-4 text-brand-accent" strokeWidth={1.75} />
                   {geo.kind === 'granted'
@@ -269,8 +269,8 @@ export default function NearbyListingsPage() {
           ) : results.length === 0 ? (
             <EmptyState
               icon={MapPin}
-              title={t('nearby.empty' as any) ?? 'Yaqin atrofda eʼlon topilmadi'}
-              description={t('nearby.emptyDesc' as any) ?? 'Radius yoki kategoriyani o\'zgartiring.'}
+              title={t('nearby.empty' as any) ?? "Yaqin atrofda e'lon topilmadi"}
+              description={t('nearby.emptyDesc' as any) ?? "Radius yoki kategoriyani o'zgartiring."}
             />
           ) : (
             <motion.div
@@ -279,7 +279,7 @@ export default function NearbyListingsPage() {
               transition={{ duration: 0.4 }}
             >
               <p className="mb-6 text-sm text-fg-muted">
-                <span className="font-bold text-fg">{count}</span> ta eʼlon topildi
+                <span className="font-bold text-fg">{count}</span> ta e'lon topildi
               </p>
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {results.map((listing, i) => (

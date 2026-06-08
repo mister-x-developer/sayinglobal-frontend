@@ -93,13 +93,13 @@ export default function SettingsPage() {
   const [listingNotifs, setListingNotifs] = useState(true);
 
   const handleConfirmDelete = async () => {
-    if (deleteInput !== 'OʻCHIRISH') return;
+    if (deleteInput !== "O'CHIRISH") return;
     try {
       await apiClient.delete('/api/users/me/delete/');
       logout();
       router.replace('/');
     } catch (err: any) {
-      const detail = err?.response?.data?.detail || t('errors.somethingWrong') || 'Hisobni oʻchirib boʻlmadi.';
+      const detail = err?.response?.data?.detail || t('errors.somethingWrong' as any) || "Hisobni o'chirib bo'lmadi.";
       // Simple alert for now; in real would use toast
       alert(detail);
     } finally {
@@ -191,7 +191,7 @@ export default function SettingsPage() {
                 />
                 <SettingRow
                   label={t('settings.favoriteNotifications')}
-                  description={t('settings.listingNotifDescription' as any) ?? 'Eʼlonlaringiz boʻyicha faollik'}
+                  description={t('settings.listingNotifDescription' as any) ?? "E'lonlaringiz bo'yicha faollik"}
                   on={listingNotifs}
                   onToggle={() => setListingNotifs((v) => !v)}
                 />
@@ -263,20 +263,20 @@ export default function SettingsPage() {
             <p className="mt-2 text-sm text-fg-muted">{t('settings.deleteAccountWarning')}</p>
             <div className="mt-4">
               <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-fg-muted">
-                Tasdiqlash uchun «OʻCHIRISH» deb yozing
+                Tasdiqlash uchun «O'CHIRISH» deb yozing
               </label>
               <input
                 value={deleteInput}
                 onChange={(e) => setDeleteInput(e.target.value)}
                 className="input-base w-full"
-                placeholder="OʻCHIRISH"
+                placeholder="O'CHIRISH"
               />
             </div>
             <div className="mt-5 flex gap-3">
               <button type="button" onClick={() => setShowDeleteConfirm(false)} className="btn btn-secondary flex-1">
                 {t('common.cancel')}
               </button>
-              <button type="button" onClick={handleConfirmDelete} disabled={deleteInput !== 'OʻCHIRISH'} className="btn btn-danger flex-1">
+              <button type="button" onClick={handleConfirmDelete} disabled={deleteInput !== "O'CHIRISH"} className="btn btn-danger flex-1">
                 {t('common.delete')}
               </button>
             </div>

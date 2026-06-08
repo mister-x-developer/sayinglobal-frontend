@@ -40,7 +40,7 @@ const LOCALE_TO_ISO: Record<string, string> = {
 // Covers the most common letter combinations used in Uzbek Latin script.
 const LATIN_TO_CYRL: [RegExp, string][] = [
   [/sh/gi, 'ш'], [/ch/gi, 'ч'], [/ng/gi, 'нг'], [/gh/gi, 'ғ'],
-  [/oʻ/gi, 'ў'], [/gʻ/gi, 'ғ'], [/Oʻ/g, 'Ў'], [/Gʻ/g, 'Ғ'],
+  [/o'/gi, 'ў'], [/g'/gi, 'ғ'], [/O'/g, 'Ў'], [/G'/g, 'Ғ'],
   [/o'/gi, 'ў'], [/g'/gi, 'ғ'],
   [/a/gi, 'а'], [/b/gi, 'б'], [/d/gi, 'д'], [/e/gi, 'е'],
   [/f/gi, 'ф'], [/g/gi, 'г'], [/h/gi, 'ҳ'], [/i/gi, 'и'],

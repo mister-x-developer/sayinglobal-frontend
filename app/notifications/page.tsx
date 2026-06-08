@@ -229,6 +229,7 @@ function NotificationRow({
   locale: string;
 }) {
   const t = useTranslations();
+  const router = useRouter();
   const Icon = TYPE_ICON[n.notification_type] ?? Bell;
   const tone = TYPE_TONE[n.notification_type] ?? 'bg-bg-subtle text-fg-muted';
 
@@ -243,19 +244,26 @@ function NotificationRow({
   const title = getLocaleText(n.title, n.title_uz, n.title_uz_cyrl, n.title_ru, n.title_en);
   const message = getLocaleText(n.message, n.message_uz, n.message_uz_cyrl, n.message_ru, n.message_en);
 
-  const inner = (
+  const dest = n.action_url ?? `/notifications/${n.public_id}`;
+
+  const handleRowClick = () => {
+    if (!n.is_read) onMarkRead(n.public_id);
+    router.push(dest);
+  };
+
+  return (
     <motion.div
       layout
       initial={{ opacity: 0, y: -4 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, x: 20, height: 0, marginBottom: 0 }}
       transition={{ duration: 0.22 }}
-      className={`group relative flex items-start gap-4 rounded-2xl border p-4 transition-colors ${
+      className={`group relative flex cursor-pointer items-start gap-4 rounded-2xl border p-4 transition-colors ${
         n.is_read
           ? 'border-border bg-bg-elevated hover:bg-bg-subtle'
           : 'border-brand-primary/20 bg-brand-primary/5 hover:bg-brand-primary/8'
       }`}
-      onClick={() => !n.is_read && onMarkRead(n.public_id)}
+      onClick={handleRowClick}
     >
       {/* Unread dot */}
       {!n.is_read && (
@@ -301,7 +309,7 @@ function NotificationRow({
         )}
         <button
           type="button"
-          onClick={(e) => { e.stopPropagation(); onRemove(n.public_id); }}
+          onClick={(e) => { e.stopPropagation(); e.preventDefault(); onRemove(n.public_id); }}
           className="inline-flex h-8 w-8 items-center justify-center rounded-full text-fg-subtle hover:bg-danger/10 hover:text-danger"
           aria-label={t('common.delete')}
         >
@@ -310,17 +318,5 @@ function NotificationRow({
       </div>
     </motion.div>
   );
-
-  if (n.action_url) {
-    return (
-      <Link href={n.action_url} className="block">
-        {inner}
-      </Link>
-    );
-  }
-  return (
-    <Link href={`/notifications/${n.public_id}`} className="block">
-      {inner}
-    </Link>
-  );
 }
+

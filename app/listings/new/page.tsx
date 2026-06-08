@@ -193,7 +193,7 @@ export default function NewListingPage() {
       }
       
       if (uploadedCount === 0 && images.length > 0) {
-        toast.error(t('errors.uploadFailed' as any) ?? 'Rasmlar yuklanmadi. Keyinroq qayta urinib koʻring.');
+        toast.error(t('errors.uploadFailed' as any) ?? "Rasmlar yuklanmadi. Keyinroq qayta urinib ko'ring.");
       }
       
       setSaved(true);

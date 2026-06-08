@@ -75,9 +75,9 @@ export function middleware(req: NextRequest) {
     });
   }
 
-  // If the user is already authenticated, do not show the auth screen.
-  // Strict: non-admins to /dashboard or next, admins to /admin.
-  if (pathname === '/auth' && isAuthenticated(req)) {
+  // If the user is already authenticated, redirect away from landing and auth.
+  // Strict: non-admins to /dashboard, admins to /admin.
+  if ((pathname === '/' || pathname === '/auth') && isAuthenticated(req)) {
     const nextUrl = req.nextUrl.clone();
     const target = isPlatformAdmin(req)
       ? '/admin'

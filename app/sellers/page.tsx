@@ -9,6 +9,7 @@ import { Search as SearchIcon, X, Users, MapPin, Compass } from 'lucide-react';
 import { AppNav } from '@/components/layout/AppNav';
 import { SellerCard } from '@/components/sellers/SellerCard';
 import { EmptyState } from '@/components/shared/EmptyState';
+import { SellerCardSkeleton } from '@/components/shared/LoadingStates';
 import { usersApi } from '@/lib/api/users';
 import { searchItems } from '@/lib/utils/search';
 
@@ -183,7 +184,13 @@ export default function SellersDirectoryPage() {
                 </button>
               </div>
             )}
-            {!hydrated ? null : filtered.length === 0 ? (
+            {loading || !hydrated ? (
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <SellerCardSkeleton key={i} />
+                ))}
+              </div>
+            ) : filtered.length === 0 ? (
               <EmptyState
                 icon={Users}
                 title={t('sellers.noResults' as any) ?? 'Sotuvchilar topilmadi'}

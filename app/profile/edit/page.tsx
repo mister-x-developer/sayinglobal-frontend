@@ -228,7 +228,7 @@ export default function EditProfilePage() {
                     />
                   </div>
                   <p className="mt-1.5 text-xs text-fg-subtle">
-                    Telefon raqam oʻzgartirib boʻlmaydi
+                    Telefon raqam o'zgartirib bo'lmaydi
                   </p>
                 </div>
               </div>

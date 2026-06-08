@@ -12,6 +12,7 @@ import {
 
 import { AppNav } from '@/components/layout/AppNav';
 import { Avatar } from '@/components/ui/Avatar';
+import { ChatListSkeleton } from '@/components/shared/LoadingStates';
 import { ReportDialog } from '@/components/shared/ReportDialog';
 import { useAuthStore } from '@/lib/store/auth';
 import { chatApi } from '@/lib/api/chat';
@@ -30,6 +31,39 @@ interface Message {
   translating?: boolean;
   translated?: boolean;
   failed?: boolean;
+}
+
+function normalizeChatMessage(raw: any): Message {
+  return {
+    id: String(raw.public_id ?? raw.id ?? `msg-${raw.created_at ?? Date.now()}`),
+    sender_id: String(raw.sender?.public_id ?? raw.sender_id ?? ''),
+    content: raw.content ?? raw.text ?? '',
+    created_at: raw.created_at ?? new Date().toISOString(),
+    is_read: raw.is_read ?? false,
+  };
+}
+
+function isSameOutgoingMessage(a: Message, b: Message, myId: string | null): boolean {
+  if (!myId) return false;
+  if (a.sender_id !== myId || b.sender_id !== myId) return false;
+  if (a.content !== b.content) return false;
+  const aTime = new Date(a.created_at).getTime();
+  const bTime = new Date(b.created_at).getTime();
+  if (!Number.isFinite(aTime) || !Number.isFinite(bTime)) return false;
+  return Math.abs(aTime - bTime) < 15_000;
+}
+
+function mergeMessageList(prev: Message[], incoming: Message, myId: string | null): Message[] {
+  if (prev.some((m) => m.id === incoming.id)) return prev;
+  const localMatch = prev.find((m) => m.id.startsWith('local-') && isSameOutgoingMessage(m, incoming, myId));
+  if (localMatch) {
+    return prev.map((m) => (
+      m.id === localMatch.id
+        ? { ...incoming, original: m.original, translated: m.translated, translating: false }
+        : m
+    ));
+  }
+  return [...prev, incoming];
 }
 
 export default function ChatPage() {
@@ -52,6 +86,8 @@ export default function ChatPage() {
   const typingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  // Track our pending optimistic message ids to prevent WS echo duplication
+  const pendingOptimisticIds = useRef<Set<string>>(new Set());
 
   // My public_id as string — used for isMe check
   const myId = user?.public_id != null ? String(user.public_id) : null;
@@ -130,13 +166,7 @@ export default function ChatPage() {
     setTypingUserId(null);
     chatApi.getMessages(conv.id ?? conv.public_id).then((msgs: any) => {
       const list = Array.isArray(msgs) ? msgs : msgs?.results ?? [];
-      const mapped: Message[] = list.map((m: any) => ({
-        id: String(m.public_id ?? m.id ?? Math.random()),
-        sender_id: String(m.sender?.public_id ?? m.sender_id ?? ''),
-        content: m.content ?? m.text ?? '',
-        created_at: m.created_at ?? new Date().toISOString(),
-        is_read: m.is_read ?? false,
-      })).reverse();
+      const mapped: Message[] = list.map(normalizeChatMessage).reverse();
       setMessages(mapped);
       scrollToBottom(false);
     }).finally(() => setMessagesLoading(false));
@@ -147,15 +177,14 @@ export default function ChatPage() {
       chatSocket.connect(String(conv.id ?? conv.public_id), token, {
         onMessage: (msg) => {
           setMessages((prev) => {
-            // Avoid duplicates (optimistic or already received)
-            if (prev.some((m) => m.id === msg.id)) return prev;
-            return [...prev, {
-              id: msg.id,
-              sender_id: msg.sender_id,
-              content: msg.content,
-              created_at: msg.created_at,
-              is_read: msg.is_read,
-            }];
+            const incoming = normalizeChatMessage(msg);
+            const next = mergeMessageList(prev, incoming, myId);
+            if (next !== prev) {
+              pendingOptimisticIds.current.forEach((id) => {
+                if (!next.some((m) => m.id === id)) pendingOptimisticIds.current.delete(id);
+              });
+            }
+            return next;
           });
           scrollToBottom();
           // Update conversation last_message
@@ -191,6 +220,7 @@ export default function ChatPage() {
       is_read: false,
       failed: false,
     };
+    pendingOptimisticIds.current.add(optimistic.id);
     setMessages((prev) => [...prev, optimistic]);
     setText('');
     scrollToBottom();
@@ -198,12 +228,14 @@ export default function ChatPage() {
     // Send via WebSocket (primary) or HTTP fallback
     const sentViaWs = chatSocket.sendMessage(content);
     if (sentViaWs) {
+      // WS echo will replace the optimistic message via onMessage handler
       setSending(false);
     } else {
       try {
         const sent = await chatApi.sendMessage(activeConv.id ?? activeConv.public_id, content);
         if (sent) {
           const sentId = String((sent as any).public_id ?? (sent as any).id ?? optimistic.id);
+          pendingOptimisticIds.current.delete(optimistic.id);
           setMessages((prev) => prev.map((m) =>
             m.id === optimistic.id ? { ...m, id: sentId } : m
           ));
@@ -214,6 +246,7 @@ export default function ChatPage() {
           ));
         }
       } catch {
+        pendingOptimisticIds.current.delete(optimistic.id);
         setMessages((prev) => prev.map((m) =>
           m.id === optimistic.id ? { ...m, failed: true } : m
         ));
@@ -322,19 +355,9 @@ export default function ChatPage() {
             </div>
           </div>
           {/* Conversation list */}
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden no-scrollbar">
             {convLoading ? (
-              <div className="space-y-1 p-2">
-                {[1,2,3].map((i) => (
-                  <div key={i} className="flex items-center gap-3 rounded-xl p-3 animate-pulse">
-                    <div className="h-11 w-11 rounded-full bg-bg-subtle flex-shrink-0" />
-                    <div className="flex-1 space-y-2">
-                      <div className="h-3 w-24 rounded bg-bg-subtle" />
-                      <div className="h-2.5 w-36 rounded bg-bg-subtle" />
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <ChatListSkeleton count={7} />
             ) : filteredConvs.length === 0 ? (
               <div className="p-6 text-center">
                 <MessageSquareText className="mx-auto mb-2 h-10 w-10 text-fg-subtle" strokeWidth={1.5} />

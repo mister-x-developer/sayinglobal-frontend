@@ -31,7 +31,7 @@ const CYR_TO_LAT: Record<string, string> = {
  * Pipeline:
  * 1. Lowercase
  * 2. Transliterate Cyrillic → Latin
- * 3. Remove Uzbek apostrophes (ʻ ʼ ' `)
+ * 3. Remove Uzbek apostrophes (' ' ' `)
  * 4. Collapse common digraph variants (sh→s, ch→c, etc.)
  * 5. Remove non-alphanumeric
  */
@@ -48,7 +48,7 @@ export function normalizeForSearch(text: string): string {
   result = result.toLowerCase();
 
   // Step 3: Remove Uzbek apostrophes
-  result = result.replace(/[ʻʼ''`ʹ]/g, '');
+  result = result.replace(/[''''`ʹ]/g, '');
 
   // Step 4: Collapse digraph variants for fuzzy matching
   result = result

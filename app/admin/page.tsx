@@ -149,7 +149,7 @@ export default function AdminDashboardPage() {
   const statCards = stats ? [
     { label: t('admin.totalUsers'), value: stats.users.total, sub: `+${stats.users.new_today} ${t('analytics.today' as any)}`, icon: Users, color: 'text-blue-500', bg: 'bg-blue-500/10', href: '/admin/users', delay: 0 },
     { label: t('admin.activeListings'), value: stats.listings.active, sub: `${formatNumber(stats.listings.total)} ${t('common.all').toLowerCase()}`, icon: Package, color: 'text-brand-primary', bg: 'bg-brand-primary/10', href: '/admin/listings', delay: 0.05 },
-    { label: t('analytics.totalViews' as any) ?? 'Koʻrishlar', value: stats.engagement.total_views, sub: `+${stats.engagement.views_today} ${t('analytics.today' as any)}`, icon: Eye, color: 'text-purple-500', bg: 'bg-purple-500/10', delay: 0.1 },
+    { label: t('analytics.totalViews' as any) ?? "Ko'rishlar", value: stats.engagement.total_views, sub: `+${stats.engagement.views_today} ${t('analytics.today' as any)}`, icon: Eye, color: 'text-purple-500', bg: 'bg-purple-500/10', delay: 0.1 },
     { label: t('nav.chat'), value: stats.messages.total, sub: `+${stats.messages.today} ${t('analytics.today' as any)}`, icon: MessageCircle, color: 'text-green-500', bg: 'bg-green-500/10', delay: 0.15 },
   ] : [];
 
@@ -391,7 +391,7 @@ function PendingListings() {
   if (items.length === 0) return (
     <div className="flex flex-col items-center justify-center py-10 gap-2">
       <CheckCircle2 className="h-8 w-8 text-success" strokeWidth={1.5} />
-      <p className="text-sm text-fg-muted">Kutilayotgan eʼlonlar yoʻq</p>
+      <p className="text-sm text-fg-muted">Kutilayotgan e'lonlar yo'q</p>
     </div>
   );
 
@@ -440,7 +440,7 @@ function RecentComplaints() {
   if (items.length === 0) return (
     <div className="flex flex-col items-center justify-center py-10 gap-2">
       <CheckCircle2 className="h-8 w-8 text-success" strokeWidth={1.5} />
-      <p className="text-sm text-fg-muted">Shikoyatlar yoʻq</p>
+      <p className="text-sm text-fg-muted">Shikoyatlar yo'q</p>
     </div>
   );
 

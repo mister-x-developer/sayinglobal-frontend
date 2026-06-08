@@ -159,7 +159,7 @@ export default function FavoritesPage() {
                         <h3 className="font-display text-base font-semibold text-fg">{getLocalizedListingTitle(l, locale)}</h3>
                         <p className="mt-1 text-sm text-fg-muted">{l.location}</p>
                         <p className="mt-2 font-display text-lg font-bold text-fg">
-                          {new Intl.NumberFormat('uz-UZ').format(l.price)} soʻm
+                          {new Intl.NumberFormat('uz-UZ').format(l.price)} so'm
                         </p>
                       </div>
                       <button

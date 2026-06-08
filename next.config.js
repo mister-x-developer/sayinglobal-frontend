@@ -18,6 +18,11 @@ const nextConfig = {
   reactStrictMode: true,
   skipTrailingSlashRedirect: true,
 
+  eslint: {
+    // ESLint runs in CI separately; don't let it block the build
+    ignoreDuringBuilds: true,
+  },
+
   images: {
     remotePatterns: [
       { protocol: 'http', hostname: 'localhost' },
