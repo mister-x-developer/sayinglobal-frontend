@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect, KeyboardEvent, ClipboardEvent, ChangeEvent } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface CodeInputProps {
   value: string;
@@ -19,6 +20,7 @@ export function CodeInput({
   hasError = false,
   autoFocus = true,
 }: CodeInputProps) {
+  const t = useTranslations('auth');
   const inputs = useRef<Array<HTMLInputElement | null>>([]);
   const lastValue = useRef(value);
 
@@ -93,7 +95,7 @@ export function CodeInput({
     <div
       className="flex items-center justify-center gap-2 sm:gap-3"
       role="group"
-      aria-label="Tasdiqlash kodi"
+      aria-label={t('codePlaceholder')}
       aria-describedby={hasError ? 'code-error' : undefined}
     >
       {Array.from({ length }).map((_, i) => {

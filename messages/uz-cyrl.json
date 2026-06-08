@@ -407,8 +407,8 @@
     "followers": "Обуначилар",
     "totalReviews": "шарҳ",
     "trustNotice": "Платформа харидор ва сотувчи ўртасидаги битим учун жавобгар эмас",
-    "noResults": "Sotuvchilar topilmadi",
-    "tryAdjusting": "Boshqa qidiruv soʻzlarini sinab koʻring yoki joylashuvni oʻzgartiring"
+    "noResults": "Сотувчилар топилмади",
+    "tryAdjusting": "Бошқа қидирув сўзларини синаб кўринг ёки жойлашувни ўзгартиринг"
   },
   "comments": {
     "title": "Изоҳлар",
@@ -509,7 +509,7 @@
     "descriptionPlaceholder": "Ҳайвон ҳақида батафсил маълумот беринг",
     "uploadPhotos": "Расмлар юкланг",
     "photosHint": "Яхши сифатли расмлар юклаш савдони тезлаштиради",
-    "minPhotos": "Камида 1 та расм юкланг",
+    "minPhotos": "Камида 3 та расм юкланг (максимал 5 та)",
     "maxPhotos": "Максимум 10 та расм",
     "selectLocation": "Жойлашувни танланг",
     "addressPlaceholder": "Туман, қишлоқ, кўча...",
@@ -865,12 +865,12 @@
     "statusLabel": "Ҳолат",
     "titleChat": "Чат орқали шикоят",
     "descriptionMinLength": "Камида 10 та белги керак",
-    "titleComment": "Izohni shikoyat qilish",
-    "titleRating": "Sharhni shikoyat qilish",
-    "status.pending": "Kutilmoqda",
-    "status.under_review": "Koʻrib chiqilmoqda",
-    "status.resolved_valid": "Tasdiqlandi",
-    "status.resolved_invalid": "Rad etildi"
+    "titleComment": "Изоҳни шикоят қилиш",
+    "titleRating": "Шарҳни шикоят қилиш",
+    "status.pending": "Кутилмоқда",
+    "status.under_review": "Кўриб чиқилмоқда",
+    "status.resolved_valid": "Тасдиқланди",
+    "status.resolved_invalid": "Рад этилди"
   },
   "security": {
     "title": "Хавфсизлик",
@@ -911,9 +911,9 @@
       "verify_success": "Тасдиқлаш муваффақиятли",
       "verify_attempt": "Тасдиқлаш уриниш"
     },
-    "sessions": "Seanslat",
-    "revokeAllOthers": "Boshqa seanslarga ruxsatni qaytarib olish",
-    "events": "Xavfsizlik voqealari"
+    "sessions": "Сеанслар",
+    "revokeAllOthers": "Бошқа сеанслардан чиқиш",
+    "events": "Хавфсизлик воқеалари"
   },
   "adminMod": {
     "title": "Шикоятлар",

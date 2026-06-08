@@ -90,7 +90,7 @@ export function ListingCard({ listing, onFavorite }: Props) {
           <button
             type="button"
             onClick={handleFav}
-            aria-label={isFavorited ? "Saralangandan olib tashlash" : "Saralanganga qo'shish"}
+            aria-label={isFavorited ? t('success.unfavorited') : t('success.favorited')}
             aria-pressed={isFavorited}
             className={cn(
               'absolute top-3 right-3 inline-flex h-9 w-9 items-center justify-center rounded-full',

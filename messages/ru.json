@@ -407,8 +407,8 @@
     "followers": "Подписчики",
     "totalReviews": "отзывов",
     "trustNotice": "Платформа не несёт ответственности за сделки между покупателями и продавцами",
-    "noResults": "Sotuvchilar topilmadi",
-    "tryAdjusting": "Boshqa qidiruv soʻzlarini sinab koʻring yoki joylashuvni oʻzgartiring"
+    "noResults": "Продавцы не найдены",
+    "tryAdjusting": "Попробуйте другие ключевые слова или измените местоположение"
   },
   "comments": {
     "title": "Комментарии",
@@ -509,7 +509,7 @@
     "descriptionPlaceholder": "Подробная информация о животном",
     "uploadPhotos": "Загрузите фото",
     "photosHint": "Качественные фото ускоряют продажу",
-    "minPhotos": "Загрузите минимум 1 фото",
+    "minPhotos": "Загрузите минимум 3 фото (максимум 5)",
     "maxPhotos": "Максимум 10 фото",
     "selectLocation": "Выберите местоположение",
     "addressPlaceholder": "Район, село, улица...",
@@ -865,12 +865,12 @@
     "statusLabel": "Статус",
     "titleChat": "Жалоба на чат",
     "descriptionMinLength": "Минимум 10 символов",
-    "titleComment": "Izohni shikoyat qilish",
-    "titleRating": "Sharhni shikoyat qilish",
-    "status.pending": "Kutilmoqda",
-    "status.under_review": "Koʻrib chiqilmoqda",
-    "status.resolved_valid": "Tasdiqlandi",
-    "status.resolved_invalid": "Rad etildi"
+    "titleComment": "Пожаловаться на комментарий",
+    "titleRating": "Пожаловаться на отзыв",
+    "status.pending": "В ожидании",
+    "status.under_review": "На рассмотрении",
+    "status.resolved_valid": "Подтверждено",
+    "status.resolved_invalid": "Отклонено"
   },
   "security": {
     "title": "Безопасность",
@@ -911,9 +911,9 @@
       "verify_success": "Верификация успешна",
       "verify_attempt": "Попытка верификации"
     },
-    "sessions": "Seanslat",
-    "revokeAllOthers": "Boshqa seanslarga ruxsatni qaytarib olish",
-    "events": "Xavfsizlik voqealari"
+    "sessions": "Сессии",
+    "revokeAllOthers": "Завершить другие сессии",
+    "events": "События безопасности"
   },
   "adminMod": {
     "title": "Жалобы",

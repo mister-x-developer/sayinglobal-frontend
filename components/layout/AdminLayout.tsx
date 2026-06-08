@@ -132,7 +132,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
             type="button"
             onClick={toggleCollapsed}
             className={`inline-flex h-8 w-8 items-center justify-center rounded-lg text-fg-subtle hover:bg-bg-subtle hover:text-fg transition-colors ${collapsed ? '' : 'ml-auto'}`}
-            aria-label={collapsed ? 'Kengaytirish' : 'Yig\'ish'}
+            aria-label={collapsed ? t('common.showAll') : t('common.less')}
           >
             {collapsed ? <PanelLeftOpen className="h-4 w-4" strokeWidth={2} /> : <PanelLeftClose className="h-4 w-4" strokeWidth={2} />}
           </button>
@@ -282,7 +282,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
             type="button"
             onClick={() => setSidebarOpen(true)}
             className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-fg-muted hover:bg-bg-subtle lg:hidden"
-            aria-label="Menyuni ochish"
+            aria-label={t('nav.menu')}
           >
             <Menu className="h-5 w-5" strokeWidth={1.75} />
           </button>

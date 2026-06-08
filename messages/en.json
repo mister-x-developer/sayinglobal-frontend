@@ -407,8 +407,8 @@
     "followers": "Followers",
     "totalReviews": "reviews",
     "trustNotice": "The platform is not responsible for transactions between buyers and sellers",
-    "noResults": "Sotuvchilar topilmadi",
-    "tryAdjusting": "Boshqa qidiruv soʻzlarini sinab koʻring yoki joylashuvni oʻzgartiring"
+    "noResults": "No sellers found",
+    "tryAdjusting": "Try different search terms or change the location"
   },
   "comments": {
     "title": "Comments",
@@ -509,7 +509,7 @@
     "descriptionPlaceholder": "Detailed information about the animal",
     "uploadPhotos": "Upload photos",
     "photosHint": "Quality photos help sell faster",
-    "minPhotos": "Upload at least 1 photo",
+    "minPhotos": "Upload at least 3 photos (maximum 5)",
     "maxPhotos": "Maximum 10 photos",
     "selectLocation": "Select location",
     "addressPlaceholder": "District, village, street...",
@@ -865,12 +865,12 @@
     "statusLabel": "Status",
     "titleChat": "Report chat",
     "descriptionMinLength": "At least 10 characters required",
-    "titleComment": "Izohni shikoyat qilish",
-    "titleRating": "Sharhni shikoyat qilish",
-    "status.pending": "Kutilmoqda",
-    "status.under_review": "Koʻrib chiqilmoqda",
-    "status.resolved_valid": "Tasdiqlandi",
-    "status.resolved_invalid": "Rad etildi"
+    "titleComment": "Report comment",
+    "titleRating": "Report review",
+    "status.pending": "Pending",
+    "status.under_review": "Under review",
+    "status.resolved_valid": "Confirmed",
+    "status.resolved_invalid": "Dismissed"
   },
   "security": {
     "title": "Security",
@@ -911,9 +911,9 @@
       "verify_success": "Verification successful",
       "verify_attempt": "Verification attempt"
     },
-    "sessions": "Seanslat",
-    "revokeAllOthers": "Boshqa seanslarga ruxsatni qaytarib olish",
-    "events": "Xavfsizlik voqealari"
+    "sessions": "Sessions",
+    "revokeAllOthers": "Sign out all other sessions",
+    "events": "Security events"
   },
   "adminMod": {
     "title": "Reports",

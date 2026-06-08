@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { CheckCircle2, XCircle, AlertCircle, Info, X } from 'lucide-react';
 import { create } from 'zustand';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -53,6 +54,7 @@ const TONE_CLASS: Record<ToastType, string> = {
 export function ToastContainer() {
   const { toasts, remove } = useToastStore();
   const router = useRouter();
+  const t = useTranslations('common');
 
   return (
     <div className="pointer-events-none fixed bottom-20 right-4 z-[2000] flex flex-col gap-2.5 sm:bottom-5 sm:right-5">
@@ -104,7 +106,7 @@ export function ToastContainer() {
                 type="button"
                 onClick={(e) => { e.stopPropagation(); remove(t.id); }}
                 className="ml-1 mt-0.5 flex-shrink-0 rounded-full p-1 text-fg-subtle opacity-60 transition hover:bg-black/5 hover:opacity-100 dark:hover:bg-white/5"
-                aria-label="Yopish"
+                aria-label={t('close')}
               >
                 <X className="h-4 w-4" strokeWidth={2.25} />
               </button>
