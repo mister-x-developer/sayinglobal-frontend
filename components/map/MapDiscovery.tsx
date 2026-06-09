@@ -2,10 +2,12 @@
 
 import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
+import { ErrorBoundary } from '@/components/providers/ErrorBoundary';
+import { listingsApi } from '@/lib/api/listings';
 
 const Map = dynamic(() => import('./Map'), {
   ssr: false,
-  loading: () => <div className="w-full h-full bg-slate-100 animate-pulse rounded-lg flex items-center justify-center"><p className="text-slate-400">Xarita yuklanmoqda...</p></div>
+  loading: () => <div className="w-full h-full bg-bg-subtle animate-pulse rounded-lg flex items-center justify-center"><p className="text-fg-subtle">Xarita yuklanmoqda...</p></div>
 });
 
 interface MapDiscoveryProps {
@@ -13,7 +15,7 @@ interface MapDiscoveryProps {
 }
 
 export default function MapDiscovery({ className = "h-[500px] w-full" }: MapDiscoveryProps) {
-  const [listings, setListings] = useState([]);
+  const [listings, setListings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   
   // Center (Tashkent default)
@@ -28,12 +30,8 @@ export default function MapDiscovery({ className = "h-[500px] w-full" }: MapDisc
     const fetchListings = async () => {
       setLoading(true);
       try {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/listings/?lat=${lat}&lng=${lng}&radius=${radius}`;
-        const res = await fetch(url);
-        if (res.ok) {
-          const data = await res.json();
-          setListings(data.results || []);
-        }
+        const data = await listingsApi.nearby({ lat, lng, radius_km: radius, page_size: 100 });
+        setListings(data.results || []);
       } catch (err) {
         console.error("Error fetching map listings", err);
       } finally {
@@ -46,11 +44,13 @@ export default function MapDiscovery({ className = "h-[500px] w-full" }: MapDisc
 
   return (
     <div className={`relative ${className}`}>
-      <Map listings={listings} centerLat={lat} centerLng={lng} radius={radius} />
+      <ErrorBoundary>
+        <Map listings={listings} centerLat={lat} centerLng={lng} radius={radius} />
+      </ErrorBoundary>
       
-      {/* Overlay controls */}
-      <div className="absolute top-4 right-4 z-[400] bg-white p-3 rounded-lg shadow-lg border border-slate-200 w-64">
-        <h3 className="font-semibold text-sm mb-2 text-slate-800">Qidiruv radiusi (km)</h3>
+      {/* Overlay controls — uses design system colors */}
+      <div className="absolute top-4 right-4 z-[400] bg-bg-elevated p-3 rounded-lg shadow-lift border border-border w-64">
+        <h3 className="font-semibold text-sm mb-2 text-fg">Qidiruv radiusi (km)</h3>
         <input 
           type="range" 
           min="10" 
@@ -58,14 +58,14 @@ export default function MapDiscovery({ className = "h-[500px] w-full" }: MapDisc
           step="10" 
           value={radius} 
           onChange={(e) => setRadius(Number(e.target.value))}
-          className="w-full accent-emerald-600"
+          className="w-full accent-brand-primary"
         />
-        <div className="flex justify-between text-xs text-slate-500 mt-1">
+        <div className="flex justify-between text-xs text-fg-muted mt-1">
           <span>10 km</span>
-          <span className="font-bold text-emerald-700">{radius} km</span>
+          <span className="font-bold text-brand-primary">{radius} km</span>
           <span>500 km</span>
         </div>
-        <p className="text-xs text-slate-500 mt-3 border-t border-slate-100 pt-2">
+        <p className="text-xs text-fg-subtle mt-3 border-t border-border pt-2">
           Topilgan e&apos;lonlar: {loading ? '...' : listings.length}
         </p>
       </div>

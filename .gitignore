@@ -49,3 +49,11 @@ next-env.d.ts
 
 # Misc
 .turbo
+
+# Capacitor
+android/
+android-admin/
+ios/
+ios-admin/
+capacitor.config.ts
+.capacitor/

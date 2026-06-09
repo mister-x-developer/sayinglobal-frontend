@@ -60,6 +60,11 @@ interface AuthState {
 const COOKIE_NAME = 'sayin-auth';
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 
+/**
+ * Writes the sayin-auth cookie.
+ * The cookie shape is the shared contract with middleware.ts.
+ * Changing this shape requires updating lib/types/auth.ts and middleware.ts readAuthCookie.
+ */
 function writeAuthCookie(payload: {
   isAuthenticated: boolean;
   accessToken: string | null;

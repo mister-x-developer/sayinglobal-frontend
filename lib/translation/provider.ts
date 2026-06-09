@@ -100,8 +100,11 @@ const backendProvider: TranslationProvider = {
       return { text: cache.get(key)!, fromLocale: source, toLocale: target, cached: true };
     }
 
-    // Call backend proxy
-    const apiBase = process.env.NEXT_PUBLIC_API_URL ?? 'https://sayinglobal.up.railway.app';
+    // Call backend proxy via the same origin rewrite that apiClient uses.
+    // NEXT_PUBLIC_API_URL already contains the /api suffix (e.g. http://localhost:8000/api
+    // or https://sayinglobal.up.railway.app/api), so we must NOT append /api again.
+    const apiBase = (process.env.NEXT_PUBLIC_API_URL || 'https://sayinglobal.up.railway.app')
+      .replace(/\/api\/?$/, '');
     const res = await fetch(`${apiBase}/api/listings/translate/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

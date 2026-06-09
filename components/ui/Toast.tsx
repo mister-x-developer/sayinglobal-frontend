@@ -54,24 +54,24 @@ const TONE_CLASS: Record<ToastType, string> = {
 export function ToastContainer() {
   const { toasts, remove } = useToastStore();
   const router = useRouter();
-  const t = useTranslations('common');
+  const tCommon = useTranslations('common');
 
   return (
     <div className="pointer-events-none fixed bottom-20 right-4 z-[2000] flex flex-col gap-2.5 sm:bottom-5 sm:right-5">
       <AnimatePresence>
-        {toasts.map((t) => {
-          const Icon = ICON[t.type];
-          const isActionable = !!(t.href || t.onClick);
+        {toasts.map((item) => {
+          const Icon = ICON[item.type];
+          const isActionable = !!(item.href || item.onClick);
 
           const handleAction = () => {
-            if (t.onClick) t.onClick();
-            if (t.href) router.push(t.href);
-            remove(t.id);
+            if (item.onClick) item.onClick();
+            if (item.href) router.push(item.href);
+            remove(item.id);
           };
 
           return (
             <motion.div
-              key={t.id}
+              key={item.id}
               initial={{ opacity: 0, y: 10, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, x: 40, scale: 0.98 }}
@@ -85,7 +85,7 @@ export function ToastContainer() {
                   handleAction();
                 }
               }}
-              className={`toast pointer-events-auto group flex w-[320px] max-w-[calc(100vw-2rem)] items-start gap-3 border p-4 shadow-xl ${TONE_CLASS[t.type]} ${isActionable ? 'cursor-pointer active:opacity-95' : ''}`}
+              className={`toast pointer-events-auto group flex w-[320px] max-w-[calc(100vw-2rem)] items-start gap-3 border p-4 shadow-xl ${TONE_CLASS[item.type]} ${isActionable ? 'cursor-pointer active:opacity-95' : ''}`}
             >
               <div className="mt-0.5 flex-shrink-0">
                 <Icon className="h-5 w-5" strokeWidth={2} />
@@ -93,20 +93,20 @@ export function ToastContainer() {
 
               <div className="min-w-0 flex-1 pt-0.5">
                 <div className="text-[14.5px] font-semibold leading-snug tracking-[-0.1px] text-fg">
-                  {t.title}
+                  {item.title}
                 </div>
-                {t.message && (
+                {item.message && (
                   <div className="mt-1 text-[13px] leading-snug text-fg-muted">
-                    {t.message}
+                    {item.message}
                   </div>
                 )}
               </div>
 
               <button
                 type="button"
-                onClick={(e) => { e.stopPropagation(); remove(t.id); }}
+                onClick={(e) => { e.stopPropagation(); remove(item.id); }}
                 className="ml-1 mt-0.5 flex-shrink-0 rounded-full p-1 text-fg-subtle opacity-60 transition hover:bg-black/5 hover:opacity-100 dark:hover:bg-white/5"
-                aria-label={t('close')}
+                aria-label={tCommon('close')}
               >
                 <X className="h-4 w-4" strokeWidth={2.25} />
               </button>

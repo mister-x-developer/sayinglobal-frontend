@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { AdminLayout } from '@/components/layout/AdminLayout';
 import { formatNumber, formatRelativeTime } from '@/lib/utils/format';
+import { ErrorBoundary } from '@/components/providers/ErrorBoundary';
 import { analyticsApi, type DashboardStats, type GrowthAnalytics } from '@/lib/api/analytics';
 import apiClient from '@/lib/api/client';
 
@@ -180,10 +181,12 @@ export default function AdminDashboardPage() {
           </div>
         ) : (
           <>
-            {/* Stat cards */}
+            {/* Stat cards — ErrorBoundary for crash isolation */}
+            <ErrorBoundary>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
               {statCards.map((s) => <StatCard key={s.label} {...s} />)}
             </div>
+            </ErrorBoundary>
 
             {/* Alert banners */}
             {(pendingListings > 0 || pendingComplaints > 0) && (
@@ -207,6 +210,7 @@ export default function AdminDashboardPage() {
               </div>
             )}
 
+            <ErrorBoundary>
             <div className="grid gap-6 lg:grid-cols-3">
               {/* Quick actions */}
               <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
@@ -289,8 +293,10 @@ export default function AdminDashboardPage() {
                 </div>
               </motion.div>
             </div>
+            </ErrorBoundary>
 
-            {/* Bottom row: pending items */}
+            {/* Bottom row: pending items — ErrorBoundary for crash isolation */}
+            <ErrorBoundary>
             <div className="mt-6 grid gap-6 lg:grid-cols-2">
               {/* Pending listings */}
               <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
@@ -332,9 +338,11 @@ export default function AdminDashboardPage() {
                 <RecentComplaints />
               </motion.div>
             </div>
+            </ErrorBoundary>
 
-            {/* 30-day trends */}
+            {/* 30-day trends — ErrorBoundary for chart crash isolation */}
             {growth && ((growth.users_by_day?.length ?? 0) > 1 || (growth.listings_by_day?.length ?? 0) > 1) && (
+            <ErrorBoundary>
               <div className="mt-6 grid gap-6 lg:grid-cols-2">
                 {(growth.users_by_day?.length ?? 0) > 1 && (
                   <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
@@ -367,6 +375,7 @@ export default function AdminDashboardPage() {
                   </motion.div>
                 )}
               </div>
+            </ErrorBoundary>
             )}
           </>
         )}

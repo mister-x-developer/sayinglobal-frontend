@@ -67,6 +67,14 @@ async function loadMessages(locale: Locale): Promise<Messages> {
   return (await import(`../messages/${locale}.json`)).default as Messages;
 }
 
+/**
+ * next-intl routing config — used by middleware.ts createMiddleware().
+ */
+export const routing = {
+  locales,
+  defaultLocale,
+};
+
 export default getRequestConfig(async () => {
   // R6.9: resolve the stored locale, falling back to `uz` when it is missing
   // or not one of the four supported locales.

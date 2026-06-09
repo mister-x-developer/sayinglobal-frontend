@@ -14,6 +14,7 @@ import { AppNav } from '@/components/layout/AppNav';
 import { Avatar } from '@/components/ui/Avatar';
 import { ChatListSkeleton } from '@/components/shared/LoadingStates';
 import { ReportDialog } from '@/components/shared/ReportDialog';
+import { ErrorBoundary } from '@/components/providers/ErrorBoundary';
 import { useAuthStore } from '@/lib/store/auth';
 import { chatApi } from '@/lib/api/chat';
 import type { Conversation } from '@/lib/api/chat';
@@ -501,7 +502,8 @@ export default function ChatPage() {
                 </div>
               </div>
 
-              {/* Messages area */}
+              {/* Messages area — wrapped in ErrorBoundary for granular crash recovery */}
+              <ErrorBoundary>
               <div
                 className="flex-1 overflow-y-auto px-4 py-4 space-y-1"
                 onClick={() => setMoreOpen(false)}
@@ -673,6 +675,7 @@ export default function ChatPage() {
                 )}
                 <div ref={messagesEndRef} />
               </div>
+              </ErrorBoundary>
 
               {/* Input area — pb-safe for iOS keyboard */}
               <div className="border-t border-border bg-bg-elevated px-3 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
