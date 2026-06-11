@@ -180,7 +180,7 @@ async function generatePWAIcons(logoPath, outputDir) {
 }
 
 async function main() {
-  const logoPath = path.join(__dirname, '../../logo.png');
+  const logoPath = path.join(__dirname, '../../app_icon.png');
   
   if (!fs.existsSync(logoPath)) {
     console.error('❌ Logo file not found at:', logoPath);
