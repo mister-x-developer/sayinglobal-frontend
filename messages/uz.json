@@ -1116,13 +1116,20 @@
     "disclaimer": "Biz maʼlumotlaringizni himoya qilish uchun zamonaviy xavfsizlik choralarini qoʻllaymiz. Biroq, internet orqali uzatiladigan hech qanday maʼlumot 100% xavfsiz boʻla olmaydi."
   },
   "terms": {
-    "title": "Foydalanish shartlari",
-    "intro": "SAYIN GLOBAL platformasiga xush kelibsiz. Ushbu shartlar platformadan foydalanish qoidalarini belgilaydi.",
-    "point1": "Platformadan foydalanish orqali siz ushbu shartlarga rozilik bildirasiz.",
-    "point2": "Sotuvga qoʻyilgan barcha jonivorlar haqidagi maʼlumotlar toʻgʻri va haqqoniy boʻlishi shart.",
-    "point3": "Eʼlonlar 30 kun ichida yangilanmasa, avtomatik ravishda arxivlanadi.",
-    "point4": "Platforma qoidalarini buzgan foydalanuvchilarning hisoblari va eʼlonlari bloklanishi mumkin.",
-    "disclaimer": "SAYIN GLOBAL platformasi sotuvchi va xaridor oʻrtasidagi vositachi hisoblanadi. Biz sotilayotgan jonivorlarning sifati va sogʻligʻi uchun toʻgʻridan-toʻgʻri javobgar emasmiz. Har qanday savdo jarayonida ehtiyotkor boʻlishingizni soʻraymiz."
+    "title": "Maxfiylik siyosati va Foydalanish shartlari",
+    "subtitle": "SAYIN GLOBAL platformasidan foydalanish bo'yicha rasmiy qoidalar",
+    "intro": "Ushbu hujjat foydalanuvchilar va SAYIN GLOBAL ma'muriyati o'rtasidagi rasmiy kelishuvni ifodalaydi. Platformadan foydalanish orqali quyidagi barcha shartlarga rozilik bildirasiz:",
+    "point1": "Sotuvga qo'yilgan barcha jonivorlar haqidagi ma'lumotlar (sog'lig'i, narxi, rasmlari) mutlaqo to'g'ri va haqqoniy bo'lishi shart. Yolg'on ma'lumotlar platforma qoidalariga ziddir.",
+    "point2": "Foydalanuvchilar bir-biri bilan muloqotda va savdoda hurmat va o'zaro ishonchni saqlashi kerak. Har qanday firibgarlik yoki yolg'on aralashgan savdo qat'iy taqiqlanadi.",
+    "point3": "E'lonlar 30 kun ichida yangilanmasa yoki holati o'zgartirilmasa, avtomatik ravishda arxivlanadi. Sotilgan e'lonlar esa 7 kun ichida o'chiriladi.",
+    "point4": "Xaridorlar tomonidan kelib tushgan asosli shikoyatlar (masalan, noto'g'ri ma'lumot berish, narxni ataylab o'zgartirish) e'lonning rad etilishiga va foydalanuvchi Health Score (ishonch balli) ning pasayishiga olib keladi.",
+    "point5": "Agar foydalanuvchining ishonch balli (Health Score) 20 dan pasayib ketsa, uning akkaunti va barcha e'lonlari avtomatik ravishda bloklanadi. Qayta tiklash faqat ma'muriyat orqali amalga oshiriladi.",
+    "point6": "SAYIN GLOBAL platformasi sotuvchi va xaridor o'rtasida axborot vositachisi vazifasini bajaradi. Jonivorlarning yetkazib berilishi va to'lov jarayonlari tomonlarning shaxsiy mas'uliyatidadir.",
+    "point7": "Platformaga kiritilgan barcha shaxsiy ma'lumotlar, aloqa raqamlari va yozishmalar kuchli shifrlangan holda himoyalanadi va uchinchi shaxslarga taqdim etilmaydi (qonunchilikda belgilangan holatlar bundan mustasno).",
+    "point8": "SAYIN ma'muriyati ushbu qoidalarga ogohlantirishsiz o'zgartirishlar kiritish huquqini o'zida saqlab qoladi. Asosiy o'zgarishlar e'lonlar doskasida xabar qilinadi.",
+    "disclaimer": "Ogohlantirish: Biz xavfsiz va ishonchli ekotizim yaratishga intilamiz. Har qanday xarid oldidan jonivorni ko'zdan kechirishni va xavfsiz to'lov usullaridan foydalanishni qat'iy tavsiya qilamiz.",
+    "checkboxLabel": "Men barcha qoidalarni o'qib chiqdim va qat'iy amal qilishga rozilik bildiraman",
+    "accept": "Shartlarni qabul qilish"
   },
   "aiModeration": {
     "center": "Xavfsizlik markazi",

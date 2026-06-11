@@ -230,7 +230,7 @@ export default function NewListingPage() {
 
             <form onSubmit={handleSubmit} className="mt-8 space-y-5" noValidate>
               {/* Category — backend-driven */}
-              <div className="surface-elevated p-6">
+              <div className="surface-elevated p-4 sm:p-6">
                 <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
                   {t('create.stepCategory')}
                 </h2>
@@ -243,7 +243,7 @@ export default function NewListingPage() {
               </div>
 
               {/* Details */}
-              <div className="surface-elevated p-6">
+              <div className="surface-elevated p-4 sm:p-6">
                 <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
                   {t('create.stepDetails')}
                 </h2>
@@ -362,7 +362,7 @@ export default function NewListingPage() {
               </div>
 
               {/* Photos */}
-              <div className="surface-elevated p-6">
+              <div className="surface-elevated p-4 sm:p-6">
                 <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
                   {t('create.stepPhotos')}
                 </h2>
@@ -408,7 +408,7 @@ export default function NewListingPage() {
               </div>
 
               {/* Location — backend-driven dependent selector */}
-              <div className="surface-elevated p-6">
+              <div className="surface-elevated p-4 sm:p-6">
                 <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
                   {t('create.stepLocation')}
                 </h2>
@@ -489,7 +489,7 @@ export default function NewListingPage() {
               </div>
 
               {/* Price */}
-              <div className="surface-elevated p-6">
+              <div className="surface-elevated p-4 sm:p-6">
                 <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
                   {t('create.stepPrice')}
                 </h2>

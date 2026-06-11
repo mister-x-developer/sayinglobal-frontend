@@ -157,7 +157,7 @@ export default function ListingDetailPage() {
                     transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                   >
                     {/* Main image */}
-                    <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-bg-subtle">
+                    <div className="relative aspect-[4/3] overflow-hidden sm:rounded-2xl bg-bg-subtle -mx-4 sm:mx-0">
                       <AnimatePresence mode="wait" initial={false}>
                         <motion.div
                           key={imgIndex}
@@ -234,7 +234,7 @@ export default function ListingDetailPage() {
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.06 }}
-                    className="surface-elevated p-6"
+                    className="surface-elevated p-4 sm:p-6"
                   >
                     {listing.category && (
                       <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.12em] text-brand-accent">
@@ -275,13 +275,173 @@ export default function ListingDetailPage() {
                     </div>
                   </motion.div>
 
-                  {/* Specifications */}
+                  
+                  {/* ── MOBILE ONLY: Price & Actions & Seller Card ── */}
+                  <div className="flex flex-col space-y-4 lg:hidden">
+                    {/* Price & actions */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
+                    className="surface-elevated p-4 sm:p-6"
+                  >
+                    <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-fg-subtle">
+                      {t('listings.price')}
+                    </p>
+                    <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                      <p className="font-display text-3xl font-bold text-fg leading-none">
+                        {formatPrice(listing.price, listing.currency)}
+                      </p>
+                    </div>
+                    {listing.is_negotiable && (
+                      <div className="mt-3 inline-flex items-center gap-2 rounded-xl border border-brand-primary/20 bg-brand-primary/5 px-3.5 py-2">
+                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-md bg-brand-primary/15">
+                          <CheckCircle2 className="h-3 w-3 text-brand-primary" strokeWidth={2.5} />
+                        </span>
+                        <span className="text-sm font-semibold text-brand-primary tracking-wide">
+                          {t('listings.negotiable')}
+                        </span>
+                      </div>
+                    )}
+
+                    <div className="mt-6 space-y-2.5">
+                      {user?.public_id !== listing.seller.public_id && (
+                        <Link
+                          href={`/chat?with=${listing.seller.public_id}`}
+                          className="btn btn-primary w-full"
+                        >
+                          <MessageSquareText className="h-4 w-4" strokeWidth={2.25} />
+                          {t('listings.contactSeller')}
+                        </Link>
+                      )}
+
+                      <div className="grid grid-cols-3 gap-2">
+                        <button
+                          type="button"
+                          onClick={handleFavorite}
+                          aria-pressed={favorited}
+                          className={`btn btn-secondary btn-sm transition-all ${favorited ? 'text-danger border-danger/30 bg-danger/8' : ''}`}
+                        >
+                          <Heart
+                            className="h-4 w-4 transition-all duration-200"
+                            strokeWidth={1.75}
+                            fill={favorited ? 'currentColor' : 'none'}
+                          />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleShare}
+                          className="btn btn-secondary btn-sm"
+                          aria-label={t('listings.share')}
+                        >
+                          <Share2 className="h-4 w-4" strokeWidth={1.75} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setReportOpen(true)}
+                          className="btn btn-secondary btn-sm"
+                          aria-label={t('listings.report')}
+                        >
+                          <Flag className="h-4 w-4" strokeWidth={1.75} />
+                        </button>
+                      </div>
+                    </div>
+
+                    <AnimatePresence>
+                      {shareOk && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -4, height: 0 }}
+                          animate={{ opacity: 1, y: 0, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="mt-3 overflow-hidden rounded-xl bg-success/12 px-3 py-2 text-center text-xs font-semibold text-success"
+                        >
+                          {t('success.copied')}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+
+                  {/* Seller card */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.15 }}
+                    className="surface-elevated overflow-hidden"
+                  >
+                    {/* Header */}
+                    <div className="border-b border-border px-5 py-4">
+                      <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-fg-subtle">
+                        {t('listings.seller')}
+                      </p>
+                    </div>
+
+                    <div className="p-5">
+                      <Link
+                        href={user?.public_id === listing.seller.public_id ? '/profile' : `/sellers/${listing.seller.public_id}`}
+                        className="flex items-start gap-3 group"
+                      >
+                        <Avatar
+                          src={listing.seller.avatar_url}
+                          name={listing.seller.full_name}
+                          size="lg"
+                          ring
+                        />
+                        <div className="min-w-0 flex-1">
+                          <p className="font-display text-base font-semibold text-fg group-hover:text-brand-primary transition-colors">
+                            {listing.seller.full_name}
+                          </p>
+                          <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-fg-muted">
+                            <RatingDisplay
+                              score={listing.seller.trust_score}
+                              count={(listing.seller as any).rating_count}
+                              size="sm"
+                            />
+                          </div>
+                        </div>
+                      </Link>
+
+                      {/* Trust indicators (real data only) */}
+                      <div className="mt-4 grid grid-cols-2 gap-2 rounded-xl bg-bg-subtle p-3">
+                        <div className="text-center">
+                          <p className="font-display text-lg font-bold text-fg">
+                            {listing.seller.active_listings_count ?? 0}
+                          </p>
+                          <p className="text-[11px] text-fg-subtle">{t('profile.activeListings')}</p>
+                        </div>
+                        <div className="text-center">
+                          <p className="font-display text-lg font-bold text-fg">
+                            {listing.seller.sold_listings_count ?? 0}
+                          </p>
+                          <p className="text-[11px] text-fg-subtle">{t('listings.sold')}</p>
+                        </div>
+                      </div>
+
+                      <div className="mt-4 grid grid-cols-2 gap-2">
+                        <Link
+                          href={user?.public_id === listing.seller.public_id ? '/profile' : `/sellers/${listing.seller.public_id}`}
+                          className="btn btn-secondary btn-sm"
+                        >
+                          {t('common.view')}
+                        </Link>
+                        <FollowButton sellerId={listing.seller.public_id} size="sm" />
+                      </div>
+                      <Link
+                        href={user?.public_id === listing.seller.public_id ? '/profile' : `/sellers/${listing.seller.public_id}?tab=reviews`}
+                        className="mt-2 block w-full rounded-xl border border-border bg-bg-subtle/60 px-3 py-2 text-center text-xs font-semibold text-fg-muted hover:bg-bg-subtle"
+                      >
+                        {t('reviews.viewAll' as any) ?? 'View all reviews'}
+                      </Link>
+                    </div>
+                  </motion.div>
+                  </div>
+
+{/* Specifications */}
                   {(listing.age_years != null || listing.weight_kg != null || listing.gender || listing.breed) && (
                     <motion.div
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 0.1 }}
-                      className="surface-elevated p-6"
+                      className="surface-elevated p-4 sm:p-6"
                     >
                       <h2 className="display-sm mb-5">{t('listings.specifications')}</h2>
                       <dl className="grid grid-cols-2 gap-x-8 gap-y-4 sm:grid-cols-3">
@@ -354,7 +514,7 @@ export default function ListingDetailPage() {
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.14 }}
-                    className="surface-elevated p-6"
+                    className="surface-elevated p-4 sm:p-6"
                   >
                     <h2 className="display-sm mb-4">{t('listings.description')}</h2>
                     <TranslatableText
@@ -369,7 +529,7 @@ export default function ListingDetailPage() {
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 0.16 }}
-                      className="surface-elevated p-6"
+                      className="surface-elevated p-4 sm:p-6"
                     >
                       <div className="mb-4 flex items-center justify-between gap-3">
                         <h2 className="display-sm">{t('listings.locationOnMap' as any) ?? t('listings.location')}</h2>
@@ -415,7 +575,7 @@ export default function ListingDetailPage() {
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.18 }}
-                    className="surface-elevated p-6"
+                    className="surface-elevated p-4 sm:p-6"
                   >
                     <CommentSection
                       listingId={listing.public_id}
@@ -442,13 +602,13 @@ export default function ListingDetailPage() {
                 </div>
 
                 {/* ── RIGHT COLUMN — STICKY ── */}
-                <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
+                <aside className="hidden lg:block space-y-4 lg:sticky lg:top-24 lg:self-start">
                   {/* Price & actions */}
                   <motion.div
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.1 }}
-                    className="surface-elevated p-6"
+                    className="surface-elevated p-4 sm:p-6"
                   >
                     <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-fg-subtle">
                       {t('listings.price')}
@@ -733,14 +893,14 @@ function DetailSkeleton() {
             <div key={i} className="skeleton aspect-square rounded-xl" />
           ))}
         </div>
-        <div className="surface-elevated p-6">
+        <div className="surface-elevated p-4 sm:p-6">
           <div className="skeleton h-3 w-20 rounded-full" />
           <div className="skeleton mt-3 h-7 w-3/4" />
           <div className="skeleton mt-3 h-4 w-1/2" />
         </div>
       </div>
       <div className="space-y-4">
-        <div className="surface-elevated p-6">
+        <div className="surface-elevated p-4 sm:p-6">
           <div className="skeleton h-3 w-16" />
           <div className="skeleton mt-3 h-8 w-40" />
           <div className="skeleton mt-6 h-11 w-full" />

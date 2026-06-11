@@ -307,7 +307,7 @@ export default function EditListingPage() {
 
           <form onSubmit={handleSave} className="mt-6 space-y-6">
             {/* Category */}
-            <div className="surface-elevated p-6">
+            <div className="surface-elevated p-4 sm:p-6">
               <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
                 {t('listings.category')}
               </h2>
@@ -327,7 +327,7 @@ export default function EditListingPage() {
             </div>
 
             {/* Images */}
-            <div className="surface-elevated p-6">
+            <div className="surface-elevated p-4 sm:p-6">
               <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
                 {t('create.stepPhotos')}
               </h2>
@@ -416,7 +416,7 @@ export default function EditListingPage() {
             </div>
 
             {/* Title + description */}
-            <div className="surface-elevated p-6">
+            <div className="surface-elevated p-4 sm:p-6">
               <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
                 {t('create.stepBasics' as any) ?? t('listings.title')}
               </h2>
@@ -441,7 +441,7 @@ export default function EditListingPage() {
             </div>
 
             {/* Specs */}
-            <div className="surface-elevated p-6">
+            <div className="surface-elevated p-4 sm:p-6">
               <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
                 {t('listings.specifications')}
               </h2>
@@ -482,7 +482,7 @@ export default function EditListingPage() {
             </div>
 
             {/* Location + map pin */}
-            <div className="surface-elevated p-6">
+            <div className="surface-elevated p-4 sm:p-6">
               <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
                 {t('create.stepLocation')}
               </h2>
@@ -565,7 +565,7 @@ export default function EditListingPage() {
             </div>
 
             {/* Price */}
-            <div className="surface-elevated p-6">
+            <div className="surface-elevated p-4 sm:p-6">
               <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
                 {t('create.stepPrice')}
               </h2>
@@ -629,7 +629,7 @@ export default function EditListingPage() {
 
       {/* Delete confirmation modal */}
       <Modal isOpen={showDelete} onClose={() => setShowDelete(false)}>
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           <h3 className="font-display text-lg font-semibold">{t('common.delete')}</h3>
           <p className="mt-2 text-sm text-fg-muted">
             {t('listings.deleteConfirm' as any) ?? 'Are you sure?'}

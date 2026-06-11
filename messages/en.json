@@ -1116,13 +1116,20 @@
     "disclaimer": "We use modern security measures to protect your information. However, no information transmitted over the Internet can be 100% secure."
   },
   "terms": {
-    "title": "Terms of Service",
-    "intro": "Welcome to the SAYIN GLOBAL platform. These terms define the rules for using the platform.",
-    "point1": "By using the platform, you agree to these terms.",
-    "point2": "All information about animals listed for sale must be accurate and true.",
-    "point3": "Listings are automatically archived if not updated within 30 days.",
-    "point4": "Accounts and listings of users who violate the platform rules may be blocked.",
-    "disclaimer": "The SAYIN GLOBAL platform acts as an intermediary between the seller and the buyer. We are not directly responsible for the quality and health of the animals sold. We ask you to be cautious in any trading process."
+    "title": "Privacy Policy and Terms of Use",
+    "subtitle": "Official rules for using the SAYIN GLOBAL platform",
+    "intro": "This document represents an official agreement between users and the SAYIN GLOBAL administration. By using the platform, you agree to all of the following conditions:",
+    "point1": "All information about the animals put up for sale (health, price, pictures) must be absolutely correct and truthful. False information contradicts the rules of the platform.",
+    "point2": "Users must maintain respect and mutual trust in communication and trade. Any trade involving fraud or deception is strictly prohibited.",
+    "point3": "Ads are automatically archived if they are not updated or their status is not changed within 30 days. Sold ads will be deleted within 7 days.",
+    "point4": "Justified complaints from buyers (e.g., providing false information, deliberately changing the price) will result in the rejection of the ad and a decrease in the user's Health Score.",
+    "point5": "If a user's trust score (Health Score) drops below 20, their account and all ads will be automatically blocked. Restoration is carried out only through the administration.",
+    "point6": "The SAYIN GLOBAL platform acts as an information intermediary between the seller and the buyer. The delivery and payment processes for animals are the personal responsibility of the parties.",
+    "point7": "All personal data, contact numbers and correspondence entered into the platform are strongly encrypted and are not provided to third parties (except as provided by law).",
+    "point8": "SAYIN administration reserves the right to make changes to these rules without prior notice. Major changes will be announced on the bulletin board.",
+    "disclaimer": "Disclaimer: We strive to create a safe and reliable ecosystem. We strongly recommend that you inspect the animal before any purchase and use safe payment methods.",
+    "checkboxLabel": "I have read all the rules and agree to strictly abide by them",
+    "accept": "Accept Terms"
   },
   "aiModeration": {
     "center": "Security Center",

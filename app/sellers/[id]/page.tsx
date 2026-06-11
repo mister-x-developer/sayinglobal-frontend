@@ -114,7 +114,7 @@ export default function SellerDetailPage() {
 
           {loading ? (
             <div className="mt-6 space-y-4">
-              <div className="surface-elevated p-6">
+              <div className="surface-elevated p-4 sm:p-6">
                 <div className="flex items-start gap-4">
                   <div className="skeleton h-24 w-24 rounded-full" />
                   <div className="flex-1">
@@ -145,9 +145,9 @@ export default function SellerDetailPage() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="surface-elevated mt-4 p-6 sm:p-8"
+                className="surface-elevated mt-4 p-4 sm:p-6 sm:p-8"
               >
-                <div className="flex flex-col gap-6 md:flex-row md:items-start">
+                <div className="flex flex-col gap-4 sm:p-6 md:flex-row md:items-start">
                   <Avatar
                     src={seller.avatar_url}
                     name={seller.full_name}
@@ -218,7 +218,7 @@ export default function SellerDetailPage() {
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.4, delay: 0.04 * i }}
-                      className="surface-elevated flex items-center gap-4 p-5"
+                      className="surface-elevated flex items-center gap-4 p-4 sm:p-5"
                     >
                       <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
                         <Icon className="h-5 w-5" strokeWidth={1.75} />

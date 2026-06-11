@@ -56,6 +56,11 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'SAYIN GLOBAL',
+  },
   icons: {
     icon: [
       { url: '/icon.png', type: 'image/png' },

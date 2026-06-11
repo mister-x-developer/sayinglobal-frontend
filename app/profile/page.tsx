@@ -110,9 +110,9 @@ export default function ProfilePage() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="surface-elevated p-4 sm:p-6 lg:p-8"
+            className="surface-elevated p-4 sm:p-4 sm:p-6 lg:p-8"
           >
-            <div className="flex flex-col gap-6 md:flex-row md:items-start">
+            <div className="flex flex-col gap-4 sm:p-6 md:flex-row md:items-start">
               <Avatar
                 src={profile.avatar_url}
                 name={profile.full_name}
@@ -188,7 +188,7 @@ export default function ProfilePage() {
                 )}
 
                 {/* Follow counts */}
-                <div className="mt-4 flex flex-wrap gap-6 text-sm">
+                <div className="mt-4 flex flex-wrap gap-4 sm:p-6 text-sm">
                   <Link href="/sellers/following" className="group flex items-center gap-1.5 text-fg-muted hover:text-fg">
                     <span className="font-bold text-fg">{profile.following}</span>
                     <span>{t('profile.following')}</span>
@@ -212,7 +212,7 @@ export default function ProfilePage() {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.04 * i }}
-                  className="surface-elevated flex items-center gap-4 p-5"
+                  className="surface-elevated flex items-center gap-4 p-4 sm:p-5"
                 >
                   <div className={`inline-flex h-11 w-11 items-center justify-center rounded-xl ${s.tone}`}>
                     <Icon className="h-5 w-5" strokeWidth={1.75} />
@@ -227,7 +227,7 @@ export default function ProfilePage() {
           </div>
 
           {/* SIDEBAR + TABS LAYOUT */}
-          <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_280px] pb-8 md:pb-0"> {/* extra padding on mobile for full visibility of stacked sidebar content vs fixed AI + nav */}
+          <div className="mt-8 grid gap-4 sm:p-6 lg:grid-cols-[minmax(0,1fr)_280px] pb-8 md:pb-0"> {/* extra padding on mobile for full visibility of stacked sidebar content vs fixed AI + nav */}
             {/* MAIN */}
             <div>
               {/* Tabs — horizontal scroll on mobile so all labels (incl. long "Mening eʼlonlarim") are fully visible */}
@@ -315,7 +315,7 @@ export default function ProfilePage() {
                 )}
 
                 {tab === 'reviews' && user?.public_id && (
-                  <div className="surface-elevated p-6">
+                  <div className="surface-elevated p-4 sm:p-6">
                     <SellerRatingsThread sellerPublicId={user.public_id} />
                   </div>
                 )}
@@ -325,7 +325,7 @@ export default function ProfilePage() {
             {/* SIDEBAR */}
             <aside className="space-y-4 pb-48 md:pb-0"> {/* extra bottom space on mobile so last card (Muhim maʼlumot) text is not covered by fixed AI button or bottom nav */}
               {/* Account summary */}
-              <div className="surface-elevated p-5">
+              <div className="surface-elevated p-4 sm:p-5">
                 <h3 className="display-sm">{t('profile.accountSummary' as any) ?? t('profile.title')}</h3>
                 <dl className="mt-4 space-y-3 text-sm">
                   <div className="flex items-center justify-between">
@@ -348,7 +348,7 @@ export default function ProfilePage() {
               </div>
 
               {/* Quick links */}
-              <div className="surface-elevated p-5">
+              <div className="surface-elevated p-4 sm:p-5">
                 <h3 className="display-sm mb-3">{t('common.settings')}</h3>
                 <div className="space-y-1">
                   {[

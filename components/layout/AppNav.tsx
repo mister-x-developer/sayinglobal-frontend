@@ -253,7 +253,6 @@ export function AppNav() {
   const links = [
     { href: '/dashboard', icon: Home, label: t('nav.home') },
     { href: '/listings', icon: LayoutGrid, label: t('nav.listings') },
-    { href: '/listings/nearby', icon: MapPin, label: t('nav.nearby') },
     { href: '/sellers', icon: ShieldCheck, label: t('nav.sellers') },
     { href: '/chat', icon: MessageSquareText, label: t('nav.chat') },
     { href: '/plans', icon: Tag, label: t('nav.plans') },

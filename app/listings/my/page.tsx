@@ -182,7 +182,7 @@ export default function MyListingsPage() {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: i * 0.04 }}
-                  className="surface-elevated flex items-center gap-4 p-5"
+                  className="surface-elevated flex items-center gap-4 p-4 sm:p-5"
                 >
                   <div className={`inline-flex h-11 w-11 items-center justify-center rounded-xl ${s.tone}`}>
                     <Icon className="h-5 w-5" strokeWidth={1.75} />
@@ -479,7 +479,7 @@ export default function MyListingsPage() {
               initial={{ opacity: 0, scale: 0.96, y: 8 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96 }}
-              className="fixed left-1/2 top-1/2 z-50 w-full max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-bg-elevated p-6 shadow-lift"
+              className="fixed left-1/2 top-1/2 z-50 w-full max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-bg-elevated p-4 sm:p-6 shadow-lift"
             >
               <div className="flex items-center gap-3">
                 <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-success/12">
@@ -526,7 +526,7 @@ export default function MyListingsPage() {
               initial={{ opacity: 0, scale: 0.96, y: 8 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96 }}
-              className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-bg-elevated p-6 shadow-lift"
+              className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-bg-elevated p-4 sm:p-6 shadow-lift"
             >
               <div className="text-center">
                 <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-success/12">
@@ -588,7 +588,7 @@ export default function MyListingsPage() {
               initial={{ opacity: 0, scale: 0.96, y: 8 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96 }}
-              className="fixed left-1/2 top-1/2 z-50 w-full max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-bg-elevated p-6 shadow-lift"
+              className="fixed left-1/2 top-1/2 z-50 w-full max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-bg-elevated p-4 sm:p-6 shadow-lift"
             >
               <div className="flex items-center gap-3">
                 <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-danger/12">

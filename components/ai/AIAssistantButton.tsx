@@ -117,14 +117,18 @@ export function AIAssistantButton() {
     setShowHistory(false);
   };
 
-  const aiLogo = '/images/user_ai_logo.png';
+  const isAdmin = user?.is_staff || user?.is_admin;
+  const aiLogo = isAdmin ? '/images/admin_ai_logo.png' : '/images/user_ai_logo.png';
+  const aiTitle = isAdmin ? 'Admin AI Co-pilot' : 'SAYIN AI';
+  const aiSubtitle = isAdmin ? 'Moderation & Analytics' : (t('ai.subtitle' as any) ?? 'Chorva bozori yordamchisi');
 
   return (
     <motion.div
       drag={!open}
       dragConstraints={{ left: -windowSize.width + 80, right: 0, top: -windowSize.height + 140, bottom: 0 }}
-      dragMomentum={false}
-      dragElastic={0.1}
+      dragMomentum={true}
+      dragElastic={0.2}
+      dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
       onDragStart={() => setDragged(true)}
       onDragEnd={() => setTimeout(() => setDragged(false), 100)} // short delay so click doesn't trigger on drag end
       className="fixed bottom-40 right-4 md:bottom-8 md:right-8 z-50 flex flex-col items-end"
@@ -149,10 +153,10 @@ export function AIAssistantButton() {
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-bold text-fg flex items-center gap-1.5">
-                  SAYIN AI
+                  {aiTitle}
                   <Sparkles className="h-3.5 w-3.5 text-brand-primary" />
                 </p>
-                <p className="text-[11px] text-fg-subtle">{t('ai.subtitle' as any) ?? 'Chorva bozori yordamchisi'}</p>
+                <p className="text-[11px] text-fg-subtle">{aiSubtitle}</p>
               </div>
               
               <button 
