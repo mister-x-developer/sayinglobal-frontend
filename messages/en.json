@@ -154,7 +154,8 @@
     "nightMode": "Night mode",
     "menu": "Menu",
     "nearby": "Nearby",
-    "plans": "Plans"
+    "plans": "Plans",
+    "guide": "Guide and Rules"
   },
   "marketplace": {
     "title": "Marketplace",
@@ -866,11 +867,7 @@
     "titleChat": "Report chat",
     "descriptionMinLength": "At least 10 characters required",
     "titleComment": "Report comment",
-    "titleRating": "Report review",
-    "status.pending": "Pending",
-    "status.under_review": "Under review",
-    "status.resolved_valid": "Confirmed",
-    "status.resolved_invalid": "Dismissed"
+    "titleRating": "Report review"
   },
   "security": {
     "title": "Security",
@@ -1090,9 +1087,9 @@
   },
   "ai": {
     "openAssistant": "AI Assistant",
-    "subtitle": "Livestock marketplace assistant",
-    "greeting": "👋 Hello! Do you have questions about the livestock marketplace?",
-    "inputPlaceholder": "Type a question...",
+    "subtitle": "Livestock Market Assistant",
+    "greeting": "👋 Hello! Do you have any questions about the livestock market?",
+    "inputPlaceholder": "Type your question...",
     "errorReply": "An error occurred.",
     "prompt": {
       "findCattle": "Find cattle",
@@ -1106,7 +1103,7 @@
     },
     "newChat": "New Chat",
     "chatHistory": "Chat History",
-    "noChats": "No chats yet.",
+    "noChats": "No conversations found",
     "adminGreeting": "👋 Hello! Do you have any questions about managing the platform?"
   },
   "privacy": {
@@ -1196,5 +1193,31 @@
       "account_deleted": "Account deleted",
       "subscription_upgraded": "Subscription upgraded"
     }
+  },
+  "guidePage": {
+    "title": "Platform Guide",
+    "healthScoreTitle": "100-point Health Score System",
+    "healthScoreDesc": "On our platform, all sellers start with 100 points. This score indicates your reliability and compliance with the rules on the platform. Your account status is determined based on your score.",
+    "pointsDeductionTitle": "Point Deduction (Penalties)",
+    "pointsDeductionDesc": "Complaints made by buyers are reviewed by moderators. If a complaint is found to be justified, points are deducted depending on its severity:",
+    "lowOffense": "Minor offense (Low)",
+    "mediumOffense": "Medium error (Medium)",
+    "highOffense": "Serious violation (High)",
+    "criticalOffense": "Critical case, Cheating (Critical)",
+    "pointsRecoveryTitle": "Point Addition (Recovery)",
+    "pointsRecoveryDesc": "Lost points can only be recovered through honest trading. For this, the system has a special mechanism to prevent cheating.",
+    "confirmedSale": "Confirmed sale (+5 points)",
+    "confirmedSaleDesc": "When you mark an ad as \"Sold\", the system gives you a special hidden code (confirmation code). You give this code to the buyer. When the buyer enters that code into the system, the trade is confirmed and you are automatically given +5 points.",
+    "goodRating": "Good rating (+2 points)",
+    "goodRatingDesc": "If the buyer gives you a 4 or 5 star excellent rating when confirming the purchase, an additional +2 points (total +7 points) will be added. (Your points will not exceed 100).",
+    "retentionTitle": "Retention period of advertisements",
+    "activeRetention": "Active listings:",
+    "activeRetentionDesc": "If not updated within 30 days, they will be automatically archived (taken off sale).",
+    "soldRetention": "Ads marked as \"Sold\":",
+    "soldRetentionDesc": "Kept for 7 days, then automatically deleted.",
+    "rejectedRetention": "Rejected or expired listings:",
+    "rejectedRetentionDesc": "Kept for 5 days, then automatically deleted.",
+    "blockingTitle": "Blocking and Appeal",
+    "blockingDesc": "If your score drops to 19 or below, your account will automatically be completely blocked and all your ads will be deleted (hidden). It is impossible to get out of the blocked state independently. In this case, you will only have to wait for the Admins' decision or contact the support service."
   }
 }

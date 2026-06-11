@@ -349,7 +349,7 @@ export default function AdminAnalyticsPage() {
                     data1={growth.users_by_day ?? []}
                     data2={growth.listings_by_day ?? []}
                     label1="Foydalanuvchilar"
-                    label2="E'lonlar"
+                    label2="Eʼlonlar"
                     color1="#3b82f6"
                     color2="#1f7a52"
                   />

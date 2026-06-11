@@ -30,7 +30,7 @@ const USER_QUICK_PROMPTS = [
   { key: 'findCattle', icon: '🐄', text: 'Qoramol topish' },
   { key: 'findHorse', icon: '🐎', text: 'Ot topish' },
   { key: 'priceCheck', icon: '💰', text: 'Narx tekshirish' },
-  { key: 'nearbyListings', icon: '📍', text: "Yaqin e'lonlar" },
+  { key: 'nearbyListings', icon: '📍', text: "Yaqin eʼlonlar" },
 ];
 
 export function AIAssistantButton() {
@@ -39,6 +39,7 @@ export function AIAssistantButton() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const user = useAuthStore((s) => s.user);
   const [mounted, setMounted] = useState(false);
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -51,7 +52,13 @@ export function AIAssistantButton() {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+    setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    const handleResize = () => setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     if (open && !showHistory) {
@@ -114,13 +121,14 @@ export function AIAssistantButton() {
 
   return (
     <motion.div
-      drag
+      drag={!open}
+      dragConstraints={{ left: -windowSize.width + 80, right: 0, top: -windowSize.height + 140, bottom: 0 }}
       dragMomentum={false}
       dragElastic={0.1}
       onDragStart={() => setDragged(true)}
       onDragEnd={() => setTimeout(() => setDragged(false), 100)} // short delay so click doesn't trigger on drag end
       className="fixed bottom-40 right-4 md:bottom-8 md:right-8 z-50 flex flex-col items-end"
-      style={{ touchAction: 'none' }}
+      style={{ touchAction: open ? 'auto' : 'none' }}
     >
       <AnimatePresence>
         {open && (

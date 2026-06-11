@@ -195,7 +195,7 @@ export default function AdminDashboardPage() {
                   <Link href="/admin/listings?status=pending"
                     className="flex items-center gap-2.5 rounded-xl border border-warning/30 bg-warning/8 px-4 py-3 text-sm font-semibold text-warning hover:bg-warning/12 transition-colors">
                     <AlertTriangle className="h-4 w-4" strokeWidth={2} />
-                    {pendingListings} {t('admin.listingsPendingApproval' as any) ?? "ta e'lon tasdiqlash kutmoqda"}
+                    {pendingListings} {t('admin.listingsPendingApproval' as any) ?? "ta eʼlon tasdiqlash kutmoqda"}
                     <ArrowRight className="h-4 w-4" strokeWidth={2} />
                   </Link>
                 )}
@@ -241,7 +241,7 @@ export default function AdminDashboardPage() {
                 <div className="p-4 grid grid-cols-2 gap-3">
                   {stats && [
                     { label: t('admin.newUsers' as any) ?? 'Yangi foydalanuvchilar', value: stats.users.new_today, color: 'text-blue-500' },
-                    { label: t('admin.newListings' as any) ?? "Yangi e'lonlar", value: stats.listings.new_today, color: 'text-brand-primary' },
+                    { label: t('admin.newListings' as any) ?? "Yangi eʼlonlar", value: stats.listings.new_today, color: 'text-brand-primary' },
                     { label: t('admin.soldListings'), value: stats.listings.sold, color: 'text-success' },
                     { label: t('admin.activeUsers'), value: stats.users.active, color: 'text-purple-500' },
                     { label: t('analytics.totalViews' as any) ?? "Ko'rishlar", value: stats.engagement.views_today, color: 'text-amber-500' },
@@ -267,7 +267,7 @@ export default function AdminDashboardPage() {
                 <div className="p-4 space-y-3">
                   {[
                     { label: 'Backend API', key: '_api' },
-                    { label: t('admin.database' as any) ?? "Ma'lumotlar bazasi", key: 'database' },
+                    { label: t('admin.database' as any) ?? "Maʼlumotlar bazasi", key: 'database' },
                     { label: 'Redis / Cache', key: 'cache' },
                     { label: 'Celery Broker', key: 'broker' },
                   ].map((item) => {
@@ -304,7 +304,7 @@ export default function AdminDashboardPage() {
                 <div className="border-b border-border px-5 py-4 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4 text-warning" strokeWidth={2} />
-                    <h2 className="font-bold text-fg">{t('admin.pendingListings' as any) ?? "Kutilayotgan e'lonlar"}</h2>
+                    <h2 className="font-bold text-fg">{t('admin.pendingListings' as any) ?? "Kutilayotgan eʼlonlar"}</h2>
                     {pendingListings > 0 && (
                       <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-warning/15 px-1.5 text-[10px] font-bold text-warning">
                         {pendingListings}
@@ -400,7 +400,7 @@ function PendingListings() {
   if (items.length === 0) return (
     <div className="flex flex-col items-center justify-center py-10 gap-2">
       <CheckCircle2 className="h-8 w-8 text-success" strokeWidth={1.5} />
-      <p className="text-sm text-fg-muted">Kutilayotgan e'lonlar yo'q</p>
+      <p className="text-sm text-fg-muted">Kutilayotgan eʼlonlar yoʻq</p>
     </div>
   );
 
@@ -449,7 +449,7 @@ function RecentComplaints() {
   if (items.length === 0) return (
     <div className="flex flex-col items-center justify-center py-10 gap-2">
       <CheckCircle2 className="h-8 w-8 text-success" strokeWidth={1.5} />
-      <p className="text-sm text-fg-muted">Shikoyatlar yo'q</p>
+      <p className="text-sm text-fg-muted">Shikoyatlar yoʻq</p>
     </div>
   );
 

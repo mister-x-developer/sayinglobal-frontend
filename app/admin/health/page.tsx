@@ -161,7 +161,7 @@ export default function AdminHealthPage() {
             <div className="grid gap-3 sm:grid-cols-3">
               {Object.entries(health.checks).map(([name, value]) => {
                 const translatedName = {
-                  database: "Ma'lumotlar bazasi",
+                  database: "Maʼlumotlar bazasi",
                   cache: "Kesh",
                   broker: "Broker"
                 }[name.toLowerCase()] || name;

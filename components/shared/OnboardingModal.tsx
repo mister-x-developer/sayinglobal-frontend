@@ -35,7 +35,7 @@ const SLIDES: Slide[] = [
       en: 'Welcome to SAYIN GLOBAL!',
     },
     body: {
-      uz: "O'zbekistondagi eng yirik raqamli chorva bozori. Sotuvchilar va xaridorlarni bevosita bog'laymiz.",
+      uz: "Oʻzbekistondagi eng yirik raqamli chorva bozori. Sotuvchilar va xaridorlarni bevosita bogʻlaymiz.",
       'uz-cyrl': "Ўзбекистондаги энг йирик рақамли чорва бозори. Сотувчилар ва харидорларни бевосита боғлаймиз.",
       ru: 'Крупнейший цифровой рынок скота в Узбекистане. Соединяем продавцов и покупателей напрямую.',
       en: "Uzbekistan's largest digital livestock marketplace. We connect sellers and buyers directly.",
@@ -45,13 +45,13 @@ const SLIDES: Slide[] = [
     icon: Tag,
     color: 'bg-brand-accent/10 text-brand-accent',
     title: {
-      uz: "E'lonlar",
+      uz: "Eʼlonlar",
       'uz-cyrl': "Эълонлар",
       ru: 'Объявления',
       en: 'Listings',
     },
     body: {
-      uz: "Qoramol, qo'y, echki, ot, tuya, parrandalar va boshqa chorva mollarini soting yoki xarid qiling. Har bir e'lon xaritada ko'rsatiladi.",
+      uz: "Qoramol, qo'y, echki, ot, tuya, parrandalar va boshqa chorva mollarini soting yoki xarid qiling. Har bir eʼlon xaritada koʻrsatiladi.",
       'uz-cyrl': "Қорамол, қўй, эчки, от, туя, паррандалар ва бошқа чорва молларини сотинг ёки харид қилинг. Ҳар бир эълон харитада кўрсатилади.",
       ru: 'Продавайте или покупайте КРС, овец, коз, лошадей, верблюдов, птицу и другой скот. Каждое объявление отображается на карте.',
       en: 'Sell or buy cattle, sheep, goats, horses, camels, poultry and more. Every listing is shown on the map.',
@@ -67,7 +67,7 @@ const SLIDES: Slide[] = [
       en: 'Nearby listings',
     },
     body: {
-      uz: "GPS orqali yaqin atrofdagi e'lonlarni ko'ring. Xaritada sotuvchilarning joylashuvini aniqlang va eng yaqinini toping.",
+      uz: "GPS orqali yaqin atrofdagi eʼlonlarni ko'ring. Xaritada sotuvchilarning joylashuvini aniqlang va eng yaqinini toping.",
       'uz-cyrl': "GPS орқали яқин атрофдаги эълонларни кўринг. Харитада сотувчиларнинг жойлашувини аниқланг.",
       ru: 'Смотрите объявления рядом с вами через GPS. Найдите ближайших продавцов на карте.',
       en: 'See listings near you via GPS. Find the closest sellers on the map.',
@@ -83,7 +83,7 @@ const SLIDES: Slide[] = [
       en: 'Chat with sellers',
     },
     body: {
-      uz: "E'lon sahifasida 'Sotuvchiga yozish' tugmasini bosib, to'g'ridan-to'g'ri muloqot qiling. Barcha suhbatlar /chat sahifasida.",
+      uz: "Eʼlon sahifasida 'Sotuvchiga yozish' tugmasini bosib, toʻgʻridan-toʻgʻri muloqot qiling. Barcha suhbatlar /chat sahifasida.",
       'uz-cyrl': "Эълон саҳифасида 'Сотувчига ёзиш' тугмасини босиб, тўғридан-тўғри мулоқот қилинг.",
       ru: "Нажмите 'Написать продавцу' на странице объявления для прямого общения. Все диалоги в разделе /chat.",
       en: "Tap 'Message Seller' on any listing to chat directly. All conversations are at /chat.",
@@ -99,7 +99,7 @@ const SLIDES: Slide[] = [
       en: 'Plans & referrals',
     },
     body: {
-      uz: "Hozirda platforma referral tizimida ishlaydi — bepul. Do'stlaringizni taklif qiling va bonus oling. Tez orada pullik tariflar ham ishga tushadi.",
+      uz: "Hozirda platforma referral tizimida ishlaydi — bepul. Doʻstlaringizni taklif qiling va bonus oling. Tez orada pullik tariflar ham ishga tushadi.",
       'uz-cyrl': "Ҳозирда платформа реферал тизимида ишлайди — бепул. Дўстларингизни таклиф қилинг ва бонус олинг.",
       ru: 'Сейчас платформа работает по реферальной системе — бесплатно. Приглашайте друзей и получайте бонусы. Скоро появятся платные тарифы.',
       en: 'The platform currently runs on a referral system — free. Invite friends and earn bonuses. Paid plans coming soon.',
@@ -111,7 +111,7 @@ const BTN_LABELS = {
   next: { uz: 'Keyingi', 'uz-cyrl': 'Кейинги', ru: 'Далее', en: 'Next' },
   prev: { uz: 'Oldingi', 'uz-cyrl': 'Олдинги', ru: 'Назад', en: 'Back' },
   start: { uz: 'Boshlash', 'uz-cyrl': 'Бошлаш', ru: 'Начать', en: 'Get started' },
-  skip: { uz: "O'tkazib yuborish", 'uz-cyrl': 'Ўтказиб юбориш', ru: 'Пропустить', en: 'Skip' },
+  skip: { uz: "Oʻtkazib yuborish", 'uz-cyrl': 'Ўтказиб юбориш', ru: 'Пропустить', en: 'Skip' },
 };
 
 export function OnboardingModal() {

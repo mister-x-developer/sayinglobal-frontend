@@ -287,7 +287,7 @@ export function LocationPicker({
     );
   }
 
-  // Status label: GPS belgisi qo'yilgan yoki yo'qligini ko'rsatadi — ko'cha nomi emas
+  // Status label: GPS belgisi qo'yilgan yoki yoʻqligini ko'rsatadi — ko'cha nomi emas
   const statusLabel = locationError
     ? locationError
     : geocoding

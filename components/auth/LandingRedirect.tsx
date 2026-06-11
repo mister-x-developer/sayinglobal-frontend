@@ -6,9 +6,9 @@ import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
 /**
  * LandingRedirect
  * 
- * Ushbu komponent foydalanuvchi tizimga kirgan bo'lsa (Zustand auth store bo'yicha)
+ * Ushbu komponent foydalanuvchi tizimga kirgan boʻlsa (Zustand auth store boʻyicha)
  * va Landing yoxud Auth sahifasida tursa, avtomatik ravishda uni Dashboardga yo'naltiradi.
- * Bu orqali "cookie yo'qolishi ammo localStorage saqlanib qolishi" natijasida kelib chiqadigan
+ * Bu orqali "cookie yoʻqolishi ammo localStorage saqlanib qolishi" natijasida kelib chiqadigan
  * Landing va Dashboard aralashib ketish xatoligini to'liq oldini oladi.
  */
 export function LandingRedirect() {

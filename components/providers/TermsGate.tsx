@@ -45,7 +45,7 @@ export function TermsGate() {
     usersApi.getTerms().then((data) => {
       if (!alive || !data) return;
       if (!data.accepted) { setStep('terms'); setOpen(true); }
-      else { updateUser({ terms_accepted_at: data.accepted_at ?? undefined }); setOpen(false); }
+      else { updateUser({ terms_accepted_at: data.accepted_at || new Date().toISOString() }); setOpen(false); }
     }).catch(() => {});
     return () => { alive = false; };
   }, [shouldEvaluate, user?.terms_accepted_at, updateUser]);
@@ -84,8 +84,8 @@ export function TermsGate() {
     } catch (e: any) {
       const err = e?.response?.data?.error ?? 'error';
       const msgs: Record<string, string> = {
-        invalid_code: "Noto'g'ri referral kod",
-        cannot_use_own_code: "O'z kodingizni ishlatib bo'lmaydi",
+        invalid_code: "Notoʻgʻri referral kod",
+        cannot_use_own_code: "Oʻz kodingizni ishlatib boʻlmaydi",
         already_used_referral: "Referral kod allaqachon ishlatilgan",
       };
       setReferralMsg({ ok: false, text: msgs[err] ?? err });
@@ -151,13 +151,13 @@ export function TermsGate() {
                 </span>
                 <div>
                   <h2 className="display-sm">{t('referral.title' as any) ?? 'Referral kod'}</h2>
-                  <p className="mt-0.5 text-xs text-fg-subtle">{t('referral.subtitle' as any) ?? "Agar do'stingiz sizga kod bergan bo'lsa, kiriting"}</p>
+                  <p className="mt-0.5 text-xs text-fg-subtle">{t('referral.subtitle' as any) ?? "Agar doʻstingiz sizga kod bergan boʻlsa, kiriting"}</p>
                 </div>
               </div>
             </div>
             <div className="px-6 py-6">
               <p className="text-sm text-fg-muted mb-4">
-                {t('referral.description' as any) ?? "Referral kod orqali platformaga qo'shilsangiz, do'stingiz mukofot oladi. Kod yo'q bo'lsa, o'tkazib yuboring."}
+                {t('referral.description' as any) ?? "Referral kod orqali platformaga qoʻshilsangiz, doʻstingiz mukofot oladi. Kod yoʻq boʻlsa, oʻtkazib yuboring."}
               </p>
               <input
                 value={referralCode}
@@ -175,7 +175,7 @@ export function TermsGate() {
             <div className="border-t border-border px-6 py-4 flex gap-3">
               <button type="button" onClick={() => setStep('plans')}
                 className="btn btn-secondary flex-1">
-                {t('common.skip' as any) ?? "O'tkazib yuborish"}
+                {t('common.skip' as any) ?? "Oʻtkazib yuborish"}
               </button>
               <button type="button" onClick={submitReferral} disabled={referralLoading}
                 className="btn btn-primary flex-1">
@@ -205,7 +205,7 @@ export function TermsGate() {
               </div>
               <div className="rounded-xl bg-brand-primary/8 border border-brand-primary/20 p-4">
                 <p className="text-sm font-semibold text-fg">🎁 {t('referral.systemTitle' as any) ?? 'Referral tizimi'}</p>
-                <p className="text-xs text-fg-muted mt-1">{t('referral.systemDesc' as any) ?? "Do'stlaringizni taklif qiling → ular e'lon joylashganda siz yuqori tarif olasiz."}</p>
+                <p className="text-xs text-fg-muted mt-1">{t('referral.systemDesc' as any) ?? "Doʻstlaringizni taklif qiling → ular eʼlon joylashganda siz yuqori tarif olasiz."}</p>
                 <ul className="mt-2 space-y-1 text-xs text-fg-muted">
                   <li>• {t('referral.tier1' as any) ?? '10 ta referral → Standart tarif'}</li>
                   <li>• {t('referral.tier2' as any) ?? '25 ta referral → Plus tarif'}</li>

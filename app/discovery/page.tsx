@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Geo-Discovery | SAYIN GLOBAL',
-  description: "O'z atrofingizdagi e'lonlarni xarita orqali qidiring.",
+  description: "Oʻz atrofingizdagi eʼlonlarni xarita orqali qidiring.",
 };
 
 export default function DiscoveryPage() {
@@ -13,7 +13,7 @@ export default function DiscoveryPage() {
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Geo-Discovery</h1>
           <p className="text-slate-500 mt-2">
-            O'zingizga eng yaqin masofadagi barcha chorva e'lonlarini xaritada ko'ring va qidiring.
+            Oʻzingizga eng yaqin masofadagi barcha chorva eʼlonlarini xaritada ko'ring va qidiring.
           </p>
         </div>
         

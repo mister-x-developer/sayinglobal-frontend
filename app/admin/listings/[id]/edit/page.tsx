@@ -166,7 +166,7 @@ export default function EditListingPage() {
     const priceNum = Number(form.price);
     if (!form.price || isNaN(priceNum) || priceNum < 0.01 || priceNum > 999999999.99) e.price = t('errors.required');
     if (existingImages.length + newImages.length < 3) e.images = "Kamida 3 ta rasm kiritish majburiy";
-    if (existingImages.length + newImages.length > 5) e.images = "Ko'pi bilan 5 ta rasm kiritish mumkin";
+    if (existingImages.length + newImages.length > 5) e.images = "Koʻpi bilan 5 ta rasm kiritish mumkin";
     setErrors(e);
     return Object.keys(e).length === 0;
   };

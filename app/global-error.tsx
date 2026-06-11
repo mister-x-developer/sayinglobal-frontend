@@ -22,7 +22,7 @@ type Locale = 'uz' | 'uz-cyrl' | 'ru' | 'en';
 
 const MESSAGES: Record<Locale, { title: string; description: string; tryAgain: string; goHome: string }> = {
   uz: {
-    title: "Nimadir noto'g'ri ketdi",
+    title: "Nimadir notoʻgʻri ketdi",
     description: "Iltimos, keyinroq qaytadan urinib ko'ring",
     tryAgain: "Qaytadan urinish",
     goHome: "Bosh sahifaga qaytish",

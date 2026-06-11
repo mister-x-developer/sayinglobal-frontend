@@ -63,6 +63,11 @@ export const plansApi = {
     return data;
   },
 
+  async mySubscriptions(): Promise<UserPlan[]> {
+    const { data } = await apiClient.get<UserPlan[]>('/plans/my-subscriptions/');
+    return data;
+  },
+
   async myReferralCode(): Promise<ReferralCode> {
     const { data } = await apiClient.get<ReferralCode>('/plans/referral/');
     return data;

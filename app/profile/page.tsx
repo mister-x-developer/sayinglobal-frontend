@@ -103,7 +103,7 @@ export default function ProfilePage() {
       <AppNav />
 
       <main className="flex-1">
-        <div className="container-page py-4 pb-40 sm:py-8 sm:pb-10"> {/* very generous pb-40 on mobile so ALL "Muhim ma'lumot" cards (E'lon hayotiy davri, Shikoyatlar, Sotuvchi mas'uliyati etc.) are fully visible without being covered by the fixed AI button or bottom nav */}
+        <div className="container-page py-4 pb-40 sm:py-8 sm:pb-10"> {/* very generous pb-40 on mobile so ALL "Muhim maʼlumot" cards (Eʼlon hayotiy davri, Shikoyatlar, Sotuvchi mas'uliyati etc.) are fully visible without being covered by the fixed AI button or bottom nav */}
 
           {/* PROFILE HEADER — more compact on mobile for full visibility of stats + tabs */}
           <motion.section
@@ -230,7 +230,7 @@ export default function ProfilePage() {
           <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_280px] pb-8 md:pb-0"> {/* extra padding on mobile for full visibility of stacked sidebar content vs fixed AI + nav */}
             {/* MAIN */}
             <div>
-              {/* Tabs — horizontal scroll on mobile so all labels (incl. long "Mening e'lonlarim") are fully visible */}
+              {/* Tabs — horizontal scroll on mobile so all labels (incl. long "Mening eʼlonlarim") are fully visible */}
               <div className="overflow-x-auto -mx-4 px-4 pb-1 sm:mx-0 sm:px-0">
                 <div className="flex gap-1 border-b border-border min-w-max sm:min-w-0">
                   {TABS.map((tt) => {
@@ -323,7 +323,7 @@ export default function ProfilePage() {
             </div>
 
             {/* SIDEBAR */}
-            <aside className="space-y-4 pb-48 md:pb-0"> {/* extra bottom space on mobile so last card (Muhim ma'lumot) text is not covered by fixed AI button or bottom nav */}
+            <aside className="space-y-4 pb-48 md:pb-0"> {/* extra bottom space on mobile so last card (Muhim maʼlumot) text is not covered by fixed AI button or bottom nav */}
               {/* Account summary */}
               <div className="surface-elevated p-5">
                 <h3 className="display-sm">{t('profile.accountSummary' as any) ?? t('profile.title')}</h3>
@@ -358,7 +358,7 @@ export default function ProfilePage() {
                     { href: '/profile/reports', icon: Flag, label: t('profile.myReports' as any) ?? 'Reports' },
                     { href: '/sellers/following', icon: Users, label: t('profile.followedSellers') },
                     { href: '/chat', icon: MessageSquareText, label: t('nav.chat') },
-                    { href: '/profile/guide', icon: BookOpen, label: 'Platforma Qoidalari va Qo\'llanma' },
+                    { href: '/profile/guide', icon: BookOpen, label: t('nav.guide' as any) || 'Qoidalar va Qo\'llanma' },
                   ].map((l) => {
                     const Icon = l.icon;
                     return (

@@ -31,7 +31,7 @@ export function formatNumber(num: number): string {
 /**
  * Return the best pre-translated title for the current UI locale.
  * Falls back to the canonical `title` (original language).
- * Used for e'lon sarlavhalari so they appear in the interface language.
+ * Used for eʼlon sarlavhalari so they appear in the interface language.
  */
 export function getLocalizedListingTitle(
   listing: {

@@ -16,6 +16,7 @@ import { HydrationReady } from '@/components/providers/HydrationReady';
 import { MotionProvider } from '@/components/providers/MotionProvider';
 import { OnboardingModal } from '@/components/shared/OnboardingModal';
 import { FloatingNearbyButton } from '@/components/shared/FloatingNearbyButton';
+import { AIAssistantButton } from '@/components/ai/AIAssistantButton';
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic'],
@@ -42,13 +43,13 @@ export const metadata: Metadata = {
     template: '%s · SAYIN GLOBAL',
   },
   description:
-    "Raqamli chorva bozori. To'g'ridan-to'g'ri sotuvchilar bilan bog'laning. Tasdiqlangan profillar, ishonchli e'lonlar, xavfsiz savdo.",
+    "Raqamli chorva bozori. Toʻgʻridan-toʻgʻri sotuvchilar bilan bogʻlaning. Tasdiqlangan profillar, ishonchli eʼlonlar, xavfsiz savdo.",
   keywords: ['chorva', 'qoramol', "qo'y", 'echki', 'ot', 'tuya', 'parranda', 'bozor', 'savdo', 'sayin', 'livestock', 'marketplace'],
   authors: [{ name: 'SAYIN GLOBAL' }],
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
   openGraph: {
     title: 'SAYIN GLOBAL — Raqamli Chorva Bozori',
-    description: "Raqamli chorva bozori. To'g'ridan-to'g'ri sotuvchilar bilan bog'laning.",
+    description: "Raqamli chorva bozori. Toʻgʻridan-toʻgʻri sotuvchilar bilan bogʻlaning.",
     type: 'website',
     siteName: 'SAYIN GLOBAL',
   },
@@ -72,7 +73,8 @@ export const viewport: Viewport = {
   ],
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 5,
+  maximumScale: 1,
+  userScalable: false,
   viewportFit: 'cover',
 };
 
@@ -118,6 +120,7 @@ export default async function RootLayout({
               <MobileBottomNav />
               <OnboardingModal />
               <FloatingNearbyButton />
+              <AIAssistantButton />
               <ToastContainer />
             </MotionProvider>
           </IntlClientProvider>

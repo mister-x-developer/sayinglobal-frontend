@@ -117,7 +117,7 @@ export default function AdminAIModerationPage() {
         <div className="mb-5 flex flex-wrap gap-2">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-success/10 border border-success/20 px-3 py-1 text-xs font-semibold text-success">
             <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={2} />
-            Tasdiqlash = E'lon xavfsiz
+            Tasdiqlash = Eʼlon xavfsiz
           </span>
           <span className="inline-flex items-center gap-1.5 rounded-full bg-danger/10 border border-danger/20 px-3 py-1 text-xs font-semibold text-danger">
             <AlertTriangle className="h-3.5 w-3.5" strokeWidth={2} />
@@ -158,7 +158,7 @@ export default function AdminAIModerationPage() {
               <Shield className="h-8 w-8" strokeWidth={1.5} />
             </div>
             <p className="text-lg font-bold text-fg">Hamma narsa tekshirilgan</p>
-            <p className="mt-1 text-sm text-fg-muted">Ko'rib chiqilishi kerak bo'lgan natijalar yo'q</p>
+            <p className="mt-1 text-sm text-fg-muted">Ko'rib chiqilishi kerak bo'lgan natijalar yoʻq</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -192,7 +192,7 @@ export default function AdminAIModerationPage() {
                           <div>
                             <div className="flex flex-wrap items-center gap-2">
                               <Badge variant={r.target_type === 'listing' ? 'primary' : 'warning'} size="sm">
-                                {r.target_type === 'listing' ? "E'lon" : 'Shikoyat'}
+                                {r.target_type === 'listing' ? "Eʼlon" : 'Shikoyat'}
                               </Badge>
                               <span className="text-sm font-bold text-fg font-mono">#{r.target_id}</span>
                             </div>

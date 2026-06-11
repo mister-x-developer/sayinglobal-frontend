@@ -154,7 +154,8 @@
     "nightMode": "Tungi rejim",
     "menu": "Menyu",
     "nearby": "Yaqinlik",
-    "plans": "Tariflar"
+    "plans": "Tariflar",
+    "guide": "Qoʻllanma va qoidalar"
   },
   "marketplace": {
     "title": "Bozor",
@@ -866,11 +867,7 @@
     "titleChat": "Suhbatni shikoyat qilish",
     "descriptionMinLength": "Kamida 10 ta belgi kerak",
     "titleComment": "Izohni shikoyat qilish",
-    "titleRating": "Sharhni shikoyat qilish",
-    "status.pending": "Kutilmoqda",
-    "status.under_review": "Koʻrib chiqilmoqda",
-    "status.resolved_valid": "Tasdiqlandi",
-    "status.resolved_invalid": "Rad etildi"
+    "titleRating": "Sharhni shikoyat qilish"
   },
   "security": {
     "title": "Xavfsizlik",
@@ -1104,9 +1101,9 @@
       "adminStats": "Tizim statistikasi",
       "adminSpam": "Spam va shubhali eʼlonlar"
     },
-    "newChat": "Yangi chat ochish",
-    "chatHistory": "Suhbatlar tarixi",
-    "noChats": "Hali hech qanday chat yoʻq.",
+    "newChat": "Yangi chat",
+    "chatHistory": "Chatlar tarixi",
+    "noChats": "Suhbatlar topilmadi",
     "adminGreeting": "👋 Assalomu alaykum! Platformani boshqarish boʻyicha savollaringiz bormi?"
   },
   "privacy": {
@@ -1196,5 +1193,31 @@
       "account_deleted": "Akkaunt oʻchirildi",
       "subscription_upgraded": "Taʼrif yangilandi"
     }
+  },
+  "guidePage": {
+    "title": "Platforma Yoʻriqnomasi",
+    "healthScoreTitle": "100-ballik Sogʻlomlik Tizimi (Health Score)",
+    "healthScoreDesc": "Platformamizda barcha sotuvchilar 100 ball bilan oʻz faoliyatini boshlaydi. Bu ball sizning platformadagi ishonchliligingiz va qoidalarga qanchalik rioya qilishingizni bildiradi. Ballingizga qarab hisobingiz holati belgilanadi.",
+    "pointsDeductionTitle": "Ball ayirilishi (Taqiqlar)",
+    "pointsDeductionDesc": "Xaridorlar tomonidan qilingan shikoyatlar moderatorlar tomonidan oʻrganib chiqiladi. Agar shikoyat oʻrinli deb topilsa, uning jiddiyligiga qarab ball ayiriladi:",
+    "lowOffense": "Kichik qoidabuzarlik (Low)",
+    "mediumOffense": "Oʻrta darajadagi xato (Medium)",
+    "highOffense": "Jiddiy qoidabuzarlik (High)",
+    "criticalOffense": "Oʻta ogʻir holat, Cheating (Critical)",
+    "pointsRecoveryTitle": "Ball qoʻshilishi (Tiklanish)",
+    "pointsRecoveryDesc": "Yoʻqotilgan ballarni faqat halol savdo qilish orqali qayta tiklash mumkin. Buning uchun tizim Cheatingni oldini oluvchi maxsus mexanizmga ega.",
+    "confirmedSale": "Tasdiqlangan savdo (+5 ball)",
+    "confirmedSaleDesc": "Siz eʼloni \"Sotildi\" deb belgilaganingizda, tizim sizga maxsus yashirin kod (confirmation code) beradi. Bu kodni xaridorga berasiz. Xaridor u kodni tizimga kiritganda, savdo tasdiqlanadi va sizga avtomatik +5 ball qoʻshiladi.",
+    "goodRating": "Yaxshi reyting (+2 ball)",
+    "goodRatingDesc": "Xaridor xaridni tasdiqlayotgan vaqtda sizga 4 yoki 5 yulduzli aʼlo baho bersa, qoʻshimcha +2 ball (jami +7 ball) yoziladi. (Ballaringiz 100 dan oshmaydi).",
+    "retentionTitle": "Eʼlonlarning saqlanish muddati",
+    "activeRetention": "Faol eʼlonlar:",
+    "activeRetentionDesc": "30 kun ichida yangilanmasa avtomatik arxivlanadi (sotuvdan olinadi).",
+    "soldRetention": "\"Sotildi\" deb belgilingan eʼlonlar:",
+    "soldRetentionDesc": "7 kun davomida saqlanadi, soʻngra avtomatik oʻchiriladi.",
+    "rejectedRetention": "Rad etilgan yoki muddati oʻtgan eʼlonlar:",
+    "rejectedRetentionDesc": "5 kun davomida saqlanadi, soʻngra avtomatik oʻchiriladi.",
+    "blockingTitle": "Bloklanish va Murojaat",
+    "blockingDesc": "Agar sizning ballingiz 19 yoki undan pasayib ketsa, hisobingiz avtomatik tarzda toʻliq bloklanadi va barcha eʼlonlaringiz oʻchiriladi (yashiriladi). Bloklangan holatdan mustaqil ravishda chiqish imkonsiz. Bunday holatda, siz faqat Adminlar qarorini kutishingiz yoki qoʻllab-quvvatlash xizmatiga murojaat qilishingiz kerak boʻladi."
   }
 }

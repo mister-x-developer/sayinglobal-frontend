@@ -172,7 +172,7 @@ export default function SettingsPage() {
                 />
                 <SettingRow
                   label={t('settings.favoriteNotifications')}
-                  description={t('settings.listingNotifDescription' as any) ?? "E'lonlaringiz bo'yicha faollik"}
+                  description={t('settings.listingNotifDescription' as any) ?? "Eʼlonlaringiz boʻyicha faollik"}
                   on={listingNotifs}
                   onToggle={() => setListingNotifs((v) => !v)}
                 />

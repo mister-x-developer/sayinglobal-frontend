@@ -71,6 +71,7 @@ export default function PlansPage() {
   const { isAuthenticated } = useAuthStore();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [myPlan, setMyPlan] = useState<MyPlan | null>(null);
+  const [mySubscriptions, setMySubscriptions] = useState<MyPlan[]>([]);
   const [referral, setReferral] = useState<ReferralCode | null>(null);
   const [promoCode, setPromoCode] = useState('');
   const [promoLoading, setPromoLoading] = useState(false);
@@ -89,6 +90,7 @@ export default function PlansPage() {
 
     const loadAuth = isAuthenticated ? Promise.all([
       apiClient.get('/plans/my/').then((r) => { if (alive) setMyPlan(r.data); }).catch(() => {}),
+      apiClient.get('/plans/my-subscriptions/').then((r) => { if (alive) setMySubscriptions(r.data); }).catch(() => {}),
       apiClient.get('/plans/referral/').then((r) => { if (alive) setReferral(r.data); }).catch(() => {}),
     ]) : Promise.resolve();
 
@@ -108,6 +110,8 @@ export default function PlansPage() {
       setPromoCode('');
       const updated = await apiClient.get('/plans/my/');
       setMyPlan(updated.data);
+      const updatedSubs = await apiClient.get('/plans/my-subscriptions/');
+      setMySubscriptions(updatedSubs.data);
     } catch (e: any) {
       const err = e?.response?.data?.error ?? '';
       const msgs: Record<string, string> = {
@@ -151,6 +155,8 @@ export default function PlansPage() {
       await apiClient.post('/plans/referral/claim/', { plan_id: plan.id });
       const updated = await apiClient.get('/plans/my/');
       setMyPlan(updated.data);
+      const updatedSubs = await apiClient.get('/plans/my-subscriptions/');
+      setMySubscriptions(updatedSubs.data);
       const msg = t('plans.planActivated').replace('{name}', getPlanName(plan, locale));
       setPlanMsg({ planId: plan.id, ok: true, text: msg });
     } catch (e: any) {
@@ -182,46 +188,51 @@ export default function PlansPage() {
           </motion.div>
 
           {/* Current plan banner */}
-          {isAuthenticated && myPlan && (
-            <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.1 }}
-              className="mt-8 surface-elevated p-5 border border-brand-primary/20 bg-brand-primary/4 rounded-2xl"
-            >
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-brand-primary">
-                    {t('plans.currentPlan')}
-                  </p>
-                  <p className="mt-1 text-2xl font-black text-fg">{getPlanName(myPlan.plan, locale)}</p>
-                  <div className="mt-2 flex items-center gap-2">
-                    <div className="h-2 w-32 rounded-full bg-border overflow-hidden">
-                      <div
-                        className="h-full rounded-full bg-brand-primary transition-all"
-                        style={{ width: `${Math.min(100, (myPlan.monthly_listings_used / myPlan.plan.monthly_listing_limit) * 100)}%` }}
-                      />
+          {isAuthenticated && mySubscriptions.length > 0 && (
+            <div className="mt-8 space-y-4">
+              {mySubscriptions.map((sub, idx) => (
+                <motion.div
+                  key={sub.plan.id + idx}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.1 + (idx * 0.1) }}
+                  className="surface-elevated p-5 border border-brand-primary/20 bg-brand-primary/4 rounded-2xl"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-wider text-brand-primary">
+                        {t('plans.currentPlanBadge')}
+                      </p>
+                      <p className="mt-1 text-2xl font-black text-fg">{getPlanName(sub.plan, locale)}</p>
+                      <div className="mt-2 flex items-center gap-2">
+                        <div className="h-2 w-32 rounded-full bg-border overflow-hidden">
+                          <div
+                            className="h-full rounded-full bg-brand-primary transition-all"
+                            style={{ width: `${Math.min(100, (sub.monthly_listings_used / sub.plan.monthly_listing_limit) * 100)}%` }}
+                          />
+                        </div>
+                        <p className="text-sm text-fg-muted">
+                          {sub.monthly_listings_used}/{sub.plan.monthly_listing_limit}{' '}
+                          {t('plans.listingsThisMonth')}
+                        </p>
+                      </div>
                     </div>
-                    <p className="text-sm text-fg-muted">
-                      {myPlan.monthly_listings_used}/{myPlan.plan.monthly_listing_limit}{' '}
-                      {t('plans.listingsThisMonth')}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="text-center">
-                    <p className="text-xs text-fg-muted">{t('plans.activeLimit')}</p>
-                    <p className="font-bold text-fg text-lg">{myPlan.plan.active_listing_limit}</p>
-                  </div>
-                  {myPlan.expires_at && (
-                    <div className="text-center">
-                      <p className="text-xs text-fg-muted">{t('plans.until')}</p>
-                      <p className="font-bold text-fg">{new Date(myPlan.expires_at).toLocaleDateString()}</p>
+                    <div className="flex items-center gap-4">
+                      <div className="text-center">
+                        <p className="text-xs text-fg-muted">{t('plans.activeLimit')}</p>
+                        <p className="font-bold text-fg text-lg">{sub.plan.active_listing_limit}</p>
+                      </div>
+                      {sub.expires_at && (
+                        <div className="text-center">
+                          <p className="text-xs text-fg-muted">{t('plans.until')}</p>
+                          <p className="font-bold text-fg">{new Date(sub.expires_at).toLocaleDateString()}</p>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              </div>
-            </motion.div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           )}
 
           {/* Plans grid */}
@@ -238,9 +249,9 @@ export default function PlansPage() {
               plans.map((plan, i) => {
                 const Icon = PLAN_ICONS[i % PLAN_ICONS.length];
                 const iconColor = PLAN_ICON_COLORS[i % PLAN_ICON_COLORS.length];
-                const isCurrent = myPlan
-                  ? (myPlan.plan.name === plan.name && myPlan.plan.monthly_listing_limit === plan.monthly_listing_limit)
-                  : false;
+                const isCurrent = mySubscriptions.some(
+                  sub => sub.plan.name === plan.name && sub.plan.monthly_listing_limit === plan.monthly_listing_limit
+                );
 
                 return (
                   <motion.div
@@ -370,11 +381,11 @@ export default function PlansPage() {
                         <button disabled className="btn btn-secondary w-full opacity-60 cursor-not-allowed">
                           {t('plans.currentPlanBadge')}
                         </button>
-                      ) : plan.price_uzs === 0 ? (
+                      ) : plan.is_default || plan.price_uzs === 0 ? (
                         <button disabled className="btn btn-secondary w-full opacity-60 cursor-not-allowed">
                           {t('plans.freePlan')}
                         </button>
-                      ) : (
+                      ) : plan.referrals_required > 0 ? (
                         <div className="space-y-2">
                           <button
                             onClick={() => claimWithReferral(plan)}
@@ -393,7 +404,7 @@ export default function PlansPage() {
                             </p>
                           )}
                         </div>
-                      )}
+                      ) : null}
                     </div>
                   </motion.div>
                 );

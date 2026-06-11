@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { Gift, Check, Copy, Users, ArrowRight, ExternalLink } from 'lucide-react';
+import { Gift, Check, Copy, Users, ArrowRight, ExternalLink, Loader2 } from 'lucide-react';
 import { AppNav } from '@/components/layout/AppNav';
 import apiClient from '@/lib/api/client';
 import { toast } from '@/components/ui/Toast';
@@ -21,6 +21,8 @@ export default function ReferralPage() {
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
+  const [useCode, setUseCode] = useState('');
+  const [useCodeLoading, setUseCodeLoading] = useState(false);
 
   useEffect(() => {
     apiClient.get('/plans/referral/')
@@ -60,6 +62,25 @@ export default function ReferralPage() {
       }).catch(() => {});
     } else {
       copyLink();
+    }
+  };
+
+  const handleUseCode = async () => {
+    if (!useCode.trim()) return;
+    setUseCodeLoading(true);
+    try {
+      const res = await apiClient.post('/plans/referral/use/', { code: useCode.trim().toUpperCase() });
+      toast.success(res.data?.message || t('plans.referralApplied' as any) || 'Kod muvaffaqiyatli ishlatildi!');
+      setUseCode('');
+    } catch (e: any) {
+      const err = e.response?.data?.error;
+      let msg = 'Xatolik yuz berdi';
+      if (err === 'invalid_code') msg = 'Kod noto\'g\'ri';
+      if (err === 'cannot_use_own_code') msg = 'O\'z kodingizni ishlata olmaysiz';
+      if (err === 'already_used_referral') msg = 'Siz allaqachon referal kodidan foydalangansiz';
+      toast.error(msg);
+    } finally {
+      setUseCodeLoading(false);
     }
   };
 
@@ -106,6 +127,28 @@ export default function ReferralPage() {
                     </div>
                     <p className="font-display text-3xl font-black text-fg">{referral.rewarded_referrals}</p>
                     <p className="mt-1 text-sm text-fg-muted">{t('plans.rewarded')}</p>
+                  </div>
+                </div>
+
+                {/* Submit someone else's referral code */}
+                <div className="surface-elevated p-6 mb-5 border border-brand-primary/20">
+                  <h2 className="display-sm mb-1">{t('plans.useReferralTitle' as any) || "Doʻstingizni kodini ishlating"}</h2>
+                  <p className="text-sm text-fg-muted mb-4">{t('plans.useReferralDesc' as any) || "Agar sizni doʻstingiz taklif qilgan boʻlsa, uning kodini kiriting va eʼlon joylaganingizda ikkingiz ham bonus olasiz."}</p>
+                  <div className="flex gap-3">
+                    <input
+                      value={useCode}
+                      onChange={(e) => setUseCode(e.target.value.toUpperCase())}
+                      placeholder="DO'STINGIZ KODI"
+                      className="input-base flex-1 font-mono tracking-widest"
+                      onKeyDown={(e) => e.key === 'Enter' && handleUseCode()}
+                    />
+                    <button
+                      onClick={handleUseCode}
+                      disabled={useCodeLoading || !useCode.trim()}
+                      className="btn btn-primary"
+                    >
+                      {useCodeLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : (t('common.submit' as any) || 'Yuborish')}
+                    </button>
                   </div>
                 </div>
 
