@@ -22,6 +22,7 @@ import {
   TILE_URL,
   loadLeaflet,
 } from '@/lib/utils/leaflet';
+import { Geolocation } from '@capacitor/geolocation';
 
 export interface ResolvedAddress {
   /** Human-readable street / neighbourhood / place name */
@@ -234,44 +235,37 @@ export function LocationPicker({
     };
   }, []);
 
-  const useMyLocation = () => {
-    if (typeof navigator === 'undefined' || !navigator.geolocation) {
-      setLocating(true);
-      fetch('https://ipapi.co/json/')
-        .then((res) => res.json())
-        .then((data) => {
-          if (data && data.latitude && data.longitude) {
-            handleCoords(data.latitude, data.longitude);
-          } else {
-            setLocationError(t('marketplace.geolocationUnsupported' as any) ?? 'Joylashuv aniqlash qo‘llab-quvvatlanmaydi');
-          }
-        })
-        .catch(() => {
-          setLocationError(t('marketplace.geolocationUnsupported' as any) ?? 'Joylashuv aniqlash qo‘llab-quvvatlanmaydi');
-        })
-        .finally(() => setLocating(false));
-      return;
-    }
-
+  const useMyLocation = async () => {
     setLocating(true);
     setLocationError('');
-
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
+    try {
+      const pos = await Geolocation.getCurrentPosition({ enableHighAccuracy: true, timeout: 10000 });
+      setLocating(false);
+      handleCoords(pos.coords.latitude, pos.coords.longitude);
+    } catch (e) {
+      // Fallback if Capacitor plugin fails (or not in native shell)
+      if (typeof navigator !== 'undefined' && navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            setLocating(false);
+            handleCoords(pos.coords.latitude, pos.coords.longitude);
+          },
+          (err) => {
+            setLocating(false);
+            const msg = err.code === 1
+              ? (t('marketplace.geolocationPermission' as any) ?? 'Joylashuv ruxsati berilmadi. Ilova sozlamalaridan yoqing.')
+              : (t('marketplace.geolocationError' as any) ?? 'Joylashuvni aniqlab bo‘lmadi. Qayta urining.');
+            setLocationError(msg);
+            setTimeout(() => setLocationError(''), 4000);
+          },
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 30_000 },
+        );
+      } else {
         setLocating(false);
-        handleCoords(pos.coords.latitude, pos.coords.longitude);
-      },
-      (err) => {
-        setLocating(false);
-        const msg = err.code === 1
-          ? (t('marketplace.geolocationPermission' as any) ?? 'Joylashuv ruxsati berilmadi. Ilova sozlamalaridan yoqing.')
-          : (t('marketplace.geolocationError' as any) ?? 'Joylashuvni aniqlab bo‘lmadi. Qayta urining.');
-        setLocationError(msg);
-        // Auto clear error after a bit
+        setLocationError(t('marketplace.geolocationUnsupported' as any) ?? 'Joylashuv aniqlash qo‘llab-quvvatlanmaydi');
         setTimeout(() => setLocationError(''), 4000);
-      },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 30_000 },
-    );
+      }
+    }
   };
 
   if (failed) {

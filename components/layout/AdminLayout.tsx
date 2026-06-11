@@ -47,7 +47,8 @@ const NAV_GROUPS = [
     items: [
       { href: '/admin/listings', icon: LayoutGrid, label: 'admin.listings' },
       { href: '/admin/moderation', icon: Flag, label: 'admin.complaints' },
-      { href: '/admin/ai-moderation', icon: Bot, label: 'admin.aiModeration' },
+      { href: '/admin/ai-agent', icon: Bot, label: 'AI Agent' },
+      { href: '/admin/ai-moderation', icon: ShieldCheck, label: 'admin.aiModeration' },
     ],
   },
   {

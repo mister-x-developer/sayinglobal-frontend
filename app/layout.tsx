@@ -109,12 +109,12 @@ export default async function RootLayout({
       lang={locale}
       data-theme="day"
       suppressHydrationWarning
-      className={`${inter.variable} ${poppins.variable} overflow-x-hidden`}
+      className={`${inter.variable} ${poppins.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className="antialiased min-h-[100dvh] bg-bg text-fg pb-[calc(72px+env(safe-area-inset-bottom))] md:pb-0 overflow-x-hidden">
+      <body className="antialiased min-h-[100dvh] bg-bg text-fg pb-[calc(72px+env(safe-area-inset-bottom))] md:pb-0">
         <HydrationReady />
         <ThemeProvider>
           <IntlClientProvider messages={messages} locale={locale} timeZone="Asia/Tashkent">
