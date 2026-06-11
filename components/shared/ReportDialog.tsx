@@ -181,7 +181,7 @@ export function ReportDialog({ open, target, onClose, onSubmitted }: Props) {
                             : 'border-border hover:bg-bg-subtle',
                         )}
                       >
-                        <span className="flex-1 text-sm font-medium text-fg">
+                        <span className="flex-1 text-sm font-medium text-fg break-words text-left leading-snug pe-2">
                           {t(`report.reasons.${r.code}` as any) ?? r.code}
                         </span>
                         <span

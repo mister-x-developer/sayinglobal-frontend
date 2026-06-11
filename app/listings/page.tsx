@@ -350,18 +350,25 @@ export default function ListingsPage() {
       </main>
 
       {/* Floating Nearby Button — calm */}
-      <div className="fixed bottom-8 left-6 z-40 sm:bottom-10 sm:left-8">
+      <motion.div 
+        drag
+        dragMomentum={false}
+        dragElastic={0.1}
+        className="fixed bottom-8 left-6 z-40 sm:bottom-10 sm:left-8"
+        style={{ touchAction: 'none' }}
+      >
         <Link
           href={`/listings/nearby${category !== 'all' ? `?category=${category}` : ''}`}
           className="group flex items-center gap-3 rounded-2xl bg-brand-primary px-5 py-3.5 text-white shadow-sm transition-all hover:bg-brand-primary/90 active:scale-[0.985]"
           aria-label={t('nearby.title' as any) ?? 'Nearby listings'}
+          onDragStart={(e) => e.preventDefault()} // prevent default link drag behavior
         >
           <MapPin className="h-5 w-5" strokeWidth={2} />
           <span className="text-sm font-semibold tracking-wide">
             {t('nearby.title' as any) ?? 'Yaqin atrofda'}
           </span>
         </Link>
-      </div>
+      </motion.div>
     </div>
   );
 }

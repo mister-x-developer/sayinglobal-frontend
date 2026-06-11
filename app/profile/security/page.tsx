@@ -88,6 +88,7 @@ function PlatformIcon({ platform }: { platform: UserSession['platform'] }) {
 
 export default function SecurityPage() {
   const t = useTranslations();
+  const ts = useTranslations('security');
   const router = useRouter();
   const { isAuthenticated, refreshToken } = useAuthStore();
   const [hydrated, setHydrated] = useState(false);
@@ -154,9 +155,9 @@ export default function SecurityPage() {
       const result = await sessionsApi.revokeAllOthers(jti);
       await fetchSessions();
       if (result.revoked_count > 0) {
-        setToast({ message: t('security.allOthersRevoked'), variant: 'success' });
+        setToast({ message: ts('allOthersRevoked'), variant: 'success' });
       } else {
-        setToast({ message: t('security.noOtherSessions'), variant: 'info' });
+        setToast({ message: ts('noOtherSessions'), variant: 'info' });
       }
     } catch {
       setToast({ message: t('errors.somethingWrong'), variant: 'error' });
@@ -199,7 +200,7 @@ export default function SecurityPage() {
               <ShieldCheck className="h-5 w-5" strokeWidth={1.75} />
             </div>
             <div>
-              <h1 className="display-md">{t('security.title')}</h1>
+              <h1 className="display-md">{ts('title')}</h1>
             </div>
           </motion.div>
 
@@ -214,7 +215,7 @@ export default function SecurityPage() {
                 className="surface-elevated p-6"
               >
                 <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-                  <h2 className="display-sm">{t('security.activeSessions')}</h2>
+                  <h2 className="display-sm">{ts('activeSessions')}</h2>
                   <button
                     type="button"
                     onClick={handleRevokeAll}
@@ -226,7 +227,7 @@ export default function SecurityPage() {
                     ) : (
                       <LogOut className="h-3.5 w-3.5" strokeWidth={1.75} />
                     )}
-                    {t('security.signOutAllOthers')}
+                    {ts('signOutAllOthers')}
                   </button>
                 </div>
 
@@ -243,7 +244,7 @@ export default function SecurityPage() {
                     ))}
                   </div>
                 ) : sessions.length === 0 ? (
-                  <p className="text-sm text-fg-muted">{t('security.noOtherSessions')}</p>
+                  <p className="text-sm text-fg-muted">{ts('noOtherSessions')}</p>
                 ) : (
                   <div className="space-y-3">
                     <AnimatePresence initial={false}>
@@ -267,14 +268,14 @@ export default function SecurityPage() {
                               </span>
                               {session.is_current && (
                                 <span className="inline-flex items-center rounded-full bg-brand-primary/10 px-2 py-0.5 text-xs font-semibold text-brand-primary">
-                                  {t('security.currentDevice')}
+                                  {ts('currentDevice')}
                                 </span>
                               )}
                             </div>
                             <div className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-fg-muted">
                               <span className="inline-flex items-center gap-1">
                                 <Clock className="h-3 w-3" strokeWidth={1.75} />
-                                {t('security.lastActivity')}: {relativeTime(session.last_activity)}
+                                {ts('lastActivity')}: {relativeTime(session.last_activity)}
                               </span>
                               {session.ip_address && (
                                 <span>{session.ip_address}</span>
@@ -294,7 +295,7 @@ export default function SecurityPage() {
                               ) : (
                                 <LogOut className="h-3.5 w-3.5" strokeWidth={1.75} />
                               )}
-                              {t('security.revokeSession')}
+                              {ts('revokeSession')}
                             </button>
                           )}
                         </motion.div>
@@ -312,7 +313,7 @@ export default function SecurityPage() {
               transition={{ duration: 0.4, delay: 0.1 }}
               className="surface-elevated p-6 self-start"
             >
-              <h2 className="display-sm mb-5">{t('security.recentEvents')}</h2>
+              <h2 className="display-sm mb-5">{ts('recentEvents')}</h2>
 
               {loadingEvents ? (
                 <div className="space-y-3">

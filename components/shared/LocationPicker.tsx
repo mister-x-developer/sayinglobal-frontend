@@ -236,11 +236,26 @@ export function LocationPicker({
 
   const useMyLocation = () => {
     if (typeof navigator === 'undefined' || !navigator.geolocation) {
-      setLocationError(t('marketplace.geolocationUnsupported' as any) ?? 'Joylashuv aniqlash qo‘llab-quvvatlanmaydi');
+      setLocating(true);
+      fetch('https://ipapi.co/json/')
+        .then((res) => res.json())
+        .then((data) => {
+          if (data && data.latitude && data.longitude) {
+            handleCoords(data.latitude, data.longitude);
+          } else {
+            setLocationError(t('marketplace.geolocationUnsupported' as any) ?? 'Joylashuv aniqlash qo‘llab-quvvatlanmaydi');
+          }
+        })
+        .catch(() => {
+          setLocationError(t('marketplace.geolocationUnsupported' as any) ?? 'Joylashuv aniqlash qo‘llab-quvvatlanmaydi');
+        })
+        .finally(() => setLocating(false));
       return;
     }
-    setLocationError('');
+
     setLocating(true);
+    setLocationError('');
+
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setLocating(false);

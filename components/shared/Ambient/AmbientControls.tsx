@@ -4,8 +4,10 @@ import { useState, useRef, useEffect } from 'react';
 import { useAmbientStore, AMBIENT_TRACKS, AmbientTrackId } from '@/lib/store/ambient';
 import { Volume2, VolumeX, MonitorPlay, MonitorOff, Play, Pause, Headphones } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 export function AmbientControls() {
+  const t = useTranslations();
   const { 
     trackId, 
     volume, 
@@ -42,7 +44,7 @@ export function AmbientControls() {
         className={`relative flex h-9 w-9 items-center justify-center rounded-full transition-colors ${
           isPlaying ? 'bg-brand-accent/10 text-brand-accent' : 'text-fg-subtle hover:bg-bg-subtle hover:text-fg'
         }`}
-        title="Zen Mode (Tabiat tovushlari)"
+        title={t('ambient.zenMode' as any) ?? 'Zen Mode (Tabiat tovushlari)'}
       >
         <Headphones className="h-5 w-5" />
         {isPlaying && (
@@ -63,7 +65,7 @@ export function AmbientControls() {
             className="absolute right-0 mt-2 w-64 origin-top-right rounded-2xl border border-border bg-bg p-4 shadow-xl ring-1 ring-black/5 focus:outline-none z-50"
           >
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-fg">Zen Mode</h3>
+              <h3 className="text-sm font-semibold text-fg">{t('ambient.title' as any) ?? 'Zen Mode'}</h3>
               {trackId !== 'none' && (
                 <button
                   onClick={togglePlay}
@@ -116,7 +118,7 @@ export function AmbientControls() {
                 </div>
                 
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-fg-muted">Fon animatsiyasi</span>
+                  <span className="text-xs text-fg-muted">{t('ambient.backgroundAnimation' as any) ?? 'Fon animatsiyasi'}</span>
                   <button
                     onClick={() => setShowVideo(!showVideo)}
                     className={`flex h-7 items-center gap-1.5 rounded-full px-2.5 text-xs font-medium transition-colors ${

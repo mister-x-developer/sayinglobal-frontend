@@ -253,10 +253,10 @@ export function AppNav() {
   const links = [
     { href: '/dashboard', icon: Home, label: t('nav.home') },
     { href: '/listings', icon: LayoutGrid, label: t('nav.listings') },
-    { href: '/listings/nearby', icon: MapPin, label: t('nav.nearby' as any) ?? 'Nearby' },
+    { href: '/listings/nearby', icon: MapPin, label: t('nav.nearby') },
     { href: '/sellers', icon: ShieldCheck, label: t('nav.sellers') },
     { href: '/chat', icon: MessageSquareText, label: t('nav.chat') },
-    { href: '/plans', icon: Tag, label: t('nav.plans' as any) ?? 'Tariflar' },
+    { href: '/plans', icon: Tag, label: t('nav.plans') },
   ];
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');
@@ -269,7 +269,7 @@ export function AppNav() {
   return (
     <>
       {/* ── Sticky header bar ── */}
-      <header className="sticky top-0 z-40 border-b border-border/60 bg-bg/80 backdrop-blur-xl backdrop-saturate-150 transition-shadow duration-300">
+      <header className="sticky top-0 z-40 w-full pt-safe border-b border-border/60 bg-bg/80 backdrop-blur-xl backdrop-saturate-150 transition-shadow duration-300">
         <div className="container-page">
           <div className="flex h-14 md:h-16 items-center gap-2">
             {/* Mobile menu trigger */}

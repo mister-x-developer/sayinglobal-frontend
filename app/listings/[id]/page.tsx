@@ -470,13 +470,15 @@ export default function ListingDetailPage() {
                     )}
 
                     <div className="mt-6 space-y-2.5">
-                      <Link
-                        href={`/chat?with=${listing.seller.public_id}`}
-                        className="btn btn-primary w-full"
-                      >
-                        <MessageSquareText className="h-4 w-4" strokeWidth={2.25} />
-                        {t('listings.contactSeller')}
-                      </Link>
+                      {user?.public_id !== listing.seller.public_id && (
+                        <Link
+                          href={`/chat?with=${listing.seller.public_id}`}
+                          className="btn btn-primary w-full"
+                        >
+                          <MessageSquareText className="h-4 w-4" strokeWidth={2.25} />
+                          {t('listings.contactSeller')}
+                        </Link>
+                      )}
 
                       <div className="grid grid-cols-3 gap-2">
                         <button

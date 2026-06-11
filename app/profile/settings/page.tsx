@@ -84,29 +84,10 @@ export default function SettingsPage() {
   const router = useRouter();
   const { mode, setMode } = useTheme();
   const { logout } = useAuthStore();
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [deleteInput, setDeleteInput] = useState('');
-
   // Only push notifications remain — email removed (users have no email)
   const [pushNotifs, setPushNotifs] = useState(true);
   const [msgNotifs, setMsgNotifs] = useState(true);
   const [listingNotifs, setListingNotifs] = useState(true);
-
-  const handleConfirmDelete = async () => {
-    if (deleteInput !== "O'CHIRISH") return;
-    try {
-      await apiClient.delete('/api/users/me/delete/');
-      logout();
-      router.replace('/');
-    } catch (err: any) {
-      const detail = err?.response?.data?.detail || t('errors.somethingWrong' as any) || "Hisobni o'chirib bo'lmadi.";
-      // Simple alert for now; in real would use toast
-      alert(detail);
-    } finally {
-      setShowDeleteConfirm(false);
-      setDeleteInput('');
-    }
-  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -221,68 +202,10 @@ export default function SettingsPage() {
                   </Badge>
                 </div>
               </Section>
-
-              {/* DANGER ZONE */}
-              <div className="rounded-2xl border border-danger/30 bg-danger/5 p-5">
-                <div className="flex items-start gap-3">
-                  <div className="inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-danger/12 text-danger">
-                    <Shield className="h-5 w-5" strokeWidth={1.75} />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-fg">{t('settings.deleteAccount')}</h3>
-                    <p className="mt-1 text-sm text-fg-muted">{t('settings.deleteAccountWarning')}</p>
-                    <button
-                      type="button"
-                      onClick={() => setShowDeleteConfirm(true)}
-                      className="btn btn-danger btn-sm mt-4"
-                    >
-                      <Trash2 className="h-4 w-4" strokeWidth={1.75} />
-                      {t('settings.deleteAccount')}
-                    </button>
-                  </div>
-                </div>
-              </div>
             </div>
           </motion.div>
         </div>
       </main>
-
-      {/* Delete confirm */}
-      {showDeleteConfirm && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setShowDeleteConfirm(false)}
-          />
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="relative w-full max-w-md rounded-2xl border border-border bg-bg-elevated p-6 shadow-lift"
-          >
-            <h2 className="display-sm">{t('settings.deleteAccount')}</h2>
-            <p className="mt-2 text-sm text-fg-muted">{t('settings.deleteAccountWarning')}</p>
-            <div className="mt-4">
-              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-fg-muted">
-                Tasdiqlash uchun «O'CHIRISH» deb yozing
-              </label>
-              <input
-                value={deleteInput}
-                onChange={(e) => setDeleteInput(e.target.value)}
-                className="input-base w-full"
-                placeholder="O'CHIRISH"
-              />
-            </div>
-            <div className="mt-5 flex gap-3">
-              <button type="button" onClick={() => setShowDeleteConfirm(false)} className="btn btn-secondary flex-1">
-                {t('common.cancel')}
-              </button>
-              <button type="button" onClick={handleConfirmDelete} disabled={deleteInput !== "O'CHIRISH"} className="btn btn-danger flex-1">
-                {t('common.delete')}
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      )}
     </div>
   );
 }

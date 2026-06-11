@@ -10,7 +10,6 @@ import type { Category } from '@/lib/api/reference';
  */
 const FALLBACK_SLUGS = [
   'cattle', 'sheep', 'goats', 'horses', 'camels', 'poultry',
-  'rabbits', 'bees', 'fish',
 ] as const;
 
 interface CategorySelectorProps {

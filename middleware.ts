@@ -77,7 +77,7 @@ export function middleware(req: NextRequest) {
 
   // If the user is already authenticated, redirect away from landing and auth.
   // Strict: non-admins to /dashboard, admins to /admin.
-  if ((pathname === '/' || pathname === '/auth') && isAuthenticated(req)) {
+  if ((pathname === '/' || pathname.startsWith('/auth')) && isAuthenticated(req)) {
     const nextUrl = req.nextUrl.clone();
     const target = isPlatformAdmin(req)
       ? '/admin'
@@ -104,13 +104,6 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(dashboardUrl);
   }
 
-  // User route guard for Admins — admins should strictly use the admin panel
-  if (isAuthenticated(req) && isPlatformAdmin(req) && !isAdminPath(pathname)) {
-    const adminUrl = req.nextUrl.clone();
-    adminUrl.pathname = '/admin';
-    adminUrl.search = '';
-    return NextResponse.redirect(adminUrl);
-  }
 
   return res;
 }

@@ -28,6 +28,7 @@ import { ReportDialog } from '@/components/shared/ReportDialog';
 import { usersApi } from '@/lib/api/users';
 import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
+import { useAuthStore } from '@/lib/store/auth';
 
 type Tab = 'listings' | 'reviews' | 'activity';
 
@@ -36,6 +37,7 @@ export default function SellerDetailPage() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const id = Number(params?.id ?? 0);
+  const { user } = useAuthStore();
 
   const [seller, setSeller] = useState<any | null>(null);
   const [sellerListings, setSellerListings] = useState<Listing[]>([]);
@@ -175,13 +177,15 @@ export default function SellerDetailPage() {
                       </div>
 
                       <div className="flex flex-wrap gap-2">
-                        <Link
-                          href={`/chat?with=${seller.public_id}`}
-                          className="btn btn-secondary btn-sm"
-                        >
-                          <MessageSquareText className="h-4 w-4" strokeWidth={1.75} />
-                          {t('sellers.message')}
-                        </Link>
+                        {user?.public_id !== seller.public_id && (
+                          <Link
+                            href={`/chat?with=${seller.public_id}`}
+                            className="btn btn-secondary btn-sm"
+                          >
+                            <MessageSquareText className="h-4 w-4" strokeWidth={1.75} />
+                            {t('sellers.message')}
+                          </Link>
+                        )}
                         <FollowButton sellerId={seller.public_id} size="sm" />
                         <button
                           type="button"

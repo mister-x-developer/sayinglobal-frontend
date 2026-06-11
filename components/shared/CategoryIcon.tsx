@@ -5,7 +5,7 @@
 import type React from 'react';
 
 interface CategoryIconProps {
-  name: 'cattle' | 'sheep' | 'goats' | 'horses' | 'camels' | 'poultry' | 'rabbits' | 'bees' | 'fish';
+  name: 'cattle' | 'sheep' | 'goats' | 'horses' | 'camels' | 'poultry';
   className?: string;
 }
 
@@ -88,40 +88,6 @@ export function CategoryIcon({ name, className = 'h-10 w-10' }: CategoryIconProp
         </svg>
       );
 
-    case 'rabbits':
-      return (
-        <svg {...common}>
-          <path d="M18 38c0-5 4-8 8-8h2c1-4 3-8 3-8l3 5 1-5 4 6c3 1 5 3 5 7v4c0 4-3 7-7 7H23c-3 0-5-2-5-5v-3z" />
-          <path d="M24 22l-3-7M30 22l1-8" />
-          <path d="M26 38v5M34 38v5" />
-          <circle cx="24" cy="33" r="0.8" fill="currentColor" />
-          <circle cx="32" cy="33" r="0.8" fill="currentColor" />
-          <path d="M28 35c0 1.5 1.5 2 3 0" />
-        </svg>
-      );
-
-    case 'bees':
-      return (
-        <svg {...common}>
-          <ellipse cx="32" cy="32" rx="10" ry="14" />
-          <path d="M22 26h20M22 32h20M22 38h20" />
-          <path d="M32 18l-6-6M32 18l6-6" />
-          <ellipse cx="22" cy="26" rx="5" ry="3" />
-          <ellipse cx="42" cy="26" rx="5" ry="3" />
-          <circle cx="29" cy="22" r="0.8" fill="currentColor" />
-          <circle cx="35" cy="22" r="0.8" fill="currentColor" />
-        </svg>
-      );
-
-    case 'fish':
-      return (
-        <svg {...common}>
-          <path d="M14 32c6-12 20-14 30-2M14 32c6 12 20 14 30 2" />
-          <path d="M44 30l6-6M44 34l6 6M44 30v4" />
-          <circle cx="22" cy="30" r="1.5" fill="currentColor" />
-          <path d="M30 26c-3-3-2-7 2-7M30 38c-3 3-2 7 2 7" />
-        </svg>
-      );
 
     default:
       return null;

@@ -65,18 +65,18 @@ export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentIt
         <div className="min-w-0 flex-1">
           {/* Name row */}
           <div className="flex flex-wrap items-center gap-2">
-            <Link
-              href={user?.public_id === comment.user.public_id ? '/profile' : `/sellers/${comment.user.public_id}`}
-              className="text-sm font-semibold text-fg hover:underline"
-            >
-              {comment.user.full_name}
-            </Link>
             {isSeller && (
               <Badge variant="primary" size="sm">
                 <ShieldCheck className="h-3 w-3" strokeWidth={2.25} />
                 {t('listings.seller')}
               </Badge>
             )}
+            <Link
+              href={user?.public_id === comment.user.public_id ? '/profile' : `/sellers/${comment.user.public_id}`}
+              className="text-sm font-semibold text-fg hover:underline"
+            >
+              {comment.user.full_name}
+            </Link>
             <span className="text-xs text-fg-subtle">{formatRelativeTime(comment.created_at)}</span>
             {comment.is_edited && (
               <span className="text-xs text-fg-subtle">· {t('comments.edited')}</span>

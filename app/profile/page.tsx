@@ -257,7 +257,7 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <div className="mt-6">
+              <div className="mt-6 pb-24 md:pb-0">
                 {tab === 'listings' && (
                   loading ? (
                     <div className="grid gap-4 sm:grid-cols-2">
@@ -323,7 +323,7 @@ export default function ProfilePage() {
             </div>
 
             {/* SIDEBAR */}
-            <aside className="space-y-4 pb-32 md:pb-0"> {/* extra bottom space on mobile so last card (Muhim ma'lumot) text is not covered by fixed AI button or bottom nav */}
+            <aside className="space-y-4 pb-48 md:pb-0"> {/* extra bottom space on mobile so last card (Muhim ma'lumot) text is not covered by fixed AI button or bottom nav */}
               {/* Account summary */}
               <div className="surface-elevated p-5">
                 <h3 className="display-sm">{t('profile.accountSummary' as any) ?? t('profile.title')}</h3>

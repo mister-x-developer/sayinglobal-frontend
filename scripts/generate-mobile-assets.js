@@ -194,11 +194,6 @@ async function main() {
   await generateIcons(logoPath, path.join(__dirname, '../public/icons/user'), '#10b981');
   await generateSplashScreens(logoPath, path.join(__dirname, '../public/splash/user'), '#10b981');
 
-  // Generate admin app assets
-  console.log('\n👨‍💼 Admin App (Admin SA)');
-  await generateIcons(logoPath, path.join(__dirname, '../public/icons/admin'), '#3b82f6');
-  await generateSplashScreens(logoPath, path.join(__dirname, '../public/splash/admin'), '#3b82f6');
-
   // Generate PWA icons
   console.log('\n🌐 PWA Icons');
   await generatePWAIcons(logoPath, path.join(__dirname, '../public/icons/pwa'));

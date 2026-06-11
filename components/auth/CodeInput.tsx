@@ -40,90 +40,56 @@ export function CodeInput({
   const clean = (value || '').replace(/\D/g, '').slice(0, length);
   const digits = clean.split('').concat(Array.from({ length: length - clean.length }, () => ''));
 
-  const handleChange = (i: number, e: ChangeEvent<HTMLInputElement>) => {
-    const v = e.target.value.replace(/\D/g, '');
-    if (!v) {
-      // Handle backspace (empty)
-      const newValue = clean.slice(0, i) + clean.slice(i + 1);
-      onChange(newValue);
-      if (i > 0) inputs.current[i - 1]?.focus();
-      return;
-    }
-    if (v.length === 1) {
-      // Single digit typed
-      const newValue = (clean.slice(0, i) + v + clean.slice(i + 1)).slice(0, length);
-      onChange(newValue);
-      if (i < length - 1) inputs.current[i + 1]?.focus();
-    } else {
-      // Multiple digits typed (rare, but handle)
-      const newValue = (clean.slice(0, i) + v + clean.slice(i)).slice(0, length);
-      onChange(newValue);
-      const focusIdx = Math.min(i + v.length, length - 1);
-      inputs.current[focusIdx]?.focus();
-    }
-  };
-
-  const handleKeyDown = (i: number, e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Backspace') {
-      if (!digits[i] && i > 0) {
-        // If current is empty, move back and delete previous
-        const newValue = clean.slice(0, i - 1) + clean.slice(i);
-        onChange(newValue);
-        inputs.current[i - 1]?.focus();
-        e.preventDefault();
-      } else if (digits[i]) {
-        // Delete current digit
-        const newValue = clean.slice(0, i) + clean.slice(i + 1);
-        onChange(newValue);
-      }
-    } else if (e.key === 'ArrowLeft' && i > 0) {
-      inputs.current[i - 1]?.focus();
-    } else if (e.key === 'ArrowRight' && i < length - 1) {
-      inputs.current[i + 1]?.focus();
-    }
-  };
-
-  const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const text = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, length);
-    if (text) {
-      onChange(text);
-    }
-  };
-
   return (
-    <div
-      className="flex items-center justify-center gap-2 sm:gap-3"
-      role="group"
-      aria-label={t('codePlaceholder')}
-      aria-describedby={hasError ? 'code-error' : undefined}
-    >
-      {Array.from({ length }).map((_, i) => {
-        const ch = digits[i] || '';
-        return (
-          <input
-            key={i}
-            ref={(el) => { inputs.current[i] = el; }}
-            inputMode="numeric"
-            pattern="[0-9]*"
-            maxLength={1}
-            autoComplete={i === 0 ? 'one-time-code' : 'off'}
-            disabled={disabled}
-            value={ch ?? ''}
-            onChange={(e) => handleChange(i, e)}
-            onKeyDown={(e) => handleKeyDown(i, e)}
-            onPaste={handlePaste}
-            aria-label={`Raqam ${i + 1}`}
-            className={`h-14 w-12 sm:h-16 sm:w-14 rounded-xl border bg-input text-center text-2xl font-semibold text-fg shadow-soft transition-all duration-200 focus:border-brand-primary focus:outline-none focus:ring-4 focus:ring-brand-primary/15 ${
-              hasError
-                ? 'border-danger ring-4 ring-danger/15'
-                : ch
-                ? 'border-brand-primary/60'
-                : 'border-input-border'
-            } ${disabled ? 'opacity-60' : ''}`}
-          />
-        );
-      })}
+    <div className="relative">
+      {/* Hidden real input that captures all keystrokes, pastes, and autofill securely */}
+      <input
+        value={clean}
+        onChange={(e) => {
+          const val = e.target.value.replace(/\D/g, '').slice(0, length);
+          onChange(val);
+        }}
+        autoFocus={autoFocus}
+        disabled={disabled}
+        inputMode="numeric"
+        pattern="[0-9]*"
+        maxLength={length}
+        autoComplete="one-time-code"
+        className="absolute inset-0 z-10 w-full h-full opacity-0 text-transparent bg-transparent caret-transparent cursor-text"
+        style={{ color: 'transparent', textShadow: 'none' }}
+        aria-label={t('codePlaceholder')}
+      />
+
+      {/* Fake UI boxes that display the value */}
+      <div
+        className="flex items-center justify-center gap-2 sm:gap-3 pointer-events-none"
+        role="group"
+        aria-hidden="true"
+      >
+        {Array.from({ length }).map((_, i) => {
+          const ch = digits[i] || '';
+          // The current active box is the one where the next digit will be typed
+          // Or the last box if all are filled
+          const isActive = clean.length === i || (clean.length === length && i === length - 1);
+          
+          return (
+            <div
+              key={i}
+              className={`flex h-14 w-12 sm:h-16 sm:w-14 items-center justify-center rounded-xl border bg-input text-2xl font-semibold text-fg shadow-soft transition-all duration-200 ${
+                hasError
+                  ? 'border-danger ring-4 ring-danger/15'
+                  : isActive && !disabled
+                  ? 'border-brand-primary ring-4 ring-brand-primary/15'
+                  : ch
+                  ? 'border-brand-primary/60'
+                  : 'border-input-border'
+              } ${disabled ? 'opacity-60' : ''}`}
+            >
+              {ch}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

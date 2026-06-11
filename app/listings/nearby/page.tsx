@@ -239,23 +239,21 @@ export default function NearbyListingsPage() {
         </div>
 
         <div className="container-page py-8">
-          {/* Map — show whenever we have markers (works for both GPS and region mode) */}
-          {mapMarkers.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="mb-8 overflow-hidden rounded-2xl border border-border shadow-soft"
-            >
-              <NearbyMapWithUserPin
-                center={center}
-                zoom={geo.kind === 'granted' ? 11 : 8}
-                markers={mapMarkers}
-                userLocation={geo.kind === 'granted' ? [geo.lat, geo.lng] : null}
-                className="h-72 w-full sm:h-96"
-              />
-            </motion.div>
-          )}
+          {/* Map — show whenever we have GPS or user wants to see map */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-8 overflow-hidden rounded-2xl border border-border shadow-soft"
+          >
+            <NearbyMapWithUserPin
+              center={center}
+              zoom={geo.kind === 'granted' ? 11 : 8}
+              markers={mapMarkers}
+              userLocation={geo.kind === 'granted' ? [geo.lat, geo.lng] : null}
+              className="h-72 w-full sm:h-96"
+            />
+          </motion.div>
 
           {/* Results */}
           {loading ? (

@@ -1,21 +1,17 @@
 #!/bin/bash
 
-# Setup User App (Sayin Global)
-echo "🚀 Setting up User App: Sayin Global"
+# Setup App (Sayin Global)
+echo "🚀 Setting up App: Sayin Global"
 
 # Build with user mode
-echo "📦 Building Next.js app in export mode..."
-NEXT_PUBLIC_APP_MODE=user npm run build
+echo "📦 Building Next.js app..."
+npm run build
 
 # Initialize Capacitor if not already initialized
 if [ ! -d "android" ] && [ ! -d "ios" ]; then
     echo "🔧 Initializing Capacitor..."
     npx cap init "Sayin Global" "com.sayinglobal.user" --web-dir=out
 fi
-
-# Copy capacitor config
-echo "📋 Copying Capacitor config..."
-cp capacitor.config.user.ts capacitor.config.ts
 
 # Add platforms if not exists
 if [ ! -d "android" ]; then

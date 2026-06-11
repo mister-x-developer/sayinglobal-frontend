@@ -33,7 +33,7 @@ export function LandingNav() {
 
   return (
     <header
-      className={`sticky top-0 z-40 w-full transition-all duration-500 animate-fade-in ${
+      className={`sticky top-0 z-40 w-full pt-safe transition-all duration-500 animate-fade-in ${
         scrolled
           ? 'border-b border-border/60 bg-bg/80 backdrop-blur-xl backdrop-saturate-150 shadow-[0_1px_0_rgb(var(--border)/0.5)]'
           : 'border-b border-transparent bg-transparent'

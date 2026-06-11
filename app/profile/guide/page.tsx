@@ -172,7 +172,7 @@ export default function GuidePage() {
                   <MapPin className="h-4 w-4 text-brand-primary mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium text-fg">Faol e'lonlar:</p>
-                    <p className="text-fg-muted leading-relaxed">Cheksiz muddat - sotilguncha yoki siz o'chirmaguncha saqlanadi.</p>
+                    <p className="text-fg-muted leading-relaxed">30 kun ichida yangilanmasa avtomatik arxivlanadi (sotuvdan olinadi).</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">

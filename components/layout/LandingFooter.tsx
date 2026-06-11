@@ -9,7 +9,7 @@ export function LandingFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border bg-bg-subtle">
+    <footer className="border-t border-border bg-bg-subtle pb-safe">
       <div className="container-page py-8 pb-24 sm:py-10 sm:pb-10"> {/* extra bottom padding on mobile for bottom nav + AI button clearance; tighter but comfortable spacing */}
         <div className="grid gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
@@ -103,7 +103,7 @@ export function LandingFooter() {
 
         <div className="mt-8 flex flex-col items-center justify-between gap-1 border-t border-border pt-5 text-[11px] leading-tight text-fg-subtle sm:flex-row sm:gap-3 sm:pt-6 sm:text-xs">
           <span>© {year} SAYIN GLOBAL. {t('landing.footerCopyright')}</span>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mt-2 sm:mt-0">
             <a href="mailto:support@sayinglobal.uz" className="hover:text-fg transition-colors">
               {t('common.contact')}
             </a>
