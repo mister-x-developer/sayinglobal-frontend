@@ -41,8 +41,8 @@ export function AIAssistantButton() {
     <motion.div
       drag
       dragConstraints={{ left: -windowSize.width + 80, right: 0, top: -windowSize.height + 140, bottom: 0 }}
-      dragMomentum={true}
-      dragElastic={0.2}
+      dragMomentum={false}
+      dragElastic={0.1}
       onDragStart={() => setDragged(true)}
       onDragEnd={() => setTimeout(() => setDragged(false), 100)}
       className="fixed bottom-32 right-4 md:bottom-8 md:right-8 z-50 flex flex-col items-center gap-2 pointer-events-auto"

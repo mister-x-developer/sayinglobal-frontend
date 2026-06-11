@@ -242,8 +242,8 @@ export default function PlansPage() {
                 <div key={i} className="surface-elevated h-64 animate-pulse" />
               ))
             ) : plans.length === 0 ? (
-              <div className="col-span-3 text-center py-12 text-fg-muted">
-                {t('marketplace.noResults')}
+              <div className="col-span-3 text-center py-12 text-fg-muted font-medium">
+                Hozircha ta'riflar mavjud emas.
               </div>
             ) : (
               plans.map((plan, i) => {

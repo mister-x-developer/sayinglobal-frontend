@@ -87,7 +87,7 @@ function MobileDrawer({
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 320 }}
-            className="fixed inset-y-0 left-0 w-72 bg-bg-elevated border-r border-border shadow-lift overflow-y-auto md:hidden"
+            className="fixed inset-y-0 left-0 w-72 bg-bg-elevated border-r border-border shadow-lift overflow-y-auto md:hidden pt-[env(safe-area-inset-top)]"
             style={{ zIndex: 9999 }}
             role="dialog"
             aria-modal="true"

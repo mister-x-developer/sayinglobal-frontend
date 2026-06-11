@@ -38,10 +38,10 @@ export function FloatingNearbyButton() {
     <>
       <motion.div
         drag
-        dragConstraints={{ left: -windowSize.width + 80, right: 0, top: -windowSize.height + 140, bottom: 0 }}
+        dragConstraints={{ left: 0, right: windowSize.width - 80, top: -windowSize.height + 140, bottom: 0 }}
         dragElastic={0.1}
         dragMomentum={false}
-        className="fixed right-4 bottom-24 z-50 inline-flex flex-col items-center gap-2 pointer-events-auto"
+        className="fixed left-4 bottom-32 md:bottom-8 md:left-8 z-50 inline-flex flex-col items-center gap-2 pointer-events-auto"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1, transition: { type: 'spring', bounce: 0.5 } }}
         whileDrag={{ scale: 1.1, cursor: 'grabbing' }}
