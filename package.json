@@ -76,7 +76,7 @@
     "@react-leaflet/core": "^2.1.0"
   },
   "engines": {
-    "node": "22.x",
+    "node": "24.x",
     "npm": ">=10.0.0"
   }
 }
