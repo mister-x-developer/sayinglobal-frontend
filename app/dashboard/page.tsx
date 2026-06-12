@@ -107,7 +107,7 @@ export default function DashboardPage() {
               {
                 href: '/listings/nearby',
                 icon: MapPin,
-                label: t('nearby.title' as any) ?? 'Yaqin atrofdagi',
+                label: t('nearby.title' as any) ?? 'Nearby',
                 tone: 'bg-success/12 text-success',
               },
               {

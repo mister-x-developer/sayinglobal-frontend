@@ -163,7 +163,7 @@ export function SellerRatingsThread({ sellerPublicId, listingPublicId }: ThreadP
     setReportTarget({
       kind: 'rating',
       publicId: r.public_id,
-      fullName: r.buyer?.full_name ?? 'Foydalanuvchi',
+      fullName: r.buyer?.full_name ?? (t('common.user') ?? 'User'),
     });
   };
 

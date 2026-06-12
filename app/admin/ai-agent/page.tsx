@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-import { Send, Loader2, Sparkles, MessageSquarePlus, MessageSquare, Clock, Menu } from 'lucide-react';
+import { Send, Loader2, Sparkles, MessageSquarePlus, Clock, ArrowLeft } from 'lucide-react';
 import { AdminLayout } from '@/components/layout/AdminLayout';
 import apiClient from '@/lib/api/client';
 import { useAuthStore } from '@/lib/store/auth';
@@ -21,10 +21,10 @@ interface ChatSession {
 }
 
 const ADMIN_QUICK_PROMPTS = [
-  { key: 'stats', icon: '📊', text: 'Platforma statistikasi' },
-  { key: 'queue', icon: '⏳', text: "Kutilayotgan e'lonlar" },
-  { key: 'scam', icon: '🚨', text: "Shubhali e'lonlar" },
-  { key: 'broadcast', icon: '📢', text: 'Hammaga xabar yozish' },
+  { key: 'stats', icon: '📊', text: 'Platform Statistics', desc: 'View overall status' },
+  { key: 'queue', icon: '⏳', text: 'Pending Listings', desc: 'Moderation queue' },
+  { key: 'scam', icon: '🚨', text: 'Suspicious Listings', desc: 'Possible fraud' },
+  { key: 'broadcast', icon: '📢', text: 'Send Broadcast', desc: 'Notify everyone' },
 ];
 
 export default function AdminAIAgentPage() {
@@ -42,10 +42,8 @@ export default function AdminAIAgentPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!showHistory) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [messages, showHistory]);
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, loading]);
 
   useEffect(() => {
     apiClient.get('/ai-moderation/assistant/sessions/')
@@ -64,13 +62,13 @@ export default function AdminAIAgentPage() {
         message: text.trim(),
         session_id: sessionId,
       });
-      const reply = res.data?.reply || res.data?.message || 'Xatolik yuz berdi.';
+      const reply = res.data?.reply || res.data?.message || 'Error occurred.';
       setMessages((prev) => [...prev, { id: (Date.now() + 1).toString(), role: 'assistant', text: reply }]);
       apiClient.get('/ai-moderation/assistant/sessions/').then(r => setSessions(r.data)).catch(()=>{});
     } catch {
       setMessages((prev) => [
         ...prev,
-        { id: (Date.now() + 1).toString(), role: 'assistant', text: "Vaqtinchalik xatolik. Qayta urining." },
+        { id: (Date.now() + 1).toString(), role: 'assistant', text: 'Temporary error. Please try again.' },
       ]);
     } finally {
       setLoading(false);
@@ -95,106 +93,120 @@ export default function AdminAIAgentPage() {
   };
 
   const aiLogo = '/images/admin_ai_logo.png';
-  const aiTitle = 'Admin AI Co-pilot';
-  const aiSubtitle = 'Agent (Tizim boshqaruvi)';
 
   return (
     <AdminLayout>
-      <div className="flex h-[calc(100dvh-64px)] md:h-[100dvh] bg-bg-elevated overflow-hidden relative">
+      <div className="flex h-[calc(100dvh-130px)] bg-bg-elevated overflow-hidden rounded-2xl border border-border shadow-sm relative">
         
-        {/* Sidebar History (Desktop) or Overlay (Mobile) */}
-        <div className={`${showHistory ? 'translate-x-0' : '-translate-x-full'} absolute md:relative z-10 w-72 h-full bg-bg-canvas border-r border-border transition-transform duration-300 ease-in-out md:translate-x-0 flex flex-col`}>
-          <div className="p-4">
-            <button
-              onClick={createNewChat}
-              className="flex items-center justify-center gap-2 w-full p-3 rounded-xl border border-dashed border-brand-primary text-brand-primary bg-brand-primary/5 hover:bg-brand-primary/10 transition-colors shadow-sm"
-            >
-              <MessageSquarePlus className="h-5 w-5" strokeWidth={2} />
-              <span className="font-semibold">Yangi Chat</span>
-            </button>
-          </div>
-          <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-2">
-            <div className="text-xs font-bold text-fg-subtle uppercase tracking-wider mb-3">Tarix</div>
-            {sessions.length === 0 ? (
-              <p className="text-sm text-fg-muted text-center mt-4">Suhbatlar yo'q</p>
-            ) : (
-              sessions.map(s => (
-                <button
-                  key={s.id}
-                  onClick={() => loadSession(s.id)}
-                  className={`flex items-start gap-3 w-full p-3 rounded-xl border transition-colors text-left ${s.id === sessionId ? 'border-brand-primary bg-brand-primary/5' : 'border-border bg-bg-elevated hover:bg-bg-subtle'}`}
-                >
-                  <MessageSquare className={`h-4 w-4 mt-0.5 shrink-0 ${s.id === sessionId ? 'text-brand-primary' : 'text-fg-muted'}`} />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-fg truncate">{s.title}</p>
-                    <p className="text-[10px] text-fg-subtle mt-1">{new Date(s.updated_at).toLocaleDateString()}</p>
-                  </div>
+        {/* Chat History Panel (Absolute overlay to save space) */}
+        {showHistory && (
+          <div className="absolute inset-0 z-20 flex">
+            <div className="w-80 bg-bg-canvas border-r border-border shadow-2xl flex flex-col h-full animate-in slide-in-from-left-8 duration-300">
+              <div className="p-4 border-b border-border flex items-center justify-between bg-bg-elevated">
+                <h3 className="font-bold text-fg flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-brand-primary" />
+                  Chat History
+                </h3>
+                <button onClick={() => setShowHistory(false)} className="p-2 rounded-full hover:bg-bg-subtle text-fg-subtle">
+                  <ArrowLeft className="h-4 w-4" />
                 </button>
-              ))
-            )}
-          </div>
-        </div>
-
-        {/* Main Chat Area */}
-        <div className="flex-1 flex flex-col min-w-0 bg-bg">
-          {/* Header */}
-          <div className="h-16 border-b border-border bg-bg/95 backdrop-blur flex items-center justify-between px-4 shrink-0">
-            <div className="flex items-center gap-3">
-              <button onClick={() => setShowHistory(!showHistory)} className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-xl text-fg-subtle hover:bg-bg-subtle">
-                <Menu className="h-5 w-5" />
-              </button>
-              <div className="relative h-10 w-10 rounded-xl overflow-hidden border border-brand-primary/20 shrink-0">
-                <Image src={aiLogo} alt="AI" width={40} height={40} className="object-cover" />
               </div>
-              <div>
-                <p className="text-[15px] font-bold text-fg flex items-center gap-1.5">
-                  {aiTitle} <Sparkles className="h-4 w-4 text-brand-primary" />
-                </p>
-                <p className="text-xs text-brand-primary font-medium">{aiSubtitle}</p>
+              <div className="p-4">
+                <button
+                  onClick={createNewChat}
+                  className="flex items-center justify-center gap-2 w-full p-3 rounded-xl bg-brand-primary text-white hover:bg-brand-primary/90 transition-colors shadow-sm"
+                >
+                  <MessageSquarePlus className="h-5 w-5" strokeWidth={2} />
+                  <span className="font-semibold">New Chat</span>
+                </button>
+              </div>
+              <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-2">
+                {sessions.length === 0 ? (
+                  <p className="text-sm text-fg-muted text-center mt-4">History is empty</p>
+                ) : (
+                  sessions.map(s => (
+                    <button
+                      key={s.id}
+                      onClick={() => loadSession(s.id)}
+                      className={`flex flex-col items-start gap-1 w-full p-3 rounded-xl border transition-colors text-left ${s.id === sessionId ? 'border-brand-primary bg-brand-primary/5' : 'border-border bg-bg-elevated hover:bg-bg-subtle'}`}
+                    >
+                      <span className="text-sm font-semibold text-fg line-clamp-1">{s.title}</span>
+                      <span className="text-[11px] text-fg-subtle font-medium">{new Date(s.updated_at).toLocaleString()}</span>
+                    </button>
+                  ))
+                )}
               </div>
             </div>
+            <div className="flex-1 bg-black/20 backdrop-blur-sm" onClick={() => setShowHistory(false)} />
           </div>
+        )}
+
+        {/* Main Chat Interface */}
+        <div className="flex-1 flex flex-col min-w-0 bg-bg">
+          
+          {/* Clean Header */}
+          <header className="h-16 border-b border-border bg-bg-elevated/95 backdrop-blur flex items-center justify-between px-6 shrink-0 z-10 shadow-sm">
+            <div className="flex items-center gap-4">
+              <div className="relative h-10 w-10 rounded-xl overflow-hidden bg-brand-primary/10 border border-brand-primary/20 shrink-0 flex items-center justify-center shadow-inner">
+                <Image src={aiLogo} alt="AI" width={32} height={32} className="object-contain mix-blend-luminosity" />
+              </div>
+              <div>
+                <h1 className="text-base font-bold text-fg flex items-center gap-1.5">
+                  AI Co-pilot <Sparkles className="h-4 w-4 text-brand-primary" />
+                </h1>
+                <p className="text-[11px] text-fg-muted font-medium uppercase tracking-wider">System Management & Analysis</p>
+              </div>
+            </div>
+            
+            <button 
+              onClick={() => setShowHistory(true)} 
+              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border bg-bg-canvas hover:bg-bg-subtle transition-colors text-sm font-semibold text-fg"
+            >
+              <Clock className="h-4 w-4 text-brand-primary" />
+              <span className="hidden sm:inline">Tarix</span>
+            </button>
+          </header>
 
           {/* Chat Body */}
-          <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
+          <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-8 sm:py-8 space-y-6">
             {messages.length === 0 && (
-              <div className="py-10 max-w-2xl mx-auto w-full">
-                <div className="flex justify-center mb-6">
-                  <div className="h-24 w-24 rounded-3xl bg-brand-primary/10 flex items-center justify-center border border-brand-primary/20 shadow-inner">
-                    <Image src={aiLogo} alt="AI" width={96} height={96} className="object-cover mix-blend-luminosity opacity-80" />
-                  </div>
+              <div className="flex flex-col items-center justify-center h-full max-w-2xl mx-auto w-full animate-in fade-in duration-500">
+                <div className="h-24 w-24 rounded-3xl bg-brand-primary/10 flex items-center justify-center border border-brand-primary/20 shadow-inner mb-6">
+                  <Image src={aiLogo} alt="AI" width={80} height={80} className="object-contain mix-blend-luminosity opacity-90" />
                 </div>
-                <h2 className="text-center text-2xl font-black text-fg mb-2">Admin AI Agentga Xush Kelibsiz!</h2>
-                <p className="text-center text-fg-muted mb-8 max-w-md mx-auto">
-                  Men platformani boshqarish, statistikani ko'rish, muammolarni hal qilish va e'lonlarni tekshirish bo'yicha yordamchingizman. Menga to'g'ridan-to'g'ri buyruq berishingiz mumkin.
+                <h2 className="text-2xl font-black text-fg mb-3 text-center">Tizimga xush kelibsiz</h2>
+                <p className="text-center text-fg-muted mb-10 max-w-md text-sm leading-relaxed">
+                  Men Sayin Global platformasining sun'iy intellekt yordamchisiman. Statistikani tahlil qilish, muammoli e'lonlarni tekshirish yoki bildirishnomalar yuborishda yordam beraman.
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                
+                <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {ADMIN_QUICK_PROMPTS.map((p) => (
                     <button
                       key={p.key}
                       onClick={() => sendMessage(p.text)}
-                      className="flex items-center gap-3 rounded-2xl border border-border bg-bg-elevated p-4 text-left font-semibold text-fg hover:border-brand-primary hover:bg-brand-primary/5 transition-all shadow-sm group"
+                      className="group flex flex-col items-start p-5 rounded-2xl border border-border bg-bg-elevated hover:border-brand-primary hover:shadow-lift transition-all text-left"
                     >
-                      <span className="text-2xl group-hover:scale-110 transition-transform">{p.icon}</span>
-                      <span className="text-[14px]">{p.text}</span>
+                      <span className="text-2xl mb-3 bg-bg-subtle p-2 rounded-xl group-hover:bg-brand-primary/10 transition-colors">{p.icon}</span>
+                      <span className="text-[15px] font-bold text-fg mb-1">{p.text}</span>
+                      <span className="text-[12px] text-fg-muted">{p.desc}</span>
                     </button>
                   ))}
                 </div>
               </div>
             )}
 
-            <div className="max-w-3xl mx-auto space-y-6 w-full pb-10">
+            <div className="max-w-3xl mx-auto space-y-6 w-full pb-4">
               {messages.map((msg) => (
                 <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   {msg.role === 'assistant' && (
-                    <div className="mr-3 shrink-0 h-10 w-10 rounded-full bg-brand-primary/10 overflow-hidden border border-brand-primary/20">
-                      <Image src={aiLogo} alt="AI" width={40} height={40} className="h-full w-full object-cover" />
+                    <div className="mr-4 shrink-0 h-10 w-10 rounded-2xl bg-brand-primary/10 overflow-hidden border border-brand-primary/20 flex items-center justify-center">
+                      <Image src={aiLogo} alt="AI" width={28} height={28} className="object-contain mix-blend-luminosity" />
                     </div>
                   )}
-                  <div className={`max-w-[85%] rounded-3xl px-5 py-3.5 text-[15px] leading-relaxed whitespace-pre-wrap shadow-sm ${
+                  <div className={`max-w-[85%] rounded-3xl px-6 py-4 text-[15px] leading-relaxed whitespace-pre-wrap shadow-sm ${
                     msg.role === 'user'
-                      ? 'bg-brand-primary text-white rounded-br-md'
-                      : 'bg-bg-elevated text-fg rounded-tl-md border border-border'
+                      ? 'bg-brand-primary text-white rounded-br-sm'
+                      : 'bg-bg-elevated text-fg rounded-tl-sm border border-border'
                   }`}>
                     {msg.text}
                   </div>
@@ -202,11 +214,11 @@ export default function AdminAIAgentPage() {
               ))}
               
               {loading && (
-                <div className="flex justify-start">
-                  <div className="mr-3 shrink-0 h-10 w-10 rounded-full bg-brand-primary/10 overflow-hidden border border-brand-primary/20">
-                    <Image src={aiLogo} alt="AI" width={40} height={40} className="h-full w-full object-cover" />
+                <div className="flex justify-start animate-in fade-in duration-300">
+                  <div className="mr-4 shrink-0 h-10 w-10 rounded-2xl bg-brand-primary/10 overflow-hidden border border-brand-primary/20 flex items-center justify-center">
+                    <Image src={aiLogo} alt="AI" width={28} height={28} className="object-contain mix-blend-luminosity" />
                   </div>
-                  <div className="rounded-3xl rounded-tl-md bg-bg-elevated border border-border px-5 py-4 shadow-sm flex items-center gap-1.5">
+                  <div className="rounded-3xl rounded-tl-sm bg-bg-elevated border border-border px-6 py-5 shadow-sm flex items-center gap-1.5">
                     <div className="h-2 w-2 rounded-full bg-brand-primary/60 animate-bounce" style={{ animationDelay: '0ms' }} />
                     <div className="h-2 w-2 rounded-full bg-brand-primary/60 animate-bounce" style={{ animationDelay: '150ms' }} />
                     <div className="h-2 w-2 rounded-full bg-brand-primary/60 animate-bounce" style={{ animationDelay: '300ms' }} />
@@ -217,14 +229,14 @@ export default function AdminAIAgentPage() {
             </div>
           </div>
 
-          {/* Chat Input */}
-          <div className="shrink-0 border-t border-border bg-bg/90 backdrop-blur p-4">
+          {/* Clean Chat Input */}
+          <div className="shrink-0 bg-bg p-4 sm:p-6">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 sendMessage(input);
               }}
-              className="max-w-3xl mx-auto flex items-end gap-2 rounded-3xl border border-input-border bg-input pl-5 pr-2 py-2 shadow-sm focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-primary/20 transition-all"
+              className="max-w-3xl mx-auto flex items-end gap-3 rounded-3xl border border-input-border bg-input pl-6 pr-3 py-3 shadow-sm focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-primary/20 transition-all"
             >
               <textarea
                 value={input}
@@ -235,19 +247,23 @@ export default function AdminAIAgentPage() {
                     sendMessage(input);
                   }
                 }}
-                placeholder="Agentga buyruq bering (masalan: Statistikani ko'rsat, Falonchini blokla...)"
-                className="max-h-32 min-h-[44px] flex-1 resize-none bg-transparent py-3 text-[15px] text-fg placeholder:text-fg-muted focus:outline-none"
+                placeholder="Agentga buyruq bering..."
+                className="max-h-32 min-h-[44px] flex-1 resize-none bg-transparent py-2.5 text-[15px] text-fg placeholder:text-fg-muted focus:outline-none"
                 rows={1}
               />
               <button
                 type="submit"
                 disabled={!input.trim() || loading}
-                className="mb-1 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-primary text-white transition-transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
+                className="mb-1 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-primary text-white transition-transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 shadow-md"
               >
-                {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-4.5 w-4.5 ml-0.5" />}
+                {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5 ml-0.5" />}
               </button>
             </form>
+            <p className="text-center text-[11px] text-fg-subtle mt-4 font-medium">
+              AI Co-pilot xatoliklar qilishi mumkin. Muhim qarorlarni o'zingiz tekshiring.
+            </p>
           </div>
+          
         </div>
       </div>
     </AdminLayout>

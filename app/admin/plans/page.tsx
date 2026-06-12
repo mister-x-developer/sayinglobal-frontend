@@ -11,6 +11,7 @@ import {
   Plus, Edit, Archive, Loader2, CheckCircle2, XCircle,
   Tag, Ticket, RefreshCw, Trash2, Users,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { AdminLayout } from '@/components/layout/AdminLayout';
 import { toast } from '@/components/ui/Toast';
 import { plansApi, type Plan } from '@/lib/api/plans';
@@ -35,6 +36,7 @@ interface PromoCode {
 type Tab = 'plans' | 'promo' | 'referrals';
 
 export default function AdminPlansPage() {
+  const t = useTranslations();
   const [tab, setTab] = useState<Tab>('plans');
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
@@ -180,42 +182,42 @@ export default function AdminPlansPage() {
       <div className="container-page py-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <p className="text-eyebrow">Admin</p>
-            <h1 className="display-md mt-1">Tariflar boshqaruvi</h1>
+            <p className="text-eyebrow">{t('admin.title') ?? 'Admin'}</p>
+            <h1 className="display-md mt-1">{t('admin.plansManagement') ?? 'Plans Management'}</h1>
             <p className="mt-1 text-sm text-fg-muted">
-              Har bir tarif oylik va faol eʼlon limitiga ega. Limitsiz tariflar yoʻq.
+              {t('admin.plansDesc') ?? 'Every plan has monthly limits. No unlimited plans.'}
             </p>
           </div>
           {tab === 'plans' && (
             <button onClick={openCreate} className="btn btn-primary btn-sm">
               <Plus className="h-4 w-4" strokeWidth={2.25} />
-              Yangi tarif
+              {t('admin.newPlan') ?? 'New Plan'}
             </button>
           )}
           {tab === 'promo' && (
             <button onClick={() => setCreatingPromo(true)} className="btn btn-primary btn-sm">
               <Plus className="h-4 w-4" strokeWidth={2.25} />
-              Yangi promo kod
+              {t('admin.newPromo') ?? 'New Promo Code'}
             </button>
           )}
         </div>
 
         {/* Tabs */}
         <div className="flex gap-1 mb-6 border-b border-border">
-          {(['plans', 'promo', 'referrals'] as Tab[]).map((t) => (
+          {(['plans', 'promo', 'referrals'] as Tab[]).map((tabItem) => (
             <button
-              key={t}
+              key={tabItem}
               type="button"
-              onClick={() => setTab(t)}
+              onClick={() => setTab(tabItem)}
               className={cn(
                 'flex items-center gap-2 px-4 py-2.5 text-sm font-semibold border-b-2 -mb-px transition',
-                tab === t
+                tab === tabItem
                   ? 'border-brand-primary text-brand-primary'
                   : 'border-transparent text-fg-muted hover:text-fg',
               )}
             >
-              {t === 'plans' ? <Tag className="h-4 w-4" strokeWidth={1.75} /> : t === 'promo' ? <Ticket className="h-4 w-4" strokeWidth={1.75} /> : <Users className="h-4 w-4" strokeWidth={1.75} />}
-              {t === 'plans' ? 'Tariflar' : t === 'promo' ? 'Promo kodlar' : 'Referrallar'}
+              {tabItem === 'plans' ? <Tag className="h-4 w-4" strokeWidth={1.75} /> : tabItem === 'promo' ? <Ticket className="h-4 w-4" strokeWidth={1.75} /> : <Users className="h-4 w-4" strokeWidth={1.75} />}
+              {tabItem === 'plans' ? (t('admin.plansTab') ?? 'Plans') : tabItem === 'promo' ? (t('admin.promoTab') ?? 'Promo Codes') : (t('admin.referralsTab') ?? 'Referrals')}
             </button>
           ))}
         </div>
@@ -261,13 +263,13 @@ export default function AdminPlansPage() {
                         <p className="font-display text-2xl font-bold text-brand-primary">
                           {plan.monthly_listing_limit}
                         </p>
-                        <p className="text-[11px] text-fg-subtle">Oylik limit</p>
+                        <p className="text-[11px] text-fg-subtle">{t('admin.monthlyLimit') ?? 'Monthly Limit'}</p>
                       </div>
                       <div className="rounded-xl bg-bg-subtle p-3 text-center">
                         <p className="font-display text-2xl font-bold text-info">
                           {plan.active_listing_limit}
                         </p>
-                        <p className="text-[11px] text-fg-subtle">Faol limit</p>
+                        <p className="text-[11px] text-fg-subtle">{t('admin.activeLimit') ?? 'Active Limit'}</p>
                       </div>
                     </div>
 
@@ -276,15 +278,15 @@ export default function AdminPlansPage() {
                         <p className="font-display text-xl font-bold text-warning">
                           {plan.referrals_required}
                         </p>
-                        <p className="text-[11px] text-fg-subtle">Referral kerak</p>
+                        <p className="text-[11px] text-fg-subtle">{t('admin.referralRequired') ?? 'Referral Required'}</p>
                       </div>
                     )}
 
                     <div className="mt-4 flex items-center justify-between text-sm">
                       <span className="font-bold text-fg">
-                        {plan.price_uzs > 0 ? formatPrice(plan.price_uzs, 'UZS') : 'Bepul'}
+                        {plan.price_uzs > 0 ? formatPrice(plan.price_uzs, 'UZS') : (t('common.free') ?? 'Free')}
                       </span>
-                      <span className="text-fg-subtle">{plan.duration_days} kun</span>
+                      <span className="text-fg-subtle">{plan.duration_days} {t('common.days') ?? 'days'}</span>
                     </div>
 
                     <div className="mt-4 flex gap-2">
@@ -293,7 +295,7 @@ export default function AdminPlansPage() {
                         className="btn btn-secondary btn-sm flex-1"
                       >
                         <Edit className="h-3.5 w-3.5" strokeWidth={1.75} />
-                        Tahrirlash
+                        {t('common.edit') ?? 'Edit'}
                       </button>
                       {plan.status === 'active' && (
                         <button
@@ -322,14 +324,14 @@ export default function AdminPlansPage() {
             ) : promos.length === 0 ? (
               <div className="py-16 text-center text-fg-muted">
                 <Ticket className="mx-auto h-8 w-8 opacity-30" strokeWidth={1.5} />
-                <p className="mt-3 text-sm">Promo kodlar yoʻq</p>
+                <p className="mt-3 text-sm">{t('admin.noPromoCodes') ?? 'No Promo Codes'}</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-border bg-bg-subtle">
-                      {['Kod', 'Tarif', 'Foydalanish', 'Amal qilish muddati', 'Holat', ''].map((h, i) => (
+                      {[t('admin.code') ?? 'Code', t('admin.plan') ?? 'Plan', t('admin.usage') ?? 'Usage', t('admin.validUntil') ?? 'Valid Until', t('admin.status') ?? 'Status', ''].map((h, i) => (
                         <th
                           key={i}
                           className={cn(
@@ -378,7 +380,7 @@ export default function AdminPlansPage() {
                               ? 'bg-success/10 text-success'
                               : 'bg-danger/10 text-danger',
                           )}>
-                            {p.is_valid ? 'Faol' : 'Nofaol'}
+                            {p.is_valid ? (t('admin.active') ?? 'Active') : (t('admin.inactive') ?? 'Inactive')}
                           </span>
                         </td>
                         <td className="px-5 py-4 text-right">
@@ -411,12 +413,12 @@ export default function AdminPlansPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 overflow-y-auto">
           <div className="surface-elevated w-full max-w-2xl p-6 my-4">
             <h2 className="display-sm mb-4">
-              {editing ? 'Tarifni tahrirlash' : 'Yangi tarif'}
+              {editing ? (t('admin.editPlan') ?? 'Edit Plan') : (t('admin.newPlan') ?? 'New Plan')}
             </h2>
             <div className="space-y-4">
               {/* Names */}
               <div>
-                <p className="mb-2 text-xs font-bold uppercase tracking-wide text-fg-subtle">Nomi (4 tilda)</p>
+                <p className="mb-2 text-xs font-bold uppercase tracking-wide text-fg-subtle">{t('admin.nameIn4Languages') ?? 'Name (in 4 languages)'}</p>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div>
                     <label className="text-xs font-semibold text-fg-subtle">UZ (lotin)</label>
@@ -524,7 +526,7 @@ export default function AdminPlansPage() {
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-fg-subtle">Narx (USD)</label>
+                  <label className="text-xs font-semibold text-fg-subtle">Narx ({t('common.usd')})</label>
                   <input
                     type="number"
                     min={0}

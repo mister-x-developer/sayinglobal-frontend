@@ -94,7 +94,16 @@ export default function EditProfilePage() {
       setSaved(true);
       setTimeout(() => router.push('/profile'), 1200);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : t('errors.saveFailed'));
+      const msg = err instanceof Error ? err.message : t('errors.saveFailed');
+      let displayMsg = msg;
+      if (msg.startsWith('api_error.')) {
+        const key = msg.split('.')[1];
+        if (key === 'network' || key === 'timeout') displayMsg = t('errors.networkError');
+        else if (key === 'permissionDenied') displayMsg = t('errors.forbidden');
+        else if (key === 'unknown') displayMsg = t('errors.somethingWrong');
+        else displayMsg = t(`errors.${key}` as any) ?? t('errors.somethingWrong');
+      }
+      setError(displayMsg);
       setSaving(false);
     }
   };
@@ -228,7 +237,7 @@ export default function EditProfilePage() {
                     />
                   </div>
                   <p className="mt-1.5 text-xs text-fg-subtle">
-                    Telefon raqam oʻzgartirib boʻlmaydi
+                    {t('profile.phoneCannotBeChanged') ?? 'Phone number cannot be changed'}
                   </p>
                 </div>
               </div>

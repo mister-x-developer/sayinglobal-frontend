@@ -213,16 +213,28 @@ apiClient.interceptors.response.use(
 export function handleApiError(error: unknown): string {
   if (axios.isAxiosError(error)) {
     const data = error.response?.data;
-    if (data?.error) return data.error;
-    if (data?.message) return data.message;
-    if (data?.detail) return data.detail;
-    if (error.response?.status === 404) return 'Not found';
-    if (error.response?.status === 403) return 'Permission denied';
-    if (error.response?.status === 500) return 'Server error. Please try again later.';
-    if (error.code === 'ECONNABORTED') return 'Request timed out';
-    if (error.message) return error.message;
+    if (typeof data?.error === 'string') return data.error;
+    if (typeof data?.message === 'string') return data.message;
+    if (typeof data?.detail === 'string') return data.detail;
+    
+    // Extract DRF field validation errors
+    if (data && typeof data === 'object' && !Array.isArray(data)) {
+      const firstKey = Object.keys(data)[0];
+      if (firstKey && Array.isArray(data[firstKey]) && data[firstKey].length > 0) {
+        return `${firstKey}: ${data[firstKey][0]}`;
+      } else if (firstKey && typeof data[firstKey] === 'string') {
+        return data[firstKey];
+      }
+    }
+
+    if (error.response?.status === 404) return 'api_error.notFound';
+    if (error.response?.status === 403) return 'api_error.permissionDenied';
+    if (error.response?.status && error.response.status >= 500) return 'api_error.serverError';
+    if (error.code === 'ECONNABORTED') return 'api_error.timeout';
+    if (error.message === 'Network Error') return 'api_error.network';
+    return 'api_error.unknown';
   }
-  return 'An unexpected error occurred';
+  return error instanceof Error ? error.message : 'api_error.unknown';
 }
 
 export default apiClient;

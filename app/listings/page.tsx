@@ -52,7 +52,6 @@ export default function ListingsPage() {
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState<string>(initialCategory);
   const [region, setRegion] = useState<string | null>(null);
-  const [status, setStatus] = useState<string>('active');
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState<typeof SORTS[number]>('newestFirst');
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -79,7 +78,7 @@ export default function ListingsPage() {
       .list({
         category: category === 'all' ? undefined : category,
         region: region ?? undefined,
-        status: status === 'all' ? undefined : status,
+        status: 'active',
         page: 1,
         page_size: pageSize,
       })
@@ -93,7 +92,7 @@ export default function ListingsPage() {
     return () => {
       alive = false;
     };
-  }, [category, region, status]);
+  }, [category, region]);
 
   const filtered = useMemo(() => {
     let arr = items;
@@ -139,7 +138,7 @@ export default function ListingsPage() {
       const res = await listingsApi.list({
         category: category === 'all' ? undefined : category,
         region: region ?? undefined,
-        status: status === 'all' ? undefined : status,
+        status: 'active',
         page: nextPage,
         page_size: pageSize,
       });
@@ -238,26 +237,6 @@ export default function ListingsPage() {
             })}
           </div>
 
-          {/* Status filter chips */}
-          <div className="mt-3 flex gap-2">
-            {[
-              { key: 'active', label: t('listings.statusActive') },
-              { key: 'all', label: t('common.all') },
-            ].map((s) => (
-              <button
-                key={s.key}
-                type="button"
-                onClick={() => setStatus(s.key)}
-                className={`inline-flex h-8 items-center rounded-full border px-4 text-xs font-medium transition-all ${
-                  status === s.key
-                    ? 'border-brand-primary bg-brand-primary/10 text-brand-primary'
-                    : 'border-border bg-bg-elevated text-fg hover:bg-bg-subtle'
-                }`}
-              >
-                {s.label}
-              </button>
-            ))}
-          </div>
 
           {/* Region filter — collapsible */}
           {filtersOpen && (

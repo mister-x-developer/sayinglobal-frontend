@@ -50,7 +50,8 @@
     "later": "Позже",
     "new": "Новый",
     "page": "{current} / {total}",
-    "deleteConfirm": "Вы уверены, что хотите удалить?"
+    "deleteConfirm": "Вы уверены, что хотите удалить?",
+    "usd": "USD"
   },
   "landing": {
     "heroTitle": "Цифровой рынок скота",
@@ -246,7 +247,8 @@
     "weight": "Вес",
     "breed": "Порода",
     "healthStatus": "Здоровье",
-    "statusActive": "Активно"
+    "statusActive": "Активно",
+    "quantity": "Количество"
   },
   "categories": {
     "all": "Все",
@@ -622,7 +624,11 @@
     "recentComplaints": "Последние жалобы",
     "listingsPendingApproval": "объявлений ожидают одобрения",
     "complaintsPendingReview": "жалоб ожидают рассмотрения",
-    "days": "дней"
+    "days": "дней",
+    "categories": "Категории",
+    "promocodes": "Промокоды",
+    "aiAgent": "ИИ Ассистент",
+    "logout": "Выйти"
   },
   "analytics": {
     "title": "Аналитика",
@@ -698,7 +704,7 @@
     "minLength": "Минимум {min} символов",
     "maxLength": "Максимум {max} символов",
     "networkError": "Ошибка сети",
-    "serverError": "Ошибка сервера.",
+    "serverError": "Ошибка сервера. Пожалуйста, попробуйте позже.",
     "notFound": "Не найдено",
     "notFoundTitle": "Страница не найдена",
     "notFoundDescription": "Запрашиваемая страница не существует или была перемещена",

@@ -116,8 +116,8 @@ export function AIAssistantButton() {
         style={{
           position: 'fixed',
           right: 16 - clampedX,
-          bottom: 128 - clampedY,
-          zIndex: 50,
+          bottom: 84 - clampedY,
+          zIndex: 40,
           touchAction: 'none',
           userSelect: 'none',
           cursor: dragging ? 'grabbing' : 'grab',

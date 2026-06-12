@@ -50,7 +50,8 @@
     "later": "Keyinroq",
     "new": "Yangi",
     "page": "{current} / {total}",
-    "deleteConfirm": "Haqiqatan ham oʻchirmoqchimisiz?"
+    "deleteConfirm": "Haqiqatan ham oʻchirmoqchimisiz?",
+    "usd": "USD"
   },
   "landing": {
     "heroTitle": "Raqamli Chorva Bozori",
@@ -246,7 +247,8 @@
     "weight": "Vazni",
     "breed": "Zot",
     "healthStatus": "Sogʻligʻi",
-    "statusActive": "Faol"
+    "statusActive": "Faol",
+    "quantity": "Soni / Miqdori"
   },
   "categories": {
     "all": "Barchasi",
@@ -528,7 +530,7 @@
     "title": "Sarlavha",
     "dashboard": "Boshqaruv paneli",
     "users": "Foydalanuvchilar",
-    "listings": "Eʼlonlar",
+    "listings": "E'lonlar",
     "moderation": "Moderatsiya",
     "complaints": "Shikoyatlar",
     "broadcasts": "Xabarlar",
@@ -610,7 +612,7 @@
     "notesRequiredToResolve": "Hal qilish uchun izoh qoʻshing.",
     "reports": "Hisobotlar",
     "aiModeration": "AI Moderatsiya",
-    "plans": "Tariflar",
+    "plans": "Ta'riflar",
     "quickActions": "Tezkor harakatlar",
     "todayActivity": "Bugungi faollik",
     "newUsers": "Yangi foydalanuvchilar",
@@ -622,7 +624,11 @@
     "recentComplaints": "Soʻnggi shikoyatlar",
     "listingsPendingApproval": "ta eʼlon tasdiqlash kutmoqda",
     "complaintsPendingReview": "ta shikoyat koʻrib chiqilmagan",
-    "days": "kun"
+    "days": "kun",
+    "categories": "Kategoriyalar",
+    "promocodes": "Promokodlar",
+    "aiAgent": "AI Yordamchi",
+    "logout": "Chiqish"
   },
   "analytics": {
     "title": "Analitika",
@@ -698,7 +704,7 @@
     "minLength": "Kamida {min} belgi boʻlishi kerak",
     "maxLength": "Koʻpi bilan {max} belgi boʻlishi kerak",
     "networkError": "Tarmoq xatosi yuz berdi",
-    "serverError": "Server xatosi. Keyinroq urinib koʻring.",
+    "serverError": "Serverda xatolik yuz berdi. Iltimos, keyinroq qaytadan urinib ko'ring.",
     "notFound": "Topilmadi",
     "notFoundTitle": "Sahifa topilmadi",
     "notFoundDescription": "Siz qidirayotgan sahifa mavjud emas yoki koʻchirilgan",

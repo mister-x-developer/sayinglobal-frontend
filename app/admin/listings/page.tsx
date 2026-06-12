@@ -281,8 +281,8 @@ export default function AdminListingsPage() {
         {pendingConfirmations.length > 0 && (
           <div className="mt-4 p-4 rounded-xl border border-warning/30 bg-warning/5">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="font-semibold text-sm">Pending Buyer Confirmations ({pendingConfirmations.length})</h3>
-              <button onClick={fetchPendingConfirmations} className="text-xs text-fg-subtle hover:text-fg">Refresh</button>
+              <h3 className="font-semibold text-sm">{t('admin.pendingConfirmations') ?? 'Pending Buyer Confirmations'} ({pendingConfirmations.length})</h3>
+              <button onClick={fetchPendingConfirmations} className="text-xs text-fg-subtle hover:text-fg">{t('common.refresh') ?? 'Refresh'}</button>
             </div>
             <div className="space-y-2 max-h-40 overflow-auto text-xs">
               {pendingConfirmations.slice(0, 5).map((c, i) => (
@@ -295,7 +295,7 @@ export default function AdminListingsPage() {
               ))}
               {pendingConfirmations.length > 5 && <div className="text-center text-fg-subtle">... and {pendingConfirmations.length - 5} more</div>}
             </div>
-            <p className="text-[10px] mt-1 text-fg-subtle">Buyers can confirm at /confirm-purchase using the code to make the sale count for trust_score.</p>
+            <p className="text-[10px] mt-1 text-fg-subtle">{t('admin.confirmHint') ?? 'Buyers can confirm at /confirm-purchase using the code to make the sale count for trust_score.'}</p>
           </div>
         )}
 
@@ -344,7 +344,7 @@ export default function AdminListingsPage() {
                     }
                     setSelected(new Set());
                     setBulkLoading(null);
-                    toast.success(`${ok}/${ids.length} AI tomonidan tasdiqlandi`);
+                    toast.success(`${ok}/${ids.length} ${t('admin.aiApproved') ?? 'approved by AI'}`);
                   }}
                   disabled={!!bulkLoading}
                   className="btn btn-sm bg-brand-accent/12 text-brand-accent hover:bg-brand-accent/20 disabled:opacity-50"
@@ -514,17 +514,17 @@ export default function AdminListingsPage() {
                                   onClick={async (e) => {
                                     e.stopPropagation();
                                     try {
-                                      toast.info('AI tahlil qilmoqda...');
+                                      toast.info(t('admin.aiAnalyzing') ?? 'AI is analyzing...');
                                       const res = await moderationApi.adminAIReviewListing(l.public_id);
                                       if (!res.is_flagged) {
                                         await listingsApi.approve(l.public_id);
                                         setListings((prev) => prev.map((item) => item.public_id === l.public_id ? { ...item, status: 'active' } : item));
-                                        toast.success('AI tomonidan tasdiqlandi!');
+                                        toast.success(t('admin.aiApproved') ?? 'Approved by AI!');
                                       } else {
-                                        toast.error(`AI rad etdi: ${res.explanation}`);
+                                        toast.error(`${t('admin.aiRejected') ?? 'Rejected by AI'}: ${res.explanation}`);
                                       }
                                     } catch {
-                                      toast.error('AI xatosi');
+                                      toast.error(t('admin.aiError') ?? 'AI Error');
                                     }
                                   }}
                                   className="btn btn-sm bg-brand-accent/12 text-brand-accent hover:bg-brand-accent/20"

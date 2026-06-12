@@ -208,7 +208,16 @@ export default function NewListingPage() {
         router.push(`/listings/${listing.public_id}`);
       }
     } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : t('errors.saveFailed'));
+      const msg = err instanceof Error ? err.message : t('errors.saveFailed');
+      let displayMsg = msg;
+      if (msg.startsWith('api_error.')) {
+        const key = msg.split('.')[1];
+        if (key === 'network' || key === 'timeout') displayMsg = t('errors.networkError');
+        else if (key === 'permissionDenied') displayMsg = t('errors.forbidden');
+        else if (key === 'unknown') displayMsg = t('errors.somethingWrong');
+        else displayMsg = t(`errors.${key}` as any) ?? t('errors.somethingWrong');
+      }
+      toast.error(displayMsg);
       setSaving(false);
     }
   };
@@ -284,7 +293,7 @@ export default function NewListingPage() {
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div>
                         <label className="mb-1.5 block text-sm font-medium text-fg">
-                          {t('listings.quantity' as any) || 'Soni / Miqdori'} <span className="text-danger">*</span>
+                          {t('listings.quantity')} <span className="text-danger">*</span>
                         </label>
                         <input
                           type="number"
@@ -532,7 +541,7 @@ export default function NewListingPage() {
                       <label className="mb-1.5 block text-sm font-medium text-fg">{t('listings.currency')}</label>
                       <select value={form.currency} onChange={(e) => set('currency', e.target.value)} className="input-base w-full cursor-pointer">
                         <option value="UZS">UZS</option>
-                        <option value="USD">USD</option>
+                        <option value="USD">{t('common.usd')}</option>
                       </select>
                     </div>
                   </div>

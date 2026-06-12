@@ -263,7 +263,7 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
         public_id: created?.public_id ?? `local-${Date.now()}`,
         user: {
           public_id: currentUser?.public_id ?? 0,
-          full_name: currentUser?.full_name ?? 'Siz',
+          full_name: currentUser?.full_name ?? (t('common.you') ?? 'You'),
           avatar_url: currentUser?.avatar_url,
         },
         content: text.trim(),
@@ -274,7 +274,7 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
       setText('');
     } catch {
       // keep text so user can retry
-      toast.error('Izoh yuborishda xato yuz berdi');
+      toast.error(t('errors.commentFailed') ?? 'Failed to post comment');
     } finally {
       setSubmitting(false);
     }
@@ -288,7 +288,7 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
         public_id: created?.public_id ?? `local-${Date.now()}`,
         user: {
           public_id: currentUser?.public_id ?? 0,
-          full_name: currentUser?.full_name ?? 'Siz',
+          full_name: currentUser?.full_name ?? (t('common.you') ?? 'You'),
           avatar_url: currentUser?.avatar_url,
         },
         content,
@@ -302,7 +302,7 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
         )
       );
     } catch {
-      toast.error('Javob yuborishda xato yuz berdi');
+      toast.error(t('errors.replyFailed') ?? 'Failed to post reply');
     }
   };
 
@@ -335,7 +335,7 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
               className="input-base w-full resize-none py-3 text-sm"
             />
             <div className="mt-2 flex items-center justify-between">
-              <p className="text-xs text-fg-subtle">Ctrl+Enter — yuborish</p>
+              <p className="text-xs text-fg-subtle">Ctrl+Enter — {t('common.send') ?? 'send'}</p>
               <button
                 type="button"
                 onClick={handleSubmit}
@@ -349,7 +349,7 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
         ) : (
           <div className="rounded-2xl border border-border bg-bg-subtle p-4 text-center">
             <p className="text-sm text-fg-muted mb-3">
-              {t('comments.loginToComment' as any) ?? 'Izoh qoldirish uchun tizimga kiring'}
+              {t('comments.loginToComment') ?? 'Log in to leave a comment'}
             </p>
             <Link href="/auth" className="btn btn-primary btn-sm">
               <LogIn className="h-4 w-4" strokeWidth={2} />

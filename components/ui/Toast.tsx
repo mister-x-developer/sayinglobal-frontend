@@ -55,6 +55,7 @@ export function ToastContainer() {
   const { toasts, remove } = useToastStore();
   const router = useRouter();
   const tCommon = useTranslations('common');
+  const tErrors = useTranslations('errors');
 
   return (
     <div className="pointer-events-none fixed bottom-20 right-4 z-[2000] flex flex-col gap-2.5 sm:bottom-5 sm:right-5">
@@ -93,11 +94,11 @@ export function ToastContainer() {
 
               <div className="min-w-0 flex-1 pt-0.5">
                 <div className="text-[14.5px] font-semibold leading-snug tracking-[-0.1px] text-fg">
-                  {item.title}
+                  {item.title === 'SERVER_ERROR' ? tErrors('serverError') : item.title}
                 </div>
                 {item.message && (
                   <div className="mt-1 text-[13px] leading-snug text-fg-muted">
-                    {item.message}
+                    {item.message === 'SERVER_ERROR' ? tErrors('serverError') : item.message}
                   </div>
                 )}
               </div>

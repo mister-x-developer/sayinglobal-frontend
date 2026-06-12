@@ -462,7 +462,7 @@ export default function EditListingPage() {
                   type="number"
                   value={form.quantity}
                   onChange={(e) => update({ quantity: e.target.value })}
-                  placeholder={t('listings.quantity' as any) || 'Soni / Miqdori'}
+                  placeholder={t('listings.quantity')}
                   className="input-base h-12 w-full"
                   min="1"
                 />
@@ -598,7 +598,7 @@ export default function EditListingPage() {
                   className="input-base h-12 w-full"
                 >
                   <option value="UZS">UZS</option>
-                  <option value="USD">USD</option>
+                  <option value="USD">{t('common.usd')}</option>
                 </select>
               </div>
               <label className="mt-4 inline-flex items-center gap-2 text-sm cursor-pointer">

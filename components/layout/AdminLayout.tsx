@@ -178,20 +178,18 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
                     key={item.href}
                     href={item.href}
                     onClick={() => setSidebarOpen(false)}
-                    title={collapsed && !isDrawer ? t(item.label as any) : undefined}
-                    className={`group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                    className={`group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-[14px] font-semibold transition-all duration-200 ${
                       collapsed && !isDrawer ? 'justify-center' : ''
                     } ${
                       active
-                        ? 'bg-brand-primary/10 text-brand-primary'
+                        ? 'bg-brand-primary text-white shadow-md shadow-brand-primary/20'
                         : 'text-fg-muted hover:bg-bg-subtle hover:text-fg'
                     }`}
                   >
-                    <Icon className="h-4.5 w-4.5 flex-shrink-0" strokeWidth={active ? 2.25 : 1.75} />
+                    <Icon className="h-5 w-5 flex-shrink-0" strokeWidth={active ? 2 : 1.75} />
                     {(!collapsed || isDrawer) && (
                       <span className="flex-1">{t(item.label as any)}</span>
                     )}
-                    {active && !collapsed && <div className="ml-auto h-1.5 w-1.5 rounded-full bg-brand-primary" />}
                   </Link>
                 );
               })}

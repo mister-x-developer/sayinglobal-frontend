@@ -84,11 +84,9 @@ export function FloatingNearbyButton() {
   if (!isAuthenticated) return null;
   if (hidden) return null;
 
-  // Clamp position within window
-  const maxX = windowSize.width - 64;
-  const maxY = windowSize.height - 200;
-  const clampedX = Math.max(-16, Math.min(pos.x, maxX));
-  const clampedY = Math.max(-(windowSize.height - 200), Math.min(pos.y, 80));
+  // Clamp position within window (anchored to right)
+  const clampedX = Math.max(-(windowSize.width - 80), Math.min(pos.x, 0));
+  const clampedY = Math.max(-(windowSize.height - 200), Math.min(pos.y, 0));
 
   return (
     <>
@@ -120,9 +118,9 @@ export function FloatingNearbyButton() {
         onPointerUp={onPointerUp}
         style={{
           position: 'fixed',
-          left: 16 + clampedX,
-          bottom: 128 - clampedY,
-          zIndex: 50,
+          right: 16 - clampedX,
+          bottom: 156 - clampedY,
+          zIndex: 40,
           touchAction: 'none',
           cursor: dragging ? 'grabbing' : 'grab',
           userSelect: 'none',

@@ -50,7 +50,8 @@
     "later": "Кейинроқ",
     "new": "Янги",
     "page": "{current} / {total}",
-    "deleteConfirm": "Ҳақиқатан ҳам ўчирмоқчимисиз?"
+    "deleteConfirm": "Ҳақиқатан ҳам ўчирмоқчимисиз?",
+    "usd": "USD"
   },
   "landing": {
     "heroTitle": "Рақамли Чорва Бозори",
@@ -246,7 +247,8 @@
     "weight": "Вазни",
     "breed": "Зот",
     "healthStatus": "Соғлиги",
-    "statusActive": "Фаол"
+    "statusActive": "Фаол",
+    "quantity": "Сони / Миқдори"
   },
   "categories": {
     "all": "Барчаси",
@@ -622,7 +624,11 @@
     "recentComplaints": "Сўнгги шикоятлар",
     "listingsPendingApproval": "та эълон тасдиқлаш кутмоқда",
     "complaintsPendingReview": "та шикоят кўриб чиқилмаган",
-    "days": "кун"
+    "days": "кун",
+    "categories": "Категориялар",
+    "promocodes": "Промокодлар",
+    "aiAgent": "АИ Ёрдамчи",
+    "logout": "Чиқиш"
   },
   "analytics": {
     "title": "Аналитика",
@@ -698,7 +704,7 @@
     "minLength": "Камида {min} белги бўлиши керак",
     "maxLength": "Кўпи билан {max} белги бўлиши керак",
     "networkError": "Тармоқ хатоси",
-    "serverError": "Сервер хатоси.",
+    "serverError": "Серверда хатолик юз берди. Илтимос, кейинроқ қайтадан уриниб кўринг.",
     "notFound": "Топилмади",
     "notFoundTitle": "Саҳифа топилмади",
     "notFoundDescription": "Сиз қидираётган саҳифа мавжуд эмас ёки кўчирилган",
