@@ -255,7 +255,7 @@ export default function ChatAIPage() {
                     sendMessage(input);
                   }
                 }}
-                placeholder={t('ai.placeholder' as any) ?? "Savol yozing..."}
+                placeholder={t('ai.inputPlaceholder' as any) ?? "Savol yozing..."}
                 className="max-h-32 min-h-[44px] flex-1 resize-none bg-transparent py-3 text-[15px] text-fg placeholder:text-fg-muted focus:outline-none"
                 rows={1}
               />

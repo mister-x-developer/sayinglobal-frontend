@@ -199,7 +199,7 @@ export const listingsApi = {
     try {
       const res = await apiClient.get<Array<{
         id: number;
-        name: string;
+        slug: string;
         name_uz?: string;
         name_ru?: string;
         name_en?: string;
@@ -298,6 +298,12 @@ export const listingsApi = {
   /** Admin: approve a pending listing. */
   async approve(publicId: number | string) {
     const res = await apiClient.post(`/listings/${publicId}/approve/`);
+    return res.data;
+  },
+
+  /** Bump a listing to the top */
+  async bump(publicId: number | string) {
+    const res = await apiClient.post(`/listings/${publicId}/bump/`);
     return res.data;
   },
 

@@ -174,7 +174,7 @@ export default function PlansPage() {
     <div className="min-h-screen flex flex-col">
       <AppNav />
       <main className="flex-1">
-        <div className="container-page py-10 sm:py-14">
+        <div className="container-page py-10 sm:py-14 pb-36 sm:pb-20">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}

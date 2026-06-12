@@ -20,6 +20,7 @@ import {
   Timer,
   ShoppingCart,
   X,
+  ArrowUp,
 } from 'lucide-react';
 
 import { AppNav } from '@/components/layout/AppNav';
@@ -412,7 +413,24 @@ export default function MyListingsPage() {
                                   </Link>
                                 )}
                                 {l.status === 'active' && (
-                                  <button
+                                  <>
+                                    <button
+                                      type="button"
+                                      onClick={async () => {
+                                        setOpenMenu(null);
+                                        try {
+                                          await listingsApi.bump(l.public_id);
+                                          load();
+                                        } catch (e) {
+                                          console.error('Failed to bump listing', e);
+                                        }
+                                      }}
+                                      className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-brand-primary hover:bg-brand-primary/10"
+                                    >
+                                      <ArrowUp className="h-4 w-4" strokeWidth={1.75} />
+                                      {t('listings.bump' as any) || 'Topga chiqarish'}
+                                    </button>
+                                    <button
                                     type="button"
                                     onClick={() => { setOpenMenu(null); setSoldConfirm(l.public_id); }}
                                     className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-success hover:bg-success/10"
@@ -420,6 +438,7 @@ export default function MyListingsPage() {
                                     <ShoppingCart className="h-4 w-4" strokeWidth={1.75} />
                                     {t('listings.markAsSold')}
                                   </button>
+                                  </>
                                 )}
                                 {(l.status === 'sold' || l.status === 'expired') && (
                                   <button

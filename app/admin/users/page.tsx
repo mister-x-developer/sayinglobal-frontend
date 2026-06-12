@@ -351,7 +351,7 @@ export default function AdminUsersPage() {
               ))}
             </div>
 
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {selectedUser.status !== 'good' && (
                 <button
                   type="button"
@@ -372,6 +372,17 @@ export default function AdminUsersPage() {
                 >
                   <AlertTriangle className="h-4 w-4" strokeWidth={2.25} />
                   {t('admin.warn')}
+                </button>
+              )}
+              {selectedUser.status !== 'restricted' && selectedUser.status !== 'blocked' && (
+                <button
+                  type="button"
+                  disabled={actionLoading}
+                  onClick={() => handleAction(selectedUser.public_id, 'restrict')}
+                  className="btn btn-sm bg-danger/12 text-danger hover:bg-danger/20 disabled:opacity-50"
+                >
+                  <AlertTriangle className="h-4 w-4" strokeWidth={2.25} />
+                  {t('userStatus.restricted')}
                 </button>
               )}
               {selectedUser.status !== 'blocked' && (

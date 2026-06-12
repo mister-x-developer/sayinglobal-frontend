@@ -34,7 +34,7 @@ import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
 import { formatPrice, formatRelativeTime, getLocalizedListingTitle } from '@/lib/utils/format';
 
-type Tab = 'listings' | 'favorites' | 'activity' | 'reviews';
+type Tab = 'listings' | 'favorites' | 'reviews';
 
 export default function ProfilePage() {
   const t = useTranslations();
@@ -94,7 +94,6 @@ export default function ProfilePage() {
   const TABS: { key: Tab; label: string }[] = [
     { key: 'listings', label: t('profile.myListings') },
     { key: 'favorites', label: t('profile.favorites') },
-    { key: 'activity', label: t('profile.activity') },
     { key: 'reviews', label: t('sellers.reviews' as any) ?? 'Reviews' },
   ];
 
@@ -188,7 +187,7 @@ export default function ProfilePage() {
                 )}
 
                 {/* Follow counts */}
-                <div className="mt-4 flex flex-wrap gap-4 sm:p-6 text-sm">
+                <div className="mt-4 flex flex-wrap gap-4 text-sm">
                   <Link href="/sellers/following" className="group flex items-center gap-1.5 text-fg-muted hover:text-fg">
                     <span className="font-bold text-fg">{profile.following}</span>
                     <span>{t('profile.following')}</span>
@@ -309,11 +308,6 @@ export default function ProfilePage() {
                     </div>
                   )
                 )}
-
-                {tab === 'activity' && (
-                  <ActivityTimeline />
-                )}
-
                 {tab === 'reviews' && user?.public_id && (
                   <div className="surface-elevated p-4 sm:p-6">
                     <SellerRatingsThread sellerPublicId={user.public_id} />
@@ -379,75 +373,7 @@ export default function ProfilePage() {
         </div>
       </main>
     </div>
-  );
-}
-
-function ActivityTimeline() {
-  // Activity timeline draws from the user's own listings instead of
-  // fabricated events. The previous demo content was misleading because
-  // it didn't reflect real platform activity.
-  const t = useTranslations();
-  const router = useRouter();
-  const locale = useLocale();
-  const [items, setItems] = useState<Listing[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let alive = true;
-    setLoading(true);
-    listingsApi
-      .my()
-      .then((data) => alive && setItems((data ?? []).slice(0, 10)))
-      .catch(() => alive && setItems([]))
-      .finally(() => alive && setLoading(false));
-    return () => { alive = false; };
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="space-y-3">
-        {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="surface-elevated h-16 animate-pulse" />
-        ))}
-      </div>
-    );
-  }
-
-  if (items.length === 0) {
-    return (
-      <p className="text-sm text-fg-muted py-8 text-center">
-        {t('empty.noActivityDescription')}
-      </p>
-    );
-  }
-
-  return (
-    <div className="space-y-3">
-      {items.map((l, i) => (
-        <motion.div
-          key={l.public_id}
-          initial={{ opacity: 0, x: -8 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.4, delay: i * 0.04 }}
-          className="surface-elevated flex items-start gap-4 p-4 cursor-pointer hover:shadow-lift"
-          onClick={() => router.push(`/listings/${l.public_id}`)}
-        >
-          <div className="mt-0.5 inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
-            <Package className="h-4 w-4" strokeWidth={1.75} />
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-fg line-clamp-1">{getLocalizedListingTitle(l, locale)}</p>
-            <p className="mt-0.5 text-sm text-fg-muted">
-              {t(`listings.${l.status}` as any) ?? l.status}
-            </p>
-          </div>
-          <span className="flex-shrink-0 text-xs text-fg-subtle">
-            {formatRelativeTime(l.created_at)}
-          </span>
-        </motion.div>
-      ))}
-    </div>
-  );
+);
 }
 
 

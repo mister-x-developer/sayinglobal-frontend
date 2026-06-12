@@ -38,7 +38,9 @@ export default function AdminListingsPage() {
   const [categoryFilter, setCategoryFilter] = useState('');
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
-  const [categories, setCategories] = useState<Array<{ id: number; name: string }>>([]);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [pendingConfirmations, setPendingConfirmations] = useState<any[]>([]);
   const [pendingLoading, setPendingLoading] = useState(false);
 
@@ -51,18 +53,20 @@ export default function AdminListingsPage() {
   const fetchListings = useCallback(async () => {
     setLoading(true);
     try {
-      const params: Record<string, any> = { page_size: 200 };
+      const params: Record<string, any> = { page_size: 50, page };
       if (statusFilter !== 'all') params.status = statusFilter;
       if (categoryFilter) params.category = categoryFilter;
       const res = await apiClient.get('/listings/', { params });
       const data = res.data as any;
       setListings(Array.isArray(data) ? data : data?.results ?? []);
+      if (data?.count) setTotalPages(Math.ceil(data.count / 50));
+      else setTotalPages(1);
     } catch {
       setListings([]);
     } finally {
       setLoading(false);
     }
-  }, [statusFilter, categoryFilter]);
+  }, [statusFilter, categoryFilter, page]);
 
   useEffect(() => { fetchListings(); }, [fetchListings]);
 
@@ -87,7 +91,7 @@ export default function AdminListingsPage() {
   }, [fetchPendingConfirmations]);
 
   // Clear selection when filter changes
-  useEffect(() => { setSelected(new Set()); }, [statusFilter, categoryFilter]);
+  useEffect(() => { setSelected(new Set()); setPage(1); }, [statusFilter, categoryFilter]);
 
   const filtered = useMemo(() => {
     if (!search) return listings;
@@ -556,6 +560,37 @@ export default function AdminListingsPage() {
             </div>
           )}
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-5 flex items-center justify-center gap-2">
+            <button
+              type="button"
+              onClick={() => { setPage((p) => p - 1); }}
+              disabled={page <= 1}
+              className={`inline-flex h-10 items-center rounded-lg border px-4 text-sm font-medium transition-all ${
+                page > 1
+                  ? 'border-border bg-bg-elevated text-fg hover:bg-bg-subtle'
+                  : 'cursor-not-allowed border-border/50 text-fg-subtle'
+              }`}
+            >
+              {t('common.previous') ?? 'Previous'}
+            </button>
+            <span className="mx-2 text-sm text-fg-muted">{page} / {totalPages}</span>
+            <button
+              type="button"
+              onClick={() => { setPage((p) => p + 1); }}
+              disabled={page >= totalPages}
+              className={`inline-flex h-10 items-center rounded-lg border px-4 text-sm font-medium transition-all ${
+                page < totalPages
+                  ? 'border-border bg-bg-elevated text-fg hover:bg-bg-subtle'
+                  : 'cursor-not-allowed border-border/50 text-fg-subtle'
+              }`}
+            >
+              {t('common.next') ?? 'Next'}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Reject modal */}

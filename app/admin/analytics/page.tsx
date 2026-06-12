@@ -226,7 +226,7 @@ export default function AdminAnalyticsPage() {
       const [dashRes, growthRes, activityRes, funnelRes, listingRes] = await Promise.allSettled([
         analyticsApi.dashboard(),
         analyticsApi.growth(period),
-        analyticsApi.activity(7),
+        analyticsApi.activity(period),
         apiClient.get('/analytics/funnel/', { params: { days: period } }),
         analyticsApi.listings(),
       ]);
@@ -481,7 +481,7 @@ export default function AdminAnalyticsPage() {
               >
                 <div className="flex items-center gap-2 mb-4">
                   <Activity className="h-4 w-4 text-success" strokeWidth={2} />
-                  <h2 className="font-bold text-fg">Faollik turlari — 7 kun</h2>
+                  <h2 className="font-bold text-fg">Faollik turlari — {period} kun</h2>
                 </div>
                 {activity?.event_distribution && activity.event_distribution.length > 0 ? (
                   <div className="space-y-2">

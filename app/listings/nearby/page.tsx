@@ -19,7 +19,32 @@ import { NearbyMapWithUserPin } from '@/components/shared/NearbyMapWithUserPin';
 import { listingsApi, type Listing } from '@/lib/api/listings';
 import { referenceApi } from '@/lib/api/reference';
 
-const ALL_CATS = ['cattle', 'sheep', 'goats', 'horses', 'camels', 'poultry', 'rabbits', 'bees', 'fish'] as const;
+async function getLocationCapacitor(): Promise<{ lat: number; lng: number }> {
+  try {
+    const { Geolocation } = await import('@capacitor/geolocation');
+    const perm = await Geolocation.requestPermissions();
+    if (perm.location === 'granted' || perm.location === 'limited') {
+      const pos = await Geolocation.getCurrentPosition({ enableHighAccuracy: true, timeout: 10000 });
+      return { lat: pos.coords.latitude, lng: pos.coords.longitude };
+    }
+    throw new Error('denied');
+  } catch {
+    // Fallback to browser geolocation
+    return new Promise((resolve, reject) => {
+      if (typeof navigator === 'undefined' || !navigator.geolocation) {
+        reject(new Error('unsupported'));
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        (pos) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+        (err) => reject(err),
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60_000 },
+      );
+    });
+  }
+}
+
+const ALL_CATS = ['cattle', 'sheep', 'goats', 'horses', 'camels', 'poultry'] as const;
 const RADIUS_OPTIONS = [5, 25, 50, 100, 250] as const;
 
 type GeoState =
@@ -43,17 +68,12 @@ export default function NearbyListingsPage() {
   const [mode, setMode] = useState<'gps' | 'region'>('region');
   const [loading, setLoading] = useState(false);
 
-  // Request location
+  // Request location using Capacitor (with browser fallback)
   useEffect(() => {
-    if (typeof navigator === 'undefined' || !navigator.geolocation) {
-      setGeo({ kind: 'denied' }); return;
-    }
     setGeo({ kind: 'requesting' });
-    navigator.geolocation.getCurrentPosition(
-      (pos) => setGeo({ kind: 'granted', lat: pos.coords.latitude, lng: pos.coords.longitude }),
-      () => setGeo({ kind: 'denied' }),
-      { enableHighAccuracy: true, timeout: 6000, maximumAge: 60_000 },
-    );
+    getLocationCapacitor()
+      .then(({ lat, lng }) => setGeo({ kind: 'granted', lat, lng }))
+      .catch(() => setGeo({ kind: 'denied' }));
   }, []);
 
   useEffect(() => {
@@ -104,13 +124,10 @@ export default function NearbyListingsPage() {
     geo.kind === 'granted' ? [geo.lat, geo.lng] : null;
 
   const requestGeo = () => {
-    if (!navigator.geolocation) return;
     setGeo({ kind: 'requesting' });
-    navigator.geolocation.getCurrentPosition(
-      (pos) => setGeo({ kind: 'granted', lat: pos.coords.latitude, lng: pos.coords.longitude }),
-      () => setGeo({ kind: 'denied' }),
-      { enableHighAccuracy: true, timeout: 6000 },
-    );
+    getLocationCapacitor()
+      .then(({ lat, lng }) => setGeo({ kind: 'granted', lat, lng }))
+      .catch(() => setGeo({ kind: 'denied' }));
   };
 
   return (

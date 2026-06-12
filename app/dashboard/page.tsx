@@ -26,23 +26,14 @@ import { useAuthStore } from '@/lib/store/auth';
 import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
 
-const CATEGORIES = [
-  { key: 'cattle', image: '/categories_images/cattle.webp' },
-  { key: 'sheep', image: '/categories_images/sheep.webp' },
-  { key: 'goats', image: '/categories_images/goats.webp' },
-  { key: 'horses', image: '/categories_images/horses.webp' },
-  { key: 'camels', image: '/categories_images/camels.webp' },
-  { key: 'poultry', image: '/categories_images/poultry.webp' },
-  { key: 'rabbits', image: '/categories_images/cattle.webp' }, // placeholder
-  { key: 'bees', image: '/categories_images/cattle.webp' }, // placeholder
-  { key: 'fish', image: '/categories_images/cattle.webp' }, // placeholder
-] as const;
+
 export default function DashboardPage() {
   const t = useTranslations();
   const router = useRouter();
   const user = useAuthStore((s) => s.user);
   // Auth gating is handled by middleware; pages don't redirect on their own.
   const [feed, setFeed] = useState<Listing[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -55,6 +46,11 @@ export default function DashboardPage() {
       })
       .catch(() => alive && setFeed([]))
       .finally(() => alive && setLoading(false));
+      
+    listingsApi.categories().then((cats) => {
+      if (alive) setCategories(cats);
+    });
+
     return () => {
       alive = false;
     };
@@ -165,30 +161,33 @@ export default function DashboardPage() {
             </div>
 
             <div className="mt-5 grid grid-cols-3 gap-3 sm:grid-cols-3 lg:grid-cols-9">
-              {CATEGORIES.map((cat, i) => (
+              {categories.map((cat, i) => (
                 <motion.div
-                  key={cat.key}
+                  key={cat.slug}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: i * 0.04 }}
                 >
                   <Link
-                    href={`/listings?category=${cat.key}`}
+                    href={`/listings?category=${cat.slug}`}
                     className="surface-elevated group relative flex aspect-square flex-col items-center justify-end overflow-hidden p-0 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift hover:border-brand-primary/30"
                   >
-                    <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-105">
+                    <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-105 bg-bg-subtle flex items-center justify-center">
                       <Image
-                        src={cat.image}
-                        alt={t(`categories.${cat.key}`)}
+                        src={`/categories_images/${cat.slug}.webp`}
+                        alt={cat.name_uz || cat.name || cat.slug}
                         fill
                         sizes="(max-width: 640px) 33vw, (max-width: 1024px) 17vw, 11vw"
                         className="object-cover"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
                       />
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent transition-opacity duration-300 group-hover:from-black/85" />
                     <div className="relative z-10 w-full p-2 text-center">
                       <p className="text-xs font-semibold text-white sm:text-sm">
-                        {t(`categories.${cat.key}`)}
+                        {cat.name_uz || cat.name || cat.slug}
                       </p>
                     </div>
                   </Link>

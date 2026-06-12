@@ -117,17 +117,20 @@ export default function AdminDashboardPage() {
     if (isRefresh) setRefreshing(true);
     else setLoading(true);
     try {
-      const [dash, pending, complaints, growthData, healthData] = await Promise.allSettled([
+      const [dash, pending, complaints, growthData, healthData, activity] = await Promise.allSettled([
         analyticsApi.dashboard(),
         apiClient.get('/listings/?status=pending&page_size=1'),
-        apiClient.get('/moderation/complaints/?status=pending&page_size=1'),
+        apiClient.get('/moderation/v2/admin/reports/?status=pending&page_size=1'),
         analyticsApi.growth(30),
         // Health check — call the deep endpoint
         (async () => {
-          const base = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api').replace(/\/api\/?$/, '');
+          const base = process.env.NEXT_PUBLIC_API_URL
+            ? process.env.NEXT_PUBLIC_API_URL.replace(/\/api\/?$/, '')
+            : (typeof window !== 'undefined' ? window.location.origin : '');
           const r = await fetch(`${base}/health/deep/`);
           return r.json();
         })(),
+        apiClient.get('/moderation/v2/admin/reports/?page_size=5&ordering=-created_at'),
       ]);
       if (dash.status === 'fulfilled') setStats(dash.value);
       if (pending.status === 'fulfilled') setPendingListings((pending.value.data as any)?.count ?? 0);
@@ -137,6 +140,9 @@ export default function AdminDashboardPage() {
         setHealthStatus((healthData.value as any)?.checks ?? {});
       } else {
         setHealthStatus({ database: 'error', cache: 'error', broker: 'error' });
+      }
+      if (activity.status === 'fulfilled') {
+        setRecentActivity((activity.value.data as any)?.results ?? []);
       }
     } catch {}
     finally {
@@ -436,7 +442,8 @@ function RecentComplaints() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    apiClient.get('/moderation/complaints/?status=pending&page_size=5')
+    // Use V2 admin reports endpoint
+    apiClient.get('/moderation/v2/admin/reports/?status=pending&page_size=5')
       .then((r) => {
         const data = r.data as any;
         setItems(Array.isArray(data) ? data : data?.results ?? []);
@@ -463,14 +470,14 @@ function RecentComplaints() {
   return (
     <div className="divide-y divide-border">
       {items.map((item: any, index: number) => (
-        <Link key={item.public_id || index} href={`/admin/moderation/${item.public_id}`}
+        <Link key={item.public_id || index} href={`/admin/moderation`}
           className="flex items-center gap-3 px-5 py-3.5 hover:bg-bg-subtle transition-colors group">
           <div className={`flex-shrink-0 inline-flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold ${severityColor[item.severity] ?? severityColor.low}`}>
             {(item.severity || 'L')[0].toUpperCase()}
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold text-fg truncate group-hover:text-brand-primary transition-colors">
-              {item.report_type?.replace(/_/g, ' ') || 'Shikoyat'}
+              {item.reason_code?.replace(/_/g, ' ') || item.report_type?.replace(/_/g, ' ') || 'Shikoyat'}
             </p>
             <p className="text-xs text-fg-muted">{formatRelativeTime(item.created_at)}</p>
           </div>
