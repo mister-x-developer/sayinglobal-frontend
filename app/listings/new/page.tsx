@@ -63,6 +63,7 @@ export default function NewListingPage() {
     currency: 'UZS',
     is_negotiable: true,
     weight_kg: '',
+    quantity: '1',
     gender: '',
     breed: '',
     health_status: '',
@@ -98,6 +99,7 @@ export default function NewListingPage() {
     if (!form.breed.trim()) e.breed = t('errors.required');
     if (!form.gender) e.gender = t('errors.required');
     if (!form.weight_kg || isNaN(Number(form.weight_kg)) || Number(form.weight_kg) <= 0) e.weight_kg = t('errors.required');
+    if (!form.quantity || isNaN(Number(form.quantity)) || Number(form.quantity) <= 0) e.quantity = t('errors.required');
     if (form.latitude == null || form.longitude == null) e.location = t('errors.required');
     if (!age.years && !age.months && !age.days) e.age = t('validation.atLeastOneFieldRequired');
     if (images.length < 3) e.images = "Kamida 3 ta rasm kiritish majburiy";
@@ -167,6 +169,7 @@ export default function NewListingPage() {
         age_years: age.years ?? 0,
         age_months: age.months ?? 0,
         weight_kg: form.weight_kg ? Number(form.weight_kg) : undefined,
+        quantity: form.quantity ? Number(form.quantity) : 1,
         gender: form.gender || undefined,
         breed: form.breed.trim() || undefined,
         health_status: form.health_status || undefined,
@@ -278,23 +281,39 @@ export default function NewListingPage() {
                   {/* Structured age */}
                   <AgeInput value={age} onChange={setAge} error={errors.age} required />
 
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div>
-                      <label className="mb-1.5 block text-sm font-medium text-fg">
-                        {t('animal.weight')} ({t('animal.kg')}) <span className="text-danger">*</span>
-                      </label>
-                      <input
-                        type="number"
-                        min={0}
-                        value={form.weight_kg}
-                        onChange={(e) => set('weight_kg', e.target.value)}
-                        placeholder="0"
-                        className="input-base w-full"
-                      />
-                      {errors.weight_kg && <p className="mt-1 text-xs text-danger">{errors.weight_kg}</p>}
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label className="mb-1.5 block text-sm font-medium text-fg">
+                          {t('listings.quantity' as any) || 'Soni / Miqdori'} <span className="text-danger">*</span>
+                        </label>
+                        <input
+                          type="number"
+                          min={1}
+                          value={form.quantity}
+                          onChange={(e) => set('quantity', e.target.value)}
+                          placeholder="1"
+                          className="input-base w-full"
+                        />
+                        {errors.quantity && <p className="mt-1 text-xs text-danger">{errors.quantity}</p>}
+                      </div>
+                      <div>
+                        <label className="mb-1.5 block text-sm font-medium text-fg">
+                          {t('animal.weight')} ({t('animal.kg')}) <span className="text-danger">*</span>
+                        </label>
+                        <input
+                          type="number"
+                          min={0}
+                          value={form.weight_kg}
+                          onChange={(e) => set('weight_kg', e.target.value)}
+                          placeholder="0"
+                          className="input-base w-full"
+                        />
+                        {errors.weight_kg && <p className="mt-1 text-xs text-danger">{errors.weight_kg}</p>}
+                      </div>
                     </div>
-                    <div>
-                      <label className="mb-1.5 block text-sm font-medium text-fg">
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label className="mb-1.5 block text-sm font-medium text-fg">
                         {t('animal.gender')} <span className="text-danger">*</span>
                       </label>
                       <select

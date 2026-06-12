@@ -43,6 +43,7 @@ export interface Listing {
   breed?: string;
   health_status?: string;
   vaccination_status?: string;
+  quantity?: number;
   location: string;
   region: string;
   district?: string;
@@ -99,6 +100,7 @@ export interface CreateListingPayload {
   weight_kg?: number;
   gender?: string;
   breed?: string;
+  quantity?: number;
   location: string;
   region: string;
   district?: string;

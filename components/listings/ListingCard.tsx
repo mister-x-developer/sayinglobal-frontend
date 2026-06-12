@@ -74,10 +74,10 @@ export function ListingCard({ listing, onFavorite }: Props) {
   };
 
   return (
-    <Link href={`/listings/${listing.public_id}`} className="group block outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-2xl">
-      <article className="surface-elevated overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:shadow-[0_20px_40px_-12px_rgb(var(--shadow-color)/0.18)]">
+    <Link href={`/listings/${listing.public_id}`} className="group block outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-t-full rounded-b-2xl">
+      <article className="surface-elevated rounded-t-full rounded-b-2xl overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:shadow-[0_20px_40px_-12px_rgb(var(--shadow-color)/0.18)]">
         {/* Image */}
-        <div className="relative aspect-[4/3] overflow-hidden bg-bg-subtle">
+        <div className="relative aspect-[4/5] overflow-hidden bg-bg-subtle">
           <ListingImage
             src={imageSrc}
             alt={listing.title}
