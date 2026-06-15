@@ -35,21 +35,18 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   // Initialize from the data-theme attribute that the inline script already set.
   // This avoids a SSR→client mismatch: the inline script runs before React
   // hydrates, so document.documentElement already has the correct data-theme.
-  const [mode, setModeState] = useState<ThemeMode>(() => {
-    if (typeof document !== 'undefined') {
-      const attr = document.documentElement.getAttribute('data-theme');
-      if (attr === 'day' || attr === 'night') return attr;
-    }
-    return 'day';
-  });
+  // Initialize to 'day' to match the server-rendered HTML.
+  // This prevents hydration mismatches. We will sync with the actual
+  // DOM/localStorage value in the useEffect below.
+  const [mode, setModeState] = useState<ThemeMode>('day');
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Sync in case localStorage differs from what the inline script set
-    const stored = readStoredMode();
-    if (stored !== mode) {
-      setModeState(stored);
-      applyMode(stored);
+    // Sync React state with the actual data-theme attribute set by the inline script
+    const attr = document.documentElement.getAttribute('data-theme');
+    const actualMode = (attr === 'day' || attr === 'night') ? attr : 'day';
+    if (actualMode !== mode) {
+      setModeState(actualMode);
     }
     setMounted(true);
     // Enable smooth theme transitions only after first hydration so the
