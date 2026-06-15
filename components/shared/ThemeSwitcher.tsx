@@ -24,7 +24,7 @@ export function ThemeSwitcher() {
         className="flex"
       >
         {!mounted ? (
-          <Sun className="h-4.5 w-4.5" strokeWidth={1.75} />
+          <div className="h-[18px] w-[18px]" />
         ) : mode === 'day' ? (
           <Sun className="h-[18px] w-[18px]" strokeWidth={1.75} />
         ) : (

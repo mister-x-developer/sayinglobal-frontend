@@ -26,7 +26,13 @@ export function AtmosphericBackground({
 }: AtmosphericBackgroundProps) {
   const { mode, mounted } = useTheme();
 
-  const isNight = mounted ? mode === 'night' : false;
+  const isNight = mode === 'night';
+
+  if (!mounted) {
+    // Avoid flashing the wrong theme during SSR/hydration.
+    // Return an empty atmosphere that naturally takes on the background color.
+    return <div className="atmosphere" aria-hidden="true" />;
+  }
 
   return (
     <div
