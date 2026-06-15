@@ -18,7 +18,7 @@ import { OnboardingModal } from '@/components/shared/OnboardingModal';
 import { FloatingNearbyButton } from '@/components/shared/FloatingNearbyButton';
 import { AIAssistantButton } from '@/components/ai/AIAssistantButton';
 import { GoogleAnalytics } from '@next/third-parties/google';
-import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
+import { ReCaptchaProvider } from '@/components/providers/ReCaptchaProvider';
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic'],
@@ -121,24 +121,16 @@ export default async function RootLayout({
         <ThemeProvider>
           <IntlClientProvider messages={messages} locale={locale} timeZone="Asia/Tashkent">
             <MotionProvider>
-              <GoogleReCaptchaProvider 
-                reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || 'dummy-key'} 
-                scriptProps={{
-                  async: false,
-                  defer: false,
-                  appendTo: 'head',
-                  nonce: undefined,
-                }}
-              >
+              <ReCaptchaProvider>
                 {children}
                 <TermsGate />
-              <NotificationSocketProvider />
-              <MobileBottomNav />
-              <OnboardingModal />
-              <FloatingNearbyButton />
+                <NotificationSocketProvider />
+                <MobileBottomNav />
+                <OnboardingModal />
+                <FloatingNearbyButton />
                 <AIAssistantButton />
                 <ToastContainer />
-              </GoogleReCaptchaProvider>
+              </ReCaptchaProvider>
             </MotionProvider>
           </IntlClientProvider>
         </ThemeProvider>
