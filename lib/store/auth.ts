@@ -245,14 +245,15 @@ export const useAuthStore = create<AuthState>()(
   )
 );
 
-/**
- * useAuthHydrated — returns true only after the auth store has finished
- * rehydrating from localStorage. Pages MUST gate their "redirect if not
- * authenticated" effects on this so they do not bounce the user back to
- * /auth during the brief boot window.
- */
 export function useAuthHydrated(): boolean {
-  return useAuthStore((s) => s._hasHydrated);
+  const storeHydrated = useAuthStore((s) => s._hasHydrated);
+  const [hydrated, setHydrated] = useState(false);
+  
+  useEffect(() => {
+    setHydrated(storeHydrated);
+  }, [storeHydrated]);
+  
+  return hydrated;
 }
 
 /**
