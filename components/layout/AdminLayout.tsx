@@ -63,7 +63,6 @@ const NAV_GROUPS = [
     labelKey: 'admin.broadcasts',
     items: [
       { href: '/admin/broadcasts', icon: Megaphone, label: 'admin.broadcasts' },
-      { href: '/admin/plans', icon: CreditCard, label: 'admin.plans' },
     ],
   },
   {
@@ -77,7 +76,7 @@ const NAV_GROUPS = [
 
 const SIDEBAR_COLLAPSED_KEY = 'admin-sidebar-collapsed';
 
-export function AdminLayout({ children }: { children: React.ReactNode }) {
+export function AdminLayout({ children, noPadding = false }: { children: React.ReactNode, noPadding?: boolean }) {
   const t = useTranslations();
   const pathname = usePathname();
   const router = useRouter();
@@ -306,7 +305,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
         </header>
 
         <main className="flex-1 overflow-auto bg-bg">
-          <div className="mx-auto w-full max-w-[1400px] p-5 sm:p-7">
+          <div className={`mx-auto w-full max-w-[1400px] ${noPadding ? '' : 'p-5 sm:p-7'}`}>
             {children}
           </div>
         </main>

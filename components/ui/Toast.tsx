@@ -58,7 +58,7 @@ export function ToastContainer() {
   const tErrors = useTranslations('errors');
 
   return (
-    <div className="pointer-events-none fixed bottom-20 right-4 z-[2000] flex flex-col gap-2.5 sm:bottom-5 sm:right-5">
+    <div className="pointer-events-none fixed bottom-[calc(84px+env(safe-area-inset-bottom,0px))] right-4 z-[2000] flex flex-col gap-2.5 sm:bottom-5 sm:right-5">
       <AnimatePresence>
         {toasts.map((item) => {
           const Icon = ICON[item.type];

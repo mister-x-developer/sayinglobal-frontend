@@ -89,22 +89,7 @@ const SLIDES: Slide[] = [
       en: "Tap 'Message Seller' on any listing to chat directly. All conversations are at /chat.",
     },
   },
-  {
-    icon: Users,
-    color: 'bg-warning/10 text-warning',
-    title: {
-      uz: 'Tariflar va referral',
-      'uz-cyrl': "Тарифлар ва реферал",
-      ru: 'Тарифы и реферальная программа',
-      en: 'Plans & referrals',
-    },
-    body: {
-      uz: "Hozirda platforma referral tizimida ishlaydi — bepul. Doʻstlaringizni taklif qiling va bonus oling. Tez orada pullik tariflar ham ishga tushadi.",
-      'uz-cyrl': "Ҳозирда платформа реферал тизимида ишлайди — бепул. Дўстларингизни таклиф қилинг ва бонус олинг.",
-      ru: 'Сейчас платформа работает по реферальной системе — бесплатно. Приглашайте друзей и получайте бонусы. Скоро появятся платные тарифы.',
-      en: 'The platform currently runs on a referral system — free. Invite friends and earn bonuses. Paid plans coming soon.',
-    },
-  },
+
 ];
 
 const BTN_LABELS = {

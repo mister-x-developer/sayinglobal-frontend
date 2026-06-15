@@ -223,10 +223,7 @@ export default function ReferralPage() {
                   <p className="mt-4 text-xs text-fg-subtle">{t('plans.referralHint')}</p>
                 </div>
 
-                <Link href="/plans" className="btn btn-secondary w-full gap-2">
-                  {t('plans.viewPlans')}
-                  <ArrowRight className="h-4 w-4" strokeWidth={2} />
-                </Link>
+
               </div>
             )}
           </motion.div>

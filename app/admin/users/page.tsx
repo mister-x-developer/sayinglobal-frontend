@@ -193,10 +193,10 @@ export default function AdminUsersPage() {
               <EmptyState icon={Users} title={t('common.empty')} description={t('errors.notFoundDescription')} />
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
+            <div className="overflow-x-auto rounded-xl border border-border bg-bg-elevated shadow-sm">
+              <table className="admin-table">
                 <thead>
-                  <tr className="border-b border-border bg-bg-subtle">
+                  <tr>
                     {[
                       t('admin.users'),
                       t('admin.pending'),
@@ -205,67 +205,60 @@ export default function AdminUsersPage() {
                       t('profile.joinedDate'),
                       '',
                     ].map((h, i) => (
-                      <th key={i} className={`px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-fg-subtle ${i === 5 ? 'text-right' : ''}`}>
+                      <th key={i} className={i === 5 ? 'text-right' : ''}>
                         {h}
                       </th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border">
+                <tbody>
                   {filtered.map((user, i) => (
-                    <motion.tr
-                      key={user.public_id}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.3, delay: Math.min(i, 10) * 0.03 }}
-                      className="group transition-colors hover:bg-bg-subtle"
-                    >
-                      <td className="px-5 py-4">
+                    <tr key={user.public_id} className="group transition-colors">
+                      <td>
                         <div className="flex items-center gap-3">
                           <Avatar src={null} name={user.full_name} size="sm" />
                           <div>
-                            <p className="text-sm font-semibold text-fg">{user.full_name}</p>
-                            <p className="text-xs text-fg-subtle">{user.phone ?? '—'}</p>
+                            <p className="cell-title">{user.full_name}</p>
+                            <p className="cell-subtle">{user.phone ?? '—'}</p>
                           </div>
                         </div>
                       </td>
-                      <td className="px-5 py-4">
+                      <td>
                         <Badge variant={STATUS_BADGE[user.status]} size="sm">
                           {t(`userStatus.${user.status}` as any)}
                         </Badge>
                       </td>
-                      <td className="px-5 py-4">
+                      <td>
                         <RatingDisplay score={user.trust_score} count={user.rating_count} size="sm" />
                       </td>
-                      <td className="px-5 py-4">
-                        <p className="text-sm text-fg">{user.active_listings_count}</p>
-                        <p className="text-xs text-fg-subtle">{user.sold_listings_count} {t('listings.sold').toLowerCase()}</p>
+                      <td>
+                        <p className="cell-title">{user.active_listings_count}</p>
+                        <p className="cell-subtle">{user.sold_listings_count} {t('listings.sold').toLowerCase()}</p>
                       </td>
-                      <td className="px-5 py-4">
-                        <p className="text-sm text-fg">{formatDate(user.date_joined, 'short')}</p>
+                      <td>
+                        <p className="cell-title">{formatDate(user.date_joined, 'short')}</p>
                         {user.last_login && (
-                          <p className="text-xs text-fg-subtle">{formatRelativeTime(user.last_login)}</p>
+                          <p className="cell-subtle">{formatRelativeTime(user.last_login)}</p>
                         )}
                       </td>
-                      <td className="px-5 py-4 text-right">
-                        <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100">
+                      <td className="text-right">
+                        <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button
                             type="button"
                             onClick={() => setSelectedUser(user)}
-                            className="btn btn-secondary btn-sm"
+                            className="btn btn-secondary btn-sm h-8 px-2.5"
                           >
-                            <Eye className="h-4 w-4" strokeWidth={1.75} />
-                            {t('admin.viewDetails')}
+                            <Eye className="h-3.5 w-3.5" strokeWidth={2} />
                           </button>
                           <Link
                             href={`/admin/users/${user.public_id}`}
-                            className="btn btn-primary btn-sm"
+                            className="btn btn-primary btn-sm h-8 px-2.5"
                           >
                             {t('common.details' as any) ?? 'Details'}
                           </Link>
                         </div>
                       </td>
-                    </motion.tr>
+                    </tr>
                   ))}
                 </tbody>
               </table>

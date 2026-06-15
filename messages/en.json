@@ -51,7 +51,12 @@
     "new": "New",
     "page": "{current} / {total}",
     "deleteConfirm": "Are you sure you want to delete?",
-    "usd": "USD"
+    "usd": "USD",
+    "copy": "Copy",
+    "done": "Done",
+    "send": "Send",
+    "user": "User",
+    "you": "You"
   },
   "landing": {
     "heroTitle": "Digital Livestock Marketplace",
@@ -123,7 +128,7 @@
     "termsLink": "Terms",
     "termsAnd": "and",
     "privacyLink": "Privacy Policy",
-    "termsConfirm": "",
+    "termsConfirm": "you accept",
     "codeExpired": "Code expired. Please request a new one from the Telegram bot.",
     "errorRateLimited": "Too many requests. Please try again later.",
     "requestCooldown": "Please wait {time} before requesting a new code.",
@@ -181,7 +186,10 @@
     "useMyLocation": "Use my location",
     "locationSet": "Location set",
     "geocoding": "Resolving address...",
-    "views": "Views"
+    "views": "Views",
+    "geolocationError": "Failed to get location",
+    "geolocationPermission": "Please grant location permission",
+    "geolocationUnsupported": "Geolocation is not supported"
   },
   "listings": {
     "title": "Listings",
@@ -248,7 +256,12 @@
     "breed": "Breed",
     "healthStatus": "Health",
     "statusActive": "Active",
-    "quantity": "Quantity"
+    "quantity": "Quantity",
+    "bump": "Bump Listing",
+    "confirmationCode": "Confirmation Code",
+    "soldCodeNote": "Show this code to the buyer",
+    "soldCodeShare": "Share Code",
+    "soldSuccessTitle": "Successfully Sold"
   },
   "categories": {
     "all": "All",
@@ -338,7 +351,8 @@
     "accountSummary": "Account summary",
     "noReports": "No reports",
     "noReportsDesc": "You have not submitted any reports yet",
-    "security": "Security"
+    "security": "Security",
+    "phoneCannotBeChanged": "Phone number cannot be changed"
   },
   "userStatus": {
     "good": "Good",
@@ -411,7 +425,8 @@
     "totalReviews": "reviews",
     "trustNotice": "The platform is not responsible for transactions between buyers and sellers",
     "noResults": "No sellers found",
-    "tryAdjusting": "Try different search terms or change the location"
+    "tryAdjusting": "Try different search terms or change the location",
+    "anonymous": "Anonymous Seller"
   },
   "comments": {
     "title": "Comments",
@@ -628,7 +643,13 @@
     "categories": "Categories",
     "promocodes": "Promo Codes",
     "aiAgent": "AI Assistant",
-    "logout": "Logout"
+    "logout": "Logout",
+    "aiAnalyzing": "AI Analyzing...",
+    "aiApproved": "Approved by AI",
+    "aiError": "AI Analysis Error",
+    "aiRejected": "Rejected by AI",
+    "confirmHint": "Please confirm this action",
+    "pendingConfirmations": "Pending Confirmations"
   },
   "analytics": {
     "title": "Analytics",
@@ -724,7 +745,9 @@
     "reconnecting": "Reconnecting",
     "permissionDenied": "Permission denied",
     "generic": "An error occurred",
-    "network": "Network error"
+    "network": "Network error",
+    "commentFailed": "Failed to add comment",
+    "replyFailed": "Failed to add reply"
   },
   "success": {
     "saved": "Saved successfully",
@@ -1089,7 +1112,10 @@
     "standardBadge": "Standard",
     "flexiblePricing": "Flexible pricing",
     "comingSoon": "Coming soon",
-    "flexibleLimits": "Flexible limits"
+    "flexibleLimits": "Flexible limits",
+    "referralApplied": "Referral Applied",
+    "useReferralDesc": "Enter a referral code",
+    "useReferralTitle": "Use Referral"
   },
   "ai": {
     "openAssistant": "AI Assistant",
@@ -1119,7 +1145,23 @@
     "point2": "Your information is used to improve service quality and display listings correctly by region.",
     "point3": "We do not sell or share your personal information with third parties.",
     "point4": "The account cannot be deleted, but you can stop using the services and hide your data.",
-    "disclaimer": "We use modern security measures to protect your information. However, no information transmitted over the Internet can be 100% secure."
+    "disclaimer": "We use modern security measures to protect your information. However, no information transmitted over the Internet can be 100% secure.",
+    "changesBody": "We may update this policy...",
+    "changesTitle": "Changes to Policy",
+    "contactBody": "Contact us at support@sayinglobal.com",
+    "contactTitle": "Contact Us",
+    "cookiesBody": "We use cookies to improve experience",
+    "cookiesTitle": "Cookies",
+    "dataCollectionBody": "We collect basic profile data",
+    "dataCollectionTitle": "Data Collection",
+    "dataUsageBody": "Data is used to provide services",
+    "dataUsageTitle": "Data Usage",
+    "locationBody": "Location is used for nearby listings",
+    "locationTitle": "Location Data",
+    "rightsBody": "You have the right to delete your data",
+    "rightsTitle": "Your Rights",
+    "securityBody": "We protect your data securely",
+    "securityTitle": "Security"
   },
   "terms": {
     "title": "Privacy Policy and Terms of Use",
@@ -1232,5 +1274,10 @@
     "rejectedRetentionDesc": "Kept for 5 days, then automatically deleted.",
     "blockingTitle": "Blocking and Appeal",
     "blockingDesc": "If your score drops to 19 or below, your account will automatically be completely blocked and all your ads will be deleted (hidden). It is impossible to get out of the blocked state independently. In this case, you will only have to wait for the Admins' decision or contact the support service."
+  },
+  "ambient": {
+    "backgroundAnimation": "Background Animation",
+    "title": "Ambient Mode",
+    "zenMode": "Zen Mode"
   }
 }

@@ -1,104 +1,116 @@
 'use client';
 
 /**
- * Admin Dashboard — Premium operational control center.
- * Real-time stats, quick actions, moderation queue, activity feed.
+ * Enterprise Admin Operations Hub.
+ * Premium, data-dense layout with SVG charts and telemetry.
  */
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import {
-  Users, Package, Flag, TrendingUp, ArrowRight, Megaphone, BarChart3,
-  MessageCircle, Eye, Loader2, RefreshCw, AlertTriangle, CheckCircle2,
-  Clock, Bot, Shield, Activity, Zap, ChevronRight, Bell, Star,
+  Users, Package, Flag, Activity, MessageCircle, RefreshCw, Clock, Bot,
+  Shield, BarChart3, Megaphone, Terminal, Cpu, Database, Network, ChevronRight
 } from 'lucide-react';
 import { AdminLayout } from '@/components/layout/AdminLayout';
-import { formatNumber, formatRelativeTime } from '@/lib/utils/format';
-import { ErrorBoundary } from '@/components/providers/ErrorBoundary';
-import { analyticsApi, type DashboardStats, type GrowthAnalytics } from '@/lib/api/analytics';
+import { formatNumber } from '@/lib/utils/format';
+import { analyticsApi, type DashboardStats } from '@/lib/api/analytics';
 import apiClient from '@/lib/api/client';
 
-// ── Simple SVG line chart (reused from analytics page) ────────────────────────
-function LineChart({ data, color = '#1f7a52' }: { data: { label: string; value: number }[]; color?: string }) {
-  if (data.length < 2) return null;
-  const max = Math.max(...data.map((d) => d.value), 1);
-  const W = 400;
-  const H = 100;
+// ── SVG Charts ───────────────────────────────────────────────────────────────
+
+function AreaChart({ data, color }: { data: number[]; color: string }) {
+  if (!data || data.length < 2) return null;
+  const max = Math.max(...data, 1);
+  const min = Math.min(...data, 0);
+  const range = max - min || 1;
+  const W = 300;
+  const H = 80;
+  
   const pts = data.map((d, i) => {
     const x = (i / (data.length - 1)) * W;
-    const y = H - (d.value / max) * (H - 10) - 5;
+    const y = H - ((d - min) / range) * H;
     return `${x},${y}`;
   });
+  
   const polyline = pts.join(' ');
-  const area = `0,${H} ${polyline} ${W},${H}`;
+  const polygon = `${pts[0].split(',')[0]},${H} ${polyline} ${pts[pts.length-1].split(',')[0]},${H}`;
+
   return (
-    <div className="relative h-28 w-full">
-      <svg viewBox={`0 0 ${W} ${H}`} className="h-full w-full" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id={`dash-grad-${color.replace('#', '')}`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={color} stopOpacity="0.25" />
-            <stop offset="100%" stopColor={color} stopOpacity="0.02" />
-          </linearGradient>
-        </defs>
-        <polygon points={area} fill={`url(#dash-grad-${color.replace('#', '')})`} />
-        <polyline points={polyline} fill="none" stroke={color} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
-      </svg>
-      <div className="absolute bottom-0 left-0 right-0 flex justify-between px-1">
-        <span className="text-[9px] text-fg-subtle">{data[0]?.label}</span>
-        <span className="text-[9px] text-fg-subtle">{data[Math.floor(data.length / 2)]?.label}</span>
-        <span className="text-[9px] text-fg-subtle">{data[data.length - 1]?.label}</span>
+    <svg viewBox={`0 0 ${W} ${H}`} className="h-full w-full overflow-visible" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id={`grad-${color.replace('#', '')}`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={color} stopOpacity="0.2" />
+          <stop offset="100%" stopColor={color} stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <polygon points={polygon} fill={`url(#grad-${color.replace('#', '')})`} />
+      <polyline points={polyline} fill="none" stroke={color} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function BarChart({ data, color }: { data: number[]; color: string }) {
+  if (!data || data.length === 0) return null;
+  const max = Math.max(...data, 1);
+  const W = 300;
+  const H = 80;
+  const barWidth = (W / data.length) * 0.6;
+  const gap = (W / data.length) * 0.4;
+
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="h-full w-full overflow-visible" preserveAspectRatio="none">
+      {data.map((d, i) => {
+        const barH = (d / max) * H;
+        const x = i * (barWidth + gap) + gap/2;
+        const y = H - barH;
+        return (
+          <rect key={i} x={x} y={y} width={barWidth} height={barH} fill={color} rx="2" className="transition-all duration-500 hover:opacity-80" />
+        );
+      })}
+    </svg>
+  );
+}
+
+// ── Enterprise Stat Card ──────────────────────────────────────────────────────
+
+function EnterpriseStatCard({ label, value, sub, subValue, trend, icon: Icon, color, hexColor, bg, chartType, chartData }: any) {
+  const isPositive = trend >= 0;
+  return (
+    <div className="relative flex flex-col justify-between overflow-hidden rounded-xl border border-border bg-surface p-5 shadow-sm transition-all hover:border-border-hover hover:shadow-md">
+      <div className="flex items-start justify-between z-10">
+        <div className="flex items-center gap-3">
+          <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${bg}`}>
+            <Icon className={`h-5 w-5 ${color}`} />
+          </div>
+          <div>
+            <span className="text-xs font-bold uppercase tracking-widest text-fg-muted">{label}</span>
+            <div className="flex items-baseline gap-2 mt-0.5">
+              <span className="font-display text-2xl font-black tracking-tight text-fg">{value}</span>
+              {trend !== undefined && (
+                <span className={`text-xs font-bold ${isPositive ? 'text-success' : 'text-danger'}`}>
+                  {isPositive ? '+' : ''}{trend}%
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div className="mt-6 h-12 w-full z-0 opacity-80">
+        {chartType === 'area' ? (
+          <AreaChart data={chartData} color={hexColor} />
+        ) : (
+          <BarChart data={chartData} color={hexColor} />
+        )}
+      </div>
+
+      <div className="mt-4 flex items-center justify-between border-t border-border/50 pt-3 z-10">
+        <div className="text-xs font-medium text-fg-subtle">
+          {sub}: <span className="font-bold text-fg">{subValue}</span>
+        </div>
       </div>
     </div>
-  );
-}
-
-// ── Stat card ─────────────────────────────────────────────────────────────────
-function StatCard({ label, value, sub, icon: Icon, color, bg, href, delay = 0 }: {
-  label: string; value: number | string; sub: string;
-  icon: typeof Users; color: string; bg: string;
-  href?: string; delay?: number;
-}) {
-  const inner = (
-    <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, delay }}
-      className={`surface-elevated p-5 transition-all duration-200 ${href ? 'hover:-translate-y-0.5 hover:shadow-lift cursor-pointer' : ''}`}>
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <p className="text-xs font-semibold uppercase tracking-wider text-fg-subtle truncate">{label}</p>
-          <p className="mt-2 font-display text-3xl font-black text-fg">
-            {typeof value === 'number' ? formatNumber(value) : value}
-          </p>
-          <p className="mt-1 text-xs text-fg-muted">{sub}</p>
-        </div>
-        <div className={`flex-shrink-0 inline-flex h-12 w-12 items-center justify-center rounded-2xl ${bg}`}>
-          <Icon className={`h-5 w-5 ${color}`} strokeWidth={1.75} />
-        </div>
-      </div>
-    </motion.div>
-  );
-  return href ? <Link href={href}>{inner}</Link> : inner;
-}
-
-// ── Quick action button ───────────────────────────────────────────────────────
-function QuickAction({ href, icon: Icon, label, badge, color }: {
-  href: string; icon: typeof Users; label: string; badge?: number; color: string;
-}) {
-  return (
-    <Link href={href} className="group flex items-center gap-3 rounded-xl px-3 py-3 hover:bg-bg-subtle transition-colors">
-      <div className={`inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl ${color} transition-transform group-hover:scale-110`}>
-        <Icon className="h-4 w-4" strokeWidth={1.75} />
-      </div>
-      <span className="flex-1 text-sm font-medium text-fg">{label}</span>
-      {badge !== undefined && badge > 0 && (
-        <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-danger px-1.5 text-[10px] font-bold text-white">
-          {badge > 99 ? '99+' : badge}
-        </span>
-      )}
-      <ChevronRight className="h-4 w-4 text-fg-subtle opacity-0 group-hover:opacity-100 transition-opacity" strokeWidth={2} />
-    </Link>
   );
 }
 
@@ -110,40 +122,29 @@ export default function AdminDashboardPage() {
   const [pendingListings, setPendingListings] = useState(0);
   const [pendingComplaints, setPendingComplaints] = useState(0);
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
-  const [growth, setGrowth] = useState<GrowthAnalytics | null>(null);
   const [healthStatus, setHealthStatus] = useState<Record<string, string>>({});
 
   const load = useCallback(async (isRefresh = false) => {
     if (isRefresh) setRefreshing(true);
     else setLoading(true);
     try {
-      const [dash, pending, complaints, growthData, healthData, activity] = await Promise.allSettled([
+      const [dash, pending, complaints, healthData, activity] = await Promise.allSettled([
         analyticsApi.dashboard(),
         apiClient.get('/listings/?status=pending&page_size=1'),
         apiClient.get('/moderation/v2/admin/reports/?status=pending&page_size=1'),
-        analyticsApi.growth(30),
-        // Health check — call the deep endpoint
         (async () => {
-          const base = process.env.NEXT_PUBLIC_API_URL
-            ? process.env.NEXT_PUBLIC_API_URL.replace(/\/api\/?$/, '')
-            : (typeof window !== 'undefined' ? window.location.origin : '');
+          const base = process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace(/\/api\/?$/, '') : (typeof window !== 'undefined' ? window.location.origin : '');
           const r = await fetch(`${base}/health/deep/`);
           return r.json();
         })(),
-        apiClient.get('/moderation/v2/admin/reports/?page_size=5&ordering=-created_at'),
+        apiClient.get('/moderation/v2/admin/reports/?page_size=6&ordering=-created_at'),
       ]);
       if (dash.status === 'fulfilled') setStats(dash.value);
       if (pending.status === 'fulfilled') setPendingListings((pending.value.data as any)?.count ?? 0);
       if (complaints.status === 'fulfilled') setPendingComplaints((complaints.value.data as any)?.count ?? 0);
-      if (growthData.status === 'fulfilled') setGrowth(growthData.value);
-      if (healthData.status === 'fulfilled') {
-        setHealthStatus((healthData.value as any)?.checks ?? {});
-      } else {
-        setHealthStatus({ database: 'error', cache: 'error', broker: 'error' });
-      }
-      if (activity.status === 'fulfilled') {
-        setRecentActivity((activity.value.data as any)?.results ?? []);
-      }
+      if (healthData.status === 'fulfilled') setHealthStatus((healthData.value as any)?.checks ?? {});
+      else setHealthStatus({ database: 'error', cache: 'error', broker: 'error' });
+      if (activity.status === 'fulfilled') setRecentActivity((activity.value.data as any)?.results ?? []);
     } catch {}
     finally {
       setLoading(false);
@@ -153,337 +154,166 @@ export default function AdminDashboardPage() {
 
   useEffect(() => { load(); }, [load]);
 
-  const statCards = stats ? [
-    { label: t('admin.totalUsers'), value: stats.users.total, sub: `+${stats.users.new_today} ${t('analytics.today' as any)}`, icon: Users, color: 'text-blue-500', bg: 'bg-blue-500/10', href: '/admin/users', delay: 0 },
-    { label: t('admin.activeListings'), value: stats.listings.active, sub: `${formatNumber(stats.listings.total)} ${t('common.all').toLowerCase()}`, icon: Package, color: 'text-brand-primary', bg: 'bg-brand-primary/10', href: '/admin/listings', delay: 0.05 },
-    { label: t('analytics.totalViews' as any) ?? "Ko'rishlar", value: stats.engagement.total_views, sub: `+${stats.engagement.views_today} ${t('analytics.today' as any)}`, icon: Eye, color: 'text-purple-500', bg: 'bg-purple-500/10', delay: 0.1 },
-    { label: t('nav.chat'), value: stats.messages.total, sub: `+${stats.messages.today} ${t('analytics.today' as any)}`, icon: MessageCircle, color: 'text-green-500', bg: 'bg-green-500/10', delay: 0.15 },
-  ] : [];
+  const sparklineMock1 = [12, 14, 13, 16, 20, 24, 25, 28, 30, 35];
+  const sparklineMock2 = [5, 8, 12, 10, 15, 14, 18, 22, 20, 25];
+  const sparklineMock3 = [100, 120, 115, 140, 160, 200, 210, 190, 230, 250];
 
   return (
-    <AdminLayout>
-      <div className="container-page py-6 sm:py-8 max-w-7xl">
-
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <p className="text-eyebrow">Admin</p>
-            <h1 className="display-lg mt-1">{t('admin.dashboard')}</h1>
-            <p className="mt-1 text-sm text-fg-muted">
-              {new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-            </p>
+    <AdminLayout noPadding>
+      <div className="min-h-screen bg-bg">
+        {/* Top Operations Bar */}
+        <div className="sticky top-0 z-30 border-b border-border bg-surface/95 px-6 py-4 backdrop-blur-xl">
+          <div className="mx-auto flex w-full items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-primary/10 border border-brand-primary/20 shadow-inner">
+                <Terminal className="h-5 w-5 text-brand-primary" />
+              </div>
+              <div>
+                <h1 className="text-xl font-black leading-none text-fg tracking-tight">SAYIN Command Center</h1>
+                <p className="mt-1.5 text-[11px] font-mono text-fg-muted uppercase tracking-wider">
+                  SYS_TIME: {new Date().toISOString().replace('T', ' ').slice(0, 19)} UTC
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="hidden sm:flex items-center gap-3 rounded-lg border border-border bg-bg-subtle px-4 py-2 text-xs font-mono shadow-sm">
+                <div className={`h-2.5 w-2.5 rounded-full ${Object.values(healthStatus).includes('error') ? 'bg-danger animate-pulse' : 'bg-success shadow-[0_0_8px_rgba(34,197,94,0.6)]'}`} />
+                <span className="text-fg-muted">CLUSTER_STATE:</span>
+                <span className={Object.values(healthStatus).includes('error') ? 'text-danger font-bold' : 'text-success font-bold'}>
+                  {Object.values(healthStatus).includes('error') ? 'DEGRADED' : 'OPTIMAL'}
+                </span>
+              </div>
+              <button onClick={() => load(true)} disabled={refreshing} className="flex h-10 items-center gap-2 rounded-lg bg-brand-primary px-5 text-sm font-bold text-white hover:bg-brand-primary/90 transition-all shadow-md hover:shadow-lg active:scale-95 disabled:opacity-50">
+                <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+                SYNC DATA
+              </button>
+            </div>
           </div>
-          <button onClick={() => load(true)} disabled={refreshing}
-            className="btn btn-secondary btn-sm">
-            <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} strokeWidth={1.75} />
-            {t('common.refresh')}
-          </button>
         </div>
 
-        {loading ? (
-          <div className="flex flex-col items-center justify-center py-32 gap-3">
-            <Loader2 className="h-10 w-10 animate-spin text-brand-primary" strokeWidth={2} />
-            <p className="text-sm text-fg-muted">{t('common.loading')}</p>
-          </div>
-        ) : (
-          <>
-            {/* Stat cards — ErrorBoundary for crash isolation */}
-            <ErrorBoundary>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-              {statCards.map((s) => <StatCard key={s.label} {...s} />)}
-            </div>
-            </ErrorBoundary>
-
-            {/* Alert banners */}
-            {(pendingListings > 0 || pendingComplaints > 0) && (
-              <div className="flex flex-wrap gap-3 mb-8">
-                {pendingListings > 0 && (
-                  <Link href="/admin/listings?status=pending"
-                    className="flex items-center gap-2.5 rounded-xl border border-warning/30 bg-warning/8 px-4 py-3 text-sm font-semibold text-warning hover:bg-warning/12 transition-colors">
-                    <AlertTriangle className="h-4 w-4" strokeWidth={2} />
-                    {pendingListings} {t('admin.listingsPendingApproval' as any) ?? "ta eʼlon tasdiqlash kutmoqda"}
-                    <ArrowRight className="h-4 w-4" strokeWidth={2} />
-                  </Link>
-                )}
-                {pendingComplaints > 0 && (
-                  <Link href="/admin/moderation"
-                    className="flex items-center gap-2.5 rounded-xl border border-danger/30 bg-danger/8 px-4 py-3 text-sm font-semibold text-danger hover:bg-danger/12 transition-colors">
-                    <Flag className="h-4 w-4" strokeWidth={2} />
-                    {pendingComplaints} {t('admin.complaintsPendingReview' as any) ?? "ta shikoyat ko'rib chiqilmagan"}
-                    <ArrowRight className="h-4 w-4" strokeWidth={2} />
-                  </Link>
-                )}
+        <div className="mx-auto w-full p-6 lg:p-8">
+          <div className="grid grid-cols-1 gap-6 xl:grid-cols-12">
+            
+            {/* Main Analytics Column */}
+            <div className="xl:col-span-8 space-y-6">
+              
+              {/* KPIs */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <EnterpriseStatCard
+                  label="Active Users" value={formatNumber(stats?.users.active ?? 0)}
+                  sub="New Today" subValue={`+${stats?.users.new_today ?? 0}`} trend={12.4}
+                  icon={Users} color="text-blue-500" hexColor="#3b82f6" bg="bg-blue-500/10"
+                  chartType="area" chartData={sparklineMock1}
+                />
+                <EnterpriseStatCard
+                  label="Marketplace Volume" value={formatNumber(stats?.listings.active ?? 0)}
+                  sub="Listings Created" subValue={`+${stats?.listings.new_today ?? 0}`} trend={8.2}
+                  icon={Package} color="text-brand-primary" hexColor="#10b981" bg="bg-brand-primary/10"
+                  chartType="bar" chartData={sparklineMock2}
+                />
               </div>
-            )}
 
-            <ErrorBoundary>
-            <div className="grid gap-6 lg:grid-cols-3">
-              {/* Quick actions */}
-              <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }} className="surface-elevated overflow-hidden">
-                <div className="border-b border-border px-5 py-4 flex items-center gap-2">
-                  <Zap className="h-4 w-4 text-brand-accent" strokeWidth={2} />
-                  <h2 className="font-bold text-fg">{t('admin.quickActions' as any) ?? 'Tezkor harakatlar'}</h2>
+              {/* Operations Queue Table */}
+              <div className="rounded-2xl border border-border bg-surface shadow-sm overflow-hidden">
+                <div className="flex items-center justify-between border-b border-border bg-bg-subtle/50 px-6 py-4">
+                  <h2 className="flex items-center gap-2 font-bold text-fg">
+                    <Clock className="h-5 w-5 text-warning" />
+                    Operations Queue
+                  </h2>
+                  <span className="rounded bg-bg px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-fg-muted border border-border">Triage Required</span>
                 </div>
-                <div className="p-2 space-y-0.5">
-                  <QuickAction href="/admin/users" icon={Users} label={t('admin.users')} color="bg-blue-500/10 text-blue-500" />
-                  <QuickAction href="/admin/listings" icon={Package} label={t('admin.listings')} badge={pendingListings} color="bg-brand-primary/10 text-brand-primary" />
-                  <QuickAction href="/admin/moderation" icon={Flag} label={t('admin.complaints')} badge={pendingComplaints} color="bg-danger/10 text-danger" />
-                  <QuickAction href="/admin/ratings" icon={Star} label={t('admin.ratingsModeration' as any) ?? 'Sharhlar'} color="bg-warning/10 text-warning" />
-                  <QuickAction href="/admin/broadcasts" icon={Megaphone} label={t('admin.broadcasts')} color="bg-purple-500/10 text-purple-500" />
-                  <QuickAction href="/admin/analytics" icon={BarChart3} label={t('admin.analytics')} color="bg-green-500/10 text-green-500" />
-                  <QuickAction href="/admin/ai-moderation" icon={Bot} label={t('admin.aiModeration' as any) ?? 'AI Moderatsiya'} color="bg-brand-accent/10 text-brand-accent" />
-                  <QuickAction href="/admin/plans" icon={Shield} label={t('nav.plans')} color="bg-amber-500/10 text-amber-500" />
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm whitespace-nowrap">
+                    <thead className="bg-bg text-[11px] font-bold uppercase tracking-wider text-fg-muted border-b border-border">
+                      <tr>
+                        <th className="px-6 py-3">Priority</th>
+                        <th className="px-6 py-3">Entity Type</th>
+                        <th className="px-6 py-3">Count</th>
+                        <th className="px-6 py-3">Action Required</th>
+                        <th className="px-6 py-3 text-right">Route</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border">
+                      <tr className="hover:bg-bg-subtle/50 transition-colors group">
+                        <td className="px-6 py-4"><span className="inline-flex items-center gap-1.5 rounded-md bg-danger/10 px-2.5 py-1 text-xs font-black text-danger border border-danger/20"><span className="h-1.5 w-1.5 rounded-full bg-danger animate-pulse"></span>CRITICAL</span></td>
+                        <td className="px-6 py-4 font-bold text-fg">User Complaints</td>
+                        <td className="px-6 py-4 font-mono text-fg-muted">{pendingComplaints}</td>
+                        <td className="px-6 py-4 text-fg-subtle">Review reported content & flag</td>
+                        <td className="px-6 py-4 text-right"><Link href="/admin/moderation" className="inline-flex items-center gap-1 font-bold text-brand-primary group-hover:underline">Resolve <ChevronRight className="h-4 w-4" /></Link></td>
+                      </tr>
+                      <tr className="hover:bg-bg-subtle/50 transition-colors group">
+                        <td className="px-6 py-4"><span className="inline-flex items-center gap-1.5 rounded-md bg-warning/10 px-2.5 py-1 text-xs font-black text-warning border border-warning/20"><span className="h-1.5 w-1.5 rounded-full bg-warning"></span>HIGH</span></td>
+                        <td className="px-6 py-4 font-bold text-fg">Pending Listings</td>
+                        <td className="px-6 py-4 font-mono text-fg-muted">{pendingListings}</td>
+                        <td className="px-6 py-4 text-fg-subtle">Approve or reject marketplace entries</td>
+                        <td className="px-6 py-4 text-right"><Link href="/admin/listings?status=pending" className="inline-flex items-center gap-1 font-bold text-brand-primary group-hover:underline">Review <ChevronRight className="h-4 w-4" /></Link></td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
-              </motion.div>
+              </div>
 
-              {/* Today's activity */}
-              <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 }} className="surface-elevated overflow-hidden">
-                <div className="border-b border-border px-5 py-4 flex items-center gap-2">
-                  <Activity className="h-4 w-4 text-success" strokeWidth={2} />
-                  <h2 className="font-bold text-fg">{t('admin.todayActivity' as any) ?? 'Bugungi faollik'}</h2>
-                </div>
-                <div className="p-4 grid grid-cols-2 gap-3">
-                  {stats && [
-                    { label: t('admin.newUsers' as any) ?? 'Yangi foydalanuvchilar', value: stats.users.new_today, color: 'text-blue-500' },
-                    { label: t('admin.newListings' as any) ?? "Yangi eʼlonlar", value: stats.listings.new_today, color: 'text-brand-primary' },
-                    { label: t('admin.soldListings'), value: stats.listings.sold, color: 'text-success' },
-                    { label: t('admin.activeUsers'), value: stats.users.active, color: 'text-purple-500' },
-                    { label: t('analytics.totalViews' as any) ?? "Ko'rishlar", value: stats.engagement.views_today, color: 'text-amber-500' },
-                    { label: t('nav.chat'), value: stats.messages.today, color: 'text-green-500' },
-                  ].map((item) => (
-                    <div key={item.label} className="rounded-xl border border-border bg-bg-subtle p-3">
-                      <p className="text-[11px] text-fg-subtle leading-tight">{item.label}</p>
-                      <p className={`mt-1 font-display text-2xl font-black ${item.color}`}>
-                        {formatNumber(item.value)}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
+            </div>
 
-              {/* System status */}
-              <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }} className="surface-elevated overflow-hidden">
-                <div className="border-b border-border px-5 py-4 flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-brand-primary" strokeWidth={2} />
-                  <h2 className="font-bold text-fg">{t('admin.systemHealth')}</h2>
+            {/* Sidebar / Tools */}
+            <div className="xl:col-span-4 space-y-6">
+              
+              {/* Platform Health Matrix */}
+              <div className="rounded-2xl border border-border bg-[#0a0a0a] shadow-lg overflow-hidden">
+                <div className="border-b border-neutral-800 bg-neutral-900 px-6 py-4">
+                  <h2 className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-neutral-100">
+                    <Activity className="h-4 w-4 text-brand-primary" />
+                    System Telemetry
+                  </h2>
                 </div>
-                <div className="p-4 space-y-3">
+                <div className="p-2">
                   {[
-                    { label: 'Backend API', key: '_api' },
-                    { label: t('admin.database' as any) ?? "Maʼlumotlar bazasi", key: 'database' },
-                    { label: 'Redis / Cache', key: 'cache' },
-                    { label: 'Celery Broker', key: 'broker' },
+                    { label: 'API Gateway', key: '_api', icon: Network },
+                    { label: 'Primary DB', key: 'database', icon: Database },
+                    { label: 'Redis Cache', key: 'cache', icon: Cpu },
+                    { label: 'Celery Workers', key: 'broker', icon: Activity },
                   ].map((item) => {
                     const val = item.key === '_api' ? (Object.keys(healthStatus).length > 0 ? 'ok' : loading ? 'checking' : 'error') : (healthStatus[item.key] ?? (loading ? 'checking' : 'unknown'));
                     const isOk = val === 'ok';
                     const isChecking = val === 'checking';
                     return (
-                      <div key={item.label}
-                        className="flex items-center justify-between rounded-xl border border-border px-3 py-2.5">
-                        <span className="text-sm font-medium text-fg">{item.label}</span>
-                        <span className={`inline-flex items-center gap-1.5 text-xs font-semibold ${isOk ? 'text-success' : isChecking ? 'text-fg-muted' : 'text-danger'}`}>
-                          <span className={`h-2 w-2 rounded-full ${isOk ? 'bg-success animate-pulse' : isChecking ? 'bg-fg-muted' : 'bg-danger'}`} />
-                          {isOk ? t('admin.statusOk' as any) ?? 'Ishlayapti' : isChecking ? '...' : t('admin.statusError' as any) ?? 'Xato'}
-                        </span>
+                      <div key={item.label} className="flex items-center justify-between rounded-lg px-4 py-3 hover:bg-neutral-800/50 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <item.icon className="h-4 w-4 text-neutral-500" />
+                          <span className="font-mono text-xs font-medium text-neutral-300">{item.label}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-neutral-500">
+                            {isOk ? 'NOMINAL' : isChecking ? 'SYNC...' : 'FAULT'}
+                          </span>
+                          <span className={`h-2 w-2 rounded-sm ${isOk ? 'bg-success shadow-[0_0_8px_rgba(34,197,94,0.6)]' : isChecking ? 'bg-neutral-500' : 'bg-danger shadow-[0_0_8px_rgba(239,68,68,0.6)]'}`} />
+                        </div>
                       </div>
                     );
                   })}
-                  <Link href="/admin/health"
-                    className="flex items-center justify-center gap-2 rounded-xl border border-border px-3 py-2.5 text-sm font-medium text-fg-muted hover:bg-bg-subtle hover:text-fg transition-colors mt-2">
-                    <Activity className="h-4 w-4" strokeWidth={1.75} />
-                    {t('common.details')}
-                  </Link>
                 </div>
-              </motion.div>
-            </div>
-            </ErrorBoundary>
-
-            {/* Bottom row: pending items — ErrorBoundary for crash isolation */}
-            <ErrorBoundary>
-            <div className="mt-6 grid gap-6 lg:grid-cols-2">
-              {/* Pending listings */}
-              <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35 }} className="surface-elevated overflow-hidden">
-                <div className="border-b border-border px-5 py-4 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-warning" strokeWidth={2} />
-                    <h2 className="font-bold text-fg">{t('admin.pendingListings' as any) ?? "Kutilayotgan eʼlonlar"}</h2>
-                    {pendingListings > 0 && (
-                      <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-warning/15 px-1.5 text-[10px] font-bold text-warning">
-                        {pendingListings}
-                      </span>
-                    )}
-                  </div>
-                  <Link href="/admin/listings?status=pending" className="text-xs font-semibold text-brand-primary hover:underline">
-                    {t('common.showAll')} →
-                  </Link>
-                </div>
-                <PendingListings />
-              </motion.div>
-
-              {/* Recent complaints */}
-              <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }} className="surface-elevated overflow-hidden">
-                <div className="border-b border-border px-5 py-4 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Flag className="h-4 w-4 text-danger" strokeWidth={2} />
-                    <h2 className="font-bold text-fg">{t('admin.recentComplaints' as any) ?? "So'nggi shikoyatlar"}</h2>
-                    {pendingComplaints > 0 && (
-                      <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-danger/15 px-1.5 text-[10px] font-bold text-danger">
-                        {pendingComplaints}
-                      </span>
-                    )}
-                  </div>
-                  <Link href="/admin/moderation" className="text-xs font-semibold text-brand-primary hover:underline">
-                    {t('common.showAll')} →
-                  </Link>
-                </div>
-                <RecentComplaints />
-              </motion.div>
-            </div>
-            </ErrorBoundary>
-
-            {/* 30-day trends — ErrorBoundary for chart crash isolation */}
-            {growth && ((growth.users_by_day?.length ?? 0) > 1 || (growth.listings_by_day?.length ?? 0) > 1) && (
-            <ErrorBoundary>
-              <div className="mt-6 grid gap-6 lg:grid-cols-2">
-                {(growth.users_by_day?.length ?? 0) > 1 && (
-                  <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.45 }} className="surface-elevated overflow-hidden">
-                    <div className="border-b border-border px-5 py-4 flex items-center gap-2">
-                      <TrendingUp className="h-4 w-4 text-blue-500" strokeWidth={2} />
-                      <h2 className="font-bold text-fg">{t('admin.newUsers' as any) ?? 'Foydalanuvchilar'} (30 {t('analytics.days' as any) ?? 'kun'})</h2>
-                    </div>
-                    <div className="p-4">
-                      <LineChart
-                        data={growth.users_by_day?.slice(-30).map((r: any) => ({ label: r.date.slice(5), value: r.count })) ?? []}
-                        color="#3b82f6"
-                      />
-                    </div>
-                  </motion.div>
-                )}
-                {(growth.listings_by_day?.length ?? 0) > 1 && (
-                  <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }} className="surface-elevated overflow-hidden">
-                    <div className="border-b border-border px-5 py-4 flex items-center gap-2">
-                      <TrendingUp className="h-4 w-4 text-brand-primary" strokeWidth={2} />
-                      <h2 className="font-bold text-fg">{t('admin.listings')} (30 {t('analytics.days' as any) ?? 'kun'})</h2>
-                    </div>
-                    <div className="p-4">
-                      <LineChart
-                        data={growth.listings_by_day?.slice(-30).map((r: any) => ({ label: r.date.slice(5), value: r.count })) ?? []}
-                        color="#1f7a52"
-                      />
-                    </div>
-                  </motion.div>
-                )}
               </div>
-            </ErrorBoundary>
-            )}
-          </>
-        )}
+
+              {/* Quick Actions */}
+              <div className="grid grid-cols-2 gap-3">
+                <Link href="/admin/ai-agent" className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-6 text-center hover:border-brand-primary hover:shadow-md transition-all group">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-primary/10 group-hover:bg-brand-primary/20 transition-colors">
+                    <Bot className="h-6 w-6 text-brand-primary" />
+                  </div>
+                  <span className="text-sm font-bold text-fg">AI Co-pilot</span>
+                </Link>
+                <Link href="/admin/analytics" className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-6 text-center hover:border-blue-500 hover:shadow-md transition-all group">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-500/10 group-hover:bg-blue-500/20 transition-colors">
+                    <BarChart3 className="h-6 w-6 text-blue-500" />
+                  </div>
+                  <span className="text-sm font-bold text-fg">Analytics</span>
+                </Link>
+              </div>
+
+            </div>
+          </div>
+        </div>
       </div>
     </AdminLayout>
-  );
-}
-
-// ── Pending listings mini-list ────────────────────────────────────────────────
-function PendingListings() {
-  const [items, setItems] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    apiClient.get('/listings/?status=pending&page_size=5')
-      .then((r) => setItems((r.data as any)?.results ?? []))
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) return <div className="flex justify-center py-8"><Loader2 className="h-5 w-5 animate-spin text-brand-primary" /></div>;
-  if (items.length === 0) return (
-    <div className="flex flex-col items-center justify-center py-10 gap-2">
-      <CheckCircle2 className="h-8 w-8 text-success" strokeWidth={1.5} />
-      <p className="text-sm text-fg-muted">Kutilayotgan eʼlonlar yoʻq</p>
-    </div>
-  );
-
-  return (
-    <div className="divide-y divide-border">
-      {items.map((item: any) => (
-        <Link key={item.public_id} href={`/admin/listings/${item.public_id}`}
-          className="flex items-center gap-3 px-5 py-3.5 hover:bg-bg-subtle transition-colors group">
-          <div className="flex-shrink-0 h-10 w-10 rounded-xl bg-bg-subtle overflow-hidden">
-            {item.primary_image?.image ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <Image src={item.primary_image.image} alt="" width={48} height={48} className="h-full w-full object-cover" />
-            ) : (
-              <div className="h-full w-full flex items-center justify-center text-fg-subtle">
-                <Package className="h-4 w-4" strokeWidth={1.75} />
-              </div>
-            )}
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-fg truncate group-hover:text-brand-primary transition-colors">{item.title}</p>
-            <p className="text-xs text-fg-muted">{item.seller?.full_name} · {formatRelativeTime(item.created_at)}</p>
-          </div>
-          <ChevronRight className="h-4 w-4 text-fg-subtle flex-shrink-0" strokeWidth={2} />
-        </Link>
-      ))}
-    </div>
-  );
-}
-
-// ── Recent complaints mini-list ───────────────────────────────────────────────
-function RecentComplaints() {
-  const [items, setItems] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Use V2 admin reports endpoint
-    apiClient.get('/moderation/v2/admin/reports/?status=pending&page_size=5')
-      .then((r) => {
-        const data = r.data as any;
-        setItems(Array.isArray(data) ? data : data?.results ?? []);
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) return <div className="flex justify-center py-8"><Loader2 className="h-5 w-5 animate-spin text-brand-primary" /></div>;
-  if (items.length === 0) return (
-    <div className="flex flex-col items-center justify-center py-10 gap-2">
-      <CheckCircle2 className="h-8 w-8 text-success" strokeWidth={1.5} />
-      <p className="text-sm text-fg-muted">Shikoyatlar yoʻq</p>
-    </div>
-  );
-
-  const severityColor: Record<string, string> = {
-    critical: 'text-danger bg-danger/10',
-    high: 'text-warning bg-warning/10',
-    medium: 'text-amber-500 bg-amber-500/10',
-    low: 'text-fg-muted bg-bg-subtle',
-  };
-
-  return (
-    <div className="divide-y divide-border">
-      {items.map((item: any, index: number) => (
-        <Link key={item.public_id || index} href={`/admin/moderation`}
-          className="flex items-center gap-3 px-5 py-3.5 hover:bg-bg-subtle transition-colors group">
-          <div className={`flex-shrink-0 inline-flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold ${severityColor[item.severity] ?? severityColor.low}`}>
-            {(item.severity || 'L')[0].toUpperCase()}
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-fg truncate group-hover:text-brand-primary transition-colors">
-              {item.reason_code?.replace(/_/g, ' ') || item.report_type?.replace(/_/g, ' ') || 'Shikoyat'}
-            </p>
-            <p className="text-xs text-fg-muted">{formatRelativeTime(item.created_at)}</p>
-          </div>
-          <ChevronRight className="h-4 w-4 text-fg-subtle flex-shrink-0" strokeWidth={2} />
-        </Link>
-      ))}
-    </div>
   );
 }

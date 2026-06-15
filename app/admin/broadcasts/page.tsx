@@ -220,10 +220,10 @@ export default function AdminBroadcastsPage() {
               <p className="mt-3 text-sm">{t('empty.noActivity')}</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
+            <div className="overflow-x-auto rounded-xl border border-border bg-bg-elevated shadow-sm">
+              <table className="admin-table">
                 <thead>
-                  <tr className="border-b border-border bg-bg-subtle">
+                  <tr>
                     {[
                       t('admin.broadcastTitle' as any) ?? 'Title',
                       t('admin.status' as any) ?? 'Status',
@@ -232,33 +232,27 @@ export default function AdminBroadcastsPage() {
                       t('admin.created' as any) ?? 'Created',
                       '',
                     ].map((h, i) => (
-                      <th key={i} className={`px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-fg-subtle ${i === 5 ? 'text-right' : ''}`}>
+                      <th key={i} className={i === 5 ? 'text-right' : ''}>
                         {h}
                       </th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border">
+                <tbody>
                   {list.map((b, i) => (
-                    <motion.tr
-                      key={b.public_id}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.3, delay: i * 0.03 }}
-                      className="group transition-colors hover:bg-bg-subtle"
-                    >
-                      <td className="px-5 py-4">
-                        <Link href={`/admin/broadcasts/${b.public_id}`} className="font-semibold text-fg hover:text-brand-primary transition-colors">
+                    <tr key={b.public_id} className="group transition-colors">
+                      <td>
+                        <Link href={`/admin/broadcasts/${b.public_id}`} className="cell-title hover:text-brand-primary transition-colors">
                           {localizedTitle(b, locale)}
                         </Link>
-                        <p className="text-xs text-fg-subtle">{formatRelativeTime(b.created_at)}</p>
+                        <p className="cell-subtle">{formatRelativeTime(b.created_at)}</p>
                       </td>
-                      <td className="px-5 py-4">
+                      <td>
                         <Badge variant={STATUS_BADGE[b.status] ?? 'default'} size="sm">
                           {b.status}
                         </Badge>
                       </td>
-                      <td className="px-5 py-4">
+                      <td>
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-2 text-sm text-fg">
                             <Users className="h-3.5 w-3.5 text-fg-subtle" strokeWidth={1.75} />
@@ -279,13 +273,13 @@ export default function AdminBroadcastsPage() {
                           )}
                         </div>
                       </td>
-                      <td className="px-5 py-4">
+                      <td>
                         <span className="inline-flex items-center gap-1 text-sm text-fg">
                           <CheckCircle2 className="h-3.5 w-3.5 text-success" strokeWidth={1.75} />
                           {b.read_count}
                         </span>
                       </td>
-                      <td className="px-5 py-4 text-sm text-fg-muted">
+                      <td className="text-sm text-fg-muted">
                         {b.sent_at ? (
                           <span className="inline-flex items-center gap-1">
                             <Send className="h-3 w-3 text-success" />
@@ -298,9 +292,9 @@ export default function AdminBroadcastsPage() {
                           </span>
                         )}
                       </td>
-                      <td className="px-5 py-4 text-right">
-                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100">
-                          <Link href={`/admin/broadcasts/${b.public_id}`} className="btn btn-secondary btn-sm">
+                      <td className="text-right">
+                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Link href={`/admin/broadcasts/${b.public_id}`} className="btn btn-secondary btn-sm h-8">
                             {t('common.view')}
                           </Link>
                           {b.status !== 'sent' && (
@@ -308,7 +302,7 @@ export default function AdminBroadcastsPage() {
                               type="button"
                               onClick={() => sendBroadcast(b)}
                               disabled={sending === b.public_id}
-                              className="btn btn-primary btn-sm"
+                              className="btn btn-primary btn-sm h-8"
                             >
                               {sending === b.public_id ? (
                                 <Loader2 className="h-3.5 w-3.5 animate-spin" strokeWidth={2} />
@@ -320,7 +314,7 @@ export default function AdminBroadcastsPage() {
                           )}
                         </div>
                       </td>
-                    </motion.tr>
+                    </tr>
                   ))}
                 </tbody>
               </table>

@@ -124,7 +124,7 @@ export default function ListingDetailPage() {
       <AppNav />
 
       <main className="flex-1">
-        <div className="container-page pt-6 pb-12 lg:pb-12">
+        <div className="container-page pt-6 pb-nav-safe lg:pb-12">
           {/* Back */}
           <button
             type="button"

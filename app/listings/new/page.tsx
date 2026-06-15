@@ -140,22 +140,6 @@ export default function NewListingPage() {
     e.preventDefault();
     if (!validate()) return;
 
-    // Plan limit check: verify user can create a listing before proceeding
-    try {
-      const { data: myPlan } = await apiClient.get('/plans/my/');
-      if (!myPlan.can_create_listing) {
-        const reason = myPlan.limit_reason;
-        const msg = reason === 'monthly_limit_reached'
-          ? t('validation.monthlyLimitReached')
-          : reason === 'active_limit_reached'
-          ? t('validation.activeLimitReached')
-          : t('validation.cannotCreateListing');
-        toast.error(msg);
-        return;
-      }
-    } catch {
-      // If plan check fails, proceed anyway (don't block the user)
-    }
 
     setSaving(true);
     try {
@@ -239,13 +223,13 @@ export default function NewListingPage() {
             </button>
             <p className="text-eyebrow">{t('listings.title')}</p>
             <h1 className="display-md mt-2">{t('create.title')}</h1>
-
-            <form onSubmit={handleSubmit} className="mt-8 space-y-5" noValidate>
-              {/* Category — backend-driven */}
-              <div className="surface-elevated p-4 sm:p-6">
-                <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
-                  {t('create.stepCategory')}
-                </h2>
+            <form onSubmit={handleSubmit} className="mt-8 space-y-6 sm:space-y-8" noValidate>
+              {/* Category */}
+              <div className="surface-elevated p-6 sm:p-8">
+                <div className="mb-6 flex items-center gap-3">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary/10 text-sm font-bold text-brand-primary">1</span>
+                  <h2 className="text-lg font-bold tracking-tight text-fg">{t('create.stepCategory')}</h2>
+                </div>
                 <CategorySelector
                   value={form.category}
                   onChange={(slug) => set('category', slug)}
@@ -255,13 +239,14 @@ export default function NewListingPage() {
               </div>
 
               {/* Details */}
-              <div className="surface-elevated p-4 sm:p-6">
-                <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
-                  {t('create.stepDetails')}
-                </h2>
-                <div className="space-y-4">
+              <div className="surface-elevated p-6 sm:p-8">
+                <div className="mb-6 flex items-center gap-3">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary/10 text-sm font-bold text-brand-primary">2</span>
+                  <h2 className="text-lg font-bold tracking-tight text-fg">{t('create.stepDetails')}</h2>
+                </div>
+                <div className="space-y-5">
                   <div>
-                    <label className="mb-1.5 block text-sm font-medium text-fg">
+                    <label className="mb-2 block text-[13px] font-semibold uppercase tracking-wider text-fg-subtle">
                       {t('listings.title2')} <span className="text-danger">*</span>
                     </label>
                     <input
@@ -270,11 +255,11 @@ export default function NewListingPage() {
                       placeholder={t('create.titlePlaceholder')}
                       className="input-base w-full"
                     />
-                    {errors.title && <p className="mt-1 text-xs text-danger">{errors.title}</p>}
+                    {errors.title && <p className="mt-1.5 text-xs font-medium text-danger">{errors.title}</p>}
                   </div>
 
                   <div>
-                    <label className="mb-1.5 block text-sm font-medium text-fg">
+                    <label className="mb-2 block text-[13px] font-semibold uppercase tracking-wider text-fg-subtle">
                       {t('listings.description')} <span className="text-danger">*</span>
                     </label>
                     <textarea
@@ -282,9 +267,9 @@ export default function NewListingPage() {
                       onChange={(e) => set('description', e.target.value)}
                       placeholder={t('create.descriptionPlaceholder')}
                       rows={5}
-                      className="input-base w-full resize-none py-3"
+                      className="input-base w-full resize-none py-3 h-auto"
                     />
-                    {errors.description && <p className="mt-1 text-xs text-danger">{errors.description}</p>}
+                    {errors.description && <p className="mt-1.5 text-xs font-medium text-danger">{errors.description}</p>}
                   </div>
 
                   {/* Structured age */}
@@ -390,10 +375,11 @@ export default function NewListingPage() {
               </div>
 
               {/* Photos */}
-              <div className="surface-elevated p-4 sm:p-6">
-                <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
-                  {t('create.stepPhotos')}
-                </h2>
+              <div className="surface-elevated p-6 sm:p-8">
+                <div className="mb-6 flex items-center gap-3">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary/10 text-sm font-bold text-brand-primary">3</span>
+                  <h2 className="text-lg font-bold tracking-tight text-fg">{t('create.stepPhotos')}</h2>
+                </div>
                 {images.length > 0 && (
                   <div className="mb-4 grid grid-cols-3 gap-2 sm:grid-cols-5">
                     {images.map((img) => (
@@ -436,10 +422,11 @@ export default function NewListingPage() {
               </div>
 
               {/* Location — backend-driven dependent selector */}
-              <div className="surface-elevated p-4 sm:p-6">
-                <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
-                  {t('create.stepLocation')}
-                </h2>
+              <div className="surface-elevated p-6 sm:p-8">
+                <div className="mb-6 flex items-center gap-3">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary/10 text-sm font-bold text-brand-primary">4</span>
+                  <h2 className="text-lg font-bold tracking-tight text-fg">{t('create.stepLocation')}</h2>
+                </div>
                 <LocationSelector
                   regionValue={form.region}
                   districtValue={form.district}
@@ -517,10 +504,11 @@ export default function NewListingPage() {
               </div>
 
               {/* Price */}
-              <div className="surface-elevated p-4 sm:p-6">
-                <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
-                  {t('create.stepPrice')}
-                </h2>
+              <div className="surface-elevated p-6 sm:p-8">
+                <div className="mb-6 flex items-center gap-3">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary/10 text-sm font-bold text-brand-primary">5</span>
+                  <h2 className="text-lg font-bold tracking-tight text-fg">{t('create.stepPrice')}</h2>
+                </div>
                 <div className="space-y-4">
                   <div className="flex gap-3">
                     <div className="flex-1">

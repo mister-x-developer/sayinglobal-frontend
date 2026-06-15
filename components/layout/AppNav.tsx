@@ -255,7 +255,6 @@ export function AppNav() {
     { href: '/listings', icon: LayoutGrid, label: t('nav.listings') },
     { href: '/sellers', icon: ShieldCheck, label: t('nav.sellers') },
     { href: '/chat', icon: MessageSquareText, label: t('nav.chat') },
-    { href: '/plans', icon: Tag, label: t('nav.plans') },
   ];
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');

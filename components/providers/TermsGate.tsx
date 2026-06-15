@@ -22,7 +22,7 @@ export function TermsGate() {
   const user = useAuthStore((s) => s.user);
   const updateUser = useAuthStore((s) => s.updateUser);
 
-  const [step, setStep] = useState<'terms' | 'referral' | 'plans'>('terms');
+  const [step, setStep] = useState<'terms' | 'referral'>('terms');
   const [open, setOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -75,12 +75,12 @@ export function TermsGate() {
 
   const submitReferral = async () => {
     const code = referralCode.trim().toUpperCase();
-    if (!code) { setStep('plans'); return; }
+    if (!code) { setOpen(false); return; }
     setReferralLoading(true);
     try {
       const res = await apiClient.post('/plans/referral/use/', { code });
       setReferralMsg({ ok: true, text: res.data?.message ?? "Referral kod qo'llanildi!" });
-      setTimeout(() => setStep('plans'), 1500);
+      setTimeout(() => setOpen(false), 1500);
     } catch (e: any) {
       const err = e?.response?.data?.error ?? 'error';
       const msgs: Record<string, string> = {
@@ -173,7 +173,7 @@ export function TermsGate() {
               )}
             </div>
             <div className="border-t border-border px-6 py-4 flex gap-3">
-              <button type="button" onClick={() => setStep('plans')}
+              <button type="button" onClick={() => setOpen(false)}
                 className="btn btn-secondary flex-1">
                 {t('common.skip' as any) ?? "Oʻtkazib yuborish"}
               </button>
@@ -185,44 +185,7 @@ export function TermsGate() {
           </>
         )}
 
-        {/* STEP 3: Plans */}
-        {step === 'plans' && (
-          <>
-            <div className="border-b border-border px-6 py-5">
-              <div className="flex items-center justify-between">
-                <h2 className="display-sm">{t('nav.plans')}</h2>
-                <button type="button" onClick={() => setOpen(false)}
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-full text-fg-muted hover:bg-bg-subtle">
-                  <X className="h-4 w-4" strokeWidth={2} />
-                </button>
-              </div>
-              <p className="mt-1 text-sm text-fg-muted">{t('referral.plansWelcome' as any) ?? 'Platformaga xush kelibsiz! Tariflarimiz bilan tanishing.'}</p>
-            </div>
-            <div className="px-6 py-6 space-y-3">
-              <div className="rounded-xl bg-success/10 border border-success/20 p-4">
-                <p className="text-sm font-semibold text-success">✓ {t('terms.accepted' as any) ?? 'Shartlarga rozisiz!'}</p>
-                <p className="text-xs text-fg-muted mt-1">{t('referral.freeNote' as any) ?? 'Hozirda barcha tariflar referral tizimi orqali bepul.'}</p>
-              </div>
-              <div className="rounded-xl bg-brand-primary/8 border border-brand-primary/20 p-4">
-                <p className="text-sm font-semibold text-fg">🎁 {t('referral.systemTitle' as any) ?? 'Referral tizimi'}</p>
-                <p className="text-xs text-fg-muted mt-1">{t('referral.systemDesc' as any) ?? "Doʻstlaringizni taklif qiling → ular eʼlon joylashganda siz yuqori tarif olasiz."}</p>
-                <ul className="mt-2 space-y-1 text-xs text-fg-muted">
-                  <li>• {t('referral.tier1' as any) ?? '10 ta referral → Standart tarif'}</li>
-                  <li>• {t('referral.tier2' as any) ?? '25 ta referral → Plus tarif'}</li>
-                </ul>
-              </div>
-            </div>
-            <div className="border-t border-border px-6 py-4 flex gap-3">
-              <button type="button" onClick={() => setOpen(false)} className="btn btn-secondary flex-1">
-                {t('common.later' as any) ?? 'Keyinroq'}
-              </button>
-              <a href="/plans" onClick={() => setOpen(false)} className="btn btn-primary flex-1 justify-center">
-                {t('referral.viewPlans' as any) ?? "Tariflarni ko'rish"}
-                <ArrowRight className="h-4 w-4" strokeWidth={2} />
-              </a>
-            </div>
-          </>
-        )}
+
       </div>
     </div>
   );

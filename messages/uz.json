@@ -51,7 +51,12 @@
     "new": "Yangi",
     "page": "{current} / {total}",
     "deleteConfirm": "Haqiqatan ham oʻchirmoqchimisiz?",
-    "usd": "USD"
+    "usd": "USD",
+    "copy": "Nusxalash",
+    "done": "Tayyor",
+    "send": "Yuborish",
+    "user": "Foydalanuvchi",
+    "you": "Siz"
   },
   "landing": {
     "heroTitle": "Raqamli Chorva Bozori",
@@ -181,7 +186,10 @@
     "useMyLocation": "Mening joyim",
     "locationSet": "Joylashuv belgilandi",
     "geocoding": "Manzil aniqlanmoqda...",
-    "views": "Koʻrishlar"
+    "views": "Koʻrishlar",
+    "geolocationError": "Manzilni aniqlab bo'lmadi",
+    "geolocationPermission": "Iltimos, manzilga ruxsat bering",
+    "geolocationUnsupported": "Geolokatsiya qo'llab-quvvatlanmaydi"
   },
   "listings": {
     "title": "Eʼlonlar",
@@ -248,7 +256,12 @@
     "breed": "Zot",
     "healthStatus": "Sogʻligʻi",
     "statusActive": "Faol",
-    "quantity": "Soni / Miqdori"
+    "quantity": "Soni / Miqdori",
+    "bump": "E'lonni ko'tarish",
+    "confirmationCode": "Tasdiqlash kodi",
+    "soldCodeNote": "Bu kodni xaridorga ko'rsating",
+    "soldCodeShare": "Kodni ulashish",
+    "soldSuccessTitle": "Muvaffaqiyatli sotildi"
   },
   "categories": {
     "all": "Barchasi",
@@ -338,7 +351,8 @@
     "noReports": "Shikoyatlar yoʻq",
     "noReportsDesc": "Siz hali biron shikoyat yubormagansiz",
     "title": "Profil",
-    "security": "Xavfsizlik"
+    "security": "Xavfsizlik",
+    "phoneCannotBeChanged": "Telefon raqamini o'zgartirib bo'lmaydi"
   },
   "userStatus": {
     "good": "Yaxshi",
@@ -411,7 +425,8 @@
     "totalReviews": "sharh",
     "trustNotice": "Platforma buyer-seller oʻrtasidagi bitim uchun javobgar emas",
     "noResults": "Sotuvchilar topilmadi",
-    "tryAdjusting": "Boshqa qidiruv soʻzlarini sinab koʻring yoki joylashuvni oʻzgartiring"
+    "tryAdjusting": "Boshqa qidiruv soʻzlarini sinab koʻring yoki joylashuvni oʻzgartiring",
+    "anonymous": "Anonim sotuvchi"
   },
   "comments": {
     "title": "Izohlar",
@@ -523,7 +538,7 @@
     "publishing": "Eʼlon qilinmoqda...",
     "publishSuccess": "Eʼlon muvaffaqiyatli joylashtirildi",
     "mapPinLabel": "Xarita ustida belgi",
-    "mapPinHelp": "Xaritada belgini qoʻying — nearby va xaritada eʼlon shu joyda koʻrinadi.",
+    "mapPinHelp": "Xaritada belgini qoʻying — eʼloningiz \"Yaqin atrofda\" boʻlimi va xaritada shu joyda koʻrinadi.",
     "stepBasics": "Asosiy maʼlumot"
   },
   "admin": {
@@ -611,7 +626,7 @@
     "accountSummary": "Hisob qisqacha",
     "notesRequiredToResolve": "Hal qilish uchun izoh qoʻshing.",
     "reports": "Hisobotlar",
-    "aiModeration": "AI Moderatsiya",
+    "aiModeration": "Sun'iy intellekt moderatsiyasi",
     "plans": "Ta'riflar",
     "quickActions": "Tezkor harakatlar",
     "todayActivity": "Bugungi faollik",
@@ -628,7 +643,13 @@
     "categories": "Kategoriyalar",
     "promocodes": "Promokodlar",
     "aiAgent": "AI Yordamchi",
-    "logout": "Chiqish"
+    "logout": "Chiqish",
+    "aiAnalyzing": "AI tahlil qilmoqda...",
+    "aiApproved": "AI tomonidan tasdiqlandi",
+    "aiError": "AI tahlil xatosi",
+    "aiRejected": "AI tomonidan rad etildi",
+    "confirmHint": "Iltimos, harakatni tasdiqlang",
+    "pendingConfirmations": "Kutilayotgan tasdiqlar"
   },
   "analytics": {
     "title": "Analitika",
@@ -724,7 +745,9 @@
     "reconnecting": "Qayta ulanmoqda",
     "permissionDenied": "Ruxsat yoʻq",
     "generic": "Xatolik yuz berdi",
-    "network": "Tarmoq xatosi"
+    "network": "Tarmoq xatosi",
+    "commentFailed": "Sharh qo'shib bo'lmadi",
+    "replyFailed": "Javob qo'shib bo'lmadi"
   },
   "success": {
     "saved": "Muvaffaqiyatli saqlandi",
@@ -988,7 +1011,7 @@
     "reason_harassment_in_chat": "Chatda taʼqib",
     "reason_impersonation": "Soxta shaxsiyat",
     "reason_listing_already_sold": "Sotilgan lekin hali sotuvda",
-    "bulkAiCheck": "Barcha yangilarini AI orqali tekshirish",
+    "bulkAiCheck": "Barcha yangilarini sun'iy intellekt orqali tekshirish",
     "loading": "Yuklanmoqda..."
   },
   "referral": {
@@ -1028,7 +1051,7 @@
     "post": "Yuborish",
     "posted": "Sharh yuborildi",
     "cannotRateSelf": "Oʻzingizga sharh qoldira olmaysiz",
-    "reportPrompt": "Sabab: spam / abuse / off_topic / false_info / other",
+    "reportPrompt": "Sabab: spam / haqorat / mavzudan_tashqari / yolg'on_ma'lumot / boshqa",
     "reportSent": "Shikoyat yuborildi",
     "replyPrompt": "Javobingiz",
     "reply": "Javob",
@@ -1089,7 +1112,10 @@
     "standardBadge": "Standart",
     "flexiblePricing": "Moslashuvchan narx, kelishuvga asosan",
     "comingSoon": "Tez kunda",
-    "flexibleLimits": "Moslashuvchan limitlar"
+    "flexibleLimits": "Moslashuvchan limitlar",
+    "referralApplied": "Referal qo'llanildi",
+    "useReferralDesc": "Referal kodni kiriting",
+    "useReferralTitle": "Referaldan foydalanish"
   },
   "ai": {
     "openAssistant": "AI Yordamchi",
@@ -1119,7 +1145,23 @@
     "point2": "Sizning maʼlumotlaringiz xizmat sifatini oshirish va eʼlonlarni hududlarga koʻra toʻgʻri koʻrsatish uchun ishlatiladi.",
     "point3": "Biz sizning shaxsiy maʼlumotlaringizni uchinchi shaxslarga sotmaymiz yoki ulashmaymiz.",
     "point4": "Hisob oʻchirilmaydi, ammo siz xizmatlardan foydalanishni toʻxtatishingiz va oʻz maʼlumotlaringizni yashirishingiz mumkin.",
-    "disclaimer": "Biz maʼlumotlaringizni himoya qilish uchun zamonaviy xavfsizlik choralarini qoʻllaymiz. Biroq, internet orqali uzatiladigan hech qanday maʼlumot 100% xavfsiz boʻla olmaydi."
+    "disclaimer": "Biz maʼlumotlaringizni himoya qilish uchun zamonaviy xavfsizlik choralarini qoʻllaymiz. Biroq, internet orqali uzatiladigan hech qanday maʼlumot 100% xavfsiz boʻla olmaydi.",
+    "changesBody": "Biz ushbu siyosatni yangilashimiz mumkin...",
+    "changesTitle": "Siyosatdagi o'zgarishlar",
+    "contactBody": "Biz bilan bog'laning support@sayinglobal.com",
+    "contactTitle": "Biz bilan aloqa",
+    "cookiesBody": "Biz cookie fayllaridan foydalanamiz",
+    "cookiesTitle": "Cookie fayllari",
+    "dataCollectionBody": "Biz asosiy profil ma'lumotlarini yig'amiz",
+    "dataCollectionTitle": "Ma'lumotlar yig'ish",
+    "dataUsageBody": "Ma'lumotlar xizmat ko'rsatish uchun ishlatiladi",
+    "dataUsageTitle": "Ma'lumotlardan foydalanish",
+    "locationBody": "Manzil yaqindagi e'lonlar uchun ishlatiladi",
+    "locationTitle": "Manzil ma'lumotlari",
+    "rightsBody": "Siz ma'lumotlaringizni o'chirish huquqiga egasiz",
+    "rightsTitle": "Sizning huquqlaringiz",
+    "securityBody": "Biz ma'lumotlaringizni xavfsiz himoya qilamiz",
+    "securityTitle": "Xavfsizlik"
   },
   "terms": {
     "title": "Maxfiylik siyosati va Foydalanish shartlari",
@@ -1128,8 +1170,8 @@
     "point1": "Sotuvga qo'yilgan barcha jonivorlar haqidagi ma'lumotlar (sog'lig'i, narxi, rasmlari) mutlaqo to'g'ri va haqqoniy bo'lishi shart. Yolg'on ma'lumotlar platforma qoidalariga ziddir.",
     "point2": "Foydalanuvchilar bir-biri bilan muloqotda va savdoda hurmat va o'zaro ishonchni saqlashi kerak. Har qanday firibgarlik yoki yolg'on aralashgan savdo qat'iy taqiqlanadi.",
     "point3": "E'lonlar 30 kun ichida yangilanmasa yoki holati o'zgartirilmasa, avtomatik ravishda arxivlanadi. Sotilgan e'lonlar esa 7 kun ichida o'chiriladi.",
-    "point4": "Xaridorlar tomonidan kelib tushgan asosli shikoyatlar (masalan, noto'g'ri ma'lumot berish, narxni ataylab o'zgartirish) e'lonning rad etilishiga va foydalanuvchi Health Score (ishonch balli) ning pasayishiga olib keladi.",
-    "point5": "Agar foydalanuvchining ishonch balli (Health Score) 20 dan pasayib ketsa, uning akkaunti va barcha e'lonlari avtomatik ravishda bloklanadi. Qayta tiklash faqat ma'muriyat orqali amalga oshiriladi.",
+    "point4": "Xaridorlar tomonidan kelib tushgan asosli shikoyatlar (masalan, noto'g'ri ma'lumot berish, narxni ataylab o'zgartirish) e'lonning rad etilishiga va foydalanuvchi ishonch ballining pasayishiga olib keladi.",
+    "point5": "Agar foydalanuvchining ishonch balli 20 dan pasayib ketsa, uning akkaunti va barcha e'lonlari avtomatik ravishda bloklanadi. Qayta tiklash faqat ma'muriyat orqali amalga oshiriladi.",
     "point6": "SAYIN GLOBAL platformasi sotuvchi va xaridor o'rtasida axborot vositachisi vazifasini bajaradi. Jonivorlarning yetkazib berilishi va to'lov jarayonlari tomonlarning shaxsiy mas'uliyatidadir.",
     "point7": "Platformaga kiritilgan barcha shaxsiy ma'lumotlar, aloqa raqamlari va yozishmalar kuchli shifrlangan holda himoyalanadi va uchinchi shaxslarga taqdim etilmaydi (qonunchilikda belgilangan holatlar bundan mustasno).",
     "point8": "SAYIN ma'muriyati ushbu qoidalarga ogohlantirishsiz o'zgartirishlar kiritish huquqini o'zida saqlab qoladi. Asosiy o'zgarishlar e'lonlar doskasida xabar qilinadi.",
@@ -1139,7 +1181,7 @@
   },
   "aiModeration": {
     "center": "Xavfsizlik markazi",
-    "title": "AI Moderatsiya",
+    "title": "Sun'iy intellekt moderatsiyasi",
     "refresh": "Yangilash",
     "legendSafe": "Tasdiqlash = Eʼlon xavfsiz",
     "legendProblem": "Rad etish = Muammo bor",
@@ -1209,18 +1251,18 @@
   },
   "guidePage": {
     "title": "Platforma Yoʻriqnomasi",
-    "healthScoreTitle": "100-ballik Sogʻlomlik Tizimi (Health Score)",
+    "healthScoreTitle": "100-ballik ishonch tizimi",
     "healthScoreDesc": "Platformamizda barcha sotuvchilar 100 ball bilan oʻz faoliyatini boshlaydi. Bu ball sizning platformadagi ishonchliligingiz va qoidalarga qanchalik rioya qilishingizni bildiradi. Ballingizga qarab hisobingiz holati belgilanadi.",
     "pointsDeductionTitle": "Ball ayirilishi (Taqiqlar)",
     "pointsDeductionDesc": "Xaridorlar tomonidan qilingan shikoyatlar moderatorlar tomonidan oʻrganib chiqiladi. Agar shikoyat oʻrinli deb topilsa, uning jiddiyligiga qarab ball ayiriladi:",
-    "lowOffense": "Kichik qoidabuzarlik (Low)",
+    "lowOffense": "Kichik qoidabuzarlik (Past)",
     "mediumOffense": "Oʻrta darajadagi xato (Medium)",
-    "highOffense": "Jiddiy qoidabuzarlik (High)",
-    "criticalOffense": "Oʻta ogʻir holat, Cheating (Critical)",
+    "highOffense": "Jiddiy qoidabuzarlik (Yuqori)",
+    "criticalOffense": "Oʻta ogʻir holat, Qalloblik (Kritik)",
     "pointsRecoveryTitle": "Ball qoʻshilishi (Tiklanish)",
-    "pointsRecoveryDesc": "Yoʻqotilgan ballarni faqat halol savdo qilish orqali qayta tiklash mumkin. Buning uchun tizim Cheatingni oldini oluvchi maxsus mexanizmga ega.",
+    "pointsRecoveryDesc": "Yoʻqotilgan ballarni faqat halol savdo qilish orqali qayta tiklash mumkin. Buning uchun tizim qalloblikning oldini oluvchi maxsus mexanizmga ega.",
     "confirmedSale": "Tasdiqlangan savdo (+5 ball)",
-    "confirmedSaleDesc": "Siz eʼloni \"Sotildi\" deb belgilaganingizda, tizim sizga maxsus yashirin kod (confirmation code) beradi. Bu kodni xaridorga berasiz. Xaridor u kodni tizimga kiritganda, savdo tasdiqlanadi va sizga avtomatik +5 ball qoʻshiladi.",
+    "confirmedSaleDesc": "Siz eʼloni \"Sotildi\" deb belgilaganingizda, tizim sizga maxsus yashirin kod (tasdiqlash kodi) beradi. Bu kodni xaridorga berasiz. Xaridor u kodni tizimga kiritganda, savdo tasdiqlanadi va sizga avtomatik +5 ball qoʻshiladi.",
     "goodRating": "Yaxshi reyting (+2 ball)",
     "goodRatingDesc": "Xaridor xaridni tasdiqlayotgan vaqtda sizga 4 yoki 5 yulduzli aʼlo baho bersa, qoʻshimcha +2 ball (jami +7 ball) yoziladi. (Ballaringiz 100 dan oshmaydi).",
     "retentionTitle": "Eʼlonlarning saqlanish muddati",
@@ -1232,5 +1274,10 @@
     "rejectedRetentionDesc": "5 kun davomida saqlanadi, soʻngra avtomatik oʻchiriladi.",
     "blockingTitle": "Bloklanish va Murojaat",
     "blockingDesc": "Agar sizning ballingiz 19 yoki undan pasayib ketsa, hisobingiz avtomatik tarzda toʻliq bloklanadi va barcha eʼlonlaringiz oʻchiriladi (yashiriladi). Bloklangan holatdan mustaqil ravishda chiqish imkonsiz. Bunday holatda, siz faqat Adminlar qarorini kutishingiz yoki qoʻllab-quvvatlash xizmatiga murojaat qilishingiz kerak boʻladi."
+  },
+  "ambient": {
+    "backgroundAnimation": "Fon animatsiyasi",
+    "title": "Ambient rejimi",
+    "zenMode": "Zen rejimi"
   }
 }

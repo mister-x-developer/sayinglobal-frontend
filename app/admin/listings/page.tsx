@@ -391,11 +391,11 @@ export default function AdminListingsPage() {
               <EmptyState icon={LayoutGrid} title={t('marketplace.noResults')} description={t('marketplace.tryAdjusting')} />
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
+            <div className="overflow-x-auto rounded-xl border border-border bg-bg-elevated shadow-sm">
+              <table className="admin-table">
                 <thead>
-                  <tr className="border-b border-border bg-bg-subtle">
-                    <th className="w-10 px-4 py-3.5">
+                  <tr>
+                    <th className="w-10">
                       <button
                         type="button"
                         onClick={toggleAll}
@@ -419,33 +419,27 @@ export default function AdminListingsPage() {
                     ].map((h, i) => (
                       <th
                         key={i}
-                        className={cn(
-                          'px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-fg-subtle',
-                          i === 5 && 'text-right',
-                        )}
+                        className={i === 5 ? 'text-right' : ''}
                       >
                         {h}
                       </th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border">
+                <tbody>
                   {filtered.map((l, i) => {
                     const isSelected = selected.has(l.public_id);
                     const primaryImg = l.primary_image?.image_url || l.primary_image?.image || l.images?.[0]?.image_url || l.images?.[0]?.image;
                     return (
-                      <motion.tr
+                      <tr
                         key={l.public_id}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.3, delay: Math.min(i, 10) * 0.03 }}
                         className={cn(
-                          'group cursor-pointer transition-colors hover:bg-bg-subtle',
-                          isSelected && 'bg-brand-primary/5',
+                          'group cursor-pointer transition-colors',
+                          isSelected && 'bg-brand-primary/5'
                         )}
                         onClick={() => (window.location.href = `/admin/listings/${l.public_id}`)}
                       >
-                        <td className="w-10 px-4 py-4" onClick={(e) => { e.stopPropagation(); toggleOne(l.public_id); }}>
+                        <td className="w-10" onClick={(e) => { e.stopPropagation(); toggleOne(l.public_id); }}>
                           <button
                             type="button"
                             className="flex items-center justify-center text-fg-subtle hover:text-fg"
@@ -456,7 +450,7 @@ export default function AdminListingsPage() {
                               : <Square className="h-4 w-4" strokeWidth={2} />}
                           </button>
                         </td>
-                        <td className="px-4 py-4">
+                        <td>
                           <div className="flex items-center gap-3">
                             {primaryImg ? (
                               <Image
@@ -472,24 +466,24 @@ export default function AdminListingsPage() {
                               </div>
                             )}
                             <div className="min-w-0">
-                              <p className="text-sm font-semibold text-fg line-clamp-1">{l.title}</p>
-                              <p className="text-xs text-fg-subtle">{formatRelativeTime(l.created_at)}</p>
+                              <p className="cell-title line-clamp-1">{l.title}</p>
+                              <p className="cell-subtle">{formatRelativeTime(l.created_at)}</p>
                             </div>
                           </div>
                         </td>
-                        <td className="px-4 py-4">
-                          <p className="text-sm text-fg">{l.seller.full_name}</p>
+                        <td>
+                          <p className="cell-title">{l.seller.full_name}</p>
                           {l.seller.phone && (
-                            <p className="text-xs text-fg-subtle">{l.seller.phone}</p>
+                            <p className="cell-subtle">{l.seller.phone}</p>
                           )}
                         </td>
-                        <td className="px-4 py-4">
-                          <p className="text-sm font-semibold text-fg">{formatPrice(l.price, l.currency)}</p>
+                        <td>
+                          <p className="cell-title">{formatPrice(l.price, l.currency)}</p>
                         </td>
-                        <td className="px-4 py-4">
-                          <p className="text-sm text-fg-muted">{l.location}</p>
+                        <td>
+                          <p className="cell-subtle">{l.location}</p>
                         </td>
-                        <td className="px-4 py-4">
+                        <td>
                           <Badge
                             variant={STATUS_BADGE[l.status] ?? 'default'}
                             size="sm"
@@ -497,12 +491,12 @@ export default function AdminListingsPage() {
                             {t(`listings.${l.status}` as any, { defaultValue: l.status })}
                           </Badge>
                         </td>
-                        <td className="px-4 py-4 text-right">
-                          <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100">
+                        <td className="text-right">
+                          <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button
                               type="button"
                               onClick={(e) => { e.stopPropagation(); window.location.href = `/admin/listings/${l.public_id}`; }}
-                              className="btn btn-sm btn-secondary"
+                              className="btn btn-sm btn-secondary h-8 px-2.5"
                               aria-label="View listing"
                             >
                               <Eye className="h-3.5 w-3.5" strokeWidth={1.75} />
@@ -527,7 +521,7 @@ export default function AdminListingsPage() {
                                       toast.error(t('admin.aiError') ?? 'AI Error');
                                     }
                                   }}
-                                  className="btn btn-sm bg-brand-accent/12 text-brand-accent hover:bg-brand-accent/20"
+                                  className="btn btn-sm bg-brand-accent/12 text-brand-accent hover:bg-brand-accent/20 h-8 px-2.5"
                                   aria-label="AI Review"
                                 >
                                   <RefreshCw className="h-3.5 w-3.5" strokeWidth={2.25} />
@@ -535,7 +529,7 @@ export default function AdminListingsPage() {
                                 <button
                                   type="button"
                                   onClick={(e) => handleApprove(l.public_id, e)}
-                                  className="btn btn-sm bg-success/12 text-success hover:bg-success/20"
+                                  className="btn btn-sm bg-success/12 text-success hover:bg-success/20 h-8 px-2.5"
                                   aria-label="Approve"
                                 >
                                   <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={2.25} />
@@ -543,7 +537,7 @@ export default function AdminListingsPage() {
                                 <button
                                   type="button"
                                   onClick={(e) => { e.stopPropagation(); setRejectReason(''); setShowRejectModal(l.public_id); }}
-                                  className="btn btn-sm bg-danger/12 text-danger hover:bg-danger/20"
+                                  className="btn btn-sm bg-danger/12 text-danger hover:bg-danger/20 h-8 px-2.5"
                                   aria-label="Reject"
                                 >
                                   <XCircle className="h-3.5 w-3.5" strokeWidth={2.25} />
@@ -552,7 +546,7 @@ export default function AdminListingsPage() {
                             )}
                           </div>
                         </td>
-                      </motion.tr>
+                      </tr>
                     );
                   })}
                 </tbody>

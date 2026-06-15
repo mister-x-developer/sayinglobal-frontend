@@ -70,11 +70,11 @@ export function FloatingNearbyButton() {
     setOverDelete(false);
   };
 
-  // Hide on auth pages, landing, admin, chat detail, or plans
+  // Hide on auth pages, landing, admin, chat detail
   if (
     pathname.startsWith('/auth') ||
+    pathname === '/' ||
     pathname.startsWith('/admin') ||
-    pathname.startsWith('/plans') ||
     /^\/chat\/[^/]+$/.test(pathname)
   ) {
     return null;
@@ -119,7 +119,7 @@ export function FloatingNearbyButton() {
         style={{
           position: 'fixed',
           right: 16 - clampedX,
-          bottom: 156 - clampedY,
+          bottom: `calc(156px + env(safe-area-inset-bottom, 0px) - ${clampedY}px)`,
           zIndex: 40,
           touchAction: 'none',
           cursor: dragging ? 'grabbing' : 'grab',

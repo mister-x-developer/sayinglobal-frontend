@@ -207,7 +207,20 @@ export const listingsApi = {
         name_en?: string;
         listing_count?: number;
       }>>('/listings/categories/');
-      return res.data ?? [];
+      
+      const order = ['cattle', 'sheep', 'goats', 'horses', 'camels', 'poultry'];
+      const data = res.data ?? [];
+      
+      return data.sort((a, b) => {
+        const indexA = order.indexOf(a.slug);
+        const indexB = order.indexOf(b.slug);
+        
+        if (indexA === -1 && indexB === -1) return a.slug.localeCompare(b.slug);
+        if (indexA === -1) return 1;
+        if (indexB === -1) return -1;
+        
+        return indexA - indexB;
+      });
     } catch {
       return [];
     }

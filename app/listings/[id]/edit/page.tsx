@@ -283,7 +283,7 @@ export default function EditListingPage() {
       <AppNav />
 
       <main className="flex-1">
-        <div className="container-page py-8 sm:py-10">
+        <div className="container-page py-8 pb-nav-safe sm:py-10">
           <button type="button" onClick={() => router.back()} className="btn btn-ghost btn-sm -ml-2">
             <ArrowLeft className="h-4 w-4" strokeWidth={2} />
             {t('common.back')}
@@ -311,10 +311,11 @@ export default function EditListingPage() {
 
           <form onSubmit={handleSave} className="mt-6 space-y-6">
             {/* Category */}
-            <div className="surface-elevated p-4 sm:p-6">
-              <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
-                {t('listings.category')}
-              </h2>
+            <div className="surface-elevated p-6 sm:p-8">
+              <div className="mb-6 flex items-center gap-3">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary/10 text-sm font-bold text-brand-primary">1</span>
+                <h2 className="text-lg font-bold tracking-tight text-fg">{t('listings.category')}</h2>
+              </div>
               <CategorySelector
                 value={form.category}
                 onChange={(slug) => update({ category: slug })}
@@ -331,10 +332,11 @@ export default function EditListingPage() {
             </div>
 
             {/* Images */}
-            <div className="surface-elevated p-4 sm:p-6">
-              <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
-                {t('create.stepPhotos')}
-              </h2>
+            <div className="surface-elevated p-6 sm:p-8">
+              <div className="mb-6 flex items-center gap-3">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary/10 text-sm font-bold text-brand-primary">2</span>
+                <h2 className="text-lg font-bold tracking-tight text-fg">{t('create.stepPhotos')}</h2>
+              </div>
 
               {/* Existing images */}
               {existingImages.length > 0 && (
@@ -420,10 +422,11 @@ export default function EditListingPage() {
             </div>
 
             {/* Title + description */}
-            <div className="surface-elevated p-4 sm:p-6">
-              <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
-                {t('create.stepBasics' as any) ?? t('listings.title')}
-              </h2>
+            <div className="surface-elevated p-6 sm:p-8">
+              <div className="mb-6 flex items-center gap-3">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary/10 text-sm font-bold text-brand-primary">3</span>
+                <h2 className="text-lg font-bold tracking-tight text-fg">{t('create.stepBasics' as any) ?? t('listings.title')}</h2>
+              </div>
               <div className="space-y-4">
                 <input
                   type="text"
@@ -445,10 +448,11 @@ export default function EditListingPage() {
             </div>
 
             {/* Specs */}
-            <div className="surface-elevated p-4 sm:p-6">
-              <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
-                {t('listings.specifications')}
-              </h2>
+            <div className="surface-elevated p-6 sm:p-8">
+              <div className="mb-6 flex items-center gap-3">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary/10 text-sm font-bold text-brand-primary">4</span>
+                <h2 className="text-lg font-bold tracking-tight text-fg">{t('listings.specifications')}</h2>
+              </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <input
                   type="number"
@@ -494,10 +498,11 @@ export default function EditListingPage() {
             </div>
 
             {/* Location + map pin */}
-            <div className="surface-elevated p-4 sm:p-6">
-              <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
-                {t('create.stepLocation')}
-              </h2>
+            <div className="surface-elevated p-6 sm:p-8">
+              <div className="mb-6 flex items-center gap-3">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary/10 text-sm font-bold text-brand-primary">5</span>
+                <h2 className="text-lg font-bold tracking-tight text-fg">{t('create.stepLocation')}</h2>
+              </div>
               <LocationSelector
                 regionValue={form.region}
                 districtValue={form.district}
@@ -577,10 +582,11 @@ export default function EditListingPage() {
             </div>
 
             {/* Price */}
-            <div className="surface-elevated p-4 sm:p-6">
-              <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-fg-subtle">
-                {t('create.stepPrice')}
-              </h2>
+            <div className="surface-elevated p-6 sm:p-8">
+              <div className="mb-6 flex items-center gap-3">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary/10 text-sm font-bold text-brand-primary">6</span>
+                <h2 className="text-lg font-bold tracking-tight text-fg">{t('create.stepPrice')}</h2>
+              </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <input
                   type="number"

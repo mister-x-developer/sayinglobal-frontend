@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { X } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore } from '@/lib/store/auth';
+import { BrandLogo } from '@/components/shared/BrandLogo';
 
 const STORAGE_KEY = 'sayin_ai_btn_hidden';
 
@@ -76,11 +77,11 @@ export function AIAssistantButton() {
   // Hide conditions
   if (!mounted) return null;
   if (!isAuthenticated || !user?.terms_accepted_at) return null;
-  if (pathname.startsWith('/chat-ai') || pathname.startsWith('/admin/ai-agent') || pathname.startsWith('/plans')) return null;
+  if (pathname.startsWith('/chat-ai') || pathname.startsWith('/admin/ai-agent')) return null;
   if (hidden) return null;
 
+
   const isAdmin = user?.is_staff || user?.is_admin;
-  const aiLogo = isAdmin ? '/images/admin_ai_logo.png' : '/images/user_ai_logo.png';
 
   // Clamp position
   const clampedX = Math.max(-(windowSize.width - 80), Math.min(pos.x, 0));
@@ -116,7 +117,7 @@ export function AIAssistantButton() {
         style={{
           position: 'fixed',
           right: 16 - clampedX,
-          bottom: 84 - clampedY,
+          bottom: `calc(84px + env(safe-area-inset-bottom, 0px) - ${clampedY}px)`,
           zIndex: 40,
           touchAction: 'none',
           userSelect: 'none',
@@ -140,14 +141,8 @@ export function AIAssistantButton() {
             {overDelete ? (
               <X className="h-6 w-6 text-white" strokeWidth={2.5} />
             ) : (
-              <div className="absolute inset-0.5 rounded-[14px] overflow-hidden bg-brand-primary">
-                <Image
-                  src={aiLogo}
-                  alt="AI"
-                  width={56}
-                  height={56}
-                  className="h-full w-full object-cover mix-blend-luminosity opacity-90 group-hover:opacity-100 group-hover:mix-blend-normal transition-all"
-                />
+              <div className="relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl overflow-hidden border border-brand-primary/20 bg-brand-primary/5">
+                <BrandLogo iconOnly size={24} noLink />
               </div>
             )}
           </button>

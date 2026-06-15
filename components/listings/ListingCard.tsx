@@ -74,8 +74,8 @@ export function ListingCard({ listing, onFavorite }: Props) {
   };
 
   return (
-    <Link href={`/listings/${listing.public_id}`} className="group block outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-2xl">
-      <article className="surface-elevated rounded-2xl overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:shadow-[0_20px_40px_-12px_rgb(var(--shadow-color)/0.18)]">
+    <Link href={`/listings/${listing.public_id}`} className="group block outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg rounded-2xl">
+      <article className="surface-elevated rounded-2xl overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-1.5 hover:shadow-[0_12px_32px_-12px_rgb(var(--shadow-color)/0.25)] border border-border/50 hover:border-border">
         {/* Image */}
         <div className="relative aspect-[4/3] overflow-hidden bg-bg-subtle">
           <ListingImage
@@ -83,7 +83,7 @@ export function ListingCard({ listing, onFavorite }: Props) {
             alt={listing.title}
             category={listing.category?.name}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05]"
+            className="transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.03]"
           />
 
           {/* Favorite button */}
@@ -94,41 +94,41 @@ export function ListingCard({ listing, onFavorite }: Props) {
             aria-pressed={isFavorited}
             className={cn(
               'absolute top-3 right-3 inline-flex h-9 w-9 items-center justify-center rounded-full',
-              'bg-bg-elevated/88 backdrop-blur-sm',
-              'transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]',
-              'hover:scale-110 active:scale-90',
+              'bg-bg-elevated/90 backdrop-blur-md shadow-sm border border-black/5 dark:border-white/10',
+              'transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)]',
+              'hover:scale-105 active:scale-95',
               isFavorited ? 'text-danger' : 'text-fg',
               favAnimating && 'scale-125'
             )}
           >
             <Heart
-              className="h-[18px] w-[18px] transition-all duration-200"
-              strokeWidth={1.75}
+              className="h-5 w-5 transition-all duration-200"
+              strokeWidth={isFavorited ? 2.5 : 2}
               fill={isFavorited ? 'currentColor' : 'none'}
             />
           </button>
 
           {/* Bottom gradient for text legibility */}
-          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/40 via-black/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
         </div>
 
         {/* Body */}
-        <div className="p-4 sm:p-5">
+        <div className="flex flex-col p-4 sm:p-5 h-full">
           {/* Category eyebrow */}
           {categoryLabel && (
-            <p className="mb-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-brand-accent">
+            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.15em] text-brand-primary">
               {categoryLabel}
             </p>
           )}
 
           {/* Title */}
-          <h3 className="line-clamp-2 font-display text-[16px] font-semibold leading-snug text-fg transition-colors group-hover:text-brand-primary">
+          <h3 className="line-clamp-2 font-display text-[17px] font-semibold leading-snug text-fg transition-colors group-hover:text-brand-primary">
             {localizedTitle}
           </h3>
 
           {/* Location */}
-          <div className="mt-2 flex items-center gap-1.5 text-xs text-fg-muted">
-            <MapPin className="h-3.5 w-3.5 flex-shrink-0" strokeWidth={1.75} />
+          <div className="mt-2.5 flex items-center gap-1.5 text-[13px] text-fg-muted">
+            <MapPin className="h-3.5 w-3.5 flex-shrink-0" strokeWidth={2} />
             <span className="truncate">
               {(() => {
                 if (!listing) return '';
@@ -145,50 +145,46 @@ export function ListingCard({ listing, onFavorite }: Props) {
             </span>
           </div>
 
-          {/* Price row */}
-          <div className="mt-4 flex items-end justify-between gap-3">
-            <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 min-w-0">
-              <p className="font-display text-xl font-bold text-fg leading-none">
-                {formatPrice(listing.price, listing.currency)}
-              </p>
-              {listing.is_negotiable && (
-                <span
-                  className="inline-flex items-center gap-1.5 rounded-md border border-brand-primary/20 bg-brand-primary/5 px-2 py-0.5 text-[11px] font-semibold text-brand-primary"
-                  aria-label={t('listings.negotiable')}
-                >
-                  {t('listings.negotiable')}
-                </span>
+          <div className="mt-auto pt-4">
+            {/* Price row */}
+            <div className="flex items-end justify-between gap-3">
+              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 min-w-0">
+                <p className="font-display text-xl sm:text-2xl font-bold text-fg leading-none tracking-tight">
+                  {formatPrice(listing.price, listing.currency)}
+                </p>
+                {listing.is_negotiable && (
+                  <span
+                    className="inline-flex items-center gap-1 rounded-md bg-brand-primary/10 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-brand-primary"
+                    aria-label={t('listings.negotiable')}
+                  >
+                    {t('listings.negotiable')}
+                  </span>
+                )}
+              </div>
+              {typeof listing.view_count === 'number' && listing.view_count > 0 && (
+                <div className="flex items-center gap-1 text-[13px] text-fg-subtle flex-shrink-0 font-medium">
+                  <Eye className="h-4 w-4" strokeWidth={2} />
+                  <span>{listing.view_count}</span>
+                </div>
               )}
             </div>
-            {typeof listing.view_count === 'number' && listing.view_count > 0 && (
-              <div className="flex items-center gap-1 text-xs text-fg-subtle flex-shrink-0">
-                <Eye className="h-3.5 w-3.5" strokeWidth={1.75} />
-                <span>{listing.view_count}</span>
-              </div>
-            )}
-          </div>
 
-          {/* Seller row */}
-          <div className="mt-4 flex items-center gap-2.5 border-t border-border pt-3.5">
-            <Avatar
-              src={listing.seller.avatar_url}
-              name={listing.seller.full_name}
-              size="xs"
-            />
-            <span className="flex-1 line-clamp-2 text-xs font-medium text-fg-muted">
-              {listing.seller.full_name || (t('sellers.anonymous' as any) ?? 'Sotuvchi')}
-            </span>
-            <RatingDisplay
-              score={listing.seller.trust_score}
-              count={listing.seller.rating_count}
-              size="sm"
-            />
-            {listing.created_at && (
-              <span className="hidden text-xs text-fg-subtle sm:inline-flex items-center gap-1">
-                <Clock className="h-3 w-3" strokeWidth={1.75} />
-                {formatRelativeTime(listing.created_at)}
+            {/* Seller row */}
+            <div className="mt-4 flex items-center gap-3 border-t border-border pt-4">
+              <Avatar
+                src={listing.seller.avatar_url}
+                name={listing.seller.full_name}
+                size="xs"
+              />
+              <span className="flex-1 line-clamp-1 text-[13px] font-medium text-fg-muted">
+                {listing.seller.full_name || (t('sellers.anonymous' as any) ?? 'Sotuvchi')}
               </span>
-            )}
+              <RatingDisplay
+                score={listing.seller.trust_score}
+                count={listing.seller.rating_count}
+                size="sm"
+              />
+            </div>
           </div>
         </div>
       </article>

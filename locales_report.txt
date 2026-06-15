@@ -1,0 +1,43 @@
+
+> sayinglobal-frontend@1.0.0 check:locales
+> node scripts/check-locale-completeness.js
+
+[check-locales] scanned 118 source files under app/ + components/: 540 static keys used, 34 dynamic key sites
+
+[check-locales] note: 34 dynamic translation key site(s) could not be statically verified (skipped):
+  ~ t(`adminMod.reason_${r.reason_code}` as any) || r.reason_code}</p>
+  ~ t(`adminMod.reason_${report.reason_code}` as any) ?? report.reason_code}
+  ~ t(`adminMod.status_${r.status}` as any) ?? r.status}
+  ~ t(`adminMod.status_${report.status}` as any) ?? report.status}
+  ~ t(`ai.prompt.${p.key}` as any) ?? p.text)}
+  ~ t(`ai.prompt.${p.key}` as any) ?? p.text}</span>
+  ~ t(`animal.${listing.gender}` as any)}
+  ~ t(`categories.${c.key}`)}
+  ~ t(`categories.${c.slug}` as any),
+  ~ t(`categories.${cat.key}Description`)}
+  ~ t(`categories.${cat.key}`)}
+  ~ t(`categories.${categorySlug}` as any) || listing.category?.name_uz || '')
+  ~ t(`categories.${c}`)}
+  ~ t(`categories.${c}`)}</span>
+  ~ t(`categories.${listing.category.name}` as any) || listing.category.name_uz
+  ~ t(`categories.${slug}` as any),
+  ~ t(`errors.${key}` as any) ?? t('errors.somethingWrong');
+  ~ t(`listings.${l.status}` as any, { defaultValue: l.status })}
+  ~ t(`listings.${listing.gender}` as any)}</dd>
+  ~ t(`listings.${listing.status}` as any)}
+  ~ t(`listings.${s}` as any, { defaultValue: s })}
+  ~ t(`marketplace.${s}`)}
+  ~ t(`regions.${r}`)}
+  ~ t(`regions.${slug}` as any) || slug;
+  ~ t(`regions.${slug}` as any),
+  ~ t(`report.reasons.${r.code}` as any) ?? r.code}
+  ~ t(`report.severity.${r.default_severity}` as any) ?? r.default_severity}
+  ~ t(`reviews.sort_${s}` as any) ?? s}
+  ~ t(`security.eventTypes.${eventType}` as Parameters<typeof t>[0]);
+  ~ t(`terms.point${n}` as any)}</p>
+  ~ t(`terms.point${n}` as any)}</span>
+  ~ t(`userStatus.${selectedUser.status}` as any)}
+  ~ t(`userStatus.${user.status}` as any) ?? user.status}
+  ~ t(`userStatus.${user.status}` as any)}
+
+[check-locales] OK — all used keys present & non-empty in 4 locales, parity holds.
