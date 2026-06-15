@@ -11,6 +11,7 @@ export interface VerifyCodeRequest {
   phone?: string;
   first_name?: string;
   last_name?: string;
+  recaptcha_token?: string;
 }
 
 export interface VerifyCodeResponse {

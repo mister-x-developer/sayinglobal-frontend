@@ -20,6 +20,7 @@ import { AtmosphericBackground } from '@/components/shared/AtmosphericBackground
 import { CodeInput } from '@/components/auth/CodeInput';
 import { authApi, AuthApiError } from '@/lib/api/auth';
 import { useAuthStore } from '@/lib/store/auth';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 const TG_BOT = process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || 'sayin_global_bot';
 
@@ -32,6 +33,7 @@ export default function AuthPage() {
   const setSession = useAuthStore((s) => s.setSession);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const currentUser = useAuthStore((s) => s.user);
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
   const nextPath = searchParams.get('next') || '';
 
@@ -67,7 +69,12 @@ export default function AuthPage() {
     setErrorMessage(null);
 
     try {
-      const result = await authApi.verifyCode({ code });
+      let recaptchaToken = undefined;
+      if (executeRecaptcha && process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY) {
+        recaptchaToken = await executeRecaptcha('verify_code');
+      }
+      
+      const result = await authApi.verifyCode({ code, recaptcha_token: recaptchaToken });
 
       // Admin users are now allowed to log in via web — they get redirected to /admin.
       // No blocking here. The middleware handles routing.
