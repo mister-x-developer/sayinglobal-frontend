@@ -1,12 +1,10 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-import { Send, Loader2, Sparkles, MessageSquarePlus, Clock, ArrowLeft } from 'lucide-react';
+import { Send, Loader2, Sparkles, MessageSquarePlus, Clock, ArrowLeft, Terminal, Bot, Zap, Cpu } from 'lucide-react';
 import { AdminLayout } from '@/components/layout/AdminLayout';
 import apiClient from '@/lib/api/client';
-import { Logo } from '@/components/shared/Logo';
 import { useAuthStore } from '@/lib/store/auth';
 
 interface Message {
@@ -93,90 +91,102 @@ export default function AdminAIAgentPage() {
     setShowHistory(false);
   };
 
-  const isAdmin = true;
-
   return (
     <AdminLayout noPadding>
-      <div className="flex h-full bg-bg overflow-hidden relative">
+      <div className="flex h-screen bg-[#050505] text-white selection:bg-indigo-500/30 overflow-hidden relative font-sans">
         
-        {/* Chat History Panel (Absolute overlay to save space) */}
+        {/* Cyber Background */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_100%_100%_at_50%_0%,#000_60%,transparent_100%)] pointer-events-none opacity-40 z-0" />
+
+        {/* Chat History Drawer */}
         {showHistory && (
-          <div className="absolute inset-0 z-20 flex">
-            <div className="w-80 bg-bg-canvas border-r border-border shadow-2xl flex flex-col h-full animate-in slide-in-from-left-8 duration-300">
-              <div className="p-4 border-b border-border flex items-center justify-between bg-bg-elevated">
-                <h3 className="font-bold text-fg flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-brand-primary" />
-                  Chat History
+          <div className="absolute inset-0 z-50 flex">
+            <div className="w-80 bg-black/80 backdrop-blur-3xl border-r border-white/10 shadow-2xl flex flex-col h-full animate-in slide-in-from-left-8 duration-300 relative z-10">
+              <div className="p-5 border-b border-white/10 flex items-center justify-between bg-white/[0.02]">
+                <h3 className="font-black tracking-wider text-white/90 flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-indigo-400" />
+                  ARCHIVE
                 </h3>
-                <button onClick={() => setShowHistory(false)} className="p-2 rounded-full hover:bg-bg-subtle text-fg-subtle">
+                <button onClick={() => setShowHistory(false)} className="p-2 rounded-xl hover:bg-white/10 text-white/50 transition-colors">
                   <ArrowLeft className="h-4 w-4" />
                 </button>
               </div>
               <div className="p-4">
                 <button
                   onClick={createNewChat}
-                  className="flex items-center justify-center gap-2 w-full p-3 rounded-xl bg-brand-primary text-white hover:bg-brand-primary/90 transition-colors shadow-sm"
+                  className="flex items-center justify-center gap-2 w-full p-3.5 rounded-xl bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 hover:bg-indigo-500/30 transition-colors shadow-[0_0_15px_rgba(99,102,241,0.1)]"
                 >
                   <MessageSquarePlus className="h-5 w-5" strokeWidth={2} />
-                  <span className="font-semibold">{t('AIAgent.newChat')}</span>
+                  <span className="font-bold tracking-widest uppercase text-xs">New Uplink</span>
                 </button>
               </div>
-              <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-2">
+              <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-2 no-scrollbar">
                 {sessions.length === 0 ? (
-                  <p className="text-sm text-fg-muted text-center mt-4">{t('AIAgent.historyEmpty')}</p>
+                  <p className="text-xs text-white/40 text-center mt-4 tracking-widest uppercase font-mono">No Logs Found</p>
                 ) : (
                   sessions.map(s => (
                     <button
                       key={s.id}
                       onClick={() => loadSession(s.id)}
-                      className={`flex flex-col items-start gap-1 w-full p-3 rounded-xl border transition-colors text-left ${s.id === sessionId ? 'border-brand-primary bg-brand-primary/5' : 'border-border bg-bg-elevated hover:bg-bg-subtle'}`}
+                      className={`flex flex-col items-start gap-1 w-full p-4 rounded-xl border transition-all text-left group ${s.id === sessionId ? 'border-indigo-500/50 bg-indigo-500/10 shadow-[0_0_15px_rgba(99,102,241,0.1)]' : 'border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/20'}`}
                     >
-                      <span className="text-sm font-semibold text-fg line-clamp-1">{s.title}</span>
-                      <span className="text-[11px] text-fg-subtle font-medium">{new Date(s.updated_at).toLocaleString()}</span>
+                      <span className="text-sm font-bold text-white/90 line-clamp-1 group-hover:text-white transition-colors">{s.title}</span>
+                      <span className="text-[10px] text-white/40 font-mono tracking-wider">{new Date(s.updated_at).toLocaleString()}</span>
                     </button>
                   ))
                 )}
               </div>
             </div>
-            <div className="flex-1 bg-black/20 backdrop-blur-sm" onClick={() => setShowHistory(false)} />
+            <div className="flex-1 bg-black/40 backdrop-blur-sm" onClick={() => setShowHistory(false)} />
           </div>
         )}
 
-        {/* Main Chat Interface */}
-        <div className="flex-1 flex flex-col min-w-0 bg-bg">
+        {/* Main Interface */}
+        <div className="flex-1 flex flex-col min-w-0 relative z-10">
           
-          {/* Clean Header */}
-          <header className="h-16 border-b border-border bg-bg-elevated/95 backdrop-blur flex items-center justify-between px-6 shrink-0 z-10 shadow-sm">
+          {/* Header */}
+          <header className="h-16 border-b border-white/10 bg-black/40 backdrop-blur-2xl flex items-center justify-between px-6 shrink-0 z-10">
             <div className="flex items-center gap-4">
-              <div className="relative h-10 w-10 rounded-xl overflow-hidden bg-brand-primary/10 border border-brand-primary/20 shrink-0 flex items-center justify-center shadow-inner">
-                <Logo size="xs" showText={false} href={null} />
+              <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.2)]">
+                <Bot className="h-5 w-5 text-indigo-400" />
+                <div className="absolute -bottom-1 -right-1 flex h-3 w-3 items-center justify-center rounded-full bg-black border border-white/10">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                </div>
               </div>
               <div>
-                <h1 className="text-base font-bold text-fg flex items-center gap-1.5">
-                  AI Co-pilot <Sparkles className="h-4 w-4 text-brand-primary" />
+                <h1 className="text-lg font-black leading-none text-white tracking-tight flex items-center gap-2">
+                  AI CO-PILOT
+                  <Sparkles className="h-4 w-4 text-indigo-400" />
                 </h1>
-                <p className="text-[11px] text-fg-muted font-medium uppercase tracking-wider">{t('AIAgent.systemManagement')}</p>
+                <p className="mt-1 text-[10px] font-mono text-indigo-400/70 uppercase tracking-[0.2em] flex items-center gap-1">
+                  <Cpu className="h-3 w-3" />
+                  SYSTEM MANAGEMENT ENGINE
+                </p>
               </div>
             </div>
             
             <button 
               onClick={() => setShowHistory(true)} 
-              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border bg-bg-canvas hover:bg-bg-subtle transition-colors text-sm font-semibold text-fg"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors text-xs font-black tracking-widest uppercase text-white/80"
             >
-              <Clock className="h-4 w-4 text-brand-primary" />
-              <span className="hidden sm:inline">{t('AIAgent.history')}</span>
+              <Terminal className="h-4 w-4 text-indigo-400" />
+              <span className="hidden sm:inline">Logs</span>
             </button>
           </header>
 
           {/* Chat Body */}
-          <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-8 sm:py-8 space-y-6">
+          <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-8 sm:py-10 space-y-8 no-scrollbar bg-transparent">
             {messages.length === 0 && (
-              <div className="flex flex-col items-center justify-center h-full max-w-2xl mx-auto w-full animate-in fade-in duration-500">
-                <div className="h-20 w-20 rounded-3xl bg-brand-primary/10 flex items-center justify-center border border-brand-primary/20 shadow-inner mb-6">
-                  <Logo size="md" showText={false} href={null} />
+              <div className="flex flex-col items-center justify-center h-full max-w-2xl mx-auto w-full animate-in fade-in zoom-in-95 duration-700">
+                <div className="relative mb-8">
+                  <div className="absolute inset-0 bg-indigo-500/20 blur-3xl rounded-full" />
+                  <div className="h-24 w-24 rounded-3xl bg-indigo-500/10 flex items-center justify-center border border-indigo-500/30 shadow-[0_0_30px_rgba(99,102,241,0.15)] relative z-10">
+                    <Bot className="h-12 w-12 text-indigo-400" />
+                  </div>
                 </div>
-                <h2 className="text-2xl font-black text-fg mb-3 text-center">{t('AIAgent.welcomeSystem')}</h2>
-                <p className="text-center text-fg-muted mb-10 max-w-md text-sm leading-relaxed">
+                
+                <h2 className="text-3xl font-black text-white tracking-tight mb-4 text-center">SYSTEM READY</h2>
+                <p className="text-center text-white/50 mb-12 max-w-lg text-sm leading-relaxed font-medium">
                   Men Sayin Global platformasining sun'iy intellekt yordamchisiman. Statistikani tahlil qilish, muammoli e'lonlarni tekshirish yoki bildirishnomalar yuborishda yordam beraman.
                 </p>
                 
@@ -185,29 +195,29 @@ export default function AdminAIAgentPage() {
                     <button
                       key={p.key}
                       onClick={() => sendMessage(p.text)}
-                      className="group flex flex-col items-start p-5 rounded-2xl border border-border bg-bg-elevated hover:border-brand-primary hover:shadow-lift transition-all text-left"
+                      className="group flex flex-col items-start p-6 rounded-2xl border border-white/5 bg-black/40 hover:bg-white/[0.02] hover:border-indigo-500/30 backdrop-blur-xl transition-all text-left"
                     >
-                      <span className="text-2xl mb-3 bg-bg-subtle p-2 rounded-xl group-hover:bg-brand-primary/10 transition-colors">{p.icon}</span>
-                      <span className="text-[15px] font-bold text-fg mb-1">{p.text}</span>
-                      <span className="text-[12px] text-fg-muted">{p.desc}</span>
+                      <span className="text-2xl mb-4 bg-white/5 p-3 rounded-xl border border-white/5 group-hover:bg-indigo-500/10 group-hover:border-indigo-500/20 transition-all shadow-inner">{p.icon}</span>
+                      <span className="text-sm font-black text-white/90 mb-1.5 uppercase tracking-wider">{p.text}</span>
+                      <span className="text-xs text-white/40 font-medium">{p.desc}</span>
                     </button>
                   ))}
                 </div>
               </div>
             )}
 
-            <div className="max-w-3xl mx-auto space-y-6 w-full pb-4">
+            <div className="max-w-4xl mx-auto space-y-8 w-full pb-8">
               {messages.map((msg) => (
                 <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   {msg.role === 'assistant' && (
-                    <div className="mr-3 shrink-0 h-9 w-9 rounded-2xl bg-brand-primary/10 overflow-hidden border border-brand-primary/20 flex items-center justify-center shadow-inner">
-                      <Logo size="xs" showText={false} href={null} />
+                    <div className="mr-4 shrink-0 h-10 w-10 rounded-2xl bg-indigo-500/10 overflow-hidden border border-indigo-500/30 flex items-center justify-center shadow-[0_0_15px_rgba(99,102,241,0.1)] mt-1">
+                      <Bot className="h-5 w-5 text-indigo-400" />
                     </div>
                   )}
-                  <div className={`max-w-[85%] rounded-3xl px-6 py-4 text-[15px] leading-relaxed whitespace-pre-wrap shadow-sm ${
+                  <div className={`max-w-[80%] rounded-3xl px-6 py-4 text-[15px] leading-relaxed whitespace-pre-wrap ${
                     msg.role === 'user'
-                      ? 'bg-brand-primary text-white rounded-br-sm'
-                      : 'bg-bg-elevated text-fg rounded-tl-sm border border-border'
+                      ? 'bg-indigo-600 text-white rounded-br-sm shadow-[0_4px_20px_rgba(79,70,229,0.3)]'
+                      : 'bg-white/[0.03] text-white/90 rounded-tl-sm border border-white/10 backdrop-blur-md shadow-2xl'
                   }`}>
                     {msg.text}
                   </div>
@@ -216,28 +226,28 @@ export default function AdminAIAgentPage() {
               
               {loading && (
                 <div className="flex justify-start animate-in fade-in duration-300">
-                  <div className="mr-3 shrink-0 h-9 w-9 rounded-2xl bg-brand-primary/10 overflow-hidden border border-brand-primary/20 flex items-center justify-center shadow-inner">
-                    <Logo size="xs" showText={false} href={null} />
+                  <div className="mr-4 shrink-0 h-10 w-10 rounded-2xl bg-indigo-500/10 overflow-hidden border border-indigo-500/30 flex items-center justify-center shadow-[0_0_15px_rgba(99,102,241,0.1)] mt-1">
+                    <Bot className="h-5 w-5 text-indigo-400 animate-pulse" />
                   </div>
-                  <div className="rounded-3xl rounded-tl-sm bg-bg-elevated border border-border px-6 py-5 shadow-sm flex items-center gap-1.5">
-                    <div className="h-2 w-2 rounded-full bg-brand-primary/60 animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <div className="h-2 w-2 rounded-full bg-brand-primary/60 animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <div className="h-2 w-2 rounded-full bg-brand-primary/60 animate-bounce" style={{ animationDelay: '300ms' }} />
+                  <div className="rounded-3xl rounded-tl-sm bg-white/[0.03] border border-white/10 px-6 py-5 backdrop-blur-md flex items-center gap-2 shadow-2xl">
+                    <div className="h-2 w-2 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <div className="h-2 w-2 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <div className="h-2 w-2 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: '300ms' }} />
                   </div>
                 </div>
               )}
-              <div ref={messagesEndRef} className="h-1" />
+              <div ref={messagesEndRef} className="h-4" />
             </div>
           </div>
 
-          {/* Clean Chat Input */}
-          <div className="shrink-0 bg-bg p-4 sm:p-6">
+          {/* Input Area */}
+          <div className="shrink-0 bg-gradient-to-t from-black via-black/90 to-transparent p-4 sm:p-6 sm:pb-8 pt-8">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 sendMessage(input);
               }}
-              className="max-w-3xl mx-auto flex items-end gap-3 rounded-3xl border border-input-border bg-input pl-6 pr-3 py-3 shadow-sm focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-primary/20 transition-all"
+              className="max-w-4xl mx-auto flex items-end gap-3 rounded-3xl border border-white/10 bg-black/60 backdrop-blur-xl pl-6 pr-3 py-3 shadow-2xl focus-within:border-indigo-500/50 focus-within:ring-4 focus-within:ring-indigo-500/10 transition-all"
             >
               <textarea
                 value={input}
@@ -248,20 +258,20 @@ export default function AdminAIAgentPage() {
                     sendMessage(input);
                   }
                 }}
-                placeholder="Agentga buyruq bering..."
-                className="max-h-32 min-h-[44px] flex-1 resize-none bg-transparent py-2.5 text-[15px] text-fg placeholder:text-fg-muted focus:outline-none"
+                placeholder="Enter command directive..."
+                className="max-h-40 min-h-[44px] flex-1 resize-none bg-transparent py-2.5 text-[15px] font-medium text-white placeholder:text-white/30 focus:outline-none placeholder:font-mono placeholder:tracking-widest"
                 rows={1}
               />
               <button
                 type="submit"
                 disabled={!input.trim() || loading}
-                className="mb-1 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-primary text-white transition-transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 shadow-md"
+                className="mb-1 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-indigo-600 text-white transition-all hover:bg-indigo-500 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 shadow-[0_0_20px_rgba(79,70,229,0.4)]"
               >
                 {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5 ml-0.5" />}
               </button>
             </form>
-            <p className="text-center text-[11px] text-fg-subtle mt-4 font-medium">
-              AI Co-pilot xatoliklar qilishi mumkin. Muhim qarorlarni o'zingiz tekshiring.
+            <p className="text-center text-[10px] text-white/30 mt-4 font-mono tracking-[0.2em] uppercase">
+              AI RESPONSES MAY REQUIRE HUMAN VERIFICATION
             </p>
           </div>
           
