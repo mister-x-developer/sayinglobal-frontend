@@ -292,7 +292,7 @@ export function NearbyMapWithUserPin({
       <div className={`${className} flex items-center justify-center rounded-2xl border border-border bg-bg-subtle text-fg-muted`}>
         <div className="flex items-center gap-2">
           <MapPin className="h-4 w-4" strokeWidth={1.75} />
-          <span className="text-sm">Xarita yuklanmadi</span>
+          <span className="text-sm">{t('Map.mapFailed')}</span>
         </div>
       </div>
     );

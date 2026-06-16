@@ -137,10 +137,10 @@ export default function AdminRatingsPage() {
                           {r.report_count}
                         </Badge>
                         {r.is_hidden && (
-                          <Badge variant="default" size="sm">hidden</Badge>
+                          <Badge variant="default" size="sm">{t('General.hidden')}</Badge>
                         )}
                         {r.is_edited && (
-                          <Badge variant="default" size="sm">edited</Badge>
+                          <Badge variant="default" size="sm">{t('General.edited')}</Badge>
                         )}
                       </div>
 

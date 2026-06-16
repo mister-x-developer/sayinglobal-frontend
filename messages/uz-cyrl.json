@@ -1279,5 +1279,89 @@
     "backgroundAnimation": "Фон анимацияси",
     "title": "Амбиент режими",
     "zenMode": "Зен режими"
+  },
+  "Admin": {
+    "commandCenter": "SAYIN Бошқарув Маркази",
+    "clusterState": "КЛАСТЕР_ҲОЛАТИ:",
+    "triageRequired": "Саралаш талаб этилади",
+    "priority": "Устуворлик",
+    "entityType": "Объект тури",
+    "count": "Сони",
+    "actionRequired": "Ҳаракат талаб этилади",
+    "route": "Йўналиш",
+    "userComplaints": "Фойдаланувчи шикоятлари",
+    "reviewContent": "Хабар қилинган таркибни кўриб чиқинг ва белгиланг",
+    "resolve": "Ҳал қилиш",
+    "pendingListings": "Кутилаётган эълонлар",
+    "approveOrReject": "Бозор ёзувларини тасдиқланг ёки рад этинг",
+    "review": "Кўриб чиқиш",
+    "aiCoPilot": "AI Ёрдамчи",
+    "analytics": "Таҳлилий",
+    "admin": "Админ"
+  },
+  "Auth": {
+    "adminPanel": "Платформани бошқариш панели",
+    "username": "Фойдаланувчи номи",
+    "password": "Пароль",
+    "getCodeFromBot": "Кодни Telegram ботдан олинг",
+    "enterCode": "5 хонали кодни киритинг"
+  },
+  "Moderation": {
+    "trustAndSafety": "Ишонч ва хавфсизлик",
+    "complaintsReports": "Шикоятлар ва ҳисоботлар",
+    "loadingReports": "Ҳисоботлар юкланмоқда...",
+    "complainant": "Шикоятчи",
+    "reported": "Шикоят қилинган",
+    "description": "Тавсиф",
+    "moderatorNotes": "Модератор эслатмалари",
+    "refresh": "Янгилаш"
+  },
+  "AIAgent": {
+    "newChat": "Янги суҳбат",
+    "historyEmpty": "Тарих бўш",
+    "systemManagement": "Тизимни бошқариш ва таҳлил қилиш",
+    "welcomeSystem": "Тизимга хуш келибсиз",
+    "history": "Тарих"
+  },
+  "AI": {
+    "advice": "AI маслаҳати:",
+    "moderation": "AI Модерация",
+    "loading": "Юкланмоқда...",
+    "allChecked": "Ҳамма нарса текширилган",
+    "noResults": "Кўриб чиқилиши керак бўлган натижалар йўқ"
+  },
+  "Analytics": {
+    "notEnoughData": "Етарли маълумот йўқ",
+    "7days": "7 кун",
+    "14days": "14 кун",
+    "30days": "30 кун",
+    "90days": "90 кун",
+    "listingStatuses": "Эълон ҳолатлари",
+    "noData": "Маълумот йўқ",
+    "login": "Кириш",
+    "createListing": "Эълон яратиш",
+    "moderation": "Модерация",
+    "approved": "Тасдиқланди",
+    "rejected": "Рад этилди"
+  },
+  "Map": {
+    "geoDiscovery": "Гео-Қидирув",
+    "loadingMap": "Харита юкланмоқда...",
+    "mapFailed": "Харита юкланмади",
+    "searchRadius": "Қидирув радиуси (км)"
+  },
+  "Errors": {
+    "connectionLost": "Алоқа узилди",
+    "somethingWentWrong": "Нимадир нотўғри кетди"
+  },
+  "General": {
+    "telegramOtp": "Telegram OTP",
+    "secureLoginActive": "Хавфсиз кириш фаол",
+    "uzbek": "Ўзбекча",
+    "english": "Инглизча",
+    "hidden": "яширин",
+    "edited": "таҳрирланган",
+    "infrastructure": "Инфратузилма",
+    "responseTime": "Жавоб вақти"
   }
 }

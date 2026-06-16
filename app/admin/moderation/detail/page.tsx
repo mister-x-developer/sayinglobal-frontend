@@ -264,10 +264,10 @@ export default function AdminReportDetailPage() {
                           onChange={(e) => setTranslateLang(e.target.value as any)}
                           className="rounded-lg border border-border bg-bg-subtle px-2 py-1 text-xs text-fg"
                         >
-                          <option value="uz">Uzbek</option>
+                          <option value="uz">{t('General.uzbek')}</option>
                           <option value="uz-cyrl">Кирилл</option>
                           <option value="ru">Русский</option>
-                          <option value="en">English</option>
+                          <option value="en">{t('General.english')}</option>
                         </select>
                         <button
                           type="button"

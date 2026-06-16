@@ -1279,5 +1279,89 @@
     "backgroundAnimation": "Фоновая анимация",
     "title": "Фоновый режим",
     "zenMode": "Дзен-режим"
+  },
+  "Admin": {
+    "commandCenter": "Центр управления SAYIN",
+    "clusterState": "СОСТОЯНИЕ_КЛАСТЕРА:",
+    "triageRequired": "Требуется сортировка",
+    "priority": "Приоритет",
+    "entityType": "Тип объекта",
+    "count": "Количество",
+    "actionRequired": "Требуется действие",
+    "route": "Маршрут",
+    "userComplaints": "Жалобы пользователей",
+    "reviewContent": "Проверьте сообщенный контент и отметьте",
+    "resolve": "Решить",
+    "pendingListings": "Ожидающие объявления",
+    "approveOrReject": "Одобрить или отклонить записи на платформе",
+    "review": "Обзор",
+    "aiCoPilot": "ИИ-помощник",
+    "analytics": "Аналитика",
+    "admin": "Админ"
+  },
+  "Auth": {
+    "adminPanel": "Панель администрирования платформы",
+    "username": "Имя пользователя",
+    "password": "Пароль",
+    "getCodeFromBot": "Получить код из Telegram-бота",
+    "enterCode": "Введите 5-значный код"
+  },
+  "Moderation": {
+    "trustAndSafety": "Доверие и безопасность",
+    "complaintsReports": "Жалобы и отчеты",
+    "loadingReports": "Загрузка отчетов...",
+    "complainant": "Заявитель",
+    "reported": "Заявлено",
+    "description": "Описание",
+    "moderatorNotes": "Заметки модератора",
+    "refresh": "Обновить"
+  },
+  "AIAgent": {
+    "newChat": "Новый чат",
+    "historyEmpty": "История пуста",
+    "systemManagement": "Управление системой и анализ",
+    "welcomeSystem": "Добро пожаловать в систему",
+    "history": "История"
+  },
+  "AI": {
+    "advice": "Совет ИИ:",
+    "moderation": "Модерация ИИ",
+    "loading": "Загрузка...",
+    "allChecked": "Все проверено",
+    "noResults": "Нет результатов для рассмотрения"
+  },
+  "Analytics": {
+    "notEnoughData": "Недостаточно данных",
+    "7days": "7 дней",
+    "14days": "14 дней",
+    "30days": "30 дней",
+    "90days": "90 дней",
+    "listingStatuses": "Статусы объявлений",
+    "noData": "Нет данных",
+    "login": "Вход",
+    "createListing": "Создать объявление",
+    "moderation": "Модерация",
+    "approved": "Одобрено",
+    "rejected": "Отклонено"
+  },
+  "Map": {
+    "geoDiscovery": "Гео-Поиск",
+    "loadingMap": "Карта загружается...",
+    "mapFailed": "Карта не загружена",
+    "searchRadius": "Радиус поиска (км)"
+  },
+  "Errors": {
+    "connectionLost": "Связь потеряна",
+    "somethingWentWrong": "Что-то пошло не так"
+  },
+  "General": {
+    "telegramOtp": "Telegram OTP",
+    "secureLoginActive": "Безопасный вход активен",
+    "uzbek": "Узбекский",
+    "english": "Английский",
+    "hidden": "скрытый",
+    "edited": "отредактировано",
+    "infrastructure": "Инфраструктура",
+    "responseTime": "Время отклика"
   }
 }

@@ -44,7 +44,7 @@ export default function AdminProfilePage() {
           <div className="flex items-center gap-3 mb-8">
             <Shield className="h-6 w-6 text-brand-primary" strokeWidth={1.75} />
             <div>
-              <p className="text-eyebrow">Admin</p>
+              <p className="text-eyebrow">{t('Admin.admin')}</p>
               <h1 className="display-md mt-1">{t('profile.myProfile')}</h1>
             </div>
           </div>
@@ -119,8 +119,8 @@ export default function AdminProfilePage() {
                 <Shield className="h-5 w-5" strokeWidth={1.75} />
               </div>
               <div>
-                <p className="text-sm font-semibold text-fg">Telegram OTP</p>
-                <p className="text-xs text-fg-muted">Xavfsiz kirish faol</p>
+                <p className="text-sm font-semibold text-fg">{t('General.telegramOtp')}</p>
+                <p className="text-xs text-fg-muted">{t('General.secureLoginActive')}</p>
               </div>
             </div>
           </div>

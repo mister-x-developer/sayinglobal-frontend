@@ -108,7 +108,7 @@ export function CapacitorNativeProvider() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3l18 18M9 9a3 3 0 00-3 3v6a3 3 0 003 3h6a3 3 0 003-3v-1.5" />
           </svg>
         </div>
-        <h2 className="text-2xl font-bold mb-2">Aloqa uzildi</h2>
+        <h2 className="text-2xl font-bold mb-2">{t('Errors.connectionLost')}</h2>
         <p className="text-fg-muted mb-8 max-w-sm">
           SAYIN GLOBAL tarmog'iga ulanishda xatolik yuz berdi. Iltimos, internet aloqangizni tekshiring.
         </p>

@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, Bot, CheckCircle2, AlertTriangle, Eye, RefreshCw, Shield } from 'lucide-react';
@@ -28,6 +29,7 @@ interface AIResult {
 type Filter = 'needs_review' | 'all' | 'reviewed';
 
 export default function AdminAIModerationPage() {
+  const t = useTranslations();
   const [results, setResults] = useState<AIResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<Filter>('needs_review');
@@ -99,8 +101,8 @@ export default function AdminAIModerationPage() {
               <Bot className="h-5 w-5" strokeWidth={1.75} />
             </div>
             <div>
-              <p className="text-eyebrow">Admin</p>
-              <h1 className="display-md mt-0.5">AI Moderatsiya</h1>
+              <p className="text-eyebrow">{t('Admin.admin')}</p>
+              <h1 className="display-md mt-0.5">{t('AI.moderation')}</h1>
             </div>
           </div>
           <button
@@ -150,15 +152,15 @@ export default function AdminAIModerationPage() {
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 gap-3">
             <Loader2 className="h-8 w-8 animate-spin text-brand-primary" strokeWidth={2} />
-            <p className="text-sm text-fg-muted">Yuklanmoqda...</p>
+            <p className="text-sm text-fg-muted">{t('AI.loading')}</p>
           </div>
         ) : results.length === 0 ? (
           <div className="surface-elevated p-16 text-center">
             <div className="mx-auto mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-success/10 text-success">
               <Shield className="h-8 w-8" strokeWidth={1.5} />
             </div>
-            <p className="text-lg font-bold text-fg">Hamma narsa tekshirilgan</p>
-            <p className="mt-1 text-sm text-fg-muted">Ko'rib chiqilishi kerak bo'lgan natijalar yoʻq</p>
+            <p className="text-lg font-bold text-fg">{t('AI.allChecked')}</p>
+            <p className="mt-1 text-sm text-fg-muted">{t('AI.noResults')}</p>
           </div>
         ) : (
           <div className="space-y-3">

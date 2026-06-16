@@ -21,7 +21,7 @@ import { formatNumber, formatRelativeTime } from '@/lib/utils/format';
 
 // ── Mini SVG Line Chart ──────────────────────────────────────────────────────
 function MiniLineChart({ data, color }: { data: { date: string; count: number }[]; color: string }) {
-  if (!data || data.length < 2) return <div className="h-16 flex items-center justify-center text-xs text-fg-subtle">Yetarli ma&apos;lumot yo&apos;q</div>;
+  if (!data || data.length < 2) return <div className="h-16 flex items-center justify-center text-xs text-fg-subtle">{t('Analytics.notEnoughData')}</div>;
   const W = 300;
   const H = 60;
   const max = Math.max(...data.map(d => d.count), 1);
@@ -291,7 +291,7 @@ export default function AdminAnalyticsPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <p className="text-eyebrow">Admin</p>
+            <p className="text-eyebrow">{t('Admin.admin')}</p>
             <h1 className="display-lg mt-1">{t('admin.analytics')}</h1>
             <p className="mt-1 text-sm text-fg-muted">
               {new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
@@ -304,10 +304,10 @@ export default function AdminAnalyticsPage() {
               onChange={(e) => setPeriod(Number(e.target.value))}
               className="input-base h-9 text-sm cursor-pointer"
             >
-              <option value={7}>7 kun</option>
-              <option value={14}>14 kun</option>
-              <option value={30}>30 kun</option>
-              <option value={90}>90 kun</option>
+              <option value={7}>{t('Analytics.7days')}</option>
+              <option value={14}>{t('Analytics.14days')}</option>
+              <option value={30}>{t('Analytics.30days')}</option>
+              <option value={90}>{t('Analytics.90days')}</option>
             </select>
             <button
               onClick={() => load(true)}
@@ -371,7 +371,7 @@ export default function AdminAnalyticsPage() {
               >
                 <div className="flex items-center gap-2 mb-4">
                   <Package className="h-4 w-4 text-brand-primary" strokeWidth={2} />
-                  <h2 className="font-bold text-fg">E&apos;lon holatlari</h2>
+                  <h2 className="font-bold text-fg">{t('Analytics.listingStatuses')}</h2>
                 </div>
                 <div className="space-y-3">
                   {statusDist.length > 0 ? statusDist.map((s: any) => (
@@ -399,7 +399,7 @@ export default function AdminAnalyticsPage() {
                       </div>
                     </div>
                   )) : (
-                    <p className="text-sm text-fg-muted py-4 text-center">Ma&apos;lumot yo&apos;q</p>
+                    <p className="text-sm text-fg-muted py-4 text-center">{t('Analytics.noData')}</p>
                   )}
                 </div>
               </motion.div>
@@ -418,7 +418,7 @@ export default function AdminAnalyticsPage() {
                 {funnel ? (
                   <div className="space-y-4">
                     <div>
-                      <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-fg-subtle">Kirish</p>
+                      <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-fg-subtle">{t('Analytics.login')}</p>
                       <div className="space-y-2">
                         <FunnelBar
                           label="Muvaffaqiyatli"
@@ -435,7 +435,7 @@ export default function AdminAnalyticsPage() {
                       </div>
                     </div>
                     <div>
-                      <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-fg-subtle">E&apos;lon yaratish</p>
+                      <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-fg-subtle">{t('Analytics.createListing')}</p>
                       <div className="space-y-2">
                         <FunnelBar
                           label="Boshlandi"
@@ -452,22 +452,22 @@ export default function AdminAnalyticsPage() {
                       </div>
                     </div>
                     <div className="rounded-xl border border-border bg-bg-subtle p-3">
-                      <p className="text-xs text-fg-subtle">Moderatsiya</p>
+                      <p className="text-xs text-fg-subtle">{t('Analytics.moderation')}</p>
                       <div className="mt-2 grid grid-cols-2 gap-2">
                         <div className="text-center">
                           <p className="font-display text-lg font-black text-success">{funnel.moderation?.approved ?? 0}</p>
-                          <p className="text-[10px] text-fg-subtle">Tasdiqlandi</p>
+                          <p className="text-[10px] text-fg-subtle">{t('Analytics.approved')}</p>
                         </div>
                         <div className="text-center">
                           <p className="font-display text-lg font-black text-danger">{funnel.moderation?.rejected ?? 0}</p>
-                          <p className="text-[10px] text-fg-subtle">Rad etildi</p>
+                          <p className="text-[10px] text-fg-subtle">{t('Analytics.rejected')}</p>
                         </div>
                       </div>
                     </div>
                   </div>
                 ) : (
                   <div className="flex items-center justify-center py-8">
-                    <p className="text-sm text-fg-muted">Ma&apos;lumot yo&apos;q</p>
+                    <p className="text-sm text-fg-muted">{t('Analytics.noData')}</p>
                   </div>
                 )}
               </motion.div>
@@ -495,7 +495,7 @@ export default function AdminAnalyticsPage() {
                     ))}
                   </div>
                 ) : (
-                  <p className="py-8 text-center text-sm text-fg-muted">Ma&apos;lumot yo&apos;q</p>
+                  <p className="py-8 text-center text-sm text-fg-muted">{t('Analytics.noData')}</p>
                 )}
               </motion.div>
             </div>

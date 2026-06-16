@@ -1279,5 +1279,89 @@
     "backgroundAnimation": "Fon animatsiyasi",
     "title": "Ambient rejimi",
     "zenMode": "Zen rejimi"
+  },
+  "Admin": {
+    "commandCenter": "SAYIN Boshqaruv Markazi",
+    "clusterState": "KLASTER_HOLATI:",
+    "triageRequired": "Saralash talab etiladi",
+    "priority": "Ustuvorlik",
+    "entityType": "Obyekt turi",
+    "count": "Soni",
+    "actionRequired": "Harakat talab etiladi",
+    "route": "Yo'nalish",
+    "userComplaints": "Foydalanuvchi shikoyatlari",
+    "reviewContent": "Xabar qilingan tarkibni ko'rib chiqing va belgilang",
+    "resolve": "Hal qilish",
+    "pendingListings": "Kutilayotgan e'lonlar",
+    "approveOrReject": "Bozor yozuvlarini tasdiqlang yoki rad eting",
+    "review": "Ko'rib chiqish",
+    "aiCoPilot": "AI Yordamchi",
+    "analytics": "Tahliliy",
+    "admin": "Admin"
+  },
+  "Auth": {
+    "adminPanel": "Platformani boshqarish paneli",
+    "username": "Foydalanuvchi nomi",
+    "password": "Parol",
+    "getCodeFromBot": "Kodni Telegram botdan oling",
+    "enterCode": "5 xonali kodni kiriting"
+  },
+  "Moderation": {
+    "trustAndSafety": "Ishonch va xavfsizlik",
+    "complaintsReports": "Shikoyatlar va hisobotlar",
+    "loadingReports": "Hisobotlar yuklanmoqda...",
+    "complainant": "Shikoyatchi",
+    "reported": "Shikoyat qilingan",
+    "description": "Tavsif",
+    "moderatorNotes": "Moderator eslatmalari",
+    "refresh": "Yangilash"
+  },
+  "AIAgent": {
+    "newChat": "Yangi suhbat",
+    "historyEmpty": "Tarix bo'sh",
+    "systemManagement": "Tizimni boshqarish va tahlil qilish",
+    "welcomeSystem": "Tizimga xush kelibsiz",
+    "history": "Tarix"
+  },
+  "AI": {
+    "advice": "AI maslahati:",
+    "moderation": "AI Moderatsiya",
+    "loading": "Yuklanmoqda...",
+    "allChecked": "Hamma narsa tekshirilgan",
+    "noResults": "Ko'rib chiqilishi kerak bo'lgan natijalar yo'q"
+  },
+  "Analytics": {
+    "notEnoughData": "Yetarli ma'lumot yo'q",
+    "7days": "7 kun",
+    "14days": "14 kun",
+    "30days": "30 kun",
+    "90days": "90 kun",
+    "listingStatuses": "E'lon holatlari",
+    "noData": "Ma'lumot yo'q",
+    "login": "Kirish",
+    "createListing": "E'lon yaratish",
+    "moderation": "Moderatsiya",
+    "approved": "Tasdiqlandi",
+    "rejected": "Rad etildi"
+  },
+  "Map": {
+    "geoDiscovery": "Geo-Qidiruv",
+    "loadingMap": "Xarita yuklanmoqda...",
+    "mapFailed": "Xarita yuklanmadi",
+    "searchRadius": "Qidiruv radiusi (km)"
+  },
+  "Errors": {
+    "connectionLost": "Aloqa uzildi",
+    "somethingWentWrong": "Nimadir noto'g'ri ketdi"
+  },
+  "General": {
+    "telegramOtp": "Telegram OTP",
+    "secureLoginActive": "Xavfsiz kirish faol",
+    "uzbek": "O'zbekcha",
+    "english": "Inglizcha",
+    "hidden": "yashirin",
+    "edited": "tahrirlangan",
+    "infrastructure": "Infratuzilma",
+    "responseTime": "Javob vaqti"
   }
 }

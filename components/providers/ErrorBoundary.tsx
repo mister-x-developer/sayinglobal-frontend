@@ -42,7 +42,7 @@ export class ErrorBoundary extends Component<Props, State> {
           <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-danger/10 text-danger">
             <RefreshCw className="h-6 w-6" strokeWidth={1.75} />
           </div>
-          <h2 className="display-sm mt-5">Nimadir notoʻgʻri ketdi</h2>
+          <h2 className="display-sm mt-5">{t('Errors.somethingWentWrong')}</h2>
           <p className="mt-2 text-sm text-fg-muted">
             Sahifani yangilang yoki bosh sahifaga qayting.
           </p>

@@ -150,7 +150,7 @@ export default function AdminHealthPage() {
         <div className="mt-6 surface-elevated p-5">
           <div className="flex items-center gap-2 mb-4">
             <Server className="h-4 w-4 text-fg-muted" strokeWidth={1.75} />
-            <h2 className="text-sm font-semibold text-fg">Infrastructure</h2>
+            <h2 className="text-sm font-semibold text-fg">{t('General.infrastructure')}</h2>
             {health && (
               <span className="ml-auto">
                 <StatusIcon status={health.status} />
@@ -176,7 +176,7 @@ export default function AdminHealthPage() {
                 );
               })}
               <div className="flex items-center justify-between rounded-xl bg-bg-subtle px-4 py-3 sm:col-span-3">
-                <span className="text-xs text-fg-subtle">Response time</span>
+                <span className="text-xs text-fg-subtle">{t('General.responseTime')}</span>
                 <span className="text-sm font-semibold text-fg">{health.response_ms}ms</span>
               </div>
             </div>

@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 import { ErrorBoundary } from '@/components/providers/ErrorBoundary';
@@ -7,7 +9,10 @@ import { listingsApi } from '@/lib/api/listings';
 
 const Map = dynamic(() => import('./Map'), {
   ssr: false,
-  loading: () => <div className="w-full h-full bg-bg-subtle animate-pulse rounded-lg flex items-center justify-center"><p className="text-fg-subtle">Xarita yuklanmoqda...</p></div>
+  loading: () => {
+    const t = useTranslations();
+    return <div className="w-full h-full bg-bg-subtle animate-pulse rounded-lg flex items-center justify-center"><p className="text-fg-subtle">{t('Map.loadingMap')}</p></div>;
+  }
 });
 
 interface MapDiscoveryProps {
@@ -15,6 +20,7 @@ interface MapDiscoveryProps {
 }
 
 export default function MapDiscovery({ className = "h-[500px] w-full" }: MapDiscoveryProps) {
+  const t = useTranslations();
   const [listings, setListings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   
@@ -50,7 +56,7 @@ export default function MapDiscovery({ className = "h-[500px] w-full" }: MapDisc
       
       {/* Overlay controls — uses design system colors */}
       <div className="absolute top-4 right-4 z-[400] bg-bg-elevated p-3 rounded-lg shadow-lift border border-border w-64">
-        <h3 className="font-semibold text-sm mb-2 text-fg">Qidiruv radiusi (km)</h3>
+        <h3 className="font-semibold text-sm mb-2 text-fg">{t('Map.searchRadius')}</h3>
         <input 
           type="range" 
           min="10" 

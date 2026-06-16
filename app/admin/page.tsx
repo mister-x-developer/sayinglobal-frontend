@@ -169,7 +169,7 @@ export default function AdminDashboardPage() {
                 <Terminal className="h-5 w-5 text-brand-primary" />
               </div>
               <div>
-                <h1 className="text-xl font-black leading-none text-fg tracking-tight">SAYIN Command Center</h1>
+                <h1 className="text-xl font-black leading-none text-fg tracking-tight">{t('Admin.commandCenter')}</h1>
                 <p className="mt-1.5 text-[11px] font-mono text-fg-muted uppercase tracking-wider">
                   SYS_TIME: {new Date().toISOString().replace('T', ' ').slice(0, 19)} UTC
                 </p>
@@ -178,7 +178,7 @@ export default function AdminDashboardPage() {
             <div className="flex items-center gap-4">
               <div className="hidden sm:flex items-center gap-3 rounded-lg border border-border bg-bg-subtle px-4 py-2 text-xs font-mono shadow-sm">
                 <div className={`h-2.5 w-2.5 rounded-full ${Object.values(healthStatus).includes('error') ? 'bg-danger animate-pulse' : 'bg-success shadow-[0_0_8px_rgba(34,197,94,0.6)]'}`} />
-                <span className="text-fg-muted">CLUSTER_STATE:</span>
+                <span className="text-fg-muted">{t('Admin.clusterState')}</span>
                 <span className={Object.values(healthStatus).includes('error') ? 'text-danger font-bold' : 'text-success font-bold'}>
                   {Object.values(healthStatus).includes('error') ? 'DEGRADED' : 'OPTIMAL'}
                 </span>
@@ -220,32 +220,32 @@ export default function AdminDashboardPage() {
                     <Clock className="h-5 w-5 text-warning" />
                     Operations Queue
                   </h2>
-                  <span className="rounded bg-bg px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-fg-muted border border-border">Triage Required</span>
+                  <span className="rounded bg-bg px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-fg-muted border border-border">{t('Admin.triageRequired')}</span>
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-sm whitespace-nowrap">
                     <thead className="bg-bg text-[11px] font-bold uppercase tracking-wider text-fg-muted border-b border-border">
                       <tr>
-                        <th className="px-6 py-3">Priority</th>
-                        <th className="px-6 py-3">Entity Type</th>
-                        <th className="px-6 py-3">Count</th>
-                        <th className="px-6 py-3">Action Required</th>
-                        <th className="px-6 py-3 text-right">Route</th>
+                        <th className="px-6 py-3">{t('Admin.priority')}</th>
+                        <th className="px-6 py-3">{t('Admin.entityType')}</th>
+                        <th className="px-6 py-3">{t('Admin.count')}</th>
+                        <th className="px-6 py-3">{t('Admin.actionRequired')}</th>
+                        <th className="px-6 py-3 text-right">{t('Admin.route')}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border">
                       <tr className="hover:bg-bg-subtle/50 transition-colors group">
                         <td className="px-6 py-4"><span className="inline-flex items-center gap-1.5 rounded-md bg-danger/10 px-2.5 py-1 text-xs font-black text-danger border border-danger/20"><span className="h-1.5 w-1.5 rounded-full bg-danger animate-pulse"></span>CRITICAL</span></td>
-                        <td className="px-6 py-4 font-bold text-fg">User Complaints</td>
+                        <td className="px-6 py-4 font-bold text-fg">{t('Admin.userComplaints')}</td>
                         <td className="px-6 py-4 font-mono text-fg-muted">{pendingComplaints}</td>
-                        <td className="px-6 py-4 text-fg-subtle">Review reported content & flag</td>
+                        <td className="px-6 py-4 text-fg-subtle">{t('Admin.reviewContent')}</td>
                         <td className="px-6 py-4 text-right"><Link href="/admin/moderation" className="inline-flex items-center gap-1 font-bold text-brand-primary group-hover:underline">Resolve <ChevronRight className="h-4 w-4" /></Link></td>
                       </tr>
                       <tr className="hover:bg-bg-subtle/50 transition-colors group">
                         <td className="px-6 py-4"><span className="inline-flex items-center gap-1.5 rounded-md bg-warning/10 px-2.5 py-1 text-xs font-black text-warning border border-warning/20"><span className="h-1.5 w-1.5 rounded-full bg-warning"></span>HIGH</span></td>
-                        <td className="px-6 py-4 font-bold text-fg">Pending Listings</td>
+                        <td className="px-6 py-4 font-bold text-fg">{t('Admin.pendingListings')}</td>
                         <td className="px-6 py-4 font-mono text-fg-muted">{pendingListings}</td>
-                        <td className="px-6 py-4 text-fg-subtle">Approve or reject marketplace entries</td>
+                        <td className="px-6 py-4 text-fg-subtle">{t('Admin.approveOrReject')}</td>
                         <td className="px-6 py-4 text-right"><Link href="/admin/listings?status=pending" className="inline-flex items-center gap-1 font-bold text-brand-primary group-hover:underline">Review <ChevronRight className="h-4 w-4" /></Link></td>
                       </tr>
                     </tbody>
@@ -300,13 +300,13 @@ export default function AdminDashboardPage() {
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-primary/10 group-hover:bg-brand-primary/20 transition-colors">
                     <Bot className="h-6 w-6 text-brand-primary" />
                   </div>
-                  <span className="text-sm font-bold text-fg">AI Co-pilot</span>
+                  <span className="text-sm font-bold text-fg">{t('Admin.aiCoPilot')}</span>
                 </Link>
                 <Link href="/admin/analytics" className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-6 text-center hover:border-blue-500 hover:shadow-md transition-all group">
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-500/10 group-hover:bg-blue-500/20 transition-colors">
                     <BarChart3 className="h-6 w-6 text-blue-500" />
                   </div>
-                  <span className="text-sm font-bold text-fg">Analytics</span>
+                  <span className="text-sm font-bold text-fg">{t('Admin.analytics')}</span>
                 </Link>
               </div>
 

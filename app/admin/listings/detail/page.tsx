@@ -468,7 +468,7 @@ ${res.explanation}`);
 
                   {aiReviewResult && (
                     <div className="rounded-lg bg-bg-subtle p-3 text-xs text-fg-muted whitespace-pre-line mb-3">
-                      <strong>AI maslahati:</strong><br />
+                      <strong>{t('AI.advice')}</strong><br />
                       {aiReviewResult}
                     </div>
                   )}

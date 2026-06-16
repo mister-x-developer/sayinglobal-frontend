@@ -1279,5 +1279,89 @@
     "backgroundAnimation": "Background Animation",
     "title": "Ambient Mode",
     "zenMode": "Zen Mode"
+  },
+  "Admin": {
+    "commandCenter": "SAYIN Command Center",
+    "clusterState": "CLUSTER_STATE:",
+    "triageRequired": "Triage Required",
+    "priority": "Priority",
+    "entityType": "Entity Type",
+    "count": "Count",
+    "actionRequired": "Action Required",
+    "route": "Route",
+    "userComplaints": "User Complaints",
+    "reviewContent": "Review reported content & flag",
+    "resolve": "Resolve",
+    "pendingListings": "Pending Listings",
+    "approveOrReject": "Approve or reject marketplace entries",
+    "review": "Review",
+    "aiCoPilot": "AI Co-pilot",
+    "analytics": "Analytics",
+    "admin": "Admin"
+  },
+  "Auth": {
+    "adminPanel": "Platform Administration Panel",
+    "username": "Username",
+    "password": "Password",
+    "getCodeFromBot": "Get code from Telegram bot",
+    "enterCode": "Enter the 5-digit code"
+  },
+  "Moderation": {
+    "trustAndSafety": "Trust & Safety",
+    "complaintsReports": "Complaints & Reports",
+    "loadingReports": "Loading reports...",
+    "complainant": "Complainant",
+    "reported": "Reported",
+    "description": "Description",
+    "moderatorNotes": "Moderator notes",
+    "refresh": "Refresh"
+  },
+  "AIAgent": {
+    "newChat": "New Chat",
+    "historyEmpty": "History is empty",
+    "systemManagement": "System Management & Analysis",
+    "welcomeSystem": "Tizimga xush kelibsiz",
+    "history": "Tarix"
+  },
+  "AI": {
+    "advice": "AI maslahati:",
+    "moderation": "AI Moderatsiya",
+    "loading": "Yuklanmoqda...",
+    "allChecked": "Hamma narsa tekshirilgan",
+    "noResults": "Ko'rib chiqilishi kerak bo'lgan natijalar yo'q"
+  },
+  "Analytics": {
+    "notEnoughData": "Yetarli ma'lumot yo'q",
+    "7days": "7 kun",
+    "14days": "14 kun",
+    "30days": "30 kun",
+    "90days": "90 kun",
+    "listingStatuses": "E'lon holatlari",
+    "noData": "Ma'lumot yo'q",
+    "login": "Kirish",
+    "createListing": "E'lon yaratish",
+    "moderation": "Moderatsiya",
+    "approved": "Tasdiqlandi",
+    "rejected": "Rad etildi"
+  },
+  "Map": {
+    "geoDiscovery": "Geo-Discovery",
+    "loadingMap": "Xarita yuklanmoqda...",
+    "mapFailed": "Xarita yuklanmadi",
+    "searchRadius": "Qidiruv radiusi (km)"
+  },
+  "Errors": {
+    "connectionLost": "Aloqa uzildi",
+    "somethingWentWrong": "Nimadir notoʻgʻri ketdi"
+  },
+  "General": {
+    "telegramOtp": "Telegram OTP",
+    "secureLoginActive": "Xavfsiz kirish faol",
+    "uzbek": "Uzbek",
+    "english": "English",
+    "hidden": "hidden",
+    "edited": "edited",
+    "infrastructure": "Infrastructure",
+    "responseTime": "Response time"
   }
 }

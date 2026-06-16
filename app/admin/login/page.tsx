@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -22,6 +23,7 @@ const TG_BOT = process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || 'sayin_global_bo
 type Tab = 'credentials' | 'otp';
 
 export default function AdminLoginPage() {
+  const t = useTranslations();
   const router = useRouter();
   const setSession = useAuthStore((s) => s.setSession);
 
@@ -125,7 +127,7 @@ export default function AdminLoginPage() {
             <h1 className="text-2xl font-bold text-fg tracking-tight">
               SAYIN<span className="text-brand-accent">.</span> Admin
             </h1>
-            <p className="text-sm text-fg-muted mt-1">Platform Administration Panel</p>
+            <p className="text-sm text-fg-muted mt-1">{t('Auth.adminPanel')}</p>
           </div>
 
           {/* Card */}
@@ -225,7 +227,7 @@ export default function AdminLoginPage() {
                       1
                     </span>
                     <div>
-                      <p className="text-sm font-medium text-fg">Get code from Telegram bot</p>
+                      <p className="text-sm font-medium text-fg">{t('Auth.getCodeFromBot')}</p>
                       <button
                         type="button"
                         onClick={openBot}
@@ -242,7 +244,7 @@ export default function AdminLoginPage() {
                     <span className="flex-shrink-0 inline-flex items-center justify-center w-6 h-6 rounded-full bg-brand-accent text-xs font-bold text-white">
                       2
                     </span>
-                    <p className="text-sm font-medium text-fg mt-0.5">Enter the 5-digit code</p>
+                    <p className="text-sm font-medium text-fg mt-0.5">{t('Auth.enterCode')}</p>
                   </div>
 
                   <CodeInput

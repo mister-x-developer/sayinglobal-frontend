@@ -287,7 +287,7 @@ export function AdminLayout({ children, noPadding = false }: { children: React.R
 
           <div className="flex items-center gap-2 lg:hidden">
             <ShieldCheck className="h-5 w-5 text-brand-primary" />
-            <span className="text-sm font-semibold">Admin</span>
+            <span className="text-sm font-semibold">{t('Admin.admin')}</span>
           </div>
 
           <div className="flex-1" />

@@ -77,12 +77,12 @@ export default function AdminModerationPage() {
       <div className="container-page py-8">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <p className="text-eyebrow">Trust & Safety</p>
-            <h1 className="display-md">Complaints &amp; Reports</h1>
+            <p className="text-eyebrow">{t('Moderation.trustAndSafety')}</p>
+            <h1 className="display-md">{t('Moderation.complaintsReports')}</h1>
           </div>
           <button onClick={fetchReports} className="btn btn-secondary h-10" disabled={loading}>
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-            <span className="ml-2">Refresh</span>
+            <span className="ml-2">{t('Moderation.refresh')}</span>
           </button>
         </div>
 
@@ -97,7 +97,7 @@ export default function AdminModerationPage() {
 
         <div className="mt-6 surface-elevated overflow-hidden">
           {loading ? (
-            <div className="p-8 text-center text-fg-muted">Loading reports...</div>
+            <div className="p-8 text-center text-fg-muted">{t('Moderation.loadingReports')}</div>
           ) : reports.length === 0 ? (
             <div className="p-8"><EmptyState icon={Flag} title="No reports" description="All clear in this filter." /></div>
           ) : (
@@ -145,20 +145,20 @@ export default function AdminModerationPage() {
 
               <div className="mt-6 space-y-4 text-sm">
                 <div>
-                  <div className="text-fg-subtle text-xs">Complainant</div>
+                  <div className="text-fg-subtle text-xs">{t('Moderation.complainant')}</div>
                   <div>{selected.complainant?.full_name}</div>
                 </div>
                 <div>
-                  <div className="text-fg-subtle text-xs">Reported</div>
+                  <div className="text-fg-subtle text-xs">{t('Moderation.reported')}</div>
                   <div>{selected.reported_user?.full_name || '—'}</div>
                 </div>
                 <div>
-                  <div className="text-fg-subtle text-xs mb-1">Description</div>
+                  <div className="text-fg-subtle text-xs mb-1">{t('Moderation.description')}</div>
                   <div className="rounded bg-bg-subtle p-3 whitespace-pre-wrap">{selected.description || '—'}</div>
                 </div>
 
                 <div>
-                  <label className="text-xs text-fg-subtle">Moderator notes</label>
+                  <label className="text-xs text-fg-subtle">{t('Moderation.moderatorNotes')}</label>
                   <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={4} className="input-base w-full mt-1" placeholder="What did you find? Why this decision?" />
                 </div>
               </div>
