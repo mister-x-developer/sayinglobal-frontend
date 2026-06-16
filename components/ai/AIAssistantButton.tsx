@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { X } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore } from '@/lib/store/auth';
-import { BrandLogo } from '@/components/shared/BrandLogo';
+import { Logo } from '@/components/shared/Logo';
 
 const STORAGE_KEY = 'sayin_ai_btn_hidden';
 
@@ -83,9 +83,10 @@ export function AIAssistantButton() {
 
   const isAdmin = user?.is_staff || user?.is_admin;
 
-  // Clamp position
+  // Clamp position to keep it on screen
   const clampedX = Math.max(-(windowSize.width - 80), Math.min(pos.x, 0));
-  const clampedY = Math.max(-(windowSize.height - 200), Math.min(pos.y, 0));
+  // Allow dragging up (negative pos.y) and down (positive pos.y, up to 64px so it doesn't leave bottom screen)
+  const clampedY = Math.max(-(windowSize.height - 200), Math.min(pos.y, 64));
 
   return (
     <>
@@ -142,7 +143,7 @@ export function AIAssistantButton() {
               <X className="h-6 w-6 text-white" strokeWidth={2.5} />
             ) : (
               <div className="relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl overflow-hidden border border-brand-primary/20 bg-brand-primary/5">
-                <BrandLogo iconOnly size={24} noLink />
+                <Logo size="xs" showText={false} href={null} />
               </div>
             )}
           </button>

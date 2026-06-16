@@ -93,14 +93,14 @@ export default function FollowedSellersPage() {
                   >
                     {/* Seller header */}
                     <div className="flex items-start gap-4 p-5">
-                      <Link href={`/sellers/${s.public_id}`} className="flex-shrink-0">
+                      <Link href={`/sellers/detail?id=${s.public_id}`} className="flex-shrink-0">
                         <Avatar src={s.avatar_url} name={s.full_name} size="lg" ring />
                       </Link>
 
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-start justify-between gap-2">
                           <div>
-                            <Link href={`/sellers/${s.public_id}`} className="font-display text-base font-semibold text-fg hover:underline">
+                            <Link href={`/sellers/detail?id=${s.public_id}`} className="font-display text-base font-semibold text-fg hover:underline">
                               {s.full_name}
                             </Link>
                             <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-fg-muted">
@@ -168,7 +168,7 @@ export default function FollowedSellersPage() {
                               ))}
                             </div>
                             <Link
-                              href={`/sellers/${s.public_id}`}
+                              href={`/sellers/detail?id=${s.public_id}`}
                               className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-primary hover:underline"
                             >
                               {t('common.showAll')}

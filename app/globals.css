@@ -137,12 +137,11 @@
     scroll-behavior: smooth;
     scroll-padding-top: 5rem; /* offset for sticky nav */
     -webkit-touch-callout: none;
-    user-select: none;
-    -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
     overscroll-behavior-y: none; /* Native app feel - no rubber banding */
   }
 
+  /* Specific elements like buttons/tabs will use Tailwind's select-none */
   input, textarea, [contenteditable="true"] {
     user-select: auto;
     -webkit-user-select: auto;

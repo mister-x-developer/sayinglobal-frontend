@@ -145,7 +145,7 @@ export default function FavoritesPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.35, delay: i * 0.04 }}
                   >
-                    <Link href={`/listings/${l.public_id}`} className="surface-elevated group flex items-start gap-4 p-4 transition-all hover:-translate-y-0.5 hover:shadow-lift">
+                    <Link href={`/listings/detail?id=${l.public_id}`} className="surface-elevated group flex items-start gap-4 p-4 transition-all hover:-translate-y-0.5 hover:shadow-lift">
                       <div className="relative h-20 w-24 flex-shrink-0 overflow-hidden rounded-xl bg-bg-subtle sm:h-24 sm:w-32">
                         <div className="absolute inset-0 flex items-center justify-center text-fg-subtle opacity-40">
                           <svg width="40" height="40" viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="1.4">

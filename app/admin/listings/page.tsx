@@ -437,7 +437,7 @@ export default function AdminListingsPage() {
                           'group cursor-pointer transition-colors',
                           isSelected && 'bg-brand-primary/5'
                         )}
-                        onClick={() => (window.location.href = `/admin/listings/${l.public_id}`)}
+                        onClick={() => (window.location.href = `/admin/listings/detail?id=${l.public_id}`)}
                       >
                         <td className="w-10" onClick={(e) => { e.stopPropagation(); toggleOne(l.public_id); }}>
                           <button
@@ -495,7 +495,7 @@ export default function AdminListingsPage() {
                           <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button
                               type="button"
-                              onClick={(e) => { e.stopPropagation(); window.location.href = `/admin/listings/${l.public_id}`; }}
+                              onClick={(e) => { e.stopPropagation(); window.location.href = `/admin/listings/detail?id=${l.public_id}`; }}
                               className="btn btn-sm btn-secondary h-8 px-2.5"
                               aria-label="View listing"
                             >

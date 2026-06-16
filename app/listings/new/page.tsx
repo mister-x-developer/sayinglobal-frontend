@@ -187,9 +187,9 @@ export default function NewListingPage() {
       toast.success(t('create.publishSuccess'));
       // Use window.location for the same atomic navigation as in auth.
       if (typeof window !== 'undefined') {
-        window.location.href = `/listings/${listing.public_id}`;
+        window.location.href = `/listings/detail?id=${listing.public_id}`;
       } else {
-        router.push(`/listings/${listing.public_id}`);
+        router.push(`/listings/detail?id=${listing.public_id}`);
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : t('errors.saveFailed');

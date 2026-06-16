@@ -84,9 +84,10 @@ export function FloatingNearbyButton() {
   if (!isAuthenticated) return null;
   if (hidden) return null;
 
-  // Clamp position within window (anchored to right)
+  // Clamp position within window
   const clampedX = Math.max(-(windowSize.width - 80), Math.min(pos.x, 0));
-  const clampedY = Math.max(-(windowSize.height - 200), Math.min(pos.y, 0));
+  // Allow dragging up (negative pos.y) and down (positive pos.y, up to 136px so it doesn't leave bottom screen)
+  const clampedY = Math.max(-(windowSize.height - 200), Math.min(pos.y, 136));
 
   return (
     <>

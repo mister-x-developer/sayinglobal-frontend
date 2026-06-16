@@ -302,7 +302,7 @@ export default function MyListingsPage() {
                       className="surface-elevated group relative flex items-start gap-4 p-4 transition-all hover:shadow-lift"
                     >
                       {/* Thumbnail */}
-                      <Link href={`/listings/${l.public_id}`} className="relative h-20 w-24 flex-shrink-0 overflow-hidden rounded-xl sm:h-24 sm:w-32">
+                      <Link href={`/listings/detail?id=${l.public_id}`} className="relative h-20 w-24 flex-shrink-0 overflow-hidden rounded-xl sm:h-24 sm:w-32">
                         <ListingImage
                           src={l.images?.[0]?.image && !l.images[0].image.startsWith('/placeholder') ? l.images[0].image : null}
                           alt={l.title}
@@ -314,7 +314,7 @@ export default function MyListingsPage() {
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-start justify-between gap-2">
                           <div className="min-w-0 flex-1">
-                            <Link href={`/listings/${l.public_id}`} className="font-display text-base font-semibold text-fg hover:underline line-clamp-1">
+                            <Link href={`/listings/detail?id=${l.public_id}`} className="font-display text-base font-semibold text-fg hover:underline line-clamp-1">
                               {getLocalizedListingTitle(l, locale)}
                             </Link>
                             <p className="mt-1 text-sm text-fg-muted">
@@ -395,7 +395,7 @@ export default function MyListingsPage() {
                             <div className="absolute right-0 top-10 z-20 w-48 overflow-hidden rounded-xl border border-border bg-bg-elevated shadow-lift">
                               <div className="p-1">
                                 <Link
-                                  href={`/listings/${l.public_id}`}
+                                  href={`/listings/detail?id=${l.public_id}`}
                                   onClick={() => setOpenMenu(null)}
                                   className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-fg hover:bg-bg-subtle"
                                 >

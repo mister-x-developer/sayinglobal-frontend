@@ -242,7 +242,7 @@ export default function AdminBroadcastsPage() {
                   {list.map((b, i) => (
                     <tr key={b.public_id} className="group transition-colors">
                       <td>
-                        <Link href={`/admin/broadcasts/${b.public_id}`} className="cell-title hover:text-brand-primary transition-colors">
+                        <Link href={`/admin/broadcasts/detail?id=${b.public_id}`} className="cell-title hover:text-brand-primary transition-colors">
                           {localizedTitle(b, locale)}
                         </Link>
                         <p className="cell-subtle">{formatRelativeTime(b.created_at)}</p>
@@ -294,7 +294,7 @@ export default function AdminBroadcastsPage() {
                       </td>
                       <td className="text-right">
                         <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <Link href={`/admin/broadcasts/${b.public_id}`} className="btn btn-secondary btn-sm h-8">
+                          <Link href={`/admin/broadcasts/detail?id=${b.public_id}`} className="btn btn-secondary btn-sm h-8">
                             {t('common.view')}
                           </Link>
                           {b.status !== 'sent' && (

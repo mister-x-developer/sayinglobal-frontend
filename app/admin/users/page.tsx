@@ -251,7 +251,7 @@ export default function AdminUsersPage() {
                             <Eye className="h-3.5 w-3.5" strokeWidth={2} />
                           </button>
                           <Link
-                            href={`/admin/users/${user.public_id}`}
+                            href={`/admin/users/detail?id=${user.public_id}`}
                             className="btn btn-primary btn-sm h-8 px-2.5"
                           >
                             {t('common.details' as any) ?? 'Details'}

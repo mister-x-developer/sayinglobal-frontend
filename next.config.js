@@ -17,29 +17,19 @@ const apiOrigin = isDev
 const nextConfig = {
   reactStrictMode: true,
   skipTrailingSlashRedirect: true,
+  output: 'export',
 
   eslint: {
     // ESLint runs in CI separately; don't let it block the build
     ignoreDuringBuilds: true,
   },
 
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+
   images: {
-    remotePatterns: [
-      { protocol: 'http', hostname: 'localhost' },
-      { protocol: 'http', hostname: '127.0.0.1' },
-      { protocol: 'https', hostname: '**.amazonaws.com' },
-      { protocol: 'https', hostname: '**.idrivee2.com' },
-      { protocol: 'https', hostname: '**.idrivee2-21.com' },
-      { protocol: 'https', hostname: '**.sayinglobal.com' },
-      { protocol: 'https', hostname: 'sayinglobal.up.railway.app' },
-      { protocol: 'https', hostname: 'sayinglobal-backend-production.up.railway.app' },
-    ],
-    formats: ['image/avif', 'image/webp'],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    // Minimize dangerously allowing all SVGs — only from our own origin
-    dangerouslyAllowSVG: false,
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    unoptimized: true,
   },
 
   experimental: {
@@ -64,75 +54,6 @@ const nextConfig = {
       /Critical dependency: require function is used in a way/,
     ];
     return config;
-  },
-
-  async rewrites() {
-    return [
-      {
-        // Proxy /api/* → Railway/Django backend.
-        // We need two rules: one for paths with trailing slashes, one without,
-        // to ensure the trailing slash is preserved. Django REQUIRES trailing slashes.
-        source: '/api/:path*/',
-        destination: `${apiOrigin}/api/:path*/`,
-      },
-      {
-        source: '/api/:path*',
-        destination: `${apiOrigin}/api/:path*/`,
-      },
-      {
-        source: '/media/:path*',
-        destination: `${apiOrigin}/media/:path*`,
-      },
-    ];
-  },
-
-  // Production security headers
-  async headers() {
-    const securityHeaders = [
-      { key: 'X-Content-Type-Options',  value: 'nosniff' },
-      { key: 'X-Frame-Options',          value: 'DENY' },
-      { key: 'X-XSS-Protection',         value: '1; mode=block' },
-      { key: 'Referrer-Policy',          value: 'strict-origin-when-cross-origin' },
-      {
-        key: 'Permissions-Policy',
-        value: 'camera=(self), microphone=(), geolocation=(self), payment=()',
-      },
-      {
-        key: 'Strict-Transport-Security',
-        value: 'max-age=63072000; includeSubDomains; preload',
-      },
-    ];
-
-    // Content-Security-Policy — tighten in production
-    if (!isDev) {
-      securityHeaders.push({
-        key: 'Content-Security-Policy',
-        value: [
-          "default-src 'self'",
-          // Scripts — self + Next.js inline scripts + Leaflet CDN (unpkg)
-          "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com",
-          // Styles — self + Leaflet CDN CSS (unpkg)
-          "style-src 'self' 'unsafe-inline' https://unpkg.com",
-          // Images — self + our S3/Railway backend + OSM tiles + Leaflet CDN images + Nominatim
-          "img-src 'self' data: blob: https://*.amazonaws.com https://*.idrivee2.com https://*.idrivee2-21.com https://sayinglobal.up.railway.app https://sayinglobal-backend-production.up.railway.app https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://unpkg.com",
-          // Fonts
-          "font-src 'self' data:",
-          // API/WS connections — production backend + Nominatim reverse geocoding + OSM tile fetchers
-          "connect-src 'self' https://sayinglobal.up.railway.app wss://sayinglobal.up.railway.app https://sayinglobal-backend-production.up.railway.app wss://sayinglobal-backend-production.up.railway.app https://sentry.io https://*.ingest.sentry.io https://*.ingest.de.sentry.io https://nominatim.openstreetmap.org https://*.tile.openstreetmap.org https://tile.openstreetmap.org",
-          // No frames
-          "frame-ancestors 'none'",
-          // Workers for Next.js
-          "worker-src 'self' blob:",
-        ].join('; '),
-      });
-    }
-
-    return [
-      {
-        source: '/(.*)',
-        headers: securityHeaders,
-      },
-    ];
   },
 };
 

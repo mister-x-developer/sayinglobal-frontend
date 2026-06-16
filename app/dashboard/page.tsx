@@ -27,6 +27,8 @@ import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
 
 
+import { PullToRefresh } from '@/components/shared/PullToRefresh';
+
 export default function DashboardPage() {
   const t = useTranslations();
   const router = useRouter();
@@ -36,28 +38,28 @@ export default function DashboardPage() {
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    let alive = true;
-    listingsApi
-      .list({ page_size: 8 })
-      .then((res) => {
-        if (!alive) return;
-        setFeed(res.results ?? []);
-      })
-      .catch(() => alive && setFeed([]))
-      .finally(() => alive && setLoading(false));
-      
-    listingsApi.categories().then((cats) => {
-      if (alive) setCategories(cats);
-    });
+  const loadData = async () => {
+    try {
+      const [res, cats] = await Promise.all([
+        listingsApi.list({ page_size: 8 }),
+        listingsApi.categories(),
+      ]);
+      setFeed(res.results ?? []);
+      setCategories(cats);
+    } catch {
+      // ignore
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    return () => {
-      alive = false;
-    };
+  useEffect(() => {
+    loadData();
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <PullToRefresh onRefresh={loadData}>
+      <div className="min-h-screen flex flex-col">
       <AppNav />
 
       <main className="flex-1">
@@ -224,6 +226,7 @@ export default function DashboardPage() {
         </div>
       </main>
     </div>
+    </PullToRefresh>
   );
 }
 

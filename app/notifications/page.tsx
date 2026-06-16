@@ -244,7 +244,7 @@ function NotificationRow({
   const title = getLocaleText(n.title, n.title_uz, n.title_uz_cyrl, n.title_ru, n.title_en);
   const message = getLocaleText(n.message, n.message_uz, n.message_uz_cyrl, n.message_ru, n.message_en);
 
-  const dest = n.action_url ?? `/notifications/${n.public_id}`;
+  const dest = n.action_url ?? `/notifications/detail?id=${n.public_id}`;
 
   const handleRowClick = () => {
     if (!n.is_read) onMarkRead(n.public_id);

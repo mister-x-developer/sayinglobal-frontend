@@ -13,6 +13,7 @@ import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { TermsGate } from '@/components/providers/TermsGate';
 import { NotificationSocketProvider } from '@/components/providers/NotificationSocketProvider';
 import { HydrationReady } from '@/components/providers/HydrationReady';
+import { CapacitorNativeProvider } from '@/components/providers/CapacitorNativeProvider';
 import { MotionProvider } from '@/components/providers/MotionProvider';
 import { OnboardingModal } from '@/components/shared/OnboardingModal';
 import { FloatingNearbyButton } from '@/components/shared/FloatingNearbyButton';
@@ -65,10 +66,10 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/icon.png', type: 'image/png' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
     ],
     apple: [
-      { url: '/icon.png', type: 'image/png' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
     ]
   },
 };
@@ -118,6 +119,7 @@ export default async function RootLayout({
       </head>
       <body className="antialiased min-h-[100dvh] bg-bg text-fg pb-[calc(72px+env(safe-area-inset-bottom))] md:pb-0">
         <HydrationReady />
+        <CapacitorNativeProvider />
         <ThemeProvider>
           <IntlClientProvider messages={messages} locale={locale} timeZone="Asia/Tashkent">
             <MotionProvider>

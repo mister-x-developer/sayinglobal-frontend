@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 import { X, Send, Loader2, Sparkles, MessageSquarePlus, MessageSquare, Clock, ArrowLeft, Menu } from 'lucide-react';
 import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
 import apiClient from '@/lib/api/client';
-import { BrandLogo } from '@/components/shared/BrandLogo';
+import { Logo } from '@/components/shared/Logo';
 
 interface Message {
   id: string;
@@ -125,7 +125,7 @@ export default function ChatAIPage() {
           <ArrowLeft className="h-5 w-5" />
         </button>
         <div className="relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl overflow-hidden border border-brand-primary/20 bg-brand-primary/5">
-          <BrandLogo iconOnly size={24} noLink />
+          <Logo size="xs" showText={false} href={null} />
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-[15px] font-bold text-fg flex items-center gap-1.5">
@@ -184,7 +184,7 @@ export default function ChatAIPage() {
               <div className="space-y-4 py-8">
                 <div className="flex justify-center mb-6">
                   <div className="h-20 w-20 rounded-3xl bg-brand-primary/10 flex items-center justify-center border border-brand-primary/20">
-                    <BrandLogo iconOnly size={48} noLink />
+                    <Logo size="md" showText={false} href={null} />
                   </div>
                 </div>
                 <h2 className="text-center text-xl font-bold text-fg px-4">
@@ -209,7 +209,7 @@ export default function ChatAIPage() {
               <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 {msg.role === 'assistant' && (
                   <div className="mr-3 shrink-0 h-8 w-8 rounded-full bg-brand-primary/10 overflow-hidden border border-brand-primary/20 flex items-center justify-center">
-                    <BrandLogo iconOnly size={20} noLink />
+                    <Logo size="xs" showText={false} href={null} />
                   </div>
                 )}
                 <div className={`max-w-[85%] rounded-3xl px-5 py-3 text-[15px] leading-relaxed whitespace-pre-wrap shadow-sm ${
@@ -225,7 +225,7 @@ export default function ChatAIPage() {
             {loading && (
               <div className="flex justify-start">
                 <div className="mr-3 shrink-0 h-8 w-8 rounded-full bg-brand-primary/10 overflow-hidden border border-brand-primary/20 flex items-center justify-center">
-                  <BrandLogo iconOnly size={20} noLink />
+                  <Logo size="xs" showText={false} href={null} />
                 </div>
                 <div className="rounded-3xl rounded-tl-md bg-bg-elevated border border-border px-5 py-4 shadow-sm flex items-center gap-1.5">
                   <div className="h-2 w-2 rounded-full bg-brand-primary/60 animate-bounce" style={{ animationDelay: '0ms' }} />

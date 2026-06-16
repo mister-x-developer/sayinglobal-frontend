@@ -84,7 +84,7 @@ export default function MyReportsPage() {
                   return (
                     <li key={r.public_id}>
                       <Link
-                        href={`/profile/reports/${r.public_id}`}
+                        href={`/profile/reports/detail?id=${r.public_id}`}
                         className="surface-elevated group flex items-start gap-4 p-4 transition-all hover:-translate-y-0.5 hover:shadow-lift"
                       >
                         <div className="inline-flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-bg-subtle text-fg-muted">

@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { Send, Loader2, Sparkles, MessageSquarePlus, Clock, ArrowLeft } from 'lucide-react';
 import { AdminLayout } from '@/components/layout/AdminLayout';
 import apiClient from '@/lib/api/client';
-import { BrandLogo } from '@/components/shared/BrandLogo';
+import { Logo } from '@/components/shared/Logo';
 import { useAuthStore } from '@/lib/store/auth';
 
 interface Message {
@@ -149,7 +149,7 @@ export default function AdminAIAgentPage() {
           <header className="h-16 border-b border-border bg-bg-elevated/95 backdrop-blur flex items-center justify-between px-6 shrink-0 z-10 shadow-sm">
             <div className="flex items-center gap-4">
               <div className="relative h-10 w-10 rounded-xl overflow-hidden bg-brand-primary/10 border border-brand-primary/20 shrink-0 flex items-center justify-center shadow-inner">
-                <BrandLogo iconOnly size={28} noLink />
+                <Logo size="xs" showText={false} href={null} />
               </div>
               <div>
                 <h1 className="text-base font-bold text-fg flex items-center gap-1.5">
@@ -173,7 +173,7 @@ export default function AdminAIAgentPage() {
             {messages.length === 0 && (
               <div className="flex flex-col items-center justify-center h-full max-w-2xl mx-auto w-full animate-in fade-in duration-500">
                 <div className="h-20 w-20 rounded-3xl bg-brand-primary/10 flex items-center justify-center border border-brand-primary/20 shadow-inner mb-6">
-                  <BrandLogo iconOnly size={56} noLink />
+                  <Logo size="md" showText={false} href={null} />
                 </div>
                 <h2 className="text-2xl font-black text-fg mb-3 text-center">Tizimga xush kelibsiz</h2>
                 <p className="text-center text-fg-muted mb-10 max-w-md text-sm leading-relaxed">
@@ -201,7 +201,7 @@ export default function AdminAIAgentPage() {
                 <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   {msg.role === 'assistant' && (
                     <div className="mr-3 shrink-0 h-9 w-9 rounded-2xl bg-brand-primary/10 overflow-hidden border border-brand-primary/20 flex items-center justify-center shadow-inner">
-                      <BrandLogo iconOnly size={24} noLink />
+                      <Logo size="xs" showText={false} href={null} />
                     </div>
                   )}
                   <div className={`max-w-[85%] rounded-3xl px-6 py-4 text-[15px] leading-relaxed whitespace-pre-wrap shadow-sm ${
@@ -217,7 +217,7 @@ export default function AdminAIAgentPage() {
               {loading && (
                 <div className="flex justify-start animate-in fade-in duration-300">
                   <div className="mr-3 shrink-0 h-9 w-9 rounded-2xl bg-brand-primary/10 overflow-hidden border border-brand-primary/20 flex items-center justify-center shadow-inner">
-                    <BrandLogo iconOnly size={24} noLink />
+                    <Logo size="xs" showText={false} href={null} />
                   </div>
                   <div className="rounded-3xl rounded-tl-sm bg-bg-elevated border border-border px-6 py-5 shadow-sm flex items-center gap-1.5">
                     <div className="h-2 w-2 rounded-full bg-brand-primary/60 animate-bounce" style={{ animationDelay: '0ms' }} />

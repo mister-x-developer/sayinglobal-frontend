@@ -436,7 +436,7 @@ export default function ChatPage() {
                 >
                   <ArrowLeft className="h-5 w-5" strokeWidth={1.75} />
                 </button>
-                <Link href={`/sellers/${getOther(activeConv).public_id}`} className="flex flex-1 items-center gap-3 min-w-0">
+                <Link href={`/sellers/detail?id=${getOther(activeConv).public_id}`} className="flex flex-1 items-center gap-3 min-w-0">
                   <div className="relative flex-shrink-0">
                     <Avatar
                       src={(getOther(activeConv) as any).avatar_url}
@@ -480,7 +480,7 @@ export default function ChatPage() {
                           className="absolute right-0 top-10 z-50 min-w-[160px] overflow-hidden rounded-xl border border-border bg-bg-elevated shadow-lift"
                         >
                           <Link
-                            href={`/sellers/${getOther(activeConv).public_id}`}
+                            href={`/sellers/detail?id=${getOther(activeConv).public_id}`}
                             className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-fg hover:bg-bg-subtle"
                             onClick={() => setMoreOpen(false)}
                           >

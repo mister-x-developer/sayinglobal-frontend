@@ -412,7 +412,7 @@ function RatingCard({
           ) : null}
           {rating.listing_title && rating.listing_public_id && (
             <a
-              href={`/listings/${rating.listing_public_id}`}
+              href={`/listings/detail?id=${rating.listing_public_id}`}
               className="mt-2 inline-flex items-center gap-1 rounded-full bg-bg-subtle px-2 py-0.5 text-[11px] text-fg-muted hover:underline"
             >
               <MessageSquareText className="h-3 w-3" strokeWidth={1.75} />

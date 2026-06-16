@@ -70,7 +70,7 @@ export default function Map({ listings, centerLat = 41.2995, centerLng = 69.2401
                 {Number(listing.price).toLocaleString()} {listing.currency}
               </p>
               <button 
-                onClick={() => router.push(`/listings/${listing.public_id}`)}
+                onClick={() => router.push(`/listings/detail?id=${listing.public_id}`)}
                 className="mt-2 w-full bg-emerald-600 text-white text-xs py-1.5 rounded hover:bg-emerald-700 transition"
               >
                 Ko&apos;rish

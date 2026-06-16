@@ -114,7 +114,7 @@ export default function NearbyListingsPage() {
       lat: Number(r.latitude),
       lng: Number(r.longitude),
       label: r.title,
-      href: `/listings/${r.public_id}`,
+      href: `/listings/detail?id=${r.public_id}`,
       imageUrl: r.primary_image?.image ?? r.images?.[0]?.image ?? undefined,
       price: r.price ? new Intl.NumberFormat('uz-UZ').format(Number(r.price)) + " so'm" : undefined,
       distanceKm: typeof r.distance_km === 'number' ? r.distance_km : undefined,

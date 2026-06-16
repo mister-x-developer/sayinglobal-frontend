@@ -211,7 +211,7 @@ export default function AdminAIModerationPage() {
                         {/* Right: actions */}
                         <div className="flex items-center gap-2 flex-shrink-0">
                           {r.target_type === 'listing' && (
-                            <Link href={`/admin/listings/${r.target_id}`}
+                            <Link href={`/admin/listings/detail?id=${r.target_id}`}
                               className="btn btn-secondary btn-sm">
                               <Eye className="h-3.5 w-3.5" strokeWidth={1.75} />
                               Ko'rish
