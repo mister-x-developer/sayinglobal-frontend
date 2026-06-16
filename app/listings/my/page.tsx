@@ -335,13 +335,26 @@ export default function MyListingsPage() {
 
                         {/* Rejection reason */}
                         {l.status === 'rejected' && rejectionReason && (
-                          <div className="mt-2 flex items-start gap-1.5 rounded-lg bg-danger/8 px-3 py-2">
-                            <AlertCircle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-danger" strokeWidth={2} />
-                            <div className="min-w-0 flex-1">
-                              <TranslatableText
-                                text={rejectionReason}
-                                textClassName="text-xs text-danger leading-relaxed"
-                              />
+                          <div className="mt-2 flex flex-col gap-1.5 rounded-lg bg-danger/8 px-3 py-2">
+                            <div className="flex items-start gap-1.5">
+                              <AlertCircle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-danger" strokeWidth={2} />
+                              <div className="min-w-0 flex-1">
+                                <TranslatableText
+                                  text={rejectionReason}
+                                  textClassName="text-xs text-danger leading-relaxed font-semibold"
+                                />
+                              </div>
+                            </div>
+                            <div className="ml-5 flex flex-wrap gap-x-4 gap-y-1 text-xs text-danger/80">
+                              {l.rejected_at && (
+                                <span>{t('listings.rejectedOn' as any) || 'Rad etilgan sana'}: {new Date(l.rejected_at).toLocaleDateString()}</span>
+                              )}
+                              {l.scheduled_delete_at && (
+                                <span className="font-medium flex items-center gap-1">
+                                  <Timer className="h-3 w-3" />
+                                  {t('listings.deletesIn' as any) || 'O\'chiriladi'}: {formatRelativeTime(l.scheduled_delete_at)}
+                                </span>
+                              )}
                             </div>
                           </div>
                         )}
@@ -431,13 +444,29 @@ export default function MyListingsPage() {
                                       {t('listings.bump' as any) || 'Topga chiqarish'}
                                     </button>
                                     <button
-                                    type="button"
-                                    onClick={() => { setOpenMenu(null); setSoldConfirm(l.public_id); }}
-                                    className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-success hover:bg-success/10"
-                                  >
-                                    <ShoppingCart className="h-4 w-4" strokeWidth={1.75} />
-                                    {t('listings.markAsSold')}
-                                  </button>
+                                      type="button"
+                                      onClick={async () => {
+                                        setOpenMenu(null);
+                                        try {
+                                          await listingsApi.restore(l.public_id);
+                                          load();
+                                        } catch (e) {
+                                          console.error('Failed to renew listing', e);
+                                        }
+                                      }}
+                                      className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-brand-primary hover:bg-brand-primary/10"
+                                    >
+                                      <Timer className="h-4 w-4" strokeWidth={1.75} />
+                                      {t('listings.renew' as any) || 'Muddati uzaytirish (+30 kun)'}
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => { setOpenMenu(null); setSoldConfirm(l.public_id); }}
+                                      className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-success hover:bg-success/10"
+                                    >
+                                      <ShoppingCart className="h-4 w-4" strokeWidth={1.75} />
+                                      {t('listings.markAsSold')}
+                                    </button>
                                   </>
                                 )}
                                 {(l.status === 'sold' || l.status === 'expired') && (
@@ -447,17 +476,15 @@ export default function MyListingsPage() {
                                       setOpenMenu(null);
                                       try {
                                         await listingsApi.restore(l.public_id);
-                                        setItems((prev) =>
-                                          prev.map((it) => it.public_id === l.public_id ? { ...it, status: 'active' } : it)
-                                        );
-                                      } catch {
                                         load();
+                                      } catch {
+                                        console.error('Failed to restore/renew');
                                       }
                                     }}
                                     className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-brand-primary hover:bg-brand-primary/10"
                                   >
                                     <CheckCircle2 className="h-4 w-4" strokeWidth={1.75} />
-                                    {t('listings.restore' as any)}
+                                    {t('listings.restore' as any) || 'Tiklash / Yangilash'}
                                   </button>
                                 )}
                                 <div className="my-1 h-px bg-border" />
