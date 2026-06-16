@@ -3,8 +3,7 @@
   "appName": "Sayin Global",
   "webDir": "out",
   "server": {
-    "androidScheme": "https",
-    "hostname": "app.sayinglobal.com",
+    "androidScheme": "http",
     "cleartext": true
   },
   "plugins": {
@@ -24,4 +23,3 @@
     }
   }
 }
-EOF && echo '=== capacitor.config.json created ===' && echo '=== Installing django-redis ===' && cd /home/lochinbek/Desktop/sayinglobal/backend && pip install django-redis --break-system-packages 2>&1 | tail -5 && echo '=== Verifying django-redis ===' && python3 -c 'import django_redis; print("django-redis OK")' 2>&1
