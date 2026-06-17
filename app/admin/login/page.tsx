@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Capacitor } from '@capacitor/core';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   AlertCircle,
@@ -42,9 +43,8 @@ export default function AdminLoginPage() {
     setSubmitting(true);
     setError(null);
     try {
-      const result = await authApi.adminLogin({ username: username.trim(), password });
       setSession(result.tokens.access, result.tokens.refresh, result.user);
-      if (typeof window !== 'undefined' && !(window as any).Capacitor?.isNative) {
+      if (typeof window !== 'undefined' && !Capacitor.isNativePlatform()) {
         window.location.replace('/admin');
         return;
       }
@@ -82,7 +82,7 @@ export default function AdminLoginPage() {
         return;
       }
       setSession(result.tokens.access, result.tokens.refresh, result.user);
-      if (typeof window !== 'undefined' && !(window as any).Capacitor?.isNative) {
+      if (typeof window !== 'undefined' && !Capacitor.isNativePlatform()) {
         window.location.replace('/admin');
         return;
       }

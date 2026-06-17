@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { Capacitor } from '@capacitor/core';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import {
@@ -96,7 +97,7 @@ export default function AuthPage() {
       //
       // Tradeoff: ~200 ms extra paint vs hard guarantee the user actually
       // lands on the destination — chosen deliberately.
-      if (typeof window !== 'undefined' && !(window as any).Capacitor?.isNative) {
+      if (typeof window !== 'undefined' && !Capacitor.isNativePlatform()) {
         window.location.replace(target);
         return;
       }
