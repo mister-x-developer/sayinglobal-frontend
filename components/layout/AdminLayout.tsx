@@ -221,7 +221,7 @@ export function AdminLayout({ children, noPadding = false }: { children: React.R
   );
 
   return (
-    <div className="dark text-fg flex min-h-screen relative">
+    <div className="text-fg flex min-h-screen relative bg-bg">
 
       {/* Desktop sidebar — collapsible */}
       <aside
