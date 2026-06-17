@@ -44,7 +44,7 @@ export default function AdminLoginPage() {
     try {
       const result = await authApi.adminLogin({ username: username.trim(), password });
       setSession(result.tokens.access, result.tokens.refresh, result.user);
-      if (typeof window !== 'undefined') {
+      if (typeof window !== 'undefined' && !(window as any).Capacitor?.isNative) {
         window.location.replace('/admin');
         return;
       }
@@ -82,7 +82,7 @@ export default function AdminLoginPage() {
         return;
       }
       setSession(result.tokens.access, result.tokens.refresh, result.user);
-      if (typeof window !== 'undefined') {
+      if (typeof window !== 'undefined' && !(window as any).Capacitor?.isNative) {
         window.location.replace('/admin');
         return;
       }

@@ -43,7 +43,7 @@ export default function AuthPage() {
   useEffect(() => {
     if (!isAuthenticated) return;
     const target = nextPath || (currentUser?.is_admin ? '/admin' : '/dashboard');
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && !(window as any).Capacitor?.isNative) {
       window.location.replace(target);
     } else {
       router.replace(target);
@@ -96,7 +96,7 @@ export default function AuthPage() {
       //
       // Tradeoff: ~200 ms extra paint vs hard guarantee the user actually
       // lands on the destination — chosen deliberately.
-      if (typeof window !== 'undefined') {
+      if (typeof window !== 'undefined' && !(window as any).Capacitor?.isNative) {
         window.location.replace(target);
         return;
       }

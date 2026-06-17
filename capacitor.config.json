@@ -3,8 +3,8 @@
   "appName": "Sayin Global",
   "webDir": "out",
   "server": {
-    "androidScheme": "http",
-    "cleartext": true
+    "hostname": "sayinglobal.vercel.app",
+    "androidScheme": "https"
   },
   "plugins": {
     "SplashScreen": {
