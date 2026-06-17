@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { X, Send, Loader2, Sparkles, MessageSquarePlus, MessageSquare, Clock, ArrowLeft, Menu } from 'lucide-react';
 import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
+import { UserAILogo } from '@/components/ai/AILogos';
 import apiClient from '@/lib/api/client';
 import { Logo } from '@/components/shared/Logo';
 
@@ -124,8 +125,11 @@ export default function ChatAIPage() {
         >
           <ArrowLeft className="h-5 w-5" />
         </button>
-        <div className="relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl overflow-hidden border border-brand-primary/20 bg-brand-primary/5">
-          <Logo size="xs" showText={false} href={null} />
+        <div className="relative flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-primary/10 border border-brand-primary/20 shadow-sm">
+          <UserAILogo size={24} />
+          <div className="absolute -bottom-0.5 -right-0.5 flex h-3 w-3 items-center justify-center rounded-full bg-white dark:bg-bg border border-border">
+            <span className="h-1.5 w-1.5 rounded-full bg-brand-primary animate-pulse" />
+          </div>
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-[15px] font-bold text-fg flex items-center gap-1.5">
@@ -183,9 +187,7 @@ export default function ChatAIPage() {
             {messages.length === 0 && (
               <div className="space-y-4 py-8">
                 <div className="flex justify-center mb-6">
-                  <div className="h-20 w-20 rounded-3xl bg-brand-primary/10 flex items-center justify-center border border-brand-primary/20">
-                    <Logo size="md" showText={false} href={null} />
-                  </div>
+                  <UserAILogo size={56} />
                 </div>
                 <h2 className="text-center text-xl font-bold text-fg px-4">
                   {t('ai.greeting' as any) ?? 'Salom! Qanday yordam bera olaman?'}
@@ -208,9 +210,7 @@ export default function ChatAIPage() {
             {messages.map((msg) => (
               <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 {msg.role === 'assistant' && (
-                  <div className="mr-3 shrink-0 h-8 w-8 rounded-full bg-brand-primary/10 overflow-hidden border border-brand-primary/20 flex items-center justify-center">
-                    <Logo size="xs" showText={false} href={null} />
-                  </div>
+                  <UserAILogo size={24} />
                 )}
                 <div className={`max-w-[85%] rounded-3xl px-5 py-3 text-[15px] leading-relaxed whitespace-pre-wrap shadow-sm ${
                   msg.role === 'user'
@@ -224,9 +224,7 @@ export default function ChatAIPage() {
             
             {loading && (
               <div className="flex justify-start">
-                <div className="mr-3 shrink-0 h-8 w-8 rounded-full bg-brand-primary/10 overflow-hidden border border-brand-primary/20 flex items-center justify-center">
-                  <Logo size="xs" showText={false} href={null} />
-                </div>
+                <UserAILogo size={24} />
                 <div className="rounded-3xl rounded-tl-md bg-bg-elevated border border-border px-5 py-4 shadow-sm flex items-center gap-1.5">
                   <div className="h-2 w-2 rounded-full bg-brand-primary/60 animate-bounce" style={{ animationDelay: '0ms' }} />
                   <div className="h-2 w-2 rounded-full bg-brand-primary/60 animate-bounce" style={{ animationDelay: '150ms' }} />

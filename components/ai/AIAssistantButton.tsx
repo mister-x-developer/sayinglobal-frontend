@@ -7,6 +7,7 @@ import { X } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore } from '@/lib/store/auth';
 import { Logo } from '@/components/shared/Logo';
+import { UserAILogo, AdminAILogo } from '@/components/ai/AILogos';
 
 const STORAGE_KEY = 'sayin_ai_btn_hidden';
 
@@ -141,10 +142,10 @@ export function AIAssistantButton() {
           >
             {overDelete ? (
               <X className="h-6 w-6 text-white" strokeWidth={2.5} />
+            ) : isAdmin ? (
+              <AdminAILogo size={32} />
             ) : (
-              <div className="relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl overflow-hidden border border-brand-primary/20 bg-brand-primary/5">
-                <Logo size="xs" showText={false} href={null} />
-              </div>
+              <UserAILogo size={36} />
             )}
           </button>
         </motion.div>

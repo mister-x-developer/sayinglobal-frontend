@@ -6,6 +6,7 @@ import { Send, Loader2, Sparkles, MessageSquarePlus, Clock, ArrowLeft, Terminal,
 import { AdminLayout } from '@/components/layout/AdminLayout';
 import apiClient from '@/lib/api/client';
 import { useAuthStore } from '@/lib/store/auth';
+import { AdminAILogo } from '@/components/ai/AILogos';
 
 interface Message {
   id: string;
@@ -147,8 +148,8 @@ export default function AdminAIAgentPage() {
           {/* Header */}
           <header className="h-16 border-b border-white/10 bg-black/40 backdrop-blur-2xl flex items-center justify-between px-6 shrink-0 z-10">
             <div className="flex items-center gap-4">
-              <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.2)]">
-                <Bot className="h-5 w-5 text-indigo-400" />
+              <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-indigo-500/20 shadow-[0_0_15px_rgba(99,102,241,0.1)]">
+                <AdminAILogo size={32} />
                 <div className="absolute -bottom-1 -right-1 flex h-3 w-3 items-center justify-center rounded-full bg-black border border-white/10">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 </div>
@@ -180,8 +181,8 @@ export default function AdminAIAgentPage() {
               <div className="flex flex-col items-center justify-center h-full max-w-2xl mx-auto w-full animate-in fade-in zoom-in-95 duration-700">
                 <div className="relative mb-8">
                   <div className="absolute inset-0 bg-indigo-500/20 blur-3xl rounded-full" />
-                  <div className="h-24 w-24 rounded-3xl bg-indigo-500/10 flex items-center justify-center border border-indigo-500/30 shadow-[0_0_30px_rgba(99,102,241,0.15)] relative z-10">
-                    <Bot className="h-12 w-12 text-indigo-400" />
+                  <div className="h-28 w-28 rounded-[2rem] bg-indigo-500/5 flex items-center justify-center border border-indigo-500/20 shadow-[0_0_40px_rgba(99,102,241,0.1)] relative z-10">
+                    <AdminAILogo size={80} />
                   </div>
                 </div>
                 
@@ -210,8 +211,8 @@ export default function AdminAIAgentPage() {
               {messages.map((msg) => (
                 <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   {msg.role === 'assistant' && (
-                    <div className="mr-4 shrink-0 h-10 w-10 rounded-2xl bg-indigo-500/10 overflow-hidden border border-indigo-500/30 flex items-center justify-center shadow-[0_0_15px_rgba(99,102,241,0.1)] mt-1">
-                      <Bot className="h-5 w-5 text-indigo-400" />
+                    <div className="mr-4 shrink-0 h-10 w-10 rounded-2xl bg-indigo-500/5 overflow-hidden border border-indigo-500/20 flex items-center justify-center shadow-[0_0_15px_rgba(99,102,241,0.05)] mt-1">
+                      <AdminAILogo size={26} />
                     </div>
                   )}
                   <div className={`max-w-[80%] rounded-3xl px-6 py-4 text-[15px] leading-relaxed whitespace-pre-wrap ${
@@ -226,8 +227,8 @@ export default function AdminAIAgentPage() {
               
               {loading && (
                 <div className="flex justify-start animate-in fade-in duration-300">
-                  <div className="mr-4 shrink-0 h-10 w-10 rounded-2xl bg-indigo-500/10 overflow-hidden border border-indigo-500/30 flex items-center justify-center shadow-[0_0_15px_rgba(99,102,241,0.1)] mt-1">
-                    <Bot className="h-5 w-5 text-indigo-400 animate-pulse" />
+                  <div className="mr-4 shrink-0 h-10 w-10 rounded-2xl bg-indigo-500/5 overflow-hidden border border-indigo-500/20 flex items-center justify-center shadow-[0_0_15px_rgba(99,102,241,0.05)] mt-1">
+                    <AdminAILogo size={26} className="animate-pulse" />
                   </div>
                   <div className="rounded-3xl rounded-tl-sm bg-white/[0.03] border border-white/10 px-6 py-5 backdrop-blur-md flex items-center gap-2 shadow-2xl">
                     <div className="h-2 w-2 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: '0ms' }} />
