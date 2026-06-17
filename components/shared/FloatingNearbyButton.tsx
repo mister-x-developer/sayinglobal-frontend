@@ -1,7 +1,6 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
-import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { MapPin, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -11,6 +10,7 @@ import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
 const STORAGE_KEY = 'sayin_nearby_btn_hidden';
 
 export function FloatingNearbyButton() {
+  const router = useRouter();
   const pathname = usePathname();
   const t = useTranslations('nearby');
   const { isAuthenticated } = useAuthStore();
@@ -44,10 +44,12 @@ export function FloatingNearbyButton() {
     return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
   }, []);
 
+  const didDrag = useRef(false);
+
   const onPointerDown = (e: React.PointerEvent) => {
-    if ((e.target as HTMLElement).closest('a')) return;
     e.currentTarget.setPointerCapture(e.pointerId);
     setDragging(true);
+    didDrag.current = false;
     startPos.current = { x: e.clientX - pos.x, y: e.clientY - pos.y };
   };
 
@@ -55,6 +57,10 @@ export function FloatingNearbyButton() {
     if (!dragging) return;
     const newX = e.clientX - startPos.current.x;
     const newY = e.clientY - startPos.current.y;
+    // Require at least 5px movement to count as a drag
+    if (Math.abs(newX - pos.x) > 5 || Math.abs(newY - pos.y) > 5) {
+      didDrag.current = true;
+    }
     currentPos.current = { x: e.clientX, y: e.clientY };
     setPos({ x: newX, y: newY });
     setOverDelete(checkOverDelete(e.clientX, e.clientY));
@@ -66,6 +72,9 @@ export function FloatingNearbyButton() {
     if (checkOverDelete(e.clientX, e.clientY)) {
       sessionStorage.setItem(STORAGE_KEY, 'true');
       setHidden(true);
+    } else if (!didDrag.current) {
+      // It was a tap, not a drag — navigate
+      router.push('/listings/nearby');
     }
     setOverDelete(false);
   };
@@ -86,7 +95,6 @@ export function FloatingNearbyButton() {
 
   // Clamp position within window
   const clampedX = Math.max(-(windowSize.width - 80), Math.min(pos.x, 0));
-  // Allow dragging up (negative pos.y) and down (positive pos.y, up to 136px so it doesn't leave bottom screen)
   const clampedY = Math.max(-(windowSize.height - 200), Math.min(pos.y, 136));
 
   return (
@@ -136,9 +144,7 @@ export function FloatingNearbyButton() {
           initial={{ y: 20, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
         >
-          <Link
-            href="/listings/nearby"
-            draggable={false}
+          <button
             onClick={(e) => { if (dragging) e.preventDefault(); }}
             className={`inline-flex h-14 w-14 items-center justify-center rounded-full text-white shadow-[0_4px_14px_0_rgb(46_140_95/0.45)] transition-all duration-200 ease-out active:scale-95 animate-float ${
               overDelete ? 'bg-red-500' : 'bg-success'
@@ -150,7 +156,7 @@ export function FloatingNearbyButton() {
             ) : (
               <MapPin className="h-6 w-6" strokeWidth={2.25} />
             )}
-          </Link>
+          </button>
         </motion.div>
       </div>
     </>
