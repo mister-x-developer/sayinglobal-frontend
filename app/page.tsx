@@ -15,20 +15,13 @@ import { LandingRedirect } from '@/components/auth/LandingRedirect';
 export default function LandingPage() {
   const router = useRouter();
 
-  // Evaluated synchronously on client. On SSR this is false, so it matches Web perfectly.
-  // On Capacitor, this is true during hydration, which intentionally drops the Landing DOM.
-  const isCapacitor = typeof window !== 'undefined' && Capacitor.isNativePlatform();
-
   useEffect(() => {
-    if (isCapacitor) {
-      router.replace('/dashboard');
-    }
-  }, [router, isCapacitor]);
-
-  if (isCapacitor) {
-    // Avoid rendering the Landing DOM entirely on mobile app to prevent flashes.
-    return <div className="min-h-screen bg-bg" />;
-  }
+    import('@capacitor/core').then(({ Capacitor }) => {
+      if (Capacitor.isNativePlatform()) {
+        window.location.replace('/dashboard/');
+      }
+    });
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col">

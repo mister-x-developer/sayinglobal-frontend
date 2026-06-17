@@ -99,6 +99,19 @@ const themeInitScript = `
 })();
 `;
 
+const capacitorInitScript = `
+(function(){
+  try {
+    if (window.Capacitor && window.Capacitor.isNative) {
+      var p = window.location.pathname;
+      if (p === '/' || p === '/index.html' || p === '') {
+        window.location.replace('/dashboard/');
+      }
+    }
+  } catch(e) {}
+})();
+`;
+
 export default async function RootLayout({
   children,
 }: {
@@ -116,6 +129,7 @@ export default async function RootLayout({
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <script dangerouslySetInnerHTML={{ __html: capacitorInitScript }} />
       </head>
       <body className="antialiased min-h-[100dvh] bg-bg text-fg pb-[calc(72px+env(safe-area-inset-bottom))] md:pb-0">
         <HydrationReady />
