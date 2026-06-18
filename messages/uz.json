@@ -1136,7 +1136,10 @@
     "newChat": "Yangi chat",
     "chatHistory": "Chatlar tarixi",
     "noChats": "Suhbatlar topilmadi",
-    "adminGreeting": "👋 Assalomu alaykum! Platformani boshqarish boʻyicha savollaringiz bormi?"
+    "adminGreeting": "Salom! Platforma boshqaruvida qanday yordam bera olaman?",
+    "title": "SAYIN AI",
+    "adminTitle": "AI Yordamchi",
+    "adminSubtitle": "Moderatsiya va Tahlil"
   },
   "privacy": {
     "title": "Maxfiylik siyosati",

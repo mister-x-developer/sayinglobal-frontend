@@ -1136,7 +1136,10 @@
     "newChat": "New Chat",
     "chatHistory": "Chat History",
     "noChats": "No conversations found",
-    "adminGreeting": "👋 Hello! Do you have any questions about managing the platform?"
+    "adminGreeting": "Hello! How can I help you manage the platform?",
+    "title": "SAYIN AI",
+    "adminTitle": "AI Co-pilot",
+    "adminSubtitle": "Moderation & Analytics"
   },
   "privacy": {
     "title": "Privacy Policy",
@@ -1349,18 +1352,18 @@
     "noResults": "Ko'rib chiqilishi kerak bo'lgan natijalar yo'q"
   },
   "Analytics": {
-    "notEnoughData": "Yetarli ma'lumot yo'q",
-    "7days": "7 kun",
-    "14days": "14 kun",
-    "30days": "30 kun",
-    "90days": "90 kun",
-    "listingStatuses": "E'lon holatlari",
-    "noData": "Ma'lumot yo'q",
-    "login": "Kirish",
-    "createListing": "E'lon yaratish",
-    "moderation": "Moderatsiya",
-    "approved": "Tasdiqlandi",
-    "rejected": "Rad etildi"
+    "notEnoughData": "Not enough data",
+    "7days": "7 days",
+    "14days": "14 days",
+    "30days": "30 days",
+    "90days": "90 days",
+    "listingStatuses": "Listing statuses",
+    "noData": "No data",
+    "login": "Login",
+    "createListing": "Create listing",
+    "moderation": "Moderation",
+    "approved": "Approved",
+    "rejected": "Rejected"
   },
   "Map": {
     "geoDiscovery": "Geo-Discovery",

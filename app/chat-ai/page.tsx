@@ -1,14 +1,12 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { X, Send, Loader2, Sparkles, MessageSquarePlus, MessageSquare, Clock, ArrowLeft, Menu } from 'lucide-react';
+import { useTranslations, useLocale } from 'next-intl';
+import { Send, Loader2, Sparkles, MessageSquarePlus, MessageSquare, Clock, ArrowLeft, Menu } from 'lucide-react';
 import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
-import { UserAILogo } from '@/components/ai/AILogos';
+import { UserAILogo, AdminAILogo } from '@/components/ai/AILogos';
 import apiClient from '@/lib/api/client';
-import { Logo } from '@/components/shared/Logo';
 
 interface Message {
   id: string;
@@ -22,15 +20,9 @@ interface ChatSession {
   updated_at: string;
 }
 
-const USER_QUICK_PROMPTS = [
-  { key: 'findCattle', icon: '🐄', text: 'Qoramol topish' },
-  { key: 'findHorse', icon: '🐎', text: 'Ot topish' },
-  { key: 'priceCheck', icon: '💰', text: 'Narx tekshirish' },
-  { key: 'nearbyListings', icon: '📍', text: "Yaqin eʼlonlar" },
-];
-
 export default function ChatAIPage() {
   const t = useTranslations();
+  const locale = useLocale();
   const router = useRouter();
 
   const hydrated = useAuthHydrated();
@@ -41,7 +33,6 @@ export default function ChatAIPage() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [sessionId, setSessionId] = useState(() => Math.random().toString(36).slice(2));
-  
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [showHistory, setShowHistory] = useState(false);
 
@@ -69,6 +60,8 @@ export default function ChatAIPage() {
 
   if (!hydrated || !isAuthenticated) return null;
 
+  const isAdmin = user?.is_staff || user?.is_admin;
+
   const sendMessage = async (text: string) => {
     if (!text.trim() || loading) return;
     const userMsg: Message = { id: Date.now().toString(), role: 'user', text: text.trim() };
@@ -79,14 +72,16 @@ export default function ChatAIPage() {
       const res = await apiClient.post('/ai-moderation/assistant/', {
         message: text.trim(),
         session_id: sessionId,
+        // Pass current UI locale so the backend responds in the same language
+        locale,
       });
-      const reply = res.data?.reply || res.data?.message || (t('ai.errorReply' as any) ?? 'Xatolik yuz berdi.');
+      const reply = res.data?.reply || res.data?.message || t('ai.errorReply');
       setMessages((prev) => [...prev, { id: (Date.now() + 1).toString(), role: 'assistant', text: reply }]);
-      apiClient.get('/ai-moderation/assistant/sessions/').then(r => setSessions(r.data)).catch(()=>{});
+      apiClient.get('/ai-moderation/assistant/sessions/').then(r => setSessions(r.data)).catch(() => {});
     } catch {
       setMessages((prev) => [
         ...prev,
-        { id: (Date.now() + 1).toString(), role: 'assistant', text: t('ai.errorReply' as any) ?? "Vaqtinchalik xatolik. Qayta urinib ko'ring." },
+        { id: (Date.now() + 1).toString(), role: 'assistant', text: t('ai.errorReply') },
       ]);
     } finally {
       setLoading(false);
@@ -110,23 +105,39 @@ export default function ChatAIPage() {
     setShowHistory(false);
   };
 
-  const isAdmin = user?.is_staff || user?.is_admin;
-  const aiTitle = isAdmin ? 'Admin AI Co-pilot' : 'SAYIN AI';
-  const aiSubtitle = isAdmin ? 'Moderation & Analytics' : (t('ai.subtitle' as any) ?? 'Chorva bozori yordamchisi');
+  const AILogo = isAdmin ? AdminAILogo : UserAILogo;
+  const aiTitle = isAdmin ? t('ai.adminTitle') : t('ai.title');
+  const aiSubtitle = isAdmin ? t('ai.adminSubtitle') : t('ai.subtitle');
+  const greeting = isAdmin ? t('ai.adminGreeting') : t('ai.greeting');
+
+  // Quick prompts based on role
+  const quickPrompts = isAdmin
+    ? [
+        { key: 'adminCheckNew', icon: '🔍' },
+        { key: 'adminComplaints', icon: '⚠️' },
+        { key: 'adminStats', icon: '📊' },
+        { key: 'adminSpam', icon: '🚨' },
+      ]
+    : [
+        { key: 'findCattle', icon: '🐄' },
+        { key: 'findHorse', icon: '🐎' },
+        { key: 'priceCheck', icon: '💰' },
+        { key: 'nearbyListings', icon: '📍' },
+      ];
 
   return (
     <div className="fixed inset-0 z-[100] flex flex-col bg-bg-elevated pt-safe pb-safe">
       {/* Header */}
       <div className="flex h-14 shrink-0 items-center gap-3 border-b border-border bg-bg px-4">
-        <button 
-          onClick={() => router.back()} 
+        <button
+          onClick={() => router.back()}
           className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-fg hover:bg-bg-subtle"
           aria-label={t('common.back')}
         >
           <ArrowLeft className="h-5 w-5" />
         </button>
         <div className="relative flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-primary/10 border border-brand-primary/20 shadow-sm">
-          <UserAILogo size={24} />
+          <AILogo size={24} />
           <div className="absolute -bottom-0.5 -right-0.5 flex h-3 w-3 items-center justify-center rounded-full bg-white dark:bg-bg border border-border">
             <span className="h-1.5 w-1.5 rounded-full bg-brand-primary animate-pulse" />
           </div>
@@ -138,8 +149,8 @@ export default function ChatAIPage() {
           </p>
           <p className="text-xs text-fg-subtle truncate">{aiSubtitle}</p>
         </div>
-        <button 
-          onClick={() => setShowHistory(!showHistory)} 
+        <button
+          onClick={() => setShowHistory(!showHistory)}
           className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors ${showHistory ? 'bg-brand-primary/10 text-brand-primary' : 'text-fg-subtle hover:bg-bg-subtle hover:text-fg'}`}
         >
           <Menu className="h-5 w-5" />
@@ -154,12 +165,12 @@ export default function ChatAIPage() {
             className="flex items-center gap-3 w-full p-4 rounded-2xl border border-dashed border-brand-primary text-brand-primary bg-brand-primary/5 hover:bg-brand-primary/10 transition-colors shadow-sm"
           >
             <MessageSquarePlus className="h-5 w-5" strokeWidth={2} />
-            <span className="font-semibold">{t('ai.newChat' as any) ?? 'Yangi chat ochish'}</span>
+            <span className="font-semibold">{t('ai.newChat')}</span>
           </button>
-          
-          <div className="text-xs font-bold text-fg-subtle uppercase tracking-wider">{t('ai.chatHistory' as any) ?? 'Chatlar tarixi'}</div>
+
+          <div className="text-xs font-bold text-fg-subtle uppercase tracking-wider">{t('ai.chatHistory')}</div>
           {sessions.length === 0 ? (
-            <p className="text-sm text-fg-muted text-center mt-8">{t('ai.noChats' as any) ?? 'Sizda hali suhbatlar yo\'q.'}</p>
+            <p className="text-sm text-fg-muted text-center mt-8">{t('ai.noChats')}</p>
           ) : (
             <div className="space-y-3">
               {sessions.map(s => (
@@ -173,7 +184,7 @@ export default function ChatAIPage() {
                     <p className="text-[15px] font-semibold text-fg truncate leading-tight">{s.title}</p>
                     <div className="flex items-center gap-1.5 mt-1.5 text-xs text-fg-subtle font-medium">
                       <Clock className="h-3.5 w-3.5" />
-                      <span>{new Date(s.updated_at).toLocaleDateString()}</span>
+                      <span>{new Date(s.updated_at).toLocaleDateString(locale)}</span>
                     </div>
                   </div>
                 </button>
@@ -187,30 +198,30 @@ export default function ChatAIPage() {
             {messages.length === 0 && (
               <div className="space-y-4 py-8">
                 <div className="flex justify-center mb-6">
-                  <UserAILogo size={56} />
+                  <AILogo size={56} />
                 </div>
-                <h2 className="text-center text-xl font-bold text-fg px-4">
-                  {t('ai.greeting' as any) ?? 'Salom! Qanday yordam bera olaman?'}
-                </h2>
+                <h2 className="text-center text-xl font-bold text-fg px-4">{greeting}</h2>
                 <div className="grid grid-cols-2 gap-3 mt-8">
-                  {USER_QUICK_PROMPTS.map((p) => (
+                  {quickPrompts.map((p) => (
                     <button
                       key={p.key}
-                      onClick={() => sendMessage(t(`ai.prompt.${p.key}` as any) ?? p.text)}
+                      onClick={() => sendMessage(t(`ai.prompt.${p.key}` as any))}
                       className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-bg-elevated p-4 text-center text-[13px] font-semibold text-fg hover:border-brand-primary hover:bg-brand-primary/5 transition-all shadow-sm active:scale-95"
                     >
                       <span className="text-2xl">{p.icon}</span>
-                      <span className="line-clamp-2 leading-tight">{t(`ai.prompt.${p.key}` as any) ?? p.text}</span>
+                      <span className="line-clamp-2 leading-tight">{t(`ai.prompt.${p.key}` as any)}</span>
                     </button>
                   ))}
                 </div>
               </div>
             )}
-            
+
             {messages.map((msg) => (
-              <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+              <div key={msg.id} className={`flex items-end gap-2 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 {msg.role === 'assistant' && (
-                  <UserAILogo size={24} />
+                  <div className="shrink-0 mb-1">
+                    <AILogo size={28} />
+                  </div>
                 )}
                 <div className={`max-w-[85%] rounded-3xl px-5 py-3 text-[15px] leading-relaxed whitespace-pre-wrap shadow-sm ${
                   msg.role === 'user'
@@ -221,10 +232,12 @@ export default function ChatAIPage() {
                 </div>
               </div>
             ))}
-            
+
             {loading && (
-              <div className="flex justify-start">
-                <UserAILogo size={24} />
+              <div className="flex justify-start items-end gap-2">
+                <div className="shrink-0 mb-1">
+                  <AILogo size={28} />
+                </div>
                 <div className="rounded-3xl rounded-tl-md bg-bg-elevated border border-border px-5 py-4 shadow-sm flex items-center gap-1.5">
                   <div className="h-2 w-2 rounded-full bg-brand-primary/60 animate-bounce" style={{ animationDelay: '0ms' }} />
                   <div className="h-2 w-2 rounded-full bg-brand-primary/60 animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -235,13 +248,10 @@ export default function ChatAIPage() {
             <div ref={messagesEndRef} className="h-1" />
           </div>
 
-          {/* Input field fixed at bottom */}
+          {/* Input */}
           <div className="shrink-0 border-t border-border bg-bg-elevated p-3 sm:p-4">
             <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                sendMessage(input);
-              }}
+              onSubmit={(e) => { e.preventDefault(); sendMessage(input); }}
               className="flex items-end gap-2 rounded-3xl border border-input-border bg-input pl-4 pr-1.5 py-1.5 shadow-sm focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-primary/20 transition-all"
             >
               <textarea
@@ -253,7 +263,7 @@ export default function ChatAIPage() {
                     sendMessage(input);
                   }
                 }}
-                placeholder={t('ai.inputPlaceholder' as any) ?? "Savol yozing..."}
+                placeholder={t('ai.inputPlaceholder')}
                 className="max-h-32 min-h-[44px] flex-1 resize-none bg-transparent py-3 text-[15px] text-fg placeholder:text-fg-muted focus:outline-none"
                 rows={1}
               />
@@ -262,7 +272,7 @@ export default function ChatAIPage() {
                 disabled={!input.trim() || loading}
                 className="mb-1 inline-flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full bg-brand-primary text-white transition-transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
               >
-                {loading ? <Loader2 className="h-4.5 w-4.5 animate-spin" /> : <Send className="h-4 w-4 ml-0.5" />}
+                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4 ml-0.5" />}
               </button>
             </form>
           </div>
