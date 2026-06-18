@@ -44,6 +44,13 @@ import type { Listing } from '@/lib/api/listings';
 import { formatPrice, formatRelativeTime, getLocalizedListingTitle } from '@/lib/utils/format';
 import { ListingGalleryViewer } from '@/components/listings/ListingGalleryViewer';
 
+/** Get the best localized value for a field like title, description. */
+function getLocalizedField(obj: Record<string, any>, field: string, locale: string): string {
+  const norm = (locale || 'uz').replace('-', '_');
+  const key = `${field}_${norm}`;
+  return obj[key] || obj[`${field}_uz`] || obj[field] || '';
+}
+
 export default function ListingDetailPage() {
   const t = useTranslations();
   const locale = useLocale();
@@ -248,16 +255,7 @@ export default function ListingDetailPage() {
                       </p>
                     )}
                     <div className="flex items-start justify-between gap-3">
-                      <h1 className="display-md text-balance flex-1">{translatedTitle ?? localizedTitle}</h1>
-                      {localizedTitle === listing.title && locale !== 'uz' && (
-                        <div className="mt-1">
-                          <TranslateButton 
-                            text={listing.title} 
-                            onTranslated={setTranslatedTitle} 
-                            compact 
-                          />
-                        </div>
-                      )}
+                      <h1 className="display-md text-balance flex-1">{getLocalizedField(listing as any, 'title', locale) || listing.title}</h1>
                     </div>
 
                     <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-sm text-fg-muted">
@@ -482,11 +480,7 @@ export default function ListingDetailPage() {
                           <SpecItem
                             icon={Dna}
                             label={t('animal.gender')}
-                            value={
-                              t.has(`animal.${listing.gender}` as any)
-                                ? t(`animal.${listing.gender}` as any)
-                                : <InlineTranslatedSpec text={listing.gender} />
-                            }
+                            value={t(`animal.${listing.gender}` as any)}
                           />
                         )}
                         {listing.breed && (
@@ -536,10 +530,9 @@ export default function ListingDetailPage() {
                     className="surface-elevated p-4 sm:p-6"
                   >
                     <h2 className="display-sm mb-4">{t('listings.description')}</h2>
-                    <TranslatableText
-                      text={listing.description}
-                      textClassName="whitespace-pre-line text-pretty leading-[1.75] text-fg-muted"
-                    />
+                    <p className="whitespace-pre-line text-pretty leading-[1.75] text-fg-muted">
+                      {getLocalizedField(listing as any, 'description', locale) || listing.description}
+                    </p>
                   </motion.div>
 
                   {/* Map (only when coordinates are available) */}
@@ -948,15 +941,21 @@ function DetailSkeleton() {
 }
 
 function InlineTranslatedSpec({ text }: { text: string }) {
-  const [translated, setTranslated] = React.useState<string | null>(null);
-  const locale = useLocale();
+  const [displayed, setDisplayed] = React.useState<string>(text);
+  const locale = useLocale() as any;
+
+  React.useEffect(() => {
+    if (!text || locale === 'uz') return;
+    import('@/lib/translation/provider').then(({ translationProvider }) => {
+      translationProvider.translate(text, locale).then((result) => {
+        if (result && result !== text) {
+          // Preserve sentence case: capitalize first letter
+          setDisplayed(result.charAt(0).toUpperCase() + result.slice(1));
+        }
+      }).catch(() => {});
+    });
+  }, [text, locale]);
+
   if (!text) return null;
-  return (
-    <div className="flex flex-col items-start gap-1">
-      <span>{translated ?? text}</span>
-      {locale !== 'uz' && (
-        <TranslateButton text={text} onTranslated={setTranslated} className="!p-1 !px-1.5 !text-[10px] h-6" compact />
-      )}
-    </div>
-  );
+  return <span>{displayed}</span>;
 }

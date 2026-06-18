@@ -77,8 +77,8 @@ const backendProvider: TranslationProvider = {
         return { text: cache.get(key)!, fromLocale: sourceLocale ?? 'auto', toLocale: 'uz-cyrl', cached: true };
       }
       let uzText = text;
-      if (sourceLocale !== 'uz') {
-        const intermediate = await backendProvider.translate(text, 'uz', sourceLocale ?? 'auto');
+      if (sourceLocale && sourceLocale !== 'uz' && sourceLocale !== 'auto') {
+        const intermediate = await backendProvider.translate(text, 'uz', sourceLocale);
         uzText = intermediate.text;
       }
       const cyrl = latinToCyrillic(uzText);
@@ -134,7 +134,15 @@ export const translationProvider = {
     if (!text.trim()) return text;
     try {
       const result = await activeProvider.translate(text, targetLocale, sourceLocale);
-      return result.text;
+      let translated = result.text;
+      // Preserve sentence case: if original starts with uppercase, translated should too
+      if (translated && text.length > 0) {
+        const originalFirstChar = text.trimStart()[0];
+        if (originalFirstChar === originalFirstChar.toUpperCase() && originalFirstChar !== originalFirstChar.toLowerCase()) {
+          translated = translated.charAt(0).toUpperCase() + translated.slice(1);
+        }
+      }
+      return translated;
     } catch {
       return text; // graceful fallback
     }
