@@ -42,7 +42,11 @@ export function LanguageSwitcher() {
   const switchTo = (code: string) => {
     setOpen(false);
     setLocaleCookie(code);
-    window.location.reload();
+    // Hard navigation so the server re-reads the new cookie and re-renders
+    // with the correct locale messages. router.refresh() alone is not
+    // enough because getLocale() runs on the server and only fires on a
+    // full page request.
+    window.location.href = window.location.href;
   };
 
   return (

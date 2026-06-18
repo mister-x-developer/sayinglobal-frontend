@@ -64,16 +64,15 @@ function isAdminPath(pathname: string): boolean {
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Set locale cookie if missing
   const res = NextResponse.next();
-  const existingLocale = req.cookies.get(LOCALE_COOKIE)?.value;
-  if (!existingLocale || !(locales as readonly string[]).includes(existingLocale)) {
-    res.cookies.set(LOCALE_COOKIE, pickLocale(req), {
-      path: '/',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 365,
-    });
-  }
+  // Always sync the locale cookie so changes from LanguageSwitcher propagate
+  // to server components on the very next request.
+  const resolvedLocale = pickLocale(req);
+  res.cookies.set(LOCALE_COOKIE, resolvedLocale, {
+    path: '/',
+    sameSite: 'lax',
+    maxAge: 60 * 60 * 24 * 365,
+  });
 
   // If the user is already authenticated, redirect away from landing and auth.
   // Strict: non-admins to /dashboard, admins to /admin.
@@ -84,7 +83,9 @@ export function middleware(req: NextRequest) {
       : (req.nextUrl.searchParams.get('next') || '/dashboard');
     nextUrl.pathname = target.startsWith('/') ? target.split('?')[0] : '/dashboard';
     nextUrl.search = '';
-    return NextResponse.redirect(nextUrl);
+    const redirectRes = NextResponse.redirect(nextUrl);
+    redirectRes.cookies.set(LOCALE_COOKIE, resolvedLocale, { path: '/', sameSite: 'lax', maxAge: 60 * 60 * 24 * 365 });
+    return redirectRes;
   }
 
   // Auth guard — redirect unauthenticated users to /auth. Loginsiz hech narsa ko'rinmasin!
@@ -93,7 +94,9 @@ export function middleware(req: NextRequest) {
     loginUrl.pathname = '/auth';
     // Preserve intended destination so we can redirect back after login
     loginUrl.searchParams.set('next', pathname);
-    return NextResponse.redirect(loginUrl);
+    const loginRes = NextResponse.redirect(loginUrl);
+    loginRes.cookies.set(LOCALE_COOKIE, resolvedLocale, { path: '/', sameSite: 'lax', maxAge: 60 * 60 * 24 * 365 });
+    return loginRes;
   }
 
   // Admin route guard — non-admin authenticated users cannot access /admin/*
@@ -101,7 +104,9 @@ export function middleware(req: NextRequest) {
     const dashboardUrl = req.nextUrl.clone();
     dashboardUrl.pathname = '/dashboard';
     dashboardUrl.search = '';
-    return NextResponse.redirect(dashboardUrl);
+    const adminRes = NextResponse.redirect(dashboardUrl);
+    adminRes.cookies.set(LOCALE_COOKIE, resolvedLocale, { path: '/', sameSite: 'lax', maxAge: 60 * 60 * 24 * 365 });
+    return adminRes;
   }
 
 
