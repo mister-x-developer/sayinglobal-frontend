@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useLocale } from 'next-intl';
+import { useLocaleSwitch } from '@/components/providers/IntlClientProvider';
 import { Globe, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -13,17 +12,10 @@ const LANGUAGES = [
   { code: 'en', label: 'English', short: 'EN' },
 ] as const;
 
-const COOKIE = 'sayin-locale';
-const ONE_YEAR = 60 * 60 * 24 * 365;
-
-function setLocaleCookie(locale: string) {
-  if (typeof document === 'undefined') return;
-  document.cookie = `${COOKIE}=${locale}; path=/; max-age=${ONE_YEAR}; samesite=lax`;
-}
-
 export function LanguageSwitcher() {
-  const locale = useLocale();
-  const router = useRouter();
+  // Use our custom hook instead of next-intl's useLocale, 
+  // because this allows us to trigger the context update.
+  const { locale, setLocale } = useLocaleSwitch();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -41,12 +33,8 @@ export function LanguageSwitcher() {
 
   const switchTo = (code: string) => {
     setOpen(false);
-    setLocaleCookie(code);
-    // Hard navigation so the server re-reads the new cookie and re-renders
-    // with the correct locale messages. router.refresh() alone is not
-    // enough because getLocale() runs on the server and only fires on a
-    // full page request.
-    window.location.href = window.location.href;
+    // Directly update state and re-render everything instantly without reload
+    setLocale(code as any);
   };
 
   return (
