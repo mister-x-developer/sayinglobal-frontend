@@ -99,14 +99,14 @@ export function IntlClientProvider({
   const [loading, setLoading] = useState(false);
 
   // On mount, check if stored locale differs from server-rendered locale
+  // Because if it does, our `messages` state (initialized to serverMessages) is WRONG!
   useEffect(() => {
     const storedLocale = getStoredLocale();
-    if (storedLocale && storedLocale !== locale) {
+    if (storedLocale && storedLocale !== serverLocale) {
       // Load the correct locale messages
       setLoading(true);
       loadMessages(storedLocale).then((msgs) => {
         setMessages(msgs);
-        setLocaleState(storedLocale);
         setLoading(false);
       });
     }
