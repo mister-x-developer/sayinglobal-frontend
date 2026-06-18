@@ -14,40 +14,36 @@ import {
   Eye, MessageCircle, Flag, CheckCircle2, XCircle, Loader2,
   ArrowUpRight, ArrowDownRight, Star, ShoppingCart, Zap,
 } from 'lucide-react';
+import {
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
+  BarChart, Bar, PieChart, Pie, Cell, Legend
+} from 'recharts';
 import { AdminLayout } from '@/components/layout/AdminLayout';
 import { analyticsApi, type DashboardStats, type GrowthAnalytics, type ActivityAnalytics } from '@/lib/api/analytics';
 import apiClient from '@/lib/api/client';
 import { formatNumber, formatRelativeTime } from '@/lib/utils/format';
 
-// ── Mini SVG Line Chart ──────────────────────────────────────────────────────
+// ── Mini SVG Line Chart (Recharts) ───────────────────────────────────────────
 function MiniLineChart({ data, color }: { data: { date: string; count: number }[]; color: string }) {
   if (!data || data.length < 2) return <div className="h-16 flex items-center justify-center text-xs text-fg-subtle">{t('Analytics.notEnoughData')}</div>;
-  const W = 300;
-  const H = 60;
-  const max = Math.max(...data.map(d => d.count), 1);
-  const pts = data.map((d, i) => {
-    const x = (i / (data.length - 1)) * W;
-    const y = H - (d.count / max) * (H - 8) - 4;
-    return `${x},${y}`;
-  }).join(' ');
-  const area = `0,${H} ${pts} ${W},${H}`;
   return (
-    <div className="h-16 w-full">
-      <svg viewBox={`0 0 ${W} ${H}`} className="h-full w-full" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id={`g-${color.slice(1)}`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={color} stopOpacity="0.3" />
-            <stop offset="100%" stopColor={color} stopOpacity="0.02" />
-          </linearGradient>
-        </defs>
-        <polygon points={area} fill={`url(#g-${color.slice(1)})`} />
-        <polyline points={pts} fill="none" stroke={color} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
-      </svg>
+    <div className="h-16 w-full -ml-2 -mb-2">
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart data={data}>
+          <defs>
+            <linearGradient id={`color-${color}`} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor={color} stopOpacity={0.3} />
+              <stop offset="95%" stopColor={color} stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <Area type="monotone" dataKey="count" stroke={color} strokeWidth={2} fillOpacity={1} fill={`url(#color-${color})`} />
+        </AreaChart>
+      </ResponsiveContainer>
     </div>
   );
 }
 
-// ── Full SVG Line Chart ──────────────────────────────────────────────────────
+// ── Full Area Chart (Recharts) ───────────────────────────────────────────────
 function FullLineChart({ 
   data1, data2, label1, label2, color1, color2
 }: { 
@@ -58,88 +54,59 @@ function FullLineChart({
   color1: string;
   color2?: string;
 }) {
-  const allVals = [...(data1.map(d => d.count)), ...(data2?.map(d => d.count) ?? [])];
-  const max = Math.max(...allVals, 1);
-  const W = 600;
-  const H = 140;
-  const pad = { t: 8, r: 8, b: 28, l: 32 };
-  const iW = W - pad.l - pad.r;
-  const iH = H - pad.t - pad.b;
-
-  const toPoints = (data: { date: string; count: number }[]) =>
-    data.map((d, i) => {
-      const x = pad.l + (i / Math.max(data.length - 1, 1)) * iW;
-      const y = pad.t + iH - (d.count / max) * iH;
-      return `${x},${y}`;
-    }).join(' ');
-
-  const toArea = (data: { date: string; count: number }[]) => {
-    const pts = data.map((d, i) => {
-      const x = pad.l + (i / Math.max(data.length - 1, 1)) * iW;
-      const y = pad.t + iH - (d.count / max) * iH;
-      return `${x},${y}`;
-    });
-    const first = pts[0].split(',');
-    const last = pts[pts.length - 1].split(',');
-    return `${first[0]},${pad.t + iH} ${pts.join(' ')} ${last[0]},${pad.t + iH}`;
-  };
-
-  // Y axis labels
-  const yLabels = [0, Math.floor(max / 2), max];
-  // X axis labels (show first, mid, last)
-  const showDates = data1.length > 0 ? [data1[0], data1[Math.floor(data1.length / 2)], data1[data1.length - 1]] : [];
+  // Merge data1 and data2 by date
+  const merged = data1.map((d1) => {
+    const d2 = data2?.find(d => d.date === d1.date);
+    return {
+      date: d1.date,
+      [label1]: d1.count,
+      ...(label2 && d2 ? { [label2]: d2.count } : {})
+    };
+  });
 
   return (
-    <div className="w-full">
-      <svg viewBox={`0 0 ${W} ${H}`} className="h-36 w-full" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id={`fa-${color1.slice(1)}`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={color1} stopOpacity="0.2" />
-            <stop offset="100%" stopColor={color1} stopOpacity="0" />
-          </linearGradient>
-          {color2 && (
-            <linearGradient id={`fa-${color2.slice(1)}`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={color2} stopOpacity="0.15" />
-              <stop offset="100%" stopColor={color2} stopOpacity="0" />
+    <div className="w-full h-64 mt-4">
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart data={merged} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+          <defs>
+            <linearGradient id="color1" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor={color1} stopOpacity={0.3} />
+              <stop offset="95%" stopColor={color1} stopOpacity={0} />
             </linearGradient>
+            {color2 && (
+              <linearGradient id="color2" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor={color2} stopOpacity={0.3} />
+                <stop offset="95%" stopColor={color2} stopOpacity={0} />
+              </linearGradient>
+            )}
+          </defs>
+          <XAxis 
+            dataKey="date" 
+            axisLine={false} 
+            tickLine={false} 
+            tick={{ fill: 'currentColor', opacity: 0.5, fontSize: 11 }}
+            tickFormatter={(val) => val.substring(5)}
+            dy={10}
+          />
+          <YAxis 
+            axisLine={false} 
+            tickLine={false} 
+            tick={{ fill: 'currentColor', opacity: 0.5, fontSize: 11 }}
+            tickFormatter={(val) => val >= 1000 ? `${(val/1000).toFixed(1)}k` : val}
+          />
+          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" strokeOpacity={0.06} />
+          <RechartsTooltip 
+            contentStyle={{ backgroundColor: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)', borderRadius: '12px', color: 'var(--color-fg)', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+            itemStyle={{ color: 'var(--color-fg)' }}
+            labelStyle={{ color: 'var(--color-fg-muted)', marginBottom: '4px' }}
+          />
+          <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '12px', color: 'var(--color-fg-muted)' }} />
+          <Area type="monotone" dataKey={label1} stroke={color1} strokeWidth={2} fillOpacity={1} fill="url(#color1)" activeDot={{ r: 6, strokeWidth: 0 }} />
+          {label2 && color2 && (
+            <Area type="monotone" dataKey={label2} stroke={color2} strokeWidth={2} fillOpacity={1} fill="url(#color2)" activeDot={{ r: 6, strokeWidth: 0 }} />
           )}
-        </defs>
-        {/* Grid lines */}
-        {yLabels.map((v, i) => {
-          const y = pad.t + iH - (v / max) * iH;
-          return <line key={i} x1={pad.l} y1={y} x2={pad.l + iW} y2={y} stroke="currentColor" strokeOpacity="0.06" strokeWidth="1" />;
-        })}
-        {/* Area */}
-        {data1.length > 1 && <polygon points={toArea(data1)} fill={`url(#fa-${color1.slice(1)})`} />}
-        {data2 && data2.length > 1 && color2 && <polygon points={toArea(data2)} fill={`url(#fa-${color2.slice(1)})`} />}
-        {/* Lines */}
-        {data1.length > 1 && <polyline points={toPoints(data1)} fill="none" stroke={color1} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />}
-        {data2 && data2.length > 1 && color2 && <polyline points={toPoints(data2)} fill="none" stroke={color2} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" strokeDasharray="5,3" />}
-        {/* Y labels */}
-        {yLabels.map((v, i) => {
-          const y = pad.t + iH - (v / max) * iH;
-          return <text key={i} x={pad.l - 4} y={y + 4} textAnchor="end" fontSize="9" fill="currentColor" fillOpacity="0.4">{v > 999 ? (v/1000).toFixed(0) + 'k' : v}</text>;
-        })}
-        {/* X labels */}
-        {showDates.map((d, i) => {
-          const idx = data1.indexOf(d);
-          const x = pad.l + (idx / Math.max(data1.length - 1, 1)) * iW;
-          return <text key={i} x={x} y={H - 4} textAnchor="middle" fontSize="9" fill="currentColor" fillOpacity="0.4">{d.date.slice(5)}</text>;
-        })}
-      </svg>
-      {/* Legend */}
-      <div className="mt-1 flex items-center gap-4">
-        <span className="flex items-center gap-1.5 text-xs text-fg-subtle">
-          <span className="inline-block h-2 w-4 rounded-full" style={{ backgroundColor: color1 }} />
-          {label1}
-        </span>
-        {label2 && color2 && (
-          <span className="flex items-center gap-1.5 text-xs text-fg-subtle">
-            <span className="inline-block h-0.5 w-4 rounded-full border-dashed" style={{ backgroundColor: color2 }} />
-            {label2}
-          </span>
-        )}
-      </div>
+        </AreaChart>
+      </ResponsiveContainer>
     </div>
   );
 }
@@ -405,34 +372,64 @@ export default function AdminAnalyticsPage() {
                   <Package className="h-4 w-4 text-brand-primary" strokeWidth={2} />
                   <h2 className="font-bold text-fg">{t('Analytics.listingStatuses')}</h2>
                 </div>
-                <div className="space-y-3">
-                  {statusDist.length > 0 ? statusDist.map((s: any) => (
-                    <div key={s.status} className="flex items-center justify-between rounded-xl bg-bg-subtle px-3 py-2.5">
-                      <div className="flex items-center gap-2">
-                        <span className={`inline-block h-2 w-2 rounded-full ${
-                          s.status === 'active' ? 'bg-success' :
-                          s.status === 'pending' ? 'bg-warning' :
-                          s.status === 'sold' ? 'bg-blue-500' :
-                          s.status === 'rejected' ? 'bg-danger' : 'bg-fg-subtle'
-                        }`} />
-                        <span className="text-sm font-medium text-fg capitalize">{
+                <div className="h-56 w-full mt-2">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={statusDist}
+                        dataKey="count"
+                        nameKey="status"
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={80}
+                        paddingAngle={5}
+                      >
+                        {statusDist.map((entry: any, index: number) => {
+                          const colors = {
+                            active: '#1f7a52',
+                            pending: '#f59e0b',
+                            sold: '#3b82f6',
+                            rejected: '#ef4444',
+                            draft: '#6b7280'
+                          } as Record<string, string>;
+                          return <Cell key={`cell-${index}`} fill={colors[entry.status] || '#6b7280'} />;
+                        })}
+                      </Pie>
+                      <RechartsTooltip 
+                        contentStyle={{ backgroundColor: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)', borderRadius: '12px', color: 'var(--color-fg)', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                        itemStyle={{ color: 'var(--color-fg)' }}
+                        formatter={(value: number, name: string) => {
+                          const translatedName = name === 'active' ? 'Faol' : name === 'pending' ? 'Kutilmoqda' : name === 'sold' ? 'Sotilgan' : name === 'rejected' ? 'Rad etilgan' : name === 'draft' ? 'Qoralama' : name;
+                          return [formatNumber(value), translatedName];
+                        }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="mt-4 grid grid-cols-2 gap-2">
+                  {statusDist.map((s: any) => {
+                    const colors = {
+                      active: 'bg-success',
+                      pending: 'bg-warning',
+                      sold: 'bg-blue-500',
+                      rejected: 'bg-danger',
+                      draft: 'bg-fg-subtle'
+                    } as Record<string, string>;
+                    return (
+                      <div key={s.status} className="flex items-center gap-2">
+                        <span className={`inline-block h-2.5 w-2.5 rounded-full ${colors[s.status] || 'bg-fg-subtle'}`} />
+                        <span className="text-xs font-medium text-fg capitalize">{
                           s.status === 'active' ? 'Faol' :
                           s.status === 'pending' ? 'Kutilmoqda' :
                           s.status === 'sold' ? 'Sotilgan' :
                           s.status === 'rejected' ? 'Rad etilgan' :
                           s.status === 'draft' ? 'Qoralama' : s.status
                         }</span>
+                        <span className="text-xs text-fg-subtle ml-auto">{formatNumber(s.count)}</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-fg">{formatNumber(s.count)}</span>
-                        <span className="text-xs text-fg-subtle">
-                          {Math.round((s.count / totalListings) * 100)}%
-                        </span>
-                      </div>
-                    </div>
-                  )) : (
-                    <p className="text-sm text-fg-muted py-4 text-center">{t('Analytics.noData')}</p>
-                  )}
+                    );
+                  })}
                 </div>
               </motion.div>
 
@@ -509,15 +506,29 @@ export default function AdminAnalyticsPage() {
                   <Activity className="h-4 w-4 text-success" strokeWidth={2} />
                   <h2 className="font-bold text-fg">Faollik turlari — {period} kun</h2>
                 </div>
-                <div className="space-y-2">
-                  {displayActivity.slice(0, 8).map((ev: any) => (
-                    <div key={ev.event_type} className="flex items-center justify-between rounded-xl bg-bg-subtle px-3 py-2">
-                      <span className="text-xs text-fg-muted truncate max-w-[140px]">
-                        {ev.event_type.replace(/_/g, ' ')}
-                      </span>
-                      <span className="text-sm font-semibold text-fg ml-2">{formatNumber(ev.count)}</span>
-                    </div>
-                  ))}
+                <div className="h-64 w-full mt-2 -ml-4">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={displayActivity.slice(0, 6)} layout="vertical" margin={{ top: 0, right: 10, left: 30, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="currentColor" strokeOpacity={0.06} />
+                      <XAxis type="number" axisLine={false} tickLine={false} tick={{ fill: 'currentColor', opacity: 0.5, fontSize: 11 }} />
+                      <YAxis 
+                        dataKey="event_type" 
+                        type="category" 
+                        axisLine={false} 
+                        tickLine={false} 
+                        tick={{ fill: 'currentColor', fontSize: 11 }}
+                        tickFormatter={(val) => val.replace(/_/g, ' ')}
+                      />
+                      <RechartsTooltip 
+                        cursor={{ fill: 'currentColor', opacity: 0.05 }}
+                        contentStyle={{ backgroundColor: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)', borderRadius: '12px', color: 'var(--color-fg)', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                        itemStyle={{ color: 'var(--color-fg)' }}
+                        formatter={(value: number, name: string) => [formatNumber(value), 'Soni']}
+                        labelFormatter={(label) => label.replace(/_/g, ' ')}
+                      />
+                      <Bar dataKey="count" fill="#10b981" radius={[0, 4, 4, 0]} barSize={20} />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </div>
               </motion.div>
             </div>
