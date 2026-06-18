@@ -13,9 +13,17 @@ type SupportedLocale = typeof SUPPORTED_LOCALES[number];
 const DEFAULT_LOCALE: SupportedLocale = 'uz';
 const COOKIE_NAME = 'sayin-locale';
 
-// ── Cookie helpers ─────────────────────────────────────────────────────────────
-function getCookieLocale(): SupportedLocale | null {
-  if (typeof document === 'undefined') return null;
+// ── Storage helpers ─────────────────────────────────────────────────────────────
+function getStoredLocale(): SupportedLocale | null {
+  if (typeof window === 'undefined') return null;
+  // Try localStorage first (reliable in Capacitor)
+  try {
+    const ls = localStorage.getItem(COOKIE_NAME);
+    if (ls && (SUPPORTED_LOCALES as readonly string[]).includes(ls)) {
+      return ls as SupportedLocale;
+    }
+  } catch {}
+  // Fallback to cookie
   const match = document.cookie.match(new RegExp(`(?:^|; )${COOKIE_NAME}=([^;]*)`));
   const val = match ? decodeURIComponent(match[1]) : null;
   return val && (SUPPORTED_LOCALES as readonly string[]).includes(val)
@@ -23,10 +31,13 @@ function getCookieLocale(): SupportedLocale | null {
     : null;
 }
 
-function setCookieLocale(locale: SupportedLocale) {
-  if (typeof document === 'undefined') return;
+function setStoredLocale(locale: SupportedLocale) {
+  if (typeof window === 'undefined') return;
   const ONE_YEAR = 60 * 60 * 24 * 365;
   document.cookie = `${COOKIE_NAME}=${locale}; path=/; max-age=${ONE_YEAR}; samesite=lax`;
+  try {
+    localStorage.setItem(COOKIE_NAME, locale);
+  } catch {}
 }
 
 // ── Dynamic message loader ────────────────────────────────────────────────────
@@ -75,8 +86,8 @@ export function IntlClientProvider({
   // Determine initial locale: prefer cookie (set by user), then server prop
   const getInitialLocale = (): SupportedLocale => {
     if (typeof window !== 'undefined') {
-      const cookie = getCookieLocale();
-      if (cookie) return cookie;
+      const stored = getStoredLocale();
+      if (stored) return stored;
     }
     return (SUPPORTED_LOCALES as readonly string[]).includes(serverLocale)
       ? (serverLocale as SupportedLocale)
@@ -87,15 +98,15 @@ export function IntlClientProvider({
   const [messages, setMessages] = useState<AbstractIntlMessages>(serverMessages);
   const [loading, setLoading] = useState(false);
 
-  // On mount, check if cookie locale differs from server-rendered locale
+  // On mount, check if stored locale differs from server-rendered locale
   useEffect(() => {
-    const cookieLocale = getCookieLocale();
-    if (cookieLocale && cookieLocale !== locale) {
+    const storedLocale = getStoredLocale();
+    if (storedLocale && storedLocale !== locale) {
       // Load the correct locale messages
       setLoading(true);
-      loadMessages(cookieLocale).then((msgs) => {
+      loadMessages(storedLocale).then((msgs) => {
         setMessages(msgs);
-        setLocaleState(cookieLocale);
+        setLocaleState(storedLocale);
         setLoading(false);
       });
     }
@@ -105,7 +116,7 @@ export function IntlClientProvider({
   const setLocale = useCallback(async (newLocale: SupportedLocale) => {
     if (newLocale === locale) return;
     setLoading(true);
-    setCookieLocale(newLocale);
+    setStoredLocale(newLocale);
     const msgs = await loadMessages(newLocale);
     setMessages(msgs);
     setLocaleState(newLocale);

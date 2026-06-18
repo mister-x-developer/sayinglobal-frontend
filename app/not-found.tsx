@@ -1,10 +1,12 @@
+'use client';
+
 import Link from 'next/link';
-import { getTranslations } from 'next-intl/server';
+import { useTranslations } from 'next-intl';
 import { ArrowLeft, Home, LayoutDashboard } from 'lucide-react';
 import { Logo } from '@/components/shared/Logo';
 
-export default async function NotFound() {
-  const t = await getTranslations();
+export default function NotFound() {
+  const t = useTranslations();
 
   return (
     <div className="flex min-h-screen flex-col">
