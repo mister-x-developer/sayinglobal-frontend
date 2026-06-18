@@ -32,7 +32,7 @@ import { ListingImage } from '@/components/listings/ListingImage';
 import { ListingGrid } from '@/components/listings/ListingGrid';
 import { FollowButton } from '@/components/sellers/FollowButton';
 import { CommentSection } from '@/components/listings/CommentThread';
-import { TranslatableText } from '@/components/shared/TranslateButton';
+import { TranslatableText, TranslateButton } from '@/components/shared/TranslateButton';
 import { RatingDisplay } from '@/components/shared/RatingDisplay';
 import { ReportDialog } from '@/components/shared/ReportDialog';
 import { MapView } from '@/components/shared/MapView';
@@ -53,6 +53,7 @@ export default function ListingDetailPage() {
   const id = Number(searchParams.get('id') ?? 0);
 
   const [listing, setListing] = useState<Listing | null>(null);
+  const [translatedTitle, setTranslatedTitle] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [imgIndex, setImgIndex] = useState(0);
   const [favorited, setFavorited] = useState(false);
@@ -246,7 +247,18 @@ export default function ListingDetailPage() {
                           : listing.category.name_uz}
                       </p>
                     )}
-                    <h1 className="display-md text-balance">{localizedTitle}</h1>
+                    <div className="flex items-start justify-between gap-3">
+                      <h1 className="display-md text-balance flex-1">{translatedTitle ?? localizedTitle}</h1>
+                      {localizedTitle === listing.title && locale !== 'uz' && (
+                        <div className="mt-1">
+                          <TranslateButton 
+                            text={listing.title} 
+                            onTranslated={setTranslatedTitle} 
+                            compact 
+                          />
+                        </div>
+                      )}
+                    </div>
 
                     <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-sm text-fg-muted">
                       <span className="inline-flex items-center gap-1.5">
@@ -470,28 +482,32 @@ export default function ListingDetailPage() {
                           <SpecItem
                             icon={Dna}
                             label={t('animal.gender')}
-                            value={t(`animal.${listing.gender}` as any)}
+                            value={
+                              t.has(`animal.${listing.gender}` as any)
+                                ? t(`animal.${listing.gender}` as any)
+                                : <InlineTranslatedSpec text={listing.gender} />
+                            }
                           />
                         )}
                         {listing.breed && (
                           <SpecItem
                             icon={CheckCircle2}
                             label={t('animal.breed')}
-                            value={listing.breed}
+                            value={<InlineTranslatedSpec text={listing.breed} />}
                           />
                         )}
                         {listing.health_status && (
                           <SpecItem
                             icon={CheckCircle2}
                             label={t('animal.health')}
-                            value={listing.health_status}
+                            value={<InlineTranslatedSpec text={listing.health_status} />}
                           />
                         )}
                         {listing.vaccination_status && (
                           <SpecItem
                             icon={Syringe}
                             label={t('animal.vaccination')}
-                            value={listing.vaccination_status}
+                            value={<InlineTranslatedSpec text={listing.vaccination_status} />}
                           />
                         )}
                         {listing.region && (
@@ -927,6 +943,20 @@ function DetailSkeleton() {
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function InlineTranslatedSpec({ text }: { text: string }) {
+  const [translated, setTranslated] = React.useState<string | null>(null);
+  const locale = useLocale();
+  if (!text) return null;
+  return (
+    <div className="flex flex-col items-start gap-1">
+      <span>{translated ?? text}</span>
+      {locale !== 'uz' && (
+        <TranslateButton text={text} onTranslated={setTranslated} className="!p-1 !px-1.5 !text-[10px] h-6" compact />
+      )}
     </div>
   );
 }
