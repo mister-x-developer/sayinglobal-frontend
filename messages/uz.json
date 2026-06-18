@@ -56,8 +56,9 @@
     "done": "Tayyor",
     "send": "Yuborish",
     "user": "Foydalanuvchi",
-    "you": "Siz"
-  },
+    "you": "Siz",
+    "other": "Boshqa"
+},
   "landing": {
     "heroTitle": "Raqamli Chorva Bozori",
     "heroSubtitle": "Sotuvchilar va xaridorlarni bevosita bogʻlovchi raqamli chorva bozori",
@@ -304,8 +305,10 @@
     "vaccinatedNo": "Emlanmagan",
     "vaccinatedPartial": "Qisman emlangan",
     "days": "kun",
-    "day": "kun"
-  },
+    "day": "kun",
+    "selectBreed": "Zotni tanlang",
+    "enterBreed": "Zotni kiriting"
+},
   "profile": {
     "profile": "Profil",
     "myProfile": "Mening profilim",

@@ -69,37 +69,75 @@ export function CategorySelector({ value, onChange, error, required }: CategoryS
 interface BreedSelectorProps {
   categorySlug: string;
   value: string;
+  customValue?: string;
   onChange: (value: string) => void;
+  onCustomChange?: (value: string) => void;
   placeholder?: string;
 }
 
-export function BreedSelector({ categorySlug, value, onChange, placeholder }: BreedSelectorProps) {
+const OTHER_VALUE = '__other__';
+
+export function BreedSelector({
+  categorySlug,
+  value,
+  customValue = '',
+  onChange,
+  onCustomChange,
+  placeholder,
+}: BreedSelectorProps) {
   const t = useTranslations();
   const { breeds } = useBreeds(categorySlug);
 
+  // If no breeds from backend, show only freetext input
   if (breeds.length === 0) {
     return (
       <input
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
+        value={customValue || value}
+        onChange={(e) => {
+          if (onCustomChange) onCustomChange(e.target.value);
+          else onChange(e.target.value);
+        }}
         placeholder={placeholder ?? t('animal.breed')}
         className="input-base w-full"
       />
     );
   }
 
+  // Check if current value matches a known breed
+  const isOther = value === OTHER_VALUE || (value !== '' && !breeds.find((b) => (b.name || b.name_uz) === value));
+
   return (
-    <select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className="input-base w-full cursor-pointer"
-    >
-      <option value="">{t('animal.breed')}</option>
-      {breeds.map((b) => (
-        <option key={b.slug} value={b.name || b.name_uz}>
-          {b.name || b.name_uz}
-        </option>
-      ))}
-    </select>
+    <div className="space-y-2">
+      <select
+        value={isOther ? OTHER_VALUE : value}
+        onChange={(e) => {
+          if (e.target.value === OTHER_VALUE) {
+            onChange(OTHER_VALUE);
+          } else {
+            onChange(e.target.value);
+            if (onCustomChange) onCustomChange('');
+          }
+        }}
+        className="input-base w-full cursor-pointer"
+      >
+        <option value="">{t('animal.selectBreed' as any) || t('animal.breed')}</option>
+        {breeds.map((b) => (
+          <option key={b.slug} value={b.name || b.name_uz}>
+            {b.name || b.name_uz}
+          </option>
+        ))}
+        <option value={OTHER_VALUE}>{t('common.other' as any) || 'Boshqa...'}</option>
+      </select>
+
+      {isOther && (
+        <input
+          value={customValue}
+          onChange={(e) => onCustomChange?.(e.target.value)}
+          placeholder={t('animal.enterBreed' as any) || "Zot nomini kiriting..."}
+          className="input-base w-full"
+          autoFocus
+        />
+      )}
+    </div>
   );
 }

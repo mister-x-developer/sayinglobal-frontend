@@ -107,12 +107,6 @@ export default function DashboardPage() {
                 tone: 'bg-brand-accent/12 text-brand-accent',
               },
               {
-                href: '/listings/nearby',
-                icon: MapPin,
-                label: t('nearby.title'),
-                tone: 'bg-success/12 text-success',
-              },
-              {
                 href: '/profile/favorites',
                 icon: Heart,
                 label: t('nav.favorites'),
@@ -242,6 +236,7 @@ function DashboardNearby() {
   const [items, setItems] = useState<(Listing & { distance_km?: number })[]>([]);
   const [loading, setLoading] = useState(true);
   const [hasGeo, setHasGeo] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     if (typeof navigator === 'undefined' || !navigator.geolocation) {
@@ -273,19 +268,33 @@ function DashboardNearby() {
   if (loading || !hasGeo || items.length === 0) return null;
 
   return (
-    <>
-      <div className="flex items-end justify-between">
-        <div className="flex items-center gap-2">
-          <MapPin className="h-5 w-5 text-brand-accent" strokeWidth={1.75} />
-          <h2 className="display-sm">{t('nearby.title')}</h2>
+    <div className="surface-elevated rounded-2xl overflow-hidden border border-border">
+      <button 
+        onClick={() => setExpanded(!expanded)} 
+        className="w-full flex items-center justify-between p-4 sm:p-5 hover:bg-bg-subtle transition-colors"
+      >
+        <div className="flex items-center gap-3">
+          <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-success/12 text-success">
+            <MapPin className="h-5 w-5" strokeWidth={1.75} />
+          </div>
+          <h2 className="text-base sm:text-lg font-bold text-fg">{t('nearby.title')}</h2>
         </div>
-        <Link href="/listings/nearby" className="text-sm font-semibold text-brand-primary hover:underline">
-          {t('common.showAll')}
-        </Link>
-      </div>
-      <div className="mt-5">
-        <ListingGrid listings={items as any} />
-      </div>
-    </>
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-medium text-fg-subtle">{items.length} ta e'lon</span>
+          <ArrowRight className={`h-5 w-5 text-fg-muted transition-transform duration-300 ${expanded ? 'rotate-90' : ''}`} />
+        </div>
+      </button>
+      
+      {expanded && (
+        <div className="p-4 sm:p-5 pt-0 border-t border-border mt-1">
+           <div className="flex justify-end mb-4">
+             <Link href="/listings/nearby" className="text-sm font-semibold text-brand-primary hover:underline">
+               {t('common.showAll')}
+             </Link>
+           </div>
+           <ListingGrid listings={items as any} />
+        </div>
+      )}
+    </div>
   );
 }

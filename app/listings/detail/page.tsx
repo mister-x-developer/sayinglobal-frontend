@@ -483,14 +483,18 @@ export default function ListingDetailPage() {
                             value={t(`animal.${listing.gender}` as any)}
                           />
                         )}
-                        {listing.breed && (
+                        {(listing.breed || (listing as any).breed_custom) && (
                           <SpecItem
                             icon={CheckCircle2}
                             label={t('animal.breed')}
                             value={
-                              typeof listing.breed === 'object'
+                              listing.breed && typeof listing.breed === 'object'
                                 ? (getLocalizedField(listing.breed as any, 'name', locale) || (listing.breed as any)?.name_uz || String(listing.breed))
-                                : <InlineTranslatedSpec text={String(listing.breed)} />
+                                : (listing as any).breed_custom
+                                  ? getLocalizedField(listing as any, 'breed_custom', locale) || (listing as any).breed_custom
+                                  : typeof listing.breed === 'string'
+                                  ? <InlineTranslatedSpec text={String(listing.breed)} />
+                                  : null
                             }
                           />
                         )}

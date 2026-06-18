@@ -95,8 +95,12 @@ export function AdminLayout({ children, noPadding = false }: { children: React.R
   }, []);
 
   useEffect(() => {
-    if (hydrated && (!isAuthenticated || (!user?.is_staff && !user?.is_admin))) {
-      router.replace('/dashboard');
+    if (hydrated) {
+      if (!isAuthenticated) {
+        router.replace('/');
+      } else if (!user?.is_staff && !user?.is_admin) {
+        router.replace('/dashboard');
+      }
     }
   }, [hydrated, isAuthenticated, user, router]);
 

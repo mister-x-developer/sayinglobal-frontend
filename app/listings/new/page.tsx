@@ -47,8 +47,11 @@ export default function NewListingPage() {
   useEffect(() => {
     if (!isAuthenticated) {
       router.push('/auth');
+    } else if (user && (!user.full_name || user.full_name === user.phone)) {
+      toast.error(t('profile.fullNameRequired') || "Iltimos, e'lon berishdan oldin ism-familiyangizni kiriting!");
+      router.push('/profile/edit');
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, user, router, t]);
 
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -66,6 +69,7 @@ export default function NewListingPage() {
     quantity: '1',
     gender: '',
     breed: '',
+    breed_custom: '',
     health_status: '',
     vaccination_status: '',
     region: '',
@@ -96,7 +100,11 @@ export default function NewListingPage() {
     if (!form.region) e.region = t('errors.required');
     if (!form.district) e.district = t('errors.required');
     if (!form.health_status) e.health_status = t('errors.required');
-    if (!form.breed.trim()) e.breed = t('errors.required');
+    // Breed is required: either a dropdown selection or a custom value
+    const isOtherBreed = form.breed === '__other__';
+    if (!form.breed.trim() || (isOtherBreed && !form.breed_custom.trim())) {
+      e.breed = t('errors.required');
+    }
     if (!form.gender) e.gender = t('errors.required');
     if (!form.weight_kg || isNaN(Number(form.weight_kg)) || Number(form.weight_kg) <= 0) e.weight_kg = t('errors.required');
     if (!form.quantity || isNaN(Number(form.quantity)) || Number(form.quantity) <= 0) e.quantity = t('errors.required');
@@ -155,7 +163,9 @@ export default function NewListingPage() {
         weight_kg: form.weight_kg ? Number(form.weight_kg) : undefined,
         quantity: form.quantity ? Number(form.quantity) : 1,
         gender: form.gender || undefined,
-        breed: form.breed.trim() || undefined,
+        // breed: send null when 'Other' is selected (breed_custom is used instead)
+        breed: (form.breed && form.breed !== '__other__') ? form.breed.trim() : undefined,
+        breed_custom: form.breed_custom.trim() || undefined,
         health_status: form.health_status || undefined,
         vaccination_status: form.vaccination_status || undefined,
         region: form.region_name || form.region,
@@ -324,7 +334,7 @@ export default function NewListingPage() {
                     </div>
                   </div>
 
-                  {/* Breed — backend-driven, depends on category */}
+                  {/* Breed — dropdown + "Other" freetext option */}
                   <div>
                     <label className="mb-1.5 block text-sm font-medium text-fg">
                       {t('animal.breed')} <span className="text-danger">*</span>
@@ -332,7 +342,9 @@ export default function NewListingPage() {
                     <BreedSelector
                       categorySlug={form.category}
                       value={form.breed}
+                      customValue={form.breed_custom}
                       onChange={(v) => set('breed', v)}
+                      onCustomChange={(v) => set('breed_custom', v)}
                       placeholder={t('animal.breed')}
                     />
                     {errors.breed && <p className="mt-1 text-xs text-danger">{errors.breed}</p>}
