@@ -293,7 +293,7 @@ export default function ListingDetailPage() {
                     </p>
                     <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
                       <p className="font-display text-3xl font-bold text-fg leading-none">
-                        {formatPrice(listing.price, listing.currency)}
+                        {formatPrice(listing.price, listing.currency, locale)}
                       </p>
                     </div>
                     {listing.is_negotiable && (
@@ -618,7 +618,7 @@ export default function ListingDetailPage() {
                     </p>
                     <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
                       <p className="font-display text-3xl font-bold text-fg leading-none">
-                        {formatPrice(listing.price, listing.currency)}
+                        {formatPrice(listing.price, listing.currency, locale)}
                       </p>
                     </div>
                     {listing.is_negotiable && (

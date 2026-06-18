@@ -4,14 +4,15 @@
 
 const NBSP = '\u00A0';
 
-export function formatPrice(price: number, currency: string = 'UZS'): string {
+export function formatPrice(price: number, currency: string = 'UZS', locale: string = 'uz'): string {
   if (currency === 'UZS' || !currency) {
     const formatted = new Intl.NumberFormat('uz-UZ', {
       style: 'decimal',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(price);
-    return `${formatted}${NBSP}so'm`;
+    const suffix = locale === 'ru' ? 'сум' : locale === 'uz-cyrl' ? 'сўм' : locale === 'en' ? 'UZS' : "so'm";
+    return `${formatted}${NBSP}${suffix}`;
   }
   try {
     return new Intl.NumberFormat('uz-UZ', {

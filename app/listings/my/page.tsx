@@ -330,7 +330,7 @@ export default function MyListingsPage() {
                         </div>
 
                         <p className="mt-2 font-display text-lg font-bold text-fg">
-                          {formatPrice(l.price, l.currency)}
+                          {formatPrice(l.price, l.currency, locale)}
                         </p>
 
                         {/* Rejection reason */}

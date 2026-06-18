@@ -150,7 +150,7 @@ export function ListingCard({ listing, onFavorite }: Props) {
             <div className="flex items-end justify-between gap-3">
               <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 min-w-0">
                 <p className="font-display text-xl sm:text-2xl font-bold text-fg leading-none tracking-tight">
-                  {formatPrice(listing.price, listing.currency)}
+                  {formatPrice(listing.price, listing.currency, locale)}
                 </p>
                 {listing.is_negotiable && (
                   <span

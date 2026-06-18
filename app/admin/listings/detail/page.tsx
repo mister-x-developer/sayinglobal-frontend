@@ -14,7 +14,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import {
   ArrowLeft,
   CheckCircle2,
@@ -45,6 +45,7 @@ import { formatPrice, formatRelativeTime } from '@/lib/utils/format';
 
 export default function AdminListingDetailPage() {
   const t = useTranslations();
+  const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = Number(searchParams.get('id'));
@@ -204,7 +205,7 @@ export default function AdminListingDetailPage() {
 
                   <div className="mt-4 flex flex-wrap items-baseline gap-2">
                     <span className="display-md text-brand-primary">
-                      {formatPrice(listing.price, listing.currency)}
+                      {formatPrice(listing.price, listing.currency, locale)}
                     </span>
                     {listing.is_negotiable && (
                       <span className="text-sm text-fg-subtle">

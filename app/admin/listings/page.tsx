@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import Image from 'next/image';
 import {
   Search, X, Eye, CheckCircle2, XCircle, LayoutGrid, RefreshCw,
@@ -33,6 +33,7 @@ const STATUS_BADGE: Record<string, any> = {
 
 export default function AdminListingsPage() {
   const t = useTranslations();
+  const locale = useLocale();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusOption>('pending');
   const [categoryFilter, setCategoryFilter] = useState('');
@@ -478,7 +479,7 @@ export default function AdminListingsPage() {
                           )}
                         </td>
                         <td>
-                          <p className="cell-title">{formatPrice(l.price, l.currency)}</p>
+                          <p className="cell-title">{formatPrice(l.price, l.currency, locale)}</p>
                         </td>
                         <td>
                           <p className="cell-subtle">{l.location}</p>
