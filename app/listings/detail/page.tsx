@@ -487,7 +487,11 @@ export default function ListingDetailPage() {
                           <SpecItem
                             icon={CheckCircle2}
                             label={t('animal.breed')}
-                            value={<InlineTranslatedSpec text={listing.breed} />}
+                            value={
+                              typeof listing.breed === 'object'
+                                ? (getLocalizedField(listing.breed as any, 'name', locale) || (listing.breed as any)?.name_uz || String(listing.breed))
+                                : <InlineTranslatedSpec text={String(listing.breed)} />
+                            }
                           />
                         )}
                         {listing.health_status && (
