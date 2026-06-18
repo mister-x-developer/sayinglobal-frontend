@@ -149,7 +149,7 @@ export default function NearbyListingsPage() {
                   <MapPin className="h-4 w-4 text-brand-accent" strokeWidth={1.75} />
                   {geo.kind === 'granted'
                     ? (t('nearby.modeGps' as any, { km: radius } as any) ?? `${radius} km radius`)
-                    : (t('nearby.modeRegion')yicha')}
+                    : (t('nearby.modeRegion'))}
                   {count > 0 && (
                     <span className="ml-2 rounded-full bg-brand-primary/10 px-2.5 py-0.5 text-xs font-bold text-brand-primary">
                       {count}

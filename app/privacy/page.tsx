@@ -10,36 +10,36 @@ export default function PrivacyPage() {
 
   const sections = [
     {
-      title: t('privacy.dataCollectionTitle')lumotlarni to\'plash va foydalanish',
-      body: t('privacy.dataCollectionBody')playdi. Bu ma\'lumotlar faqatgina e\'lonlarni ko\'rsatish va xavfsiz muhitni ta\'minlash uchun ishlatiladi.',
+      title: t('privacy.dataCollectionTitle'),
+      body: t('privacy.dataCollectionBody'),
     },
     {
-      title: t('privacy.dataUsageTitle')lumotlarni almashish',
-      body: t('privacy.dataUsageBody')lumotlari (masalan, telefon raqam) uchinchi shaxslarga tijorat maqsadida sotilmaydi. Telefon raqamingiz faqatgina tizimga kirish (Telegram orqali) va profil orqali aloqa qilishga ruxsat bersangizgina e\'londa ko\'rsatiladi.',
+      title: t('privacy.dataUsageTitle'),
+      body: t('privacy.dataUsageBody'),
     },
     {
-      title: t('privacy.locationTitle')lumotlari (GPS)',
-      body: t('privacy.locationBody')lumotlari faqatgina "Yaqin atrof" xizmati uchun va xaritada e\'lon joylashuvini belgilash uchun ishlatiladi. Sizning aniq lokatsiyangiz boshqa foydalanuvchilarga xarita belgisi (pin) shaklida ko\'rsatiladi.',
+      title: t('privacy.locationTitle'),
+      body: t('privacy.locationBody'),
     },
     {
       title: t('privacy.securityTitle'),
-      body: t('privacy.securityBody')lumotlarini himoya qiladi. Sessiyalar qurilma darajasida nazorat qilinadi va xohlagan paytingizda boshqa qurilmalardan chiqish (logout) imkoniyati mavjud.',
+      body: t('privacy.securityBody'),
     },
     {
-      title: t('privacy.rightsTitle')chirish',
-      body: t('privacy.rightsBody')z hisobini to\'liq o\'chirib tashlash huquqiga ega. Hisob o\'chirilganda, unga tegishli barcha e\'lonlar, chatlar va rasm fayllari tizimdan tiklanmas tarzda tozalanadi.',
+      title: t('privacy.rightsTitle'),
+      body: t('privacy.rightsBody'),
     },
     {
       title: t('privacy.cookiesTitle'),
       body: t('privacy.cookiesBody'),
     },
     {
-      title: t('privacy.changesTitle')zgartirishlar',
-      body: t('privacy.changesBody')muriyati mazkur Maxfiylik Siyosatiga o\'zgartirishlar kiritish huquqini o\'zida saqlab qoladi. Katta o\'zgarishlar bo\'lganda, platforma orqali sizga xabar beriladi.',
+      title: t('privacy.changesTitle'),
+      body: t('privacy.changesBody'),
     },
     {
-      title: t('privacy.contactTitle')lanish',
-      body: t('privacy.contactBody')yicha savollaringiz, takliflaringiz bo\'lsa, rasmiy Telegram manzilimiz (@sayinglobal_support) yoki elektron pochta (support@sayinglobal.uz) orqali biz bilan bog\'lanishingiz mumkin.',
+      title: t('privacy.contactTitle'),
+      body: t('privacy.contactBody'),
     },
   ];
 

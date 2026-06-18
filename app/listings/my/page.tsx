@@ -578,7 +578,7 @@ export default function MyListingsPage() {
                 <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-success/12">
                   <CheckCircle2 className="h-7 w-7 text-success" />
                 </div>
-                <h3 className="mt-4 font-display text-xl font-semibold">{t('listings.soldSuccessTitle')lon sotilgan deb belgilandi!'}</h3>
+                <h3 className="mt-4 font-display text-xl font-semibold">{t('listings.soldSuccessTitle')}</h3>
                 <p className="mt-2 text-sm text-fg-muted">
                   {t('listings.soldCodeShare')}
                 </p>
@@ -589,7 +589,7 @@ export default function MyListingsPage() {
                 </div>
 
                 <p className="mt-3 text-xs text-fg-muted">
-                  {t('listings.soldCodeNote')yishi va izoh yozishi mumkin. Tasdiqlangandan keyin savdo sizning ishonch balingizga qo\'shiladi.'}
+                  {t('listings.soldCodeNote')}
                 </p>
                 <div className="mt-2 text-[10px] text-success/80">
                   Buyer confirmation page: /confirm-purchase?code={soldCode.code}
