@@ -592,7 +592,7 @@ export default function ChatPage() {
                           >
                             {msg.content}
                             {msg.failed && (
-                              <span className="ml-1 text-[10px] opacity-70">{t('chat.sendFailed' as any) ?? 'Yuborilmadi'}</span>
+                              <span className="ml-1 text-[10px] opacity-70">{t('chat.sendFailed')}</span>
                             )}
                             {msg.translated && (
                               <span className={`ml-1 text-[10px] opacity-70 ${isMe ? 'text-white' : 'text-fg-muted'}`}>
@@ -606,7 +606,7 @@ export default function ChatPage() {
                               onClick={() => retryMessage(msg.id, msg.content)}
                               className="mt-1 inline-flex items-center gap-1 rounded-md px-2 py-1 text-[10px] font-medium text-danger hover:bg-danger/10 transition-colors"
                             >
-                              {t('chat.retry' as any) ?? 'Qayta urinish'}
+                              {t('chat.retry')}
                             </button>
                           )}
                           {/* Actions: Translate + Report */}

@@ -110,7 +110,7 @@ export default function EditListingPage() {
         const isOwner = (data as any).seller?.public_id === user?.public_id;
         const isAdmin = !!user?.is_admin;
         if (!isOwner && !isAdmin) {
-          toast.error(t('errors.permissionDenied' as any) ?? 'Permission denied');
+          toast.error(t('errors.permissionDenied'));
           router.replace('/listings/my');
           return;
         }
@@ -293,7 +293,7 @@ export default function EditListingPage() {
             className="mt-3 flex flex-wrap items-end justify-between gap-3"
           >
             <div>
-              <p className="text-eyebrow">{t('listings.editListing' as any) ?? 'Edit listing'}</p>
+              <p className="text-eyebrow">{t('listings.editListing')}</p>
               <h1 className="display-md mt-2">{form.title || `#${publicId}`}</h1>
             </div>
             <Button
@@ -368,7 +368,7 @@ export default function EditListingPage() {
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <Image src={img.preview} alt="" width={80} height={80} className="h-full w-full object-cover" />
                       <div className="absolute top-1 right-1 rounded-md bg-brand-primary/80 px-1.5 py-0.5 text-[10px] font-bold text-white">
-                        {t('common.new' as any) ?? 'New'}
+                        {t('common.new')}
                       </div>
                       <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
                         <button
@@ -411,7 +411,7 @@ export default function EditListingPage() {
               {uploadingImages && (
                 <p className="mt-1 text-xs text-brand-primary inline-flex items-center gap-1.5">
                   <Loader2 className="h-3 w-3 animate-spin" strokeWidth={2} />
-                  {t('create.publishing' as any) ?? 'Uploading images...'}
+                  {t('create.publishing')}
                 </p>
               )}
             </div>
@@ -469,14 +469,14 @@ export default function EditListingPage() {
                   className="input-base h-12 w-full"
                 >
                   <option value="">{t('listings.gender')}</option>
-                  <option value="male">{t('listings.male' as any) ?? 'Male'}</option>
-                  <option value="female">{t('listings.female' as any) ?? 'Female'}</option>
+                  <option value="male">{t('listings.male')}</option>
+                  <option value="female">{t('listings.female')}</option>
                 </select>
                 <input
                   type="text"
                   value={form.health_status}
                   onChange={(e) => update({ health_status: e.target.value })}
-                  placeholder={t('listings.healthStatus' as any) ?? 'Health'}
+                  placeholder={t('listings.healthStatus')}
                   className="input-base h-12 w-full"
                 />
               </div>
@@ -633,7 +633,7 @@ export default function EditListingPage() {
         <div className="p-6">
           <h3 className="font-display text-lg font-semibold">{t('common.delete')}</h3>
           <p className="mt-2 text-sm text-fg-muted">
-            {t('listings.deleteConfirm' as any) ?? 'Are you sure?'}
+            {t('listings.deleteConfirm')}
           </p>
           <div className="mt-6 flex gap-3">
             <button

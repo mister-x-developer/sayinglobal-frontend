@@ -180,7 +180,7 @@ export default function NewListingPage() {
       }
       
       if (uploadedCount === 0 && images.length > 0) {
-        toast.error(t('errors.uploadFailed' as any) ?? "Rasmlar yuklanmadi. Keyinroq qayta urinib ko'ring.");
+        toast.error(t('errors.uploadFailed'));
       }
       
       setSaved(true);
@@ -417,7 +417,7 @@ export default function NewListingPage() {
                   </button>
                 )}
                 <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={handleImages} className="hidden" />
-                <p className="mt-2 text-xs text-fg-subtle">{images.length}/5 · {t('validation.minImages' as any) ?? "Kamida 3 ta, koʻpi bilan 5 ta rasm kiritish majburiy"}</p>
+                <p className="mt-2 text-xs text-fg-subtle">{images.length}/5 · {t('validation.minImages')}</p>
                 {errors.images && <p className="mt-1 text-xs text-danger">{errors.images}</p>}
               </div>
 

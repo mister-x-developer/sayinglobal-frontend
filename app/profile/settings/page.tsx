@@ -160,19 +160,19 @@ export default function SettingsPage() {
               <Section title={t('settings.notifications')}>
                 <SettingRow
                   label={t('settings.pushNotifications')}
-                  description={t('settings.pushDescription' as any) ?? 'Brauzer orqali bildirishnomalar'}
+                  description={t('settings.pushDescription')}
                   on={pushNotifs}
                   onToggle={() => setPushNotifs((v) => !v)}
                 />
                 <SettingRow
                   label={t('settings.messageNotifications')}
-                  description={t('settings.messageNotifDescription' as any) ?? 'Yangi xabarlar haqida'}
+                  description={t('settings.messageNotifDescription')}
                   on={msgNotifs}
                   onToggle={() => setMsgNotifs((v) => !v)}
                 />
                 <SettingRow
                   label={t('settings.favoriteNotifications')}
-                  description={t('settings.listingNotifDescription' as any) ?? "Eʼlonlaringiz boʻyicha faollik"}
+                  description={t('settings.listingNotifDescription')}
                   on={listingNotifs}
                   onToggle={() => setListingNotifs((v) => !v)}
                 />

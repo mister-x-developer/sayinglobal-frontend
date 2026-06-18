@@ -578,18 +578,18 @@ export default function MyListingsPage() {
                 <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-success/12">
                   <CheckCircle2 className="h-7 w-7 text-success" />
                 </div>
-                <h3 className="mt-4 font-display text-xl font-semibold">{t('listings.soldSuccessTitle') ?? 'E\'lon sotilgan deb belgilandi!'}</h3>
+                <h3 className="mt-4 font-display text-xl font-semibold">{t('listings.soldSuccessTitle')lon sotilgan deb belgilandi!'}</h3>
                 <p className="mt-2 text-sm text-fg-muted">
-                  {t('listings.soldCodeShare') ?? 'Xaridorga quyidagi kodni bering. U kod orqali tasdiqlashi mumkin.'}
+                  {t('listings.soldCodeShare')}
                 </p>
 
                 <div className="mt-4 rounded-xl border border-success/30 bg-success/5 p-4">
-                  <div className="text-xs text-fg-subtle">{t('listings.confirmationCode') ?? 'Tasdiqlash kodi'}</div>
+                  <div className="text-xs text-fg-subtle">{t('listings.confirmationCode')}</div>
                   <div className="mt-1 font-mono text-3xl font-bold tracking-[4px] text-success select-all">{soldCode.code}</div>
                 </div>
 
                 <p className="mt-3 text-xs text-fg-muted">
-                  {t('listings.soldCodeNote') ?? 'Xaridor bu kodni kiritib, 1-5 yulduz baho qo\'yishi va izoh yozishi mumkin. Tasdiqlangandan keyin savdo sizning ishonch balingizga qo\'shiladi.'}
+                  {t('listings.soldCodeNote')yishi va izoh yozishi mumkin. Tasdiqlangandan keyin savdo sizning ishonch balingizga qo\'shiladi.'}
                 </p>
                 <div className="mt-2 text-[10px] text-success/80">
                   Buyer confirmation page: /confirm-purchase?code={soldCode.code}
@@ -604,14 +604,14 @@ export default function MyListingsPage() {
                   }}
                   className="btn btn-secondary flex-1"
                 >
-                  {t('common.copy') ?? 'Nusxa olish'}
+                  {t('common.copy')}
                 </button>
                 <button
                   type="button"
                   onClick={() => setSoldCode(null)}
                   className="btn btn-primary flex-1"
                 >
-                  {t('common.done') ?? 'Tayyor'}
+                  {t('common.done')}
                 </button>
               </div>
             </motion.div>

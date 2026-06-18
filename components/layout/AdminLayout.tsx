@@ -47,7 +47,7 @@ const NAV_GROUPS = [
     items: [
       { href: '/admin/listings', icon: LayoutGrid, label: 'admin.listings' },
       { href: '/admin/moderation', icon: Flag, label: 'admin.complaints' },
-      { href: '/admin/ai-agent', icon: Bot, label: 'AI Agent' },
+      { href: '/admin/ai-agent', icon: Bot, label: 'admin.aiAgent' },
       { href: '/admin/ai-moderation', icon: ShieldCheck, label: 'admin.aiModeration' },
     ],
   },
@@ -122,7 +122,7 @@ export function AdminLayout({ children, noPadding = false }: { children: React.R
             <div className="flex items-center gap-2.5">
               <Logo size="sm" href="/admin" />
               <div className="rounded-md bg-brand-primary/10 px-2 py-0.5 text-[10px] font-bold tracking-[0.5px] text-brand-primary">
-                ADMIN
+                {t('admin.admin').toUpperCase()}
               </div>
             </div>
           )}

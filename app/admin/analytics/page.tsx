@@ -216,7 +216,7 @@ export default function AdminAnalyticsPage() {
     {
       label: t('admin.totalUsers'),
       value: stats.users.total,
-      sub: `+${stats.users.new_today} ${t('analytics.today' as any)}`,
+      sub: `+${stats.users.new_today} ${t('analytics.today')}`,
       icon: Users, color: 'text-blue-500', bg: 'bg-blue-500/10',
       href: '/admin/users', delay: 0,
       chartData: growth?.users_by_day?.slice(-14),
@@ -232,16 +232,16 @@ export default function AdminAnalyticsPage() {
       chartColor: '#1f7a52',
     },
     {
-      label: t('analytics.totalViews' as any) ?? "Ko'rishlar",
+      label: t('analytics.totalViews'),
       value: stats.engagement.total_views,
-      sub: `+${stats.engagement.views_today} ${t('analytics.today' as any)}`,
+      sub: `+${stats.engagement.views_today} ${t('analytics.today')}`,
       icon: Eye, color: 'text-purple-500', bg: 'bg-purple-500/10',
       delay: 0.1,
     },
     {
       label: t('nav.chat'),
       value: stats.messages.total,
-      sub: `+${stats.messages.today} ${t('analytics.today' as any)}`,
+      sub: `+${stats.messages.today} ${t('analytics.today')}`,
       icon: MessageCircle, color: 'text-green-500', bg: 'bg-green-500/10',
       delay: 0.15,
     },
@@ -347,13 +347,13 @@ export default function AdminAnalyticsPage() {
               >
                 <div className="flex items-center gap-2 mb-5">
                   <TrendingUp className="h-4 w-4 text-brand-primary" strokeWidth={2} />
-                  <h2 className="font-bold text-fg">O&apos;sish dinamikasi — {period} kun</h2>
+                  <h2 className="font-bold text-fg">{t('Analytics.growthDynamics')} — {period} {t('admin.days')}</h2>
                 </div>
                 <FullLineChart
                   data1={displayUsersByDay}
                   data2={displayListingsByDay}
-                  label1="Foydalanuvchilar"
-                  label2="Eʼlonlar"
+                  label1={t('Analytics.users')}
+                  label2={t('Analytics.listings')}
                   color1="#3b82f6"
                   color2="#1f7a52"
                 />
@@ -400,7 +400,7 @@ export default function AdminAnalyticsPage() {
                         contentStyle={{ backgroundColor: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)', borderRadius: '12px', color: 'var(--color-fg)', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
                         itemStyle={{ color: 'var(--color-fg)' }}
                         formatter={(value: number, name: string) => {
-                          const translatedName = name === 'active' ? 'Faol' : name === 'pending' ? 'Kutilmoqda' : name === 'sold' ? 'Sotilgan' : name === 'rejected' ? 'Rad etilgan' : name === 'draft' ? 'Qoralama' : name;
+                          const translatedName = name === 'active' ? t('listings.active') : name === 'pending' ? t('listings.pending') : name === 'sold' ? t('listings.sold') : name === 'rejected' ? t('listings.rejected') : name === 'draft' ? t('listings.draft') : name;
                           return [formatNumber(value), translatedName];
                         }}
                       />
@@ -420,11 +420,11 @@ export default function AdminAnalyticsPage() {
                       <div key={s.status} className="flex items-center gap-2">
                         <span className={`inline-block h-2.5 w-2.5 rounded-full ${colors[s.status] || 'bg-fg-subtle'}`} />
                         <span className="text-xs font-medium text-fg capitalize">{
-                          s.status === 'active' ? 'Faol' :
-                          s.status === 'pending' ? 'Kutilmoqda' :
-                          s.status === 'sold' ? 'Sotilgan' :
-                          s.status === 'rejected' ? 'Rad etilgan' :
-                          s.status === 'draft' ? 'Qoralama' : s.status
+                          s.status === 'active' ? t('listings.active') :
+                          s.status === 'pending' ? t('listings.pending') :
+                          s.status === 'sold' ? t('listings.sold') :
+                          s.status === 'rejected' ? t('listings.rejected') :
+                          s.status === 'draft' ? t('listings.draft') : s.status
                         }</span>
                         <span className="text-xs text-fg-subtle ml-auto">{formatNumber(s.count)}</span>
                       </div>
@@ -442,20 +442,20 @@ export default function AdminAnalyticsPage() {
               >
                 <div className="flex items-center gap-2 mb-4">
                   <Zap className="h-4 w-4 text-warning" strokeWidth={2} />
-                  <h2 className="font-bold text-fg">Auth Funnel — {period} kun</h2>
+                  <h2 className="font-bold text-fg">{t('Analytics.authFunnel')} — {period} {t('admin.days')}</h2>
                 </div>
                 <div className="space-y-4">
                   <div>
                     <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-fg-subtle">{t('Analytics.login')}</p>
                     <div className="space-y-2">
                       <FunnelBar
-                        label="Muvaffaqiyatli"
+                        label={t('Analytics.loginSuccess')}
                         value={displayFunnel.auth_funnel?.login_success ?? 0}
                         max={(displayFunnel.auth_funnel?.login_success ?? 0) + (displayFunnel.auth_funnel?.login_failure ?? 0)}
                         color="#1f7a52"
                       />
                       <FunnelBar
-                        label="Muvaffaqiyatsiz"
+                        label={t('Analytics.loginFailed')}
                         value={displayFunnel.auth_funnel?.login_failure ?? 0}
                         max={(displayFunnel.auth_funnel?.login_success ?? 0) + (displayFunnel.auth_funnel?.login_failure ?? 0)}
                         color="#b04040"
@@ -466,13 +466,13 @@ export default function AdminAnalyticsPage() {
                     <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-fg-subtle">{t('Analytics.createListing')}</p>
                     <div className="space-y-2">
                       <FunnelBar
-                        label="Boshlandi"
+                        label={t('Analytics.started')}
                         value={displayFunnel.listing_funnel?.started ?? 0}
                         max={displayFunnel.listing_funnel?.started ?? 1}
                         color="#3b82f6"
                       />
                       <FunnelBar
-                        label="Yakunlandi"
+                        label={t('Analytics.completed')}
                         value={displayFunnel.listing_funnel?.completed ?? 0}
                         max={displayFunnel.listing_funnel?.started ?? 1}
                         color="#1f7a52"
@@ -504,7 +504,7 @@ export default function AdminAnalyticsPage() {
               >
                 <div className="flex items-center gap-2 mb-4">
                   <Activity className="h-4 w-4 text-success" strokeWidth={2} />
-                  <h2 className="font-bold text-fg">Faollik turlari — {period} kun</h2>
+                  <h2 className="font-bold text-fg">{t('Analytics.activityTypes')} — {period} {t('admin.days')}</h2>
                 </div>
                 <div className="h-64 w-full mt-2 -ml-4">
                   <ResponsiveContainer width="100%" height="100%">
@@ -523,7 +523,7 @@ export default function AdminAnalyticsPage() {
                         cursor={{ fill: 'currentColor', opacity: 0.05 }}
                         contentStyle={{ backgroundColor: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)', borderRadius: '12px', color: 'var(--color-fg)', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
                         itemStyle={{ color: 'var(--color-fg)' }}
-                        formatter={(value: number, name: string) => [formatNumber(value), 'Soni']}
+                        formatter={(value: number, name: string) => [formatNumber(value), t('Analytics.count')]}
                         labelFormatter={(label) => label.replace(/_/g, ' ')}
                       />
                       <Bar dataKey="count" fill="#10b981" radius={[0, 4, 4, 0]} barSize={20} />
@@ -544,8 +544,8 @@ export default function AdminAnalyticsPage() {
                 { href: '/admin/users', icon: Users, label: t('admin.users'), color: 'text-blue-500 bg-blue-500/10' },
                 { href: '/admin/listings', icon: Package, label: t('admin.listings'), color: 'text-brand-primary bg-brand-primary/10' },
                 { href: '/admin/moderation', icon: Flag, label: t('admin.complaints'), color: 'text-danger bg-danger/10' },
-                { href: '/admin/ai-moderation', icon: BarChart3, label: 'AI Moderatsiya', color: 'text-purple-500 bg-purple-500/10' },
-                { href: '/admin/ratings', icon: Star, label: 'Sharhlar', color: 'text-warning bg-warning/10' },
+                { href: '/admin/ai-moderation', icon: BarChart3, label: t('admin.aiModeration'), color: 'text-purple-500 bg-purple-500/10' },
+                { href: '/admin/ratings', icon: Star, label: t('admin.ratings'), color: 'text-warning bg-warning/10' },
                 { href: '/admin/health', icon: Activity, label: t('admin.systemHealth'), color: 'text-success bg-success/10' },
               ].map((item) => (
                 <Link

@@ -103,7 +103,7 @@ export default function AdminReportDetailPage() {
 
   const resolveValid = async () => {
     if (!report || !notes.trim()) {
-      toast.error(t('admin.rejectionReasonRequired' as any) ?? 'Moderator note is required');
+      toast.error(t('admin.rejectionReasonRequired'));
       return;
     }
     setSubmitting('valid');
@@ -120,7 +120,7 @@ export default function AdminReportDetailPage() {
 
   const resolveInvalid = async () => {
     if (!report || !notes.trim()) {
-      toast.error(t('admin.rejectionReasonRequired' as any) ?? 'Moderator note is required');
+      toast.error(t('admin.rejectionReasonRequired'));
       return;
     }
     setSubmitting('invalid');
@@ -184,8 +184,8 @@ export default function AdminReportDetailPage() {
                     </p>
                     <h1 className="display-md mt-2">
                       {report.report_type === 'listing'
-                        ? t('report.titleListing' as any) ?? 'Listing Report'
-                        : t('report.titleSeller' as any) ?? 'Seller Report'}
+                        ? t('report.titleListing')
+                        : t('report.titleSeller')}
                     </h1>
                     <p className="mt-1 text-sm text-fg-muted">
                       {formatDate(report.created_at)}
@@ -200,7 +200,7 @@ export default function AdminReportDetailPage() {
 
               {/* Complainant */}
               <div className="surface-elevated p-6">
-                <h2 className="text-eyebrow mb-3">{t('report.complainant' as any) ?? 'Filed by'}</h2>
+                <h2 className="text-eyebrow mb-3">{t('report.complainant')}</h2>
                 <div className="flex items-center gap-3">
                   <Avatar src={report.complainant?.avatar_url} name={report.complainant?.full_name} size="lg" />
                   <div>
@@ -215,7 +215,7 @@ export default function AdminReportDetailPage() {
 
               {/* Subject */}
               <div className="surface-elevated p-6">
-                <h2 className="text-eyebrow mb-3">{t('report.subject' as any) ?? 'Reported'}</h2>
+                <h2 className="text-eyebrow mb-3">{t('report.subject')}</h2>
                 {report.report_type === 'listing' ? (
                   report.listing ? (
                     <Link href={`/admin/listings/detail?id=${report.listing.public_id}`} className="group flex items-center gap-3 hover:text-brand-primary">
@@ -245,18 +245,18 @@ export default function AdminReportDetailPage() {
 
               {/* Reason + description */}
               <div className="surface-elevated p-6">
-                <h2 className="text-eyebrow mb-3">{t('report.reasonLabel' as any) ?? 'Reason'}</h2>
+                <h2 className="text-eyebrow mb-3">{t('report.reasonLabel')}</h2>
                 <p className="font-semibold text-fg">
                   {t(`adminMod.reason_${report.reason_code}` as any) ?? report.reason_code}
                 </p>
                 <p className="mt-1 text-xs text-fg-subtle capitalize">
-                  {t('adminMod.severity' as any) ?? 'Severity'}: {report.severity}
+                  {t('adminMod.severity')}: {report.severity}
                 </p>
                 {report.description && (
                   <div className="mt-4">
                     <div className="flex items-center justify-between mb-2">
                       <p className="text-xs font-semibold uppercase tracking-wider text-fg-subtle">
-                        {t('adminMod.description' as any) ?? 'Description'}
+                        {t('adminMod.description')}
                       </p>
                       <div className="flex items-center gap-1.5">
                         <select
@@ -300,7 +300,7 @@ export default function AdminReportDetailPage() {
 
               {/* Moderator note */}
               <div className="surface-elevated p-6">
-                <h2 className="text-eyebrow mb-3">{t('adminMod.moderatorNotes' as any) ?? 'Moderator Notes'}</h2>
+                <h2 className="text-eyebrow mb-3">{t('adminMod.moderatorNotes')}</h2>
                 {report.resolution_notes ? (
                   <div className="mb-4">
                     <TranslatableText
@@ -319,7 +319,7 @@ export default function AdminReportDetailPage() {
                   <textarea
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
-                    placeholder={t('admin.rejectionReasonPlaceholder' as any) ?? 'Add your moderator note...'}
+                    placeholder={t('admin.rejectionReasonPlaceholder')}
                     rows={4}
                     className="input-base h-auto w-full py-2"
                   />
@@ -330,7 +330,7 @@ export default function AdminReportDetailPage() {
             {/* Sidebar — actions */}
             <div className="space-y-6">
               <div className="surface-elevated p-6">
-                <h3 className="text-eyebrow">{t('admin.actions' as any) ?? 'Actions'}</h3>
+                <h3 className="text-eyebrow">{t('admin.actions')}</h3>
                 <div className="mt-3 space-y-2">
                   {report.status === 'pending' && (
                     <button
@@ -342,7 +342,7 @@ export default function AdminReportDetailPage() {
                       {submitting === 'review'
                         ? <Loader2 className="h-4 w-4 animate-spin" />
                         : <ShieldAlert className="h-4 w-4" strokeWidth={2} />}
-                      {t('adminMod.startReview' as any) ?? 'Start Review'}
+                      {t('adminMod.startReview')}
                     </button>
                   )}
                   {['pending', 'under_review'].includes(report.status) && (
@@ -356,7 +356,7 @@ export default function AdminReportDetailPage() {
                         {submitting === 'valid'
                           ? <Loader2 className="h-4 w-4 animate-spin" />
                           : <CheckCircle2 className="h-4 w-4" strokeWidth={2.25} />}
-                        {t('adminMod.resolveValid' as any) ?? 'Resolve: Confirm'}
+                        {t('adminMod.resolveValid')}
                       </button>
                       <button
                         type="button"
@@ -367,33 +367,33 @@ export default function AdminReportDetailPage() {
                         {submitting === 'invalid'
                           ? <Loader2 className="h-4 w-4 animate-spin" />
                           : <XCircle className="h-4 w-4" strokeWidth={2.25} />}
-                        {t('adminMod.resolveInvalid' as any) ?? 'Resolve: Dismiss'}
+                        {t('adminMod.resolveInvalid')}
                       </button>
                     </>
                   )}
                 </div>
                 <p className="mt-3 text-xs text-fg-subtle">
                   {!notes.trim() && !['resolved_valid', 'resolved_invalid'].includes(report.status)
-                    ? t('admin.notesRequiredToResolve' as any) ?? 'Add a note before resolving.'
+                    ? t('admin.notesRequiredToResolve')
                     : ''}
                 </p>
               </div>
 
               {/* Metadata */}
               <div className="surface-elevated p-6">
-                <h3 className="text-eyebrow">{t('admin.status' as any) ?? 'Info'}</h3>
+                <h3 className="text-eyebrow">{t('admin.status')}</h3>
                 <dl className="mt-3 space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <dt className="text-fg-muted">{t('adminMod.severity' as any) ?? 'Severity'}</dt>
+                    <dt className="text-fg-muted">{t('adminMod.severity')}</dt>
                     <dd className="font-semibold capitalize">{report.severity}</dd>
                   </div>
                   <div className="flex justify-between">
-                    <dt className="text-fg-muted">{t('admin.created' as any) ?? 'Created'}</dt>
+                    <dt className="text-fg-muted">{t('admin.created')}</dt>
                     <dd className="font-semibold">{formatRelativeTime(report.created_at)}</dd>
                   </div>
                   {report.assigned_to && (
                     <div className="flex justify-between">
-                      <dt className="text-fg-muted">{t('adminMod.assignedTo' as any) ?? 'Assigned'}</dt>
+                      <dt className="text-fg-muted">{t('adminMod.assignedTo')}</dt>
                       <dd className="font-semibold">{report.assigned_to.full_name}</dd>
                     </div>
                   )}

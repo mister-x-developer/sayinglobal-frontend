@@ -94,7 +94,7 @@ export default function ProfilePage() {
   const TABS: { key: Tab; label: string }[] = [
     { key: 'listings', label: t('profile.myListings') },
     { key: 'favorites', label: t('profile.favorites') },
-    { key: 'reviews', label: t('sellers.reviews' as any) ?? 'Reviews' },
+    { key: 'reviews', label: t('sellers.reviews') },
   ];
 
   return (
@@ -349,10 +349,10 @@ export default function ProfilePage() {
                     { href: '/profile/edit', icon: Edit, label: t('profile.editProfile') },
                     { href: '/profile/settings', icon: Settings, label: t('nav.settings') },
                     { href: '/profile/security', icon: ShieldCheck, label: t('security.title') },
-                    { href: '/profile/reports', icon: Flag, label: t('profile.myReports' as any) ?? 'Reports' },
+                    { href: '/profile/reports', icon: Flag, label: t('profile.myReports') },
                     { href: '/sellers/following', icon: Users, label: t('profile.followedSellers') },
                     { href: '/chat', icon: MessageSquareText, label: t('nav.chat') },
-                    { href: '/profile/guide', icon: BookOpen, label: t('nav.guide' as any) ?? 'Rules & Guide' },
+                    { href: '/profile/guide', icon: BookOpen, label: t('nav.guide') },
                   ].map((l) => {
                     const Icon = l.icon;
                     return (

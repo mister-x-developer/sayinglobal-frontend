@@ -48,9 +48,10 @@ interface OperationalStatus {
 }
 
 function StatusBadge({ value }: { value: string }) {
+  const t = useTranslations();
   if (value === 'ok') return <Badge variant="success" size="sm">OK</Badge>;
-  if (value === 'miss') return <Badge variant="warning" size="sm">Cache miss</Badge>;
-  if (value.startsWith('error')) return <Badge variant="error" size="sm">Error</Badge>;
+  if (value === 'miss') return <Badge variant="warning" size="sm">{t('AdminHealth.cacheMiss')}</Badge>;
+  if (value.startsWith('error')) return <Badge variant="error" size="sm">{t('AdminHealth.error')}</Badge>;
   return <Badge variant="default" size="sm">{value}</Badge>;
 }
 
@@ -112,10 +113,10 @@ export default function AdminHealthPage() {
   }, [load]);
 
   const kpis = ops ? [
-    { icon: Users,   label: 'Total users',        value: ops.platform.users_total,    sub: `+${ops.platform.users_new_24h} today`, tone: 'bg-brand-primary/10 text-brand-primary' },
-    { icon: Package, label: 'Active listings',     value: ops.platform.listings_active, sub: `${ops.platform.listings_pending} pending`, tone: 'bg-success/12 text-success' },
-    { icon: Bell,    label: 'Unread notifications', value: ops.notifications.unread_total, sub: `${ops.notifications.created_24h} today`, tone: 'bg-info/12 text-info' },
-    { icon: Flag,    label: 'Open complaints',     value: ops.moderation.open_complaints, sub: ops.moderation.open_complaints > 0 ? 'Needs attention' : 'All clear', tone: ops.moderation.open_complaints > 0 ? 'bg-danger/12 text-danger' : 'bg-success/12 text-success' },
+    { icon: Users,   label: t('AdminHealth.totalUsers'),        value: ops.platform.users_total,    sub: `+${ops.platform.users_new_24h} ${t('AdminHealth.today')}`, tone: 'bg-brand-primary/10 text-brand-primary' },
+    { icon: Package, label: t('AdminHealth.activeListings'),     value: ops.platform.listings_active, sub: `${ops.platform.listings_pending} ${t('AdminHealth.pending')}`, tone: 'bg-success/12 text-success' },
+    { icon: Bell,    label: t('AdminHealth.unreadNotifications'), value: ops.notifications.unread_total, sub: `${ops.notifications.created_24h} ${t('AdminHealth.today')}`, tone: 'bg-info/12 text-info' },
+    { icon: Flag,    label: t('AdminHealth.openComplaints'),     value: ops.moderation.open_complaints, sub: ops.moderation.open_complaints > 0 ? t('AdminHealth.needsAttention') : t('AdminHealth.allClear'), tone: ops.moderation.open_complaints > 0 ? 'bg-danger/12 text-danger' : 'bg-success/12 text-success' },
   ] : [];
 
   return (
@@ -132,7 +133,7 @@ export default function AdminHealthPage() {
             <h1 className="display-md mt-2">{t('admin.systemHealth')}</h1>
             {lastRefresh && (
               <p className="mt-1 text-xs text-fg-subtle">
-                Last updated: {lastRefresh.toLocaleTimeString()} — auto-refreshes every 30s
+                {t('AdminHealth.lastUpdated', { time: lastRefresh.toLocaleTimeString() })}
               </p>
             )}
           </div>
@@ -161,9 +162,9 @@ export default function AdminHealthPage() {
             <div className="grid gap-3 sm:grid-cols-3">
               {Object.entries(health.checks).map(([name, value]) => {
                 const translatedName = {
-                  database: "Maʼlumotlar bazasi",
-                  cache: "Kesh",
-                  broker: "Broker"
+                  database: t('AdminHealth.database'),
+                  cache: t('AdminHealth.cache'),
+                  broker: t('AdminHealth.broker')
                 }[name.toLowerCase()] || name;
                 return (
                 <div key={name} className="flex items-center justify-between rounded-xl bg-bg-subtle px-4 py-3">
@@ -183,7 +184,7 @@ export default function AdminHealthPage() {
           ) : (
             <div className="flex items-center gap-2 text-sm text-fg-muted">
               {loading ? <RefreshCw className="h-4 w-4 animate-spin" /> : <XCircle className="h-4 w-4 text-danger" />}
-              {loading ? 'Checking…' : 'Could not reach health endpoint'}
+              {loading ? t('AdminHealth.checking') : t('AdminHealth.endpointError')}
             </div>
           )}
         </div>
@@ -232,9 +233,9 @@ export default function AdminHealthPage() {
           >
             <AlertTriangle className="h-4 w-4 flex-shrink-0 text-warning" strokeWidth={2} />
             <p className="text-sm text-fg">
-              <span className="font-semibold">{ops.platform.listings_pending}</span> listing(s) awaiting moderation review.{' '}
+              <span className="font-semibold">{ops.platform.listings_pending}</span> {t('AdminHealth.awaitingModeration')}{' '}
               <Link href="/admin/listings" className="font-semibold text-brand-primary hover:underline">
-                Review now →
+                {t('AdminHealth.reviewNow')}
               </Link>
             </p>
           </motion.div>

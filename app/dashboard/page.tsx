@@ -109,7 +109,7 @@ export default function DashboardPage() {
               {
                 href: '/listings/nearby',
                 icon: MapPin,
-                label: t('nearby.title' as any) ?? 'Nearby',
+                label: t('nearby.title'),
                 tone: 'bg-success/12 text-success',
               },
               {
@@ -277,7 +277,7 @@ function DashboardNearby() {
       <div className="flex items-end justify-between">
         <div className="flex items-center gap-2">
           <MapPin className="h-5 w-5 text-brand-accent" strokeWidth={1.75} />
-          <h2 className="display-sm">{t('nearby.title' as any) ?? 'Nearby'}</h2>
+          <h2 className="display-sm">{t('nearby.title')}</h2>
         </div>
         <Link href="/listings/nearby" className="text-sm font-semibold text-brand-primary hover:underline">
           {t('common.showAll')}

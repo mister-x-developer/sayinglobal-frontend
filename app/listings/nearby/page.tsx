@@ -144,12 +144,12 @@ export default function NearbyListingsPage() {
             </Link>
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
-                <h1 className="display-md">{t('nearby.title' as any) ?? "Yaqin atrofdagi eʼlonlar"}</h1>
+                <h1 className="display-md">{t('nearby.title')}</h1>
                 <p className="mt-1.5 text-sm text-fg-muted inline-flex items-center gap-2">
                   <MapPin className="h-4 w-4 text-brand-accent" strokeWidth={1.75} />
                   {geo.kind === 'granted'
                     ? (t('nearby.modeGps' as any, { km: radius } as any) ?? `${radius} km radius`)
-                    : (t('nearby.modeRegion' as any) ?? 'Viloyat bo\'yicha')}
+                    : (t('nearby.modeRegion')yicha')}
                   {count > 0 && (
                     <span className="ml-2 rounded-full bg-brand-primary/10 px-2.5 py-0.5 text-xs font-bold text-brand-primary">
                       {count}
@@ -163,7 +163,7 @@ export default function NearbyListingsPage() {
                 {geo.kind === 'requesting' && (
                   <span className="inline-flex items-center gap-1.5 text-sm text-fg-muted">
                     <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2} />
-                    {t('nearby.requesting' as any) ?? 'Joylashuv aniqlanmoqda...'}
+                    {t('nearby.requesting')}
                   </span>
                 )}
                 {geo.kind === 'denied' && (
@@ -173,7 +173,7 @@ export default function NearbyListingsPage() {
                     className="inline-flex items-center gap-2 rounded-xl border border-brand-primary/30 bg-brand-primary/8 px-4 py-2 text-sm font-semibold text-brand-primary hover:bg-brand-primary/12 transition-colors"
                   >
                     <Navigation className="h-4 w-4" strokeWidth={2} />
-                    {t('nearby.tryAgain' as any) ?? 'GPS yoqish'}
+                    {t('nearby.tryAgain')}
                   </button>
                 )}
                 {geo.kind === 'granted' && (
@@ -218,7 +218,7 @@ export default function NearbyListingsPage() {
             {geo.kind === 'granted' && (
               <div className="mt-4 flex items-center gap-2">
                 <span className="text-xs font-semibold text-fg-subtle uppercase tracking-wider">
-                  {t('nearby.radius' as any) ?? 'Radius'}:
+                  {t('nearby.radius')}:
                 </span>
                 {RADIUS_OPTIONS.map((r) => (
                   <button
@@ -284,8 +284,8 @@ export default function NearbyListingsPage() {
           ) : results.length === 0 ? (
             <EmptyState
               icon={MapPin}
-              title={t('nearby.empty' as any) ?? "Yaqin atrofda eʼlon topilmadi"}
-              description={t('nearby.emptyDesc' as any) ?? "Radius yoki kategoriyani oʻzgartiring."}
+              title={t('nearby.empty')}
+              description={t('nearby.emptyDesc')}
             />
           ) : (
             <motion.div

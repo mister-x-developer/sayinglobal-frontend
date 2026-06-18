@@ -105,7 +105,7 @@ export default function AdminListingDetailPage() {
   const reject = async () => {
     if (!listing) return;
     if (!rejectionReason.trim()) {
-      toast.error(t('admin.rejectionReasonRequired' as any) ?? 'Reason required');
+      toast.error(t('admin.rejectionReasonRequired'));
       return;
     }
     setSubmitting('reject');
@@ -293,12 +293,12 @@ export default function AdminListingDetailPage() {
               <div className="surface-elevated p-6">
                 <div className="mb-4 flex items-center gap-2">
                   <Flag className="h-5 w-5 text-warning" strokeWidth={1.75} />
-                  <h2 className="display-sm">{t('admin.relatedReports' as any) ?? 'Reports'}</h2>
+                  <h2 className="display-sm">{t('admin.relatedReports')}</h2>
                   <Badge variant="warning" size="sm">{reports.length}</Badge>
                 </div>
 
                 {reports.length === 0 ? (
-                  <p className="text-sm text-fg-muted">{t('admin.noReports' as any) ?? '—'}</p>
+                  <p className="text-sm text-fg-muted">{t('admin.noReports')}</p>
                 ) : (
                   <ul className="divide-y divide-border">
                     {reports.map((r) => (
@@ -407,14 +407,14 @@ export default function AdminListingDetailPage() {
                   </div>
                   <div>
                     <p className="text-lg font-bold text-fg">{listing.seller.followers_count ?? 0}</p>
-                    <p className="text-xs text-fg-subtle">{t('sellers.followers' as any) ?? '—'}</p>
+                    <p className="text-xs text-fg-subtle">{t('sellers.followers')}</p>
                   </div>
                 </div>
               </div>
 
               {/* Stats */}
               <div className="surface-elevated p-6">
-                <h3 className="text-eyebrow">{t('admin.stats' as any) ?? 'Stats'}</h3>
+                <h3 className="text-eyebrow">{t('admin.stats')}</h3>
                 <dl className="mt-3 space-y-3">
                   <div className="flex items-center justify-between">
                     <dt className="flex items-center gap-2 text-sm text-fg-muted"><Eye className="h-4 w-4" strokeWidth={1.75}/> {t('marketplace.views')}</dt>
@@ -425,11 +425,11 @@ export default function AdminListingDetailPage() {
                     <dd className="text-sm font-semibold text-fg">{listing.favorite_count ?? 0}</dd>
                   </div>
                   <div className="flex items-center justify-between">
-                    <dt className="flex items-center gap-2 text-sm text-fg-muted"><Share2 className="h-4 w-4" strokeWidth={1.75}/> {t('marketplace.shares' as any) ?? '—'}</dt>
+                    <dt className="flex items-center gap-2 text-sm text-fg-muted"><Share2 className="h-4 w-4" strokeWidth={1.75}/> {t('marketplace.shares')}</dt>
                     <dd className="text-sm font-semibold text-fg">{listing.share_count ?? 0}</dd>
                   </div>
                   <div className="flex items-center justify-between">
-                    <dt className="flex items-center gap-2 text-sm text-fg-muted"><MessageSquareText className="h-4 w-4" strokeWidth={1.75}/> {t('comments.title' as any) ?? 'Comments'}</dt>
+                    <dt className="flex items-center gap-2 text-sm text-fg-muted"><MessageSquareText className="h-4 w-4" strokeWidth={1.75}/> {t('comments.title')}</dt>
                     <dd className="text-sm font-semibold text-fg">{listing.comment_count ?? 0}</dd>
                   </div>
                 </dl>
@@ -437,7 +437,7 @@ export default function AdminListingDetailPage() {
 
               {/* Actions */}
               <div className="surface-elevated p-6">
-                <h3 className="text-eyebrow">{t('admin.actions' as any) ?? 'Actions'}</h3>
+                <h3 className="text-eyebrow">{t('admin.actions')}</h3>
                 <div className="mt-3 space-y-2">
                   <button
                     type="button"
@@ -463,7 +463,7 @@ ${res.explanation}`);
                     className="btn btn-secondary w-full bg-brand-accent/10 text-brand-accent hover:bg-brand-accent/20 border-brand-accent/20"
                   >
                     <Bot className="h-4 w-4" strokeWidth={2.25}/>
-                    {t('admin.aiModeration' as any) ?? 'AI Review'}
+                    {t('admin.aiModeration')}
                   </button>
 
                   {aiReviewResult && (
@@ -505,13 +505,13 @@ ${res.explanation}`);
                       className="btn btn-secondary w-full"
                     >
                       {submitting === 'restore' ? <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2}/> : <RefreshCw className="h-4 w-4" strokeWidth={2}/>}
-                      {t('admin.restore' as any) ?? 'Restore'}
+                      {t('admin.restore')}
                     </button>
                   )}
 
                   {showRejectBox && (
                     <div className="mt-3 space-y-2">
-                      <label className="text-xs text-fg-subtle">{t('admin.rejectionReason' as any) ?? 'Reason'}</label>
+                      <label className="text-xs text-fg-subtle">{t('admin.rejectionReason')}</label>
                       <textarea
                         value={rejectionReason}
                         onChange={(e) => setRejectionReason(e.target.value)}
@@ -534,7 +534,7 @@ ${res.explanation}`);
                   {listing.status === 'rejected' && listing.rejection_reason && (
                     <div className="mt-4 rounded-xl border border-danger/30 bg-danger/8 p-3 text-sm text-fg">
                       <p className="text-xs font-semibold text-danger uppercase tracking-wide">
-                        {t('admin.rejectionReason' as any) ?? 'Rejection reason'}
+                        {t('admin.rejectionReason')}
                       </p>
                       <p className="mt-1 text-fg-muted">{listing.rejection_reason}</p>
                     </div>

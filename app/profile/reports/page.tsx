@@ -62,7 +62,7 @@ export default function MyReportsPage() {
             transition={{ duration: 0.45 }}
           >
             <p className="text-eyebrow">{t('profile.title' as any)}</p>
-            <h1 className="display-md mt-2">{t('profile.myReports' as any) ?? 'My reports'}</h1>
+            <h1 className="display-md mt-2">{t('profile.myReports')}</h1>
             <p className="mt-2 text-fg-muted">{reports.length}</p>
           </motion.div>
 
@@ -74,7 +74,7 @@ export default function MyReportsPage() {
             ) : reports.length === 0 ? (
               <EmptyState
                 icon={Flag}
-                title={t('profile.noReports' as any) ?? 'No reports yet'}
+                title={t('profile.noReports')}
                 description={t('profile.noReportsDesc' as any) ?? ''}
               />
             ) : (

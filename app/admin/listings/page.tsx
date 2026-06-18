@@ -271,7 +271,7 @@ export default function AdminListingsPage() {
             type="button"
             onClick={fetchListings}
             className="btn btn-secondary h-11"
-            aria-label={t('common.refresh') ?? 'Refresh'}
+            aria-label={t('common.refresh')}
           >
             <RefreshCw className={cn('h-4 w-4', loading && 'animate-spin')} strokeWidth={1.75} />
           </button>
@@ -281,8 +281,8 @@ export default function AdminListingsPage() {
         {pendingConfirmations.length > 0 && (
           <div className="mt-4 p-4 rounded-xl border border-warning/30 bg-warning/5">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="font-semibold text-sm">{t('admin.pendingConfirmations') ?? 'Pending Buyer Confirmations'} ({pendingConfirmations.length})</h3>
-              <button onClick={fetchPendingConfirmations} className="text-xs text-fg-subtle hover:text-fg">{t('common.refresh') ?? 'Refresh'}</button>
+              <h3 className="font-semibold text-sm">{t('admin.pendingConfirmations')} ({pendingConfirmations.length})</h3>
+              <button onClick={fetchPendingConfirmations} className="text-xs text-fg-subtle hover:text-fg">{t('common.refresh')}</button>
             </div>
             <div className="space-y-2 max-h-40 overflow-auto text-xs">
               {pendingConfirmations.slice(0, 5).map((c, i) => (
@@ -295,7 +295,7 @@ export default function AdminListingsPage() {
               ))}
               {pendingConfirmations.length > 5 && <div className="text-center text-fg-subtle">... and {pendingConfirmations.length - 5} more</div>}
             </div>
-            <p className="text-[10px] mt-1 text-fg-subtle">{t('admin.confirmHint') ?? 'Buyers can confirm at /confirm-purchase using the code to make the sale count for trust_score.'}</p>
+            <p className="text-[10px] mt-1 text-fg-subtle">{t('admin.confirmHint')}</p>
           </div>
         )}
 
@@ -310,7 +310,7 @@ export default function AdminListingsPage() {
               className="mt-4 flex flex-wrap items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 px-4 py-3"
             >
               <span className="text-sm font-semibold text-brand-primary">
-                {selected.size} selected
+                {selected.size} {t('admin.selected')}
               </span>
               <div className="flex flex-wrap gap-2">
                 <button
@@ -320,7 +320,7 @@ export default function AdminListingsPage() {
                   className="btn btn-sm bg-success/12 text-success hover:bg-success/20 disabled:opacity-50"
                 >
                   <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={2.25} />
-                  Approve selected
+                  {t('admin.approveSelected')}
                 </button>
                 <button
                   type="button"
@@ -344,13 +344,13 @@ export default function AdminListingsPage() {
                     }
                     setSelected(new Set());
                     setBulkLoading(null);
-                    toast.success(`${ok}/${ids.length} ${t('admin.aiApproved') ?? 'approved by AI'}`);
+                    toast.success(`${ok}/${ids.length} ${t('admin.aiApproved')}`);
                   }}
                   disabled={!!bulkLoading}
                   className="btn btn-sm bg-brand-accent/12 text-brand-accent hover:bg-brand-accent/20 disabled:opacity-50"
                 >
                   <RefreshCw className="h-3.5 w-3.5" strokeWidth={2.25} />
-                  AI Analysis
+                  {t('admin.aiAnalysis')}
                 </button>
                 <button
                   type="button"
@@ -359,7 +359,7 @@ export default function AdminListingsPage() {
                   className="btn btn-sm bg-danger/12 text-danger hover:bg-danger/20 disabled:opacity-50"
                 >
                   <XCircle className="h-3.5 w-3.5" strokeWidth={2.25} />
-                  Reject selected
+                  {t('admin.rejectSelected')}
                 </button>
               </div>
               <button
@@ -367,7 +367,7 @@ export default function AdminListingsPage() {
                 onClick={() => setSelected(new Set())}
                 className="ml-auto text-xs text-fg-subtle hover:text-fg"
               >
-                Clear
+                {t('admin.clearSelection')}
               </button>
             </motion.div>
           )}
@@ -508,17 +508,17 @@ export default function AdminListingsPage() {
                                   onClick={async (e) => {
                                     e.stopPropagation();
                                     try {
-                                      toast.info(t('admin.aiAnalyzing') ?? 'AI is analyzing...');
+                                      toast.info(t('admin.aiAnalyzing'));
                                       const res = await moderationApi.adminAIReviewListing(l.public_id);
                                       if (!res.is_flagged) {
                                         await listingsApi.approve(l.public_id);
                                         setListings((prev) => prev.map((item) => item.public_id === l.public_id ? { ...item, status: 'active' } : item));
-                                        toast.success(t('admin.aiApproved') ?? 'Approved by AI!');
+                                        toast.success(t('admin.aiApproved'));
                                       } else {
-                                        toast.error(`${t('admin.aiRejected') ?? 'Rejected by AI'}: ${res.explanation}`);
+                                        toast.error(`${t('admin.aiRejected')}: ${res.explanation}`);
                                       }
                                     } catch {
-                                      toast.error(t('admin.aiError') ?? 'AI Error');
+                                      toast.error(t('admin.aiError'));
                                     }
                                   }}
                                   className="btn btn-sm bg-brand-accent/12 text-brand-accent hover:bg-brand-accent/20 h-8 px-2.5"
@@ -568,7 +568,7 @@ export default function AdminListingsPage() {
                   : 'cursor-not-allowed border-border/50 text-fg-subtle'
               }`}
             >
-              {t('common.previous') ?? 'Previous'}
+              {t('common.previous')}
             </button>
             <span className="mx-2 text-sm text-fg-muted">{page} / {totalPages}</span>
             <button
@@ -581,7 +581,7 @@ export default function AdminListingsPage() {
                   : 'cursor-not-allowed border-border/50 text-fg-subtle'
               }`}
             >
-              {t('common.next') ?? 'Next'}
+              {t('common.next')}
             </button>
           </div>
         )}
@@ -599,7 +599,7 @@ export default function AdminListingsPage() {
             <textarea
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
-              placeholder={t('admin.rejectionReasonPlaceholder') ?? 'Rad etish sababi (Majburiy)'}
+              placeholder={t('admin.rejectionReasonPlaceholder')}
               rows={3}
               className="input-base h-auto w-full py-3"
             />

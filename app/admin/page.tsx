@@ -12,59 +12,58 @@ import { AdminLayout } from '@/components/layout/AdminLayout';
 import { formatNumber } from '@/lib/utils/format';
 import { analyticsApi, type DashboardStats } from '@/lib/api/analytics';
 import apiClient from '@/lib/api/client';
+import {
+  AreaChart as RechartsAreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer,
+  BarChart as RechartsBarChart, Bar, Cell
+} from 'recharts';
 
-// ── SVG Charts (Clean Enterprise Style) ─────────────────────────────────────────────
+// ── Interactive Charts (Recharts) ─────────────────────────────────────────────
 
 function AreaChart({ data, color }: { data: number[]; color: string }) {
   if (!data || data.length < 2) return null;
-  const max = Math.max(...data, 1);
-  const min = Math.min(...data, 0);
-  const range = max - min || 1;
-  const W = 300;
-  const H = 80;
-  
-  const pts = data.map((d, i) => {
-    const x = (i / (data.length - 1)) * W;
-    const y = H - ((d - min) / range) * H;
-    return `${x},${y}`;
-  });
-  
-  const polyline = pts.join(' ');
-  const polygon = `${pts[0].split(',')[0]},${H} ${polyline} ${pts[pts.length-1].split(',')[0]},${H}`;
+  const chartData = data.map((val, i) => ({ index: i, value: val }));
 
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="h-full w-full overflow-visible" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id={`grad-${color.replace('#', '')}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity="0.2" />
-          <stop offset="100%" stopColor={color} stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <polygon points={polygon} fill={`url(#grad-${color.replace('#', '')})`} />
-      <polyline points={polyline} fill="none" stroke={color} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
-    </svg>
+    <ResponsiveContainer width="100%" height="100%">
+      <RechartsAreaChart data={chartData}>
+        <defs>
+          <linearGradient id={`grad-${color.replace('#', '')}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={color} stopOpacity={0.2} />
+            <stop offset="100%" stopColor={color} stopOpacity={0} />
+          </linearGradient>
+        </defs>
+        <Tooltip
+          contentStyle={{ backgroundColor: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)', borderRadius: '12px', color: 'var(--color-fg)', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', padding: '8px 12px' }}
+          itemStyle={{ color: 'var(--color-fg)', fontWeight: 600 }}
+          labelStyle={{ display: 'none' }}
+          cursor={{ stroke: 'var(--color-border)', strokeWidth: 1, strokeDasharray: '4 4' }}
+        />
+        <Area type="monotone" dataKey="value" stroke={color} strokeWidth={2.5} fillOpacity={1} fill={`url(#grad-${color.replace('#', '')})`} activeDot={{ r: 5, strokeWidth: 0, fill: color }} />
+      </RechartsAreaChart>
+    </ResponsiveContainer>
   );
 }
 
 function BarChart({ data, color }: { data: number[]; color: string }) {
   if (!data || data.length === 0) return null;
-  const max = Math.max(...data, 1);
-  const W = 300;
-  const H = 80;
-  const barWidth = (W / data.length) * 0.6;
-  const gap = (W / data.length) * 0.4;
+  const chartData = data.map((val, i) => ({ index: i, value: val }));
 
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="h-full w-full overflow-visible" preserveAspectRatio="none">
-      {data.map((d, i) => {
-        const barH = (d / max) * H;
-        const x = i * (barWidth + gap) + gap/2;
-        const y = H - barH;
-        return (
-          <rect key={i} x={x} y={y} width={barWidth} height={barH} fill={color} rx="3" className="transition-all duration-500 ease-out opacity-90 hover:opacity-100" />
-        );
-      })}
-    </svg>
+    <ResponsiveContainer width="100%" height="100%">
+      <RechartsBarChart data={chartData}>
+        <Tooltip
+          contentStyle={{ backgroundColor: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)', borderRadius: '12px', color: 'var(--color-fg)', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', padding: '8px 12px' }}
+          itemStyle={{ color: 'var(--color-fg)', fontWeight: 600 }}
+          labelStyle={{ display: 'none' }}
+          cursor={{ fill: 'var(--color-bg-subtle)', opacity: 0.4 }}
+        />
+        <Bar dataKey="value" radius={[3, 3, 3, 3]}>
+          {chartData.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={color} fillOpacity={0.9} className="hover:fill-opacity-100 transition-opacity duration-300" />
+          ))}
+        </Bar>
+      </RechartsBarChart>
+    </ResponsiveContainer>
   );
 }
 

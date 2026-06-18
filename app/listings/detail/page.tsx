@@ -432,7 +432,7 @@ export default function ListingDetailPage() {
                         href={user?.public_id === listing.seller.public_id ? '/profile' : `/sellers/${listing.seller.public_id}?tab=reviews`}
                         className="mt-2 block w-full rounded-xl border border-border bg-bg-subtle/60 px-3 py-2 text-center text-xs font-semibold text-fg-muted hover:bg-bg-subtle"
                       >
-                        {t('reviews.viewAll' as any) ?? 'View all reviews'}
+                        {t('reviews.viewAll')}
                       </Link>
                     </div>
                   </motion.div>
@@ -757,7 +757,7 @@ export default function ListingDetailPage() {
                         href={user?.public_id === listing.seller.public_id ? '/profile' : `/sellers/${listing.seller.public_id}?tab=reviews`}
                         className="mt-2 block w-full rounded-xl border border-border bg-bg-subtle/60 px-3 py-2 text-center text-xs font-semibold text-fg-muted hover:bg-bg-subtle"
                       >
-                        {t('reviews.viewAll' as any) ?? 'View all reviews'}
+                        {t('reviews.viewAll')}
                       </Link>
                     </div>
                   </motion.div>

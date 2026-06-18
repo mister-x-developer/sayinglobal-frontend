@@ -44,7 +44,7 @@ export default function AdminAIModerationPage() {
       const { data } = await apiClient.get('/ai-moderation/results/', { params });
       setResults((data as any).results ?? []);
     } catch {
-      toast.error('Yuklab bo\'lmadi');
+      toast.error(t('AIModeration.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -58,14 +58,14 @@ export default function AdminAIModerationPage() {
     setInProgress(key);
     try {
       await apiClient.post(`/ai-moderation/results/${id}/review/`, { decision });
-      toast.success(decision === 'dismissed' ? '✓ Xavfsiz deb belgilandi' : '⚠ Muammo bor deb belgilandi');
+      toast.success(decision === 'dismissed' ? t('AIModeration.markedSafe') : t('AIModeration.markedDanger'));
       setResults((prev) => prev.map((r) =>
         r.id === id
           ? { ...r, human_reviewed: true, human_decision: decision }
           : r
       ));
     } catch {
-      toast.error('Xato yuz berdi. Qayta urining.');
+      toast.error(t('AIModeration.errorRetry'));
     } finally {
       setInProgress(null);
     }
@@ -84,9 +84,9 @@ export default function AdminAIModerationPage() {
   };
 
   const TABS: { key: Filter; label: string }[] = [
-    { key: 'needs_review', label: "Ko'rib chiqish kerak" },
-    { key: 'all', label: 'Hammasi' },
-    { key: 'reviewed', label: "Ko'rib chiqilgan" },
+    { key: 'needs_review', label: t('AIModeration.needsReview') },
+    { key: 'all', label: t('AIModeration.all') },
+    { key: 'reviewed', label: t('AIModeration.reviewed') },
   ];
 
   return (
@@ -122,7 +122,7 @@ export default function AdminAIModerationPage() {
               className="group relative flex h-11 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-6 text-sm font-black text-white transition-all hover:bg-white/10 active:scale-95 disabled:opacity-50 overflow-hidden"
             >
               <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin text-brand-primary' : ''}`} />
-              RE-SCAN
+              {t('AIModeration.rescan')}
             </button>
           </div>
         </motion.div>
@@ -131,33 +131,33 @@ export default function AdminAIModerationPage() {
           
           {/* Header Stats & Legend */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-             <div className="rounded-2xl border border-white/10 bg-black/40 p-5 backdrop-blur-md flex items-center gap-4">
+              <div className="rounded-2xl border border-white/10 bg-black/40 p-5 backdrop-blur-md flex items-center gap-4">
                 <div className="h-10 w-10 rounded-full bg-brand-primary/20 flex items-center justify-center border border-brand-primary/30">
                   <Cpu className="h-5 w-5 text-brand-primary" />
                 </div>
                 <div>
-                  <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">Engine Status</div>
-                  <div className="text-lg font-black text-brand-primary">ACTIVE</div>
+                  <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">{t('AIModeration.engineStatus')}</div>
+                  <div className="text-lg font-black text-brand-primary">{t('AIModeration.active')}</div>
                 </div>
-             </div>
-             <div className="rounded-2xl border border-white/10 bg-black/40 p-5 backdrop-blur-md flex items-center gap-4">
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/40 p-5 backdrop-blur-md flex items-center gap-4">
                 <div className="h-10 w-10 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
                   <CheckCircle2 className="h-5 w-5 text-emerald-400" />
                 </div>
                 <div>
-                  <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">Clean Threshold</div>
+                  <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">{t('AIModeration.cleanThreshold')}</div>
                   <div className="text-lg font-black text-emerald-400">&lt; 50%</div>
                 </div>
-             </div>
-             <div className="rounded-2xl border border-white/10 bg-black/40 p-5 backdrop-blur-md flex items-center gap-4">
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/40 p-5 backdrop-blur-md flex items-center gap-4">
                 <div className="h-10 w-10 rounded-full bg-rose-500/20 flex items-center justify-center border border-rose-500/30">
                   <AlertTriangle className="h-5 w-5 text-rose-400" />
                 </div>
                 <div>
-                  <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">Danger Threshold</div>
+                  <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">{t('AIModeration.dangerThreshold')}</div>
                   <div className="text-lg font-black text-rose-400">&ge; 80%</div>
                 </div>
-             </div>
+              </div>
           </div>
 
           {/* Filter tabs */}
@@ -187,7 +187,7 @@ export default function AdminAIModerationPage() {
               <div className="absolute inset-0 bg-brand-primary/5 blur-3xl rounded-full w-64 h-64 mx-auto animate-pulse" />
               <ScanLine className="h-12 w-12 animate-[bounce_2s_infinite] text-brand-primary relative z-10" strokeWidth={1.5} />
               <div className="font-mono text-sm tracking-[0.3em] text-brand-primary/80 animate-pulse relative z-10">
-                INITIATING DEEP SCAN...
+                {t('AIModeration.initiatingScan')}
               </div>
             </div>
           ) : results.length === 0 ? (
@@ -196,8 +196,8 @@ export default function AdminAIModerationPage() {
               <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-3xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shadow-[0_0_30px_rgba(52,211,153,0.15)]">
                 <Shield className="h-12 w-12" strokeWidth={1.5} />
               </div>
-              <p className="text-2xl font-black text-white tracking-tight uppercase">SYSTEM SECURE</p>
-              <p className="mt-2 text-sm font-mono tracking-widest text-emerald-400/70">NO ANOMALIES DETECTED</p>
+              <p className="text-2xl font-black text-white tracking-tight uppercase">{t('AIModeration.systemSecure')}</p>
+              <p className="mt-2 text-sm font-mono tracking-widest text-emerald-400/70">{t('AIModeration.noAnomalies')}</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -234,7 +234,7 @@ export default function AdminAIModerationPage() {
                           <div className="flex items-start gap-5 flex-1 min-w-0">
                             {/* Score Circle */}
                             <div className={`flex-shrink-0 flex h-20 w-20 flex-col items-center justify-center rounded-2xl border ${scoreBg(r.confidence_score)}`}>
-                              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-70 mb-1">THREAT</span>
+                              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-70 mb-1">{t('AIModeration.threat')}</span>
                               <span className={`font-display text-2xl font-black ${scoreColor(r.confidence_score)}`}>
                                 {Math.round(r.confidence_score * 100)}%
                               </span>
@@ -243,7 +243,7 @@ export default function AdminAIModerationPage() {
                             <div className="flex-1 min-w-0 pt-1">
                               <div className="flex flex-wrap items-center gap-3">
                                 <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest ${r.target_type === 'listing' ? 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}`}>
-                                  {r.target_type === 'listing' ? "LISTING" : 'REPORT'}
+                                  {r.target_type === 'listing' ? t('AIModeration.listing') : t('AIModeration.report')}
                                 </span>
                                 <span className="text-sm font-mono font-bold text-white/50 border border-white/10 px-2 py-0.5 rounded bg-white/5">
                                   ID: {r.target_id.slice(0,8)}...
@@ -278,7 +278,7 @@ export default function AdminAIModerationPage() {
                               <Link href={`/admin/listings/detail?id=${r.target_id}`}
                                 className="group flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-white/10 transition-colors">
                                 <Eye className="h-4 w-4 text-white/50 group-hover:text-white" />
-                                Inspect
+                                {t('AIModeration.inspect')}
                               </Link>
                             )}
                             
@@ -287,7 +287,7 @@ export default function AdminAIModerationPage() {
                               className="group flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-white/10 transition-colors"
                             >
                               <Code2 className="h-4 w-4 text-white/50 group-hover:text-white" />
-                              Raw Data
+                              {t('AIModeration.rawData')}
                             </button>
 
                             {!r.human_reviewed ? (
@@ -305,7 +305,7 @@ export default function AdminAIModerationPage() {
                                   {isDismissing
                                     ? <Loader2 className="h-4 w-4 animate-spin" />
                                     : <CheckCircle2 className="h-4 w-4" strokeWidth={2.5} />}
-                                  MARK SAFE
+                                  {t('AIModeration.markSafe')}
                                 </button>
 
                                 <button
@@ -321,14 +321,14 @@ export default function AdminAIModerationPage() {
                                   {isConfirming
                                     ? <Loader2 className="h-4 w-4 animate-spin" />
                                     : <AlertTriangle className="h-4 w-4" strokeWidth={2.5} />}
-                                  BAN / BLOCK
+                                  {t('AIModeration.banBlock')}
                                 </button>
                               </div>
                             ) : (
                               <div className={`mt-2 flex items-center gap-2 rounded-lg border px-4 py-2 text-xs font-black uppercase tracking-wider ${r.human_decision === 'confirmed' ? 'bg-rose-500/10 border-rose-500/30 text-rose-400' : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'}`}>
                                 {r.human_decision === 'confirmed' ? <AlertTriangle className="h-4 w-4" /> : <CheckCircle2 className="h-4 w-4" />}
-                                {r.human_decision === 'confirmed' ? 'BLOCKED' : 'CLEARED'}
-                                {r.reviewed_by_name && <span className="ml-2 text-[10px] opacity-70">BY {r.reviewed_by_name}</span>}
+                                {r.human_decision === 'confirmed' ? t('AIModeration.blocked') : t('AIModeration.cleared')}
+                                {r.reviewed_by_name && <span className="ml-2 text-[10px] opacity-70">{t('AIModeration.by')} {r.reviewed_by_name}</span>}
                               </div>
                             )}
                           </div>

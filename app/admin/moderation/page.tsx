@@ -99,7 +99,7 @@ export default function AdminModerationPage() {
           {loading ? (
             <div className="p-8 text-center text-fg-muted">{t('Moderation.loadingReports')}</div>
           ) : reports.length === 0 ? (
-            <div className="p-8"><EmptyState icon={Flag} title="No reports" description="All clear in this filter." /></div>
+            <div className="p-8"><EmptyState icon={Flag} title={t('admin.noReports')} description={t('admin.allClearFilter')} /></div>
           ) : (
             <div className="divide-y divide-border">
               {reports.map((r) => (
@@ -120,7 +120,7 @@ export default function AdminModerationPage() {
                       <Bot className="h-3.5 w-3.5" />
                     </button>
                     <button onClick={(e) => { e.stopPropagation(); startReview(r); }} className="btn btn-sm btn-primary">
-                      Review
+                      {t('admin.review')}
                     </button>
                   </div>
                 </div>
@@ -137,7 +137,7 @@ export default function AdminModerationPage() {
             <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 30, stiffness: 280 }} className="w-full max-w-md h-full bg-bg border-l border-border p-6 overflow-auto" onClick={e => e.stopPropagation()}>
               <div className="flex justify-between items-start">
                 <div>
-                  <h2 className="text-xl font-semibold">Review #{selected.public_id}</h2>
+                  <h2 className="text-xl font-semibold">{t('admin.review')} #{selected.public_id}</h2>
                   <p className="text-sm text-fg-muted">{selected.reason_code} • {selected.severity}</p>
                 </div>
                 <button onClick={() => setSelected(null)} className="text-fg-subtle">✕</button>
@@ -165,15 +165,15 @@ export default function AdminModerationPage() {
 
               <div className="mt-6 flex gap-2">
                 <button onClick={() => resolve(true)} className="btn flex-1 bg-success/10 text-success hover:bg-success/20">
-                  <CheckCircle2 className="h-4 w-4 mr-1.5" /> Mark Valid
+                  <CheckCircle2 className="h-4 w-4 mr-1.5" /> {t('admin.markValid')}
                 </button>
                 <button onClick={() => resolve(false)} className="btn flex-1 bg-danger/10 text-danger hover:bg-danger/20">
-                  <XCircle className="h-4 w-4 mr-1.5" /> Mark Invalid
+                  <XCircle className="h-4 w-4 mr-1.5" /> {t('admin.markInvalid')}
                 </button>
               </div>
 
               <button onClick={() => runAI(selected.public_id)} disabled={!!aiLoading} className="mt-3 w-full btn btn-secondary">
-                <Bot className="h-4 w-4 mr-2" /> Run AI Priority Analysis
+                <Bot className="h-4 w-4 mr-2" /> {t('admin.runAiPriority')}
               </button>
             </motion.div>
           </div>

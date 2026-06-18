@@ -45,7 +45,7 @@ const SORTS = ['newestFirst', 'oldestFirst', 'priceLowToHigh', 'priceHighToLow']
 export default function ListingsPage() {
   const t = useTranslations();
   const searchParams = useSearchParams();
-  const initialCategory = (searchParams.get('category') ?? 'all') as string;
+  const initialCategory = (searchParams.get('category')) as string;
 
   const [items, setItems] = useState<Listing[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -348,7 +348,7 @@ export default function ListingsPage() {
         <Link
           href={`/listings/nearby${category !== 'all' ? `?category=${category}` : ''}`}
           className="group flex items-center rounded-2xl bg-brand-primary p-3.5 text-white shadow-[0_4px_14px_0_rgb(31_122_82/0.45)] transition-all hover:bg-brand-primary/90 hover:shadow-[0_6px_20px_rgb(31_122_82/0.3)] active:scale-[0.96]"
-          aria-label={t('nearby.title' as any) ?? 'Nearby listings'}
+          aria-label={t('nearby.title')}
         >
           <MapPin className="h-5 w-5 shrink-0" strokeWidth={2.25} />
           <motion.span
@@ -361,7 +361,7 @@ export default function ListingsPage() {
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             className="overflow-hidden whitespace-nowrap text-sm font-semibold tracking-wide"
           >
-            {t('nearby.title' as any) ?? 'Yaqin atrofda'}
+            {t('nearby.title')}
           </motion.span>
         </Link>
       </motion.div>

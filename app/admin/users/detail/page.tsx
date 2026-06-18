@@ -254,7 +254,7 @@ export default function AdminUserDetailPage() {
               <div className="surface-elevated p-6">
                 <h2 className="display-sm mb-4 flex items-center gap-2">
                   <AlertTriangle className="h-4 w-4 text-warning" strokeWidth={1.75} />
-                  {t('admin.reportsReceived' as any) ?? 'Reports against this user'}
+                  {t('admin.reportsReceived')}
                   <Badge variant="warning" size="sm">{receivedReports.length}</Badge>
                 </h2>
                 <ul className="divide-y divide-border">
@@ -293,7 +293,7 @@ export default function AdminUserDetailPage() {
           {/* Sidebar — actions */}
           <div className="space-y-6">
             <div className="surface-elevated p-6">
-              <h3 className="text-eyebrow">{t('admin.actions' as any) ?? 'Actions'}</h3>
+              <h3 className="text-eyebrow">{t('admin.actions')}</h3>
               <div className="mt-3 space-y-2">
                 <button
                   type="button"
@@ -302,7 +302,7 @@ export default function AdminUserDetailPage() {
                   className="btn btn-secondary w-full bg-warning/10 text-warning hover:bg-warning/15"
                 >
                   <AlertTriangle className="h-4 w-4" strokeWidth={2} />
-                  {t('admin.warn' as any) ?? 'Warn'}
+                  {t('admin.warn')}
                 </button>
                 <button
                   type="button"
@@ -311,7 +311,7 @@ export default function AdminUserDetailPage() {
                   className="btn btn-secondary w-full"
                 >
                   <ShieldBan className="h-4 w-4" strokeWidth={2} />
-                  {t('admin.restrict' as any) ?? 'Restrict'}
+                  {t('admin.restrict')}
                 </button>
                 <button
                   type="button"
@@ -320,7 +320,7 @@ export default function AdminUserDetailPage() {
                   className="btn btn-danger w-full"
                 >
                   <ShieldBan className="h-4 w-4" strokeWidth={2} />
-                  {t('admin.block' as any) ?? 'Block'}
+                  {t('admin.block')}
                 </button>
                 {user.status !== 'good' && (
                   <button
@@ -330,7 +330,7 @@ export default function AdminUserDetailPage() {
                     className="btn btn-primary w-full"
                   >
                     <CheckCircle2 className="h-4 w-4" strokeWidth={2} />
-                    {t('admin.unblock' as any) ?? 'Unblock / Restore'}
+                    {t('admin.unblock')}
                   </button>
                 )}
               </div>
@@ -338,7 +338,7 @@ export default function AdminUserDetailPage() {
 
             {filedReports.length > 0 && (
               <div className="surface-elevated p-6">
-                <h3 className="text-eyebrow">{t('admin.reportsFiled' as any) ?? 'Reports filed by user'}</h3>
+                <h3 className="text-eyebrow">{t('admin.reportsFiled')}</h3>
                 <ul className="mt-3 space-y-2 text-sm">
                   {filedReports.map((r) => (
                     <li key={r.public_id} className="flex items-center justify-between rounded-lg bg-bg-subtle px-3 py-2">

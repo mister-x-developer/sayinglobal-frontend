@@ -237,7 +237,7 @@ export default function EditProfilePage() {
                     />
                   </div>
                   <p className="mt-1.5 text-xs text-fg-subtle">
-                    {t('profile.phoneCannotBeChanged') ?? 'Phone number cannot be changed'}
+                    {t('profile.phoneCannotBeChanged')}
                   </p>
                 </div>
               </div>

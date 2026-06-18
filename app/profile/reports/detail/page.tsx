@@ -99,7 +99,7 @@ export default function ReportDetailPage() {
                     <div className="surface-elevated p-6">
                       <div className="flex flex-wrap items-start justify-between gap-3">
                         <div>
-                          <p className="text-eyebrow">{t('report.title' as any) ?? 'Report'}</p>
+                          <p className="text-eyebrow">{t('report.title')}</p>
                           <h1 className="display-sm mt-2">
                             {report.report_type === 'listing'
                               ? t('report.titleListing' as any)
@@ -117,7 +117,7 @@ export default function ReportDetailPage() {
 
                       {/* Reason */}
                       <div className="mt-6">
-                        <h2 className="text-eyebrow">{t('report.reasonLabel' as any) ?? 'Reason'}</h2>
+                        <h2 className="text-eyebrow">{t('report.reasonLabel')}</h2>
                         <p className="mt-2 font-semibold text-fg">
                           {t(`adminMod.reason_${report.reason_code}` as any) ?? report.reason_code}
                         </p>
@@ -135,7 +135,7 @@ export default function ReportDetailPage() {
                     {/* Moderator response */}
                     {report.resolution_notes && (
                       <div className="surface-elevated p-6">
-                        <h2 className="text-eyebrow">{t('report.adminResponse' as any) ?? 'Admin response'}</h2>
+                        <h2 className="text-eyebrow">{t('report.adminResponse')}</h2>
                         <div className="mt-3">
                           <TranslatableText
                             text={report.resolution_notes}
@@ -154,7 +154,7 @@ export default function ReportDetailPage() {
                   {/* Sidebar — subject */}
                   <div className="space-y-6">
                     <div className="surface-elevated p-6">
-                      <h3 className="text-eyebrow">{t('report.subject' as any) ?? 'Subject'}</h3>
+                      <h3 className="text-eyebrow">{t('report.subject')}</h3>
                       {report.report_type === 'listing' ? (
                         report.listing ? (
                           <Link
@@ -189,16 +189,16 @@ export default function ReportDetailPage() {
                     </div>
 
                     <div className="surface-elevated p-6">
-                      <h3 className="text-eyebrow">{t('report.statusLabel' as any) ?? 'Status'}</h3>
+                      <h3 className="text-eyebrow">{t('report.statusLabel')}</h3>
                       <ul className="mt-3 space-y-3 text-sm">
                         <li className="flex items-center gap-2 text-fg-muted">
                           <span className="inline-block h-2 w-2 rounded-full bg-fg-subtle" />
-                          {t('report.created' as any) ?? 'Created'} · {formatRelativeTime(report.created_at)}
+                          {t('report.created')} · {formatRelativeTime(report.created_at)}
                         </li>
                         {report.resolved_at && (
                           <li className="flex items-center gap-2 text-success">
                             <span className="inline-block h-2 w-2 rounded-full bg-success" />
-                            {t('report.resolved' as any) ?? 'Resolved'} · {formatRelativeTime(report.resolved_at)}
+                            {t('report.resolved')} · {formatRelativeTime(report.resolved_at)}
                           </li>
                         )}
                       </ul>

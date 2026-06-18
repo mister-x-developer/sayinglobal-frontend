@@ -91,11 +91,11 @@ export default function AdminBroadcastsPage() {
       return;
     }
     if (newMessage.trim().length > 1000) {
-      toast.error(t('validation.messageTooLong' as any) ?? 'Message must be 1000 characters or less');
+      toast.error(t('validation.messageTooLong'));
       return;
     }
     if (newTitle.trim().length > 1000) {
-      toast.error(t('validation.titleTooLong' as any) ?? 'Title must be 1000 characters or less');
+      toast.error(t('validation.titleTooLong'));
       return;
     }
     setCreating(true);
@@ -109,7 +109,7 @@ export default function AdminBroadcastsPage() {
       setNewTitle('');
       setNewMessage('');
       setShowForm(false);
-      toast.success(t('success.created' as any) ?? t('success.updated'));
+      toast.success(t('success.created'));
       await load();
     } catch {
       toast.error(t('errors.generic'));
@@ -122,7 +122,7 @@ export default function AdminBroadcastsPage() {
     setSending(b.public_id);
     try {
       await apiClient.post(`/notifications/broadcasts/${b.public_id}/send/`);
-      toast.success(t('admin.broadcastSent' as any) ?? 'Sent');
+      toast.success(t('admin.broadcastSent'));
       await load();
     } catch {
       toast.error(t('errors.generic'));
@@ -159,7 +159,7 @@ export default function AdminBroadcastsPage() {
               className="btn btn-primary btn-sm"
             >
               <Plus className="h-4 w-4" strokeWidth={2.25} />
-              {t('admin.createBroadcast' as any) ?? 'New'}
+              {t('admin.createBroadcast')}
             </button>
           </div>
         </motion.div>
@@ -172,24 +172,24 @@ export default function AdminBroadcastsPage() {
             exit={{ opacity: 0, height: 0 }}
             className="surface-elevated mt-5 p-6"
           >
-            <h2 className="display-sm mb-4">{t('admin.createBroadcast' as any) ?? 'Create Broadcast'}</h2>
+            <h2 className="display-sm mb-4">{t('admin.createBroadcast')}</h2>
             <div className="space-y-4">
               <input
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
-                placeholder={t('admin.broadcastTitle' as any) ?? 'Title'}
+                placeholder={t('admin.broadcastTitle')}
                 className="input-base h-12 w-full"
               />
               <textarea
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
-                placeholder={t('admin.broadcastMessage' as any) ?? 'Message'}
+                placeholder={t('admin.broadcastMessage')}
                 rows={5}
                 className="input-base h-auto w-full py-3"
               />
               <p className="text-xs text-fg-subtle">{newMessage.length}/1000</p>
               <p className="text-xs text-fg-muted">
-                {t('admin.autoTranslateHint' as any) ?? 'Content will be auto-translated to all 4 languages.'}
+                {t('admin.autoTranslateHint')}
               </p>
               <div className="flex justify-end gap-2">
                 <button type="button" onClick={() => setShowForm(false)} className="btn btn-secondary">
@@ -225,11 +225,11 @@ export default function AdminBroadcastsPage() {
                 <thead>
                   <tr>
                     {[
-                      t('admin.broadcastTitle' as any) ?? 'Title',
-                      t('admin.status' as any) ?? 'Status',
-                      t('admin.recipients' as any) ?? 'Recipients',
-                      t('admin.read' as any) ?? 'Read',
-                      t('admin.created' as any) ?? 'Created',
+                      t('admin.broadcastTitle'),
+                      t('admin.status'),
+                      t('admin.recipients'),
+                      t('admin.read'),
+                      t('admin.created'),
                       '',
                     ].map((h, i) => (
                       <th key={i} className={i === 5 ? 'text-right' : ''}>
@@ -288,7 +288,7 @@ export default function AdminBroadcastsPage() {
                         ) : (
                           <span className="inline-flex items-center gap-1">
                             <Clock className="h-3 w-3" />
-                            {t('admin.notSentYet' as any) ?? 'Not sent'}
+                            {t('admin.notSentYet')}
                           </span>
                         )}
                       </td>
@@ -309,7 +309,7 @@ export default function AdminBroadcastsPage() {
                               ) : (
                                 <Send className="h-3.5 w-3.5" strokeWidth={2} />
                               )}
-                              {t('admin.send' as any) ?? 'Send'}
+                              {t('admin.send')}
                             </button>
                           )}
                         </div>

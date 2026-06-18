@@ -254,7 +254,7 @@ export default function AdminUsersPage() {
                             href={`/admin/users/detail?id=${user.public_id}`}
                             className="btn btn-primary btn-sm h-8 px-2.5"
                           >
-                            {t('common.details' as any) ?? 'Details'}
+                            {t('common.details')}
                           </Link>
                         </div>
                       </td>

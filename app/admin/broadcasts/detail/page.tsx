@@ -97,7 +97,7 @@ export default function AdminBroadcastDetailPage() {
     setSubmitting('send');
     try {
       await apiClient.post(`/notifications/broadcasts/${b.public_id}/send/`);
-      toast.success(t('admin.broadcastSent' as any) ?? 'Broadcast sent');
+      toast.success(t('admin.broadcastSent'));
       await fetchAll();
     } catch {
       toast.error(t('errors.generic'));
@@ -186,7 +186,7 @@ export default function AdminBroadcastDetailPage() {
             <div className="surface-elevated p-6">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <p className="text-eyebrow">{t('admin.broadcast' as any) ?? 'Broadcast'}</p>
+                  <p className="text-eyebrow">{t('admin.broadcast')}</p>
                   <h1 className="display-md mt-2">#{b.public_id}</h1>
                 </div>
                 <Badge
@@ -200,11 +200,11 @@ export default function AdminBroadcastDetailPage() {
               {!editing ? (
                 <div className="mt-5 space-y-4">
                   <div>
-                    <h2 className="text-eyebrow">{t('admin.title' as any) ?? 'Title'}</h2>
+                    <h2 className="text-eyebrow">{t('admin.title')}</h2>
                     <p className="mt-1 font-display text-xl font-semibold text-fg">{localizedField(b, 'title', locale)}</p>
                   </div>
                   <div>
-                    <h2 className="text-eyebrow">{t('admin.message' as any) ?? 'Message'}</h2>
+                    <h2 className="text-eyebrow">{t('admin.message')}</h2>
                     <p className="mt-1 whitespace-pre-line text-fg-muted leading-relaxed">{localizedField(b, 'message', locale)}</p>
                   </div>
                 </div>
@@ -213,18 +213,18 @@ export default function AdminBroadcastDetailPage() {
                   <input
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder={t('admin.title' as any) ?? 'Title'}
+                    placeholder={t('admin.title')}
                     className="input-base h-12 w-full"
                   />
                   <textarea
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    placeholder={t('admin.message' as any) ?? 'Message'}
+                    placeholder={t('admin.message')}
                     rows={6}
                     className="input-base h-auto w-full py-3"
                   />
                   <p className="text-xs text-fg-subtle">
-                    {t('admin.autoTranslateHint' as any) ?? 'Content will be auto-translated to all 4 languages.'}
+                    {t('admin.autoTranslateHint')}
                   </p>
                 </div>
               )}
@@ -232,7 +232,7 @@ export default function AdminBroadcastDetailPage() {
 
             {/* Translations preview */}
             <div className="surface-elevated p-6">
-              <h2 className="display-sm mb-4">{t('admin.translations' as any) ?? 'Translations'}</h2>
+              <h2 className="display-sm mb-4">{t('admin.translations')}</h2>
               <div className="grid gap-4 sm:grid-cols-2">
                 {(['uz', 'uz_cyrl', 'ru', 'en'] as const).map((loc) => (
                   <div key={loc} className="rounded-xl border border-border bg-bg-subtle p-4">
@@ -252,32 +252,32 @@ export default function AdminBroadcastDetailPage() {
           {/* Sidebar */}
           <div className="space-y-6">
             <div className="surface-elevated p-6">
-              <h3 className="text-eyebrow">{t('admin.delivery' as any) ?? 'Delivery'}</h3>
+              <h3 className="text-eyebrow">{t('admin.delivery')}</h3>
               <dl className="mt-3 space-y-3 text-sm">
                 <div className="flex items-center justify-between">
                   <dt className="text-fg-muted inline-flex items-center gap-1.5">
                     <Users className="h-4 w-4" />
-                    {t('admin.recipients' as any) ?? 'Recipients'}
+                    {t('admin.recipients')}
                   </dt>
                   <dd className="font-semibold text-fg">{b.recipient_count}</dd>
                 </div>
                 <div className="flex items-center justify-between">
                   <dt className="text-fg-muted inline-flex items-center gap-1.5">
                     <CheckCircle2 className="h-4 w-4" />
-                    {t('admin.read' as any) ?? 'Read'}
+                    {t('admin.read')}
                   </dt>
                   <dd className="font-semibold text-fg">{b.read_count}</dd>
                 </div>
                 <div className="flex items-center justify-between">
                   <dt className="text-fg-muted inline-flex items-center gap-1.5">
                     <Clock className="h-4 w-4" />
-                    {t('admin.created' as any) ?? 'Created'}
+                    {t('admin.created')}
                   </dt>
                   <dd className="font-semibold text-fg">{formatRelativeTime(b.created_at)}</dd>
                 </div>
                 {b.sent_at && (
                   <div className="flex items-center justify-between">
-                    <dt className="text-fg-muted">{t('admin.sentAt' as any) ?? 'Sent'}</dt>
+                    <dt className="text-fg-muted">{t('admin.sentAt')}</dt>
                     <dd className="font-semibold text-fg">{formatDate(b.sent_at)}</dd>
                   </div>
                 )}
@@ -285,7 +285,7 @@ export default function AdminBroadcastDetailPage() {
             </div>
 
             <div className="surface-elevated p-6">
-              <h3 className="text-eyebrow">{t('admin.actions' as any) ?? 'Actions'}</h3>
+              <h3 className="text-eyebrow">{t('admin.actions')}</h3>
               <div className="mt-3 space-y-2">
                 {!isSent && !editing && (
                   <button onClick={() => setEditing(true)} className="btn btn-secondary w-full">
@@ -309,7 +309,7 @@ export default function AdminBroadcastDetailPage() {
                     className="btn btn-primary w-full"
                   >
                     {submitting === 'send' ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-                    {t('admin.send' as any) ?? 'Send'}
+                    {t('admin.send')}
                   </button>
                 )}
                 {!isSent && (

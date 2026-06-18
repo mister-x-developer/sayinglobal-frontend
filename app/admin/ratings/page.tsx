@@ -66,7 +66,7 @@ export default function AdminRatingsPage() {
     try {
       await ratingsApi.remove(r.public_id);
       setItems((prev) => prev.filter((it) => it.public_id !== r.public_id));
-      toast.success(t('success.deleted' as any) ?? t('success.updated'));
+      toast.success(t('success.deleted'));
     } catch {
       toast.error(t('errors.generic'));
     }
@@ -78,14 +78,14 @@ export default function AdminRatingsPage() {
         <div className="flex items-end justify-between gap-3">
           <div>
             <p className="text-eyebrow">{t('admin.title')}</p>
-            <h1 className="display-md mt-2">{t('reviews.moderation' as any) ?? 'Reviews Moderation'}</h1>
-            <p className="mt-2 text-fg-muted">{count} {t('admin.flagged' as any) ?? 'flagged'}</p>
+            <h1 className="display-md mt-2">{t('admin.ratingsModeration')}</h1>
+            <p className="mt-2 text-fg-muted">{count} {t('admin.flagged')}</p>
           </div>
           <button
             type="button"
             onClick={load}
             className="btn btn-secondary h-10"
-            aria-label={t('common.refresh') ?? 'Refresh'}
+            aria-label={t('common.refresh')}
           >
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} strokeWidth={1.75} />
           </button>
@@ -166,7 +166,7 @@ export default function AdminRatingsPage() {
                         type="button"
                         onClick={() => toggle(r)}
                         className={`btn btn-sm ${r.is_hidden ? 'bg-success/12 text-success' : 'bg-fg-subtle/10 text-fg-muted'}`}
-                        title={r.is_hidden ? 'Unhide' : 'Hide'}
+                        title={r.is_hidden ? t('General.unhide') : t('General.hide')}
                       >
                         {r.is_hidden
                           ? <Eye className="h-3.5 w-3.5" strokeWidth={2} />
@@ -176,7 +176,7 @@ export default function AdminRatingsPage() {
                         type="button"
                         onClick={() => remove(r)}
                         className="btn btn-sm bg-danger/10 text-danger hover:bg-danger/20"
-                        title="Delete"
+                        title={t('common.delete')}
                       >
                         <Trash2 className="h-3.5 w-3.5" strokeWidth={2} />
                       </button>
