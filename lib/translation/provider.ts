@@ -77,7 +77,7 @@ const backendProvider: TranslationProvider = {
         return { text: cache.get(key)!, fromLocale: sourceLocale ?? 'auto', toLocale: 'uz-cyrl', cached: true };
       }
       let uzText = text;
-      if (sourceLocale && sourceLocale !== 'uz' && sourceLocale !== 'auto') {
+      if (sourceLocale !== 'uz') {
         const intermediate = await backendProvider.translate(text, 'uz', sourceLocale);
         uzText = intermediate.text;
       }
