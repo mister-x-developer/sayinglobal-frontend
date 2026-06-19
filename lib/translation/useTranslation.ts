@@ -29,11 +29,14 @@ export interface UseTranslationReturn {
   reset: () => void;
 }
 
+import { toast } from '@/components/ui/Toast';
+
 export function useTranslation(
   originalText: string,
   sourceLocale?: string
 ): UseTranslationReturn {
   const locale = useLocale() as SupportedLocale;
+  const t = useTranslations();
   const [state, setState] = useState<TranslationState>('idle');
   const [translatedText, setTranslatedText] = useState<string | null>(null);
 
@@ -52,6 +55,7 @@ export function useTranslation(
 
       // If result is same as original, no translation needed
       if (result === originalText) {
+        toast.info(t('common.alreadyInThisLanguage') || "Matn allaqachon ushbu tilda yoki tarjima topilmadi.");
         setState('idle');
         return;
       }
