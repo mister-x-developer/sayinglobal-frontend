@@ -129,7 +129,7 @@ export function FloatingNearbyButton() {
           position: 'fixed',
           right: 16 - clampedX,
           bottom: `calc(156px + env(safe-area-inset-bottom, 0px) - ${clampedY}px)`,
-          zIndex: 40,
+          zIndex: 999,
           touchAction: 'none',
           cursor: dragging ? 'grabbing' : 'grab',
           userSelect: 'none',

@@ -29,16 +29,23 @@ async function getLocationCapacitor(): Promise<{ lat: number; lng: number }> {
     }
     throw new Error('denied');
   } catch {
-    // Fallback to browser geolocation
     return new Promise((resolve, reject) => {
       if (typeof navigator === 'undefined' || !navigator.geolocation) {
         reject(new Error('unsupported'));
         return;
       }
+      const handleSuccess = (pos: any) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude });
       navigator.geolocation.getCurrentPosition(
-        (pos) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-        (err) => reject(err),
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60_000 },
+        handleSuccess,
+        (err) => {
+          // If high accuracy fails (especially on desktop), try without it
+          navigator.geolocation.getCurrentPosition(
+            handleSuccess,
+            (err2) => reject(err2),
+            { enableHighAccuracy: false, timeout: 10000, maximumAge: 300_000 }
+          );
+        },
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 60_000 }
       );
     });
   }

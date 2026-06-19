@@ -120,7 +120,7 @@ export function AIAssistantButton() {
           position: 'fixed',
           right: 16 - clampedX,
           bottom: `calc(84px + env(safe-area-inset-bottom, 0px) - ${clampedY}px)`,
-          zIndex: 40,
+          zIndex: 999,
           touchAction: 'none',
           userSelect: 'none',
           cursor: dragging ? 'grabbing' : 'grab',
@@ -135,7 +135,7 @@ export function AIAssistantButton() {
         >
           <button
             type="button"
-            className={`group relative inline-flex h-14 w-14 items-center justify-center rounded-2xl text-white shadow-[0_10px_40px_-5px_rgba(var(--brand-primary-rgb),0.6),inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-4px_8px_rgba(0,0,0,0.2)] transition-all duration-200 border border-white/20 overflow-hidden active:translate-y-1 active:shadow-[0_4px_16px_-4px_rgba(var(--brand-primary-rgb),0.6),inset_0_1px_2px_rgba(255,255,255,0.4),inset_0_-2px_4px_rgba(0,0,0,0.2)] hover:-translate-y-1 ${
+            className={`group relative inline-flex h-14 w-14 items-center justify-center rounded-2xl text-white shadow-[0_10px_40px_-5px_rgba(var(--brand-primary-rgb),0.6),inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-4px_8px_rgba(0,0,0,0.2)] transition-all duration-200 border border-white/20 overflow-hidden active:translate-y-1 active:shadow-[0_4px_16px_-4px_rgba(var(--brand-primary-rgb),0.6),inset_0_1px_2px_rgba(255,255,255,0.4),inset_0_-2px_4px_rgba(0,0,0,0.2)] hover:-translate-y-1 animate-float ${
               overDelete ? 'bg-red-500' : 'bg-gradient-to-br from-brand-primary to-[#0f4d34]'
             }`}
             aria-label="AI Yordamchi"

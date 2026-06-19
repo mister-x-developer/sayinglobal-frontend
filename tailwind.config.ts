@@ -142,14 +142,14 @@ const config: Config = {
         },
         'float': {
           '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-6px)' },
+          '50%': { transform: 'translateY(-10px)' },
         },
       },
       animation: {
         'fade-in': 'fade-in 480ms cubic-bezier(0.16, 1, 0.3, 1) backwards',
         'scale-in': 'scale-in 380ms cubic-bezier(0.16, 1, 0.3, 1) backwards',
         'slide-up': 'slide-up 520ms cubic-bezier(0.16, 1, 0.3, 1) backwards',
-        'float': 'float 6s ease-in-out infinite',
+        'float': 'float 3s ease-in-out infinite',
       },
     },
   },

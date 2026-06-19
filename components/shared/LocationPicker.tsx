@@ -245,20 +245,30 @@ export function LocationPicker({
     } catch (e) {
       // Fallback if Capacitor plugin fails (or not in native shell)
       if (typeof navigator !== 'undefined' && navigator.geolocation) {
+        const handleSuccess = (pos: any) => {
+          setLocating(false);
+          handleCoords(pos.coords.latitude, pos.coords.longitude);
+        };
+        const handleError = (err: any) => {
+          setLocating(false);
+          const msg = err.code === 1
+            ? (t('marketplace.geolocationPermission' as any) ?? 'Joylashuv ruxsati berilmadi. Ilova sozlamalaridan yoqing.')
+            : (t('marketplace.geolocationError' as any) ?? 'Joylashuvni aniqlab bo‘lmadi. Qayta urining.');
+          setLocationError(msg);
+          setTimeout(() => setLocationError(''), 4000);
+        };
+
         navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            setLocating(false);
-            handleCoords(pos.coords.latitude, pos.coords.longitude);
-          },
+          handleSuccess,
           (err) => {
-            setLocating(false);
-            const msg = err.code === 1
-              ? (t('marketplace.geolocationPermission' as any) ?? 'Joylashuv ruxsati berilmadi. Ilova sozlamalaridan yoqing.')
-              : (t('marketplace.geolocationError' as any) ?? 'Joylashuvni aniqlab bo‘lmadi. Qayta urining.');
-            setLocationError(msg);
-            setTimeout(() => setLocationError(''), 4000);
+            // High accuracy failed, retry without it
+            navigator.geolocation.getCurrentPosition(
+              handleSuccess,
+              handleError,
+              { enableHighAccuracy: false, timeout: 10000, maximumAge: 300_000 }
+            );
           },
-          { enableHighAccuracy: true, timeout: 10000, maximumAge: 30_000 },
+          { enableHighAccuracy: true, timeout: 5000, maximumAge: 30_000 },
         );
       } else {
         setLocating(false);
