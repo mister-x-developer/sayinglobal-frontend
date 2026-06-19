@@ -11,7 +11,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { translationProvider, type SupportedLocale } from './provider';
 
 export type TranslationState = 'idle' | 'loading' | 'translated' | 'error';
@@ -67,7 +67,7 @@ export function useTranslation(
       // Auto-reset error state after 2s
       setTimeout(() => setState('idle'), 2000);
     }
-  }, [originalText, locale, sourceLocale, state]);
+  }, [originalText, locale, sourceLocale, state, t]);
 
   const reset = useCallback(() => {
     setState('idle');

@@ -57,8 +57,9 @@
     "send": "Yuborish",
     "user": "Foydalanuvchi",
     "you": "Siz",
-    "other": "Boshqa"
-},
+    "other": "Boshqa",
+    "alreadyInThisLanguage": "Matn allaqachon ushbu tilda."
+  },
   "landing": {
     "heroTitle": "Raqamli Chorva Bozori",
     "heroSubtitle": "Sotuvchilar va xaridorlarni bevosita bogʻlovchi raqamli chorva bozori",
@@ -308,7 +309,7 @@
     "day": "kun",
     "selectBreed": "Zotni tanlang",
     "enterBreed": "Zotni kiriting"
-},
+  },
   "profile": {
     "profile": "Profil",
     "myProfile": "Mening profilim",

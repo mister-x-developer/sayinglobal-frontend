@@ -56,7 +56,8 @@
     "done": "Done",
     "send": "Send",
     "user": "User",
-    "you": "You"
+    "you": "You",
+    "alreadyInThisLanguage": "Text is already in this language."
   },
   "landing": {
     "heroTitle": "Digital Livestock Marketplace",
