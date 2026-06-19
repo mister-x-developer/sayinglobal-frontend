@@ -25,6 +25,7 @@ import { FollowButton } from '@/components/sellers/FollowButton';
 import { RatingDisplay } from '@/components/shared/RatingDisplay';
 import { SellerRatingsThread } from '@/components/sellers/SellerRatingsThread';
 import { ReportDialog } from '@/components/shared/ReportDialog';
+import { TranslatableText } from '@/components/shared/TranslateButton';
 import { usersApi } from '@/lib/api/users';
 import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
@@ -200,9 +201,11 @@ export default function SellerDetailPage() {
                     </div>
 
                     {seller.bio && (
-                      <p className="mt-4 max-w-2xl text-pretty leading-relaxed text-fg-muted">
-                        {seller.bio}
-                      </p>
+                      <TranslatableText
+                        text={seller.bio}
+                        className="mt-4 max-w-2xl"
+                        textClassName="text-pretty leading-relaxed text-fg-muted"
+                      />
                     )}
                   </div>
                 </div>

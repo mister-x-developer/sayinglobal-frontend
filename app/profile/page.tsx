@@ -29,6 +29,7 @@ import { ListingCard } from '@/components/listings/ListingCard';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { RatingDisplay } from '@/components/shared/RatingDisplay';
 import { SellerRatingsThread } from '@/components/sellers/SellerRatingsThread';
+import { TranslatableText } from '@/components/shared/TranslateButton';
 import { useAuthStore } from '@/lib/store/auth';
 import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
@@ -181,9 +182,11 @@ export default function ProfilePage() {
                 </div>
 
                 {profile.bio && (
-                  <p className="mt-4 max-w-2xl text-pretty leading-relaxed text-fg-muted">
-                    {profile.bio}
-                  </p>
+                  <TranslatableText
+                    text={profile.bio}
+                    className="mt-4 max-w-2xl"
+                    textClassName="text-pretty leading-relaxed text-fg-muted"
+                  />
                 )}
 
                 {/* Follow counts */}
