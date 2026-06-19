@@ -60,7 +60,6 @@ export const metadata: Metadata = {
     telephone: false,
   },
   appleWebApp: {
-    capable: true,
     statusBarStyle: 'black-translucent',
     title: 'SAYIN GLOBAL',
   },
@@ -128,6 +127,7 @@ export default async function RootLayout({
       className={`${inter.variable} ${poppins.variable}`}
     >
       <head>
+        <meta name="mobile-web-app-capable" content="yes" />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <script dangerouslySetInnerHTML={{ __html: capacitorInitScript }} />
       </head>

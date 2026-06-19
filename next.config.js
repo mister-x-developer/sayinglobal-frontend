@@ -16,8 +16,6 @@ const apiOrigin = isDev
 
 const nextConfig = {
   reactStrictMode: true,
-  skipTrailingSlashRedirect: true,
-  trailingSlash: true,
   output: 'export',
 
   eslint: {
