@@ -255,7 +255,13 @@ export default function ListingDetailPage() {
                       </p>
                     )}
                     <div className="flex items-start justify-between gap-3">
-                      <h1 className="display-md text-balance flex-1">{getLocalizedField(listing as any, 'title', locale) || listing.title}</h1>
+                      <div className="flex-1 min-w-0">
+                        <TranslatableText
+                          text={getLocalizedField(listing as any, 'title', locale) || listing.title}
+                          className="w-full"
+                          textClassName="display-md text-balance"
+                        />
+                      </div>
                     </div>
 
                     <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-sm text-fg-muted">
@@ -538,9 +544,11 @@ export default function ListingDetailPage() {
                     className="surface-elevated p-4 sm:p-6"
                   >
                     <h2 className="display-sm mb-4">{t('listings.description')}</h2>
-                    <p className="whitespace-pre-line text-pretty leading-[1.75] text-fg-muted">
-                      {getLocalizedField(listing as any, 'description', locale) || listing.description}
-                    </p>
+                    <TranslatableText
+                      text={getLocalizedField(listing as any, 'description', locale) || listing.description}
+                      className="w-full"
+                      textClassName="whitespace-pre-line text-pretty leading-[1.75] text-fg-muted"
+                    />
                   </motion.div>
 
                   {/* Map (only when coordinates are available) */}

@@ -403,7 +403,7 @@
     "unfollow": "Обунани бекор қилиш",
     "following": "Обуна бўлинган",
     "message": "Хабар юбориш",
-    "reviews": "Шарҳлар",
+    "reviews": "Сотувчининг шарҳлари",
     "rating": "Рейтинг",
     "stars": "юлдуз",
     "star": "юлдуз",
@@ -790,7 +790,7 @@
     "noResults": "Натижалар йўқ",
     "noResultsDescription": "Бошқа калит сўзлар ёки фильтрларни синаб кўринг",
     "noActivity": "Фаолият йўқ",
-    "noActivityDescription": "Бу ерда сизнинг фаолиятингиз кўрсатилади"
+    "noActivityDescription": "Бу ерда фойдаланувчининг фаолияти кўрсатилади"
   },
   "validation": {
     "atLeastOneFieldRequired": "Камида битта майдон тўлдирилиши шарт",
