@@ -146,8 +146,8 @@ export function FloatingNearbyButton() {
         >
           <button
             onClick={(e) => { if (dragging) e.preventDefault(); }}
-            className={`inline-flex h-14 w-14 items-center justify-center rounded-full text-white shadow-[0_4px_14px_0_rgb(46_140_95/0.45)] transition-all duration-200 ease-out active:scale-95 animate-float ${
-              overDelete ? 'bg-red-500' : 'bg-success'
+            className={`inline-flex h-14 w-14 items-center justify-center rounded-full text-white shadow-[0_10px_40px_-5px_rgba(46,140,95,0.6),inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-4px_8px_rgba(0,0,0,0.2)] transition-all duration-200 ease-out hover:-translate-y-1 active:translate-y-1 active:scale-95 animate-float border border-white/20 ${
+              overDelete ? 'bg-red-500' : 'bg-gradient-to-br from-success to-[#1b5e20]'
             }`}
             aria-label={t('title')}
           >

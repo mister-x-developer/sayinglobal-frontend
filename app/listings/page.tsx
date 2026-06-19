@@ -340,31 +340,7 @@ export default function ListingsPage() {
         </div>
       </main>
 
-      {/* Floating Nearby Button — calm, collapsible, fast */}
-      <motion.div 
-        className="fixed bottom-8 right-6 z-40 sm:bottom-10 sm:right-8"
-        style={{ touchAction: 'none' }}
-      >
-        <Link
-          href={`/listings/nearby${category !== 'all' ? `?category=${category}` : ''}`}
-          className="group flex items-center rounded-2xl bg-brand-primary p-3.5 text-white shadow-[0_4px_14px_0_rgb(31_122_82/0.45)] transition-all hover:bg-brand-primary/90 hover:shadow-[0_6px_20px_rgb(31_122_82/0.3)] active:scale-[0.96]"
-          aria-label={t('nearby.title')}
-        >
-          <MapPin className="h-5 w-5 shrink-0" strokeWidth={2.25} />
-          <motion.span
-            initial={false}
-            animate={{ 
-              width: isScrolled ? 0 : 'auto', 
-              opacity: isScrolled ? 0 : 1,
-              marginLeft: isScrolled ? 0 : 8
-            }}
-            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden whitespace-nowrap text-sm font-semibold tracking-wide"
-          >
-            {t('nearby.title')}
-          </motion.span>
-        </Link>
-      </motion.div>
+
     </div>
   );
 }

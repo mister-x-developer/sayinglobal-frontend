@@ -143,6 +143,7 @@ export default async function RootLayout({
                 <NotificationSocketProvider />
                 <MobileBottomNav />
                 <OnboardingModal />
+                <FloatingNearbyButton />
                 <AIAssistantButton />
                 <ToastContainer />
               </ReCaptchaProvider>
