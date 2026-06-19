@@ -54,6 +54,8 @@ function getLocalizedField(obj: Record<string, any>, field: string, locale: stri
 export default function ListingDetailPage() {
   const t = useTranslations();
   const locale = useLocale();
+  const normalizeLocale = (loc: string) => loc.replace('-', '_');
+  const locKey = `name_${normalizeLocale(locale)}` as 'name_uz' | 'name_uz_cyrl' | 'name_ru' | 'name_en';
   const router = useRouter();
   const searchParams = useSearchParams();
   // Route params arrive as strings — convert once at the boundary
@@ -86,10 +88,10 @@ export default function ListingDetailPage() {
 
   // Fetch related listings (same category, exclude current) from backend
   useEffect(() => {
-    if (!listing?.category?.name || !listing.public_id) return;
+    if (!(listing?.category as any)?.slug || !listing.public_id) return;
     let alive = true;
     listingsApi
-      .byCategory(listing.category.name)
+      .byCategory((listing.category as any).slug)
       .then((items) => {
         if (!alive) return;
         const filtered = (items ?? [])
@@ -99,7 +101,7 @@ export default function ListingDetailPage() {
       })
       .catch(() => alive && setRelated([]));
     return () => { alive = false; };
-  }, [listing?.category?.name, listing?.public_id]);
+  }, [(listing?.category as any)?.slug, listing?.public_id]);
 
   const images = listing?.images ?? [];
   const visibleImage = images[imgIndex];
@@ -182,7 +184,7 @@ export default function ListingDetailPage() {
                             src={visibleImage?.image && !visibleImage.image.startsWith('/placeholder')
                               ? visibleImage.image : null}
                             alt={listing.title}
-                            category={listing.category?.name}
+                            category={(listing.category as any)?.slug}
                             sizes="(max-width: 1024px) 100vw, 60vw"
                             priority
                           />
@@ -232,7 +234,7 @@ export default function ListingDetailPage() {
                             <ListingImage
                               src={img.image && !img.image.startsWith('/placeholder') ? img.image : null}
                               alt={`${listing.title} ${i + 1}`}
-                              category={listing.category?.name}
+                              category={(listing.category as any)?.slug}
                             />
                           </button>
                         ))}
@@ -249,9 +251,9 @@ export default function ListingDetailPage() {
                   >
                     {listing.category && (
                       <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.12em] text-brand-accent">
-                        {listing.category.name
-                          ? t(`categories.${listing.category.name}` as any) || listing.category.name_uz
-                          : listing.category.name_uz}
+                        {(listing.category as any).slug
+                          ? t(`categories.${(listing.category as any).slug}` as any) || (listing.category as any)[locKey] || listing.category.name_uz
+                          : (listing.category as any)[locKey] || listing.category.name_uz}
                       </p>
                     )}
                     <div className="flex items-start justify-between gap-3">
@@ -522,14 +524,14 @@ export default function ListingDetailPage() {
                           <SpecItem
                             icon={MapPin}
                             label={t('listings.region')}
-                            value={listing.region}
+                            value={(listing as any).region_data ? ((listing as any).region_data[locKey] || (listing as any).region_data.name_uz) : listing.region}
                           />
                         )}
                         {listing.district && (
                           <SpecItem
                             icon={MapPin}
                             label={t('listings.district')}
-                            value={listing.district}
+                            value={(listing as any).district_data ? ((listing as any).district_data[locKey] || (listing as any).district_data.name_uz) : listing.district}
                           />
                         )}
                       </dl>

@@ -58,11 +58,13 @@ export function ListingCard({ listing, onFavorite }: Props) {
   // Get localized title for current UI language
   const localizedTitle = getLocalizedListingTitle(listing, locale);
 
-  // Category display: prefer t('categories.{slug}') over raw name_uz
-  const categorySlug = listing.category?.name;
+  const normalizeLocale = (loc: string) => loc.replace('-', '_');
+  const locKey = `name_${normalizeLocale(locale)}` as 'name_uz' | 'name_uz_cyrl' | 'name_ru' | 'name_en';
+
+  const categorySlug = (listing.category as any)?.slug || (listing.category as any)?.name;
   const categoryLabel = categorySlug
-    ? (t(`categories.${categorySlug}` as any) || listing.category?.name_uz || '')
-    : (listing.category?.name_uz || '');
+    ? (t(`categories.${categorySlug}` as any) || (listing.category as any)?.[locKey] || listing.category?.name_uz || '')
+    : ((listing.category as any)?.[locKey] || listing.category?.name_uz || '');
 
   const handleFav = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -132,8 +134,6 @@ export function ListingCard({ listing, onFavorite }: Props) {
             <span className="truncate">
               {(() => {
                 if (!listing) return '';
-                const normalizeLocale = (loc: string) => loc.replace('-', '_');
-                const locKey = `name_${normalizeLocale(locale)}` as 'name_uz' | 'name_uz_cyrl' | 'name_ru' | 'name_en';
                 if ((listing as any).region_data) {
                   const reg = (listing as any).region_data[locKey] || (listing as any).region_data.name_uz;
                   const dist = (listing as any).district_data ? ((listing as any).district_data[locKey] || (listing as any).district_data.name_uz) : '';

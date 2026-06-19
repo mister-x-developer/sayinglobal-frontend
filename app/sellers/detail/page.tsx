@@ -31,7 +31,7 @@ import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
 import { useAuthStore } from '@/lib/store/auth';
 
-type Tab = 'listings' | 'reviews' | 'activity';
+type Tab = 'listings' | 'reviews';
 
 export default function SellerDetailPage() {
   const t = useTranslations();
@@ -241,7 +241,6 @@ export default function SellerDetailPage() {
                   {[
                     { key: 'listings', label: t('listings.title') },
                     { key: 'reviews', label: t('sellers.reviews') },
-                    { key: 'activity', label: t('profile.activity') },
                   ].map((tt) => {
                     const active = tab === (tt.key as Tab);
                     return (
@@ -285,14 +284,6 @@ export default function SellerDetailPage() {
 
                 {tab === 'reviews' && (
                   <SellerRatingsThread sellerPublicId={id} />
-                )}
-
-                {tab === 'activity' && (
-                  <EmptyState
-                    icon={TrendingUp}
-                    title={t('empty.noActivity')}
-                    description={t('empty.noActivityDescription')}
-                  />
                 )}
               </div>
             </>
