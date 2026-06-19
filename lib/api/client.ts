@@ -6,6 +6,7 @@
  */
 
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
+import axiosRetry from 'axios-retry';
 import { useAuthStore } from '../store/auth';
 
 function getApiBaseUrl(): string {
@@ -25,6 +26,18 @@ export const apiClient = axios.create({
   baseURL: `${API_BASE_URL}/api`,
   headers: { 'Content-Type': 'application/json' },
   timeout: 30000,
+});
+
+axiosRetry(apiClient, {
+  retries: 3,
+  retryDelay: axiosRetry.exponentialDelay,
+  retryCondition: (error) => {
+    // Also retry on ERR_NETWORK_CHANGED, which Chromium throws on unstable networks
+    return axiosRetry.isNetworkOrIdempotentRequestError(error) || 
+           error.message === 'Network Error' || 
+           error.code === 'ERR_NETWORK_CHANGED' || 
+           error.code === 'ECONNABORTED';
+  }
 });
 
 // ── Token reader (race-safe) ────────────────────────────────────────────────
