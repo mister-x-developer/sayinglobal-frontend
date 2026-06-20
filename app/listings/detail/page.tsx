@@ -286,7 +286,7 @@ function ListingDetailPageContent() {
                       {listing.created_at && (
                         <span className="inline-flex items-center gap-1.5">
                           <Clock className="h-4 w-4" strokeWidth={1.75} />
-                          {formatRelativeTime(listing.created_at)}
+                          {formatRelativeTime(listing.created_at || new Date().toISOString(), locale)}
                         </span>
                       )}
                       {typeof listing.view_count === 'number' && (
