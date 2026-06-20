@@ -5,24 +5,20 @@
 const NBSP = '\u00A0';
 
 export function formatPrice(price: number, currency: string = 'UZS', locale: string = 'uz'): string {
+  const formatted = new Intl.NumberFormat('uz-UZ', {
+    style: 'decimal',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(price);
+
+  let suffix = currency;
   if (currency === 'UZS' || !currency) {
-    const formatted = new Intl.NumberFormat('uz-UZ', {
-      style: 'decimal',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price);
-    const suffix = locale === 'ru' ? 'сум' : locale === 'uz-cyrl' ? 'сўм' : locale === 'en' ? 'UZS' : "so'm";
-    return `${formatted}${NBSP}${suffix}`;
+    suffix = locale === 'ru' ? 'сум' : locale === 'uz-cyrl' ? 'сўм' : locale === 'en' ? 'UZS' : "soʻm";
+  } else if (currency === 'USD') {
+    suffix = locale === 'ru' ? 'дол.' : 'USD';
   }
-  try {
-    return new Intl.NumberFormat('uz-UZ', {
-      style: 'currency',
-      currency,
-      maximumFractionDigits: 0,
-    }).format(price);
-  } catch {
-    return `${price} ${currency}`;
-  }
+
+  return `${formatted}${NBSP}${suffix}`;
 }
 
 export function formatNumber(num: number): string {
