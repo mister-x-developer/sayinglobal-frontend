@@ -66,5 +66,5 @@ const nextConfig = {
 // runtime via NEXT_PUBLIC_SENTRY_DSN in `sentry.client.config.ts` and
 // `instrumentation.ts`. Source-map upload (build-time) is simply skipped;
 // errors are still captured, just with minified stack traces.
-module.exports = withNextIntl(nextConfig);
+module.exports = nextConfig;
 

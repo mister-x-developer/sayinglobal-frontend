@@ -5,7 +5,6 @@ import './globals.css';
 
 import type { Metadata, Viewport } from 'next';
 import { Inter, Poppins } from 'next/font/google';
-import { getLocale, getMessages } from 'next-intl/server';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { IntlClientProvider } from '@/components/providers/IntlClientProvider';
 import { ToastContainer } from '@/components/ui/Toast';
@@ -111,13 +110,15 @@ const capacitorInitScript = `
 })();
 `;
 
+import uzMessages from '@/messages/uz.json';
+
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const locale = await getLocale();
-  const messages = await getMessages();
+  const locale = 'uz';
+  const messages = uzMessages;
 
   return (
     <html

@@ -1,4 +1,4 @@
-import { cookies } from 'next/headers';
+
 import { getRequestConfig } from 'next-intl/server';
 import { IntlErrorCode } from 'next-intl';
 
@@ -78,11 +78,9 @@ export const routing = {
 export default getRequestConfig(async () => {
   // R6.9: resolve the stored locale, falling back to `uz` when it is missing
   // or not one of the four supported locales.
+  // We explicitly DO NOT use `cookies()` here because it breaks static export (APK build).
+  // The IntlClientProvider will read localStorage/cookie on the client and swap the language.
   let locale: Locale = defaultLocale;
-  try {
-    const stored = cookies().get(COOKIE)?.value;
-    if (isValidLocale(stored)) locale = stored;
-  } catch {}
 
   // The `uz` base is always loaded so it can act as the fallback source.
   const base = await loadMessages(defaultLocale);
