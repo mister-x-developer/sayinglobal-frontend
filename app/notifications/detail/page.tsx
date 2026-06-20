@@ -7,7 +7,7 @@
  * language (with TranslateButton fallback for the original).
  */
 
-import { useEffect, useState } from 'react';
+import { Suspense,  useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -46,7 +46,7 @@ function localized(o: any, base: string, locale: string): string {
   return o?.[`${base}_${norm}`] || o?.[`${base}_uz`] || o?.[base] || '';
 }
 
-export default function NotificationDetailPage() {
+function NotificationDetailPageContent() {
   const t = useTranslations();
   const locale = useLocale();
   const router = useRouter();
@@ -143,5 +143,14 @@ export default function NotificationDetailPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+
+export default function NotificationDetailPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center p-8"><div className="spinner"></div></div>}>
+      <NotificationDetailPageContent />
+    </Suspense>
   );
 }

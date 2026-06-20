@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense,  useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
@@ -50,7 +50,7 @@ function clearRecent() {
 
 type ResultTab = 'listings' | 'sellers';
 
-export default function SearchPage() {
+function SearchPageContent() {
   const t = useTranslations();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -432,5 +432,14 @@ export default function SearchPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center p-8"><div className="spinner"></div></div>}>
+      <SearchPageContent />
+    </Suspense>
   );
 }

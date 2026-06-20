@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
@@ -51,7 +52,7 @@ function getLocalizedField(obj: Record<string, any>, field: string, locale: stri
   return obj[key] || obj[`${field}_uz`] || obj[field] || '';
 }
 
-export default function ListingDetailPage() {
+function ListingDetailPageContent() {
   const t = useTranslations();
   const locale = useLocale();
   const normalizeLocale = (loc: string) => loc.replace('-', '_');
@@ -977,4 +978,13 @@ function InlineTranslatedSpec({ text }: { text: string }) {
 
   if (!text) return null;
   return <span>{displayed}</span>;
+}
+
+
+export default function ListingDetailPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center p-8"><div className="spinner"></div></div>}>
+      <ListingDetailPageContent />
+    </Suspense>
+  );
 }

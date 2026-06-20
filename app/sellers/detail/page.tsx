@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense,  useEffect, useMemo, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -33,7 +33,7 @@ import { useAuthStore } from '@/lib/store/auth';
 
 type Tab = 'listings' | 'reviews';
 
-export default function SellerDetailPage() {
+function SellerDetailPageContent() {
   const t = useTranslations();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -297,5 +297,14 @@ export default function SellerDetailPage() {
         onClose={() => setReportOpen(false)}
       />
     </div>
+  );
+}
+
+
+export default function SellerDetailPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center p-8"><div className="spinner"></div></div>}>
+      <SellerDetailPageContent />
+    </Suspense>
   );
 }

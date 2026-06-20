@@ -8,7 +8,7 @@
  * 4 supported locales so the admin can verify the auto-translation.
  */
 
-import { useEffect, useState } from 'react';
+import { Suspense,  useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
@@ -58,7 +58,7 @@ function localizedField(b: Broadcast, field: 'title' | 'message', locale: string
   return (b as any)[`${field}_${key}`] || (b as any)[`${field}_uz`] || (b as any)[`${field}_ru`] || (b as any)[`${field}_en`] || b[field] || '';
 }
 
-export default function AdminBroadcastDetailPage() {
+function AdminBroadcastDetailPageContent() {
   const t = useTranslations();
   const locale = useLocale();
   const router = useRouter();
@@ -328,5 +328,14 @@ export default function AdminBroadcastDetailPage() {
         </motion.div>
       </div>
     </AdminLayout>
+  );
+}
+
+
+export default function AdminBroadcastDetailPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center p-8"><div className="spinner"></div></div>}>
+      <AdminBroadcastDetailPageContent />
+    </Suspense>
   );
 }

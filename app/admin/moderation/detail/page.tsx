@@ -11,7 +11,7 @@
  * TranslatableText so the admin can read in their own language.
  */
 
-import { useCallback, useEffect, useState } from 'react';
+import { Suspense,  useCallback, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -57,7 +57,7 @@ const STATUS_ICON: Record<ReportStatus, any> = {
   resolved_invalid: XCircle,
 };
 
-export default function AdminReportDetailPage() {
+function AdminReportDetailPageContent() {
   const t = useTranslations();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -496,5 +496,14 @@ function RestoreStatusPanel({
         Holatni tiklash
       </button>
     </div>
+  );
+}
+
+
+export default function AdminReportDetailPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center p-8"><div className="spinner"></div></div>}>
+      <AdminReportDetailPageContent />
+    </Suspense>
   );
 }

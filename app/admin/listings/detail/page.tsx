@@ -9,7 +9,7 @@
  * controls — Approve, Reject (with reason), Restore, Mark sold.
  */
 
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense,  useEffect, useMemo, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -43,7 +43,7 @@ import { listingsApi, type ListingDetail } from '@/lib/api/listings';
 import { moderationApi, type AdminReportRecord } from '@/lib/api/moderation';
 import { formatPrice, formatRelativeTime } from '@/lib/utils/format';
 
-export default function AdminListingDetailPage() {
+function AdminListingDetailPageContent() {
   const t = useTranslations();
   const locale = useLocale();
   const router = useRouter();
@@ -547,5 +547,14 @@ ${res.explanation}`);
         )}
       </div>
     </AdminLayout>
+  );
+}
+
+
+export default function AdminListingDetailPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center p-8"><div className="spinner"></div></div>}>
+      <AdminListingDetailPageContent />
+    </Suspense>
   );
 }

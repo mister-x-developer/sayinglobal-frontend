@@ -9,7 +9,7 @@
  * (warn / restrict / block / unblock).
  */
 
-import { useEffect, useState } from 'react';
+import { Suspense,  useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -70,7 +70,7 @@ interface AdminUserRecord {
   is_admin?: boolean;
 }
 
-export default function AdminUserDetailPage() {
+function AdminUserDetailPageContent() {
   const t = useTranslations();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -355,5 +355,14 @@ export default function AdminUserDetailPage() {
         </motion.div>
       </div>
     </AdminLayout>
+  );
+}
+
+
+export default function AdminUserDetailPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center p-8"><div className="spinner"></div></div>}>
+      <AdminUserDetailPageContent />
+    </Suspense>
   );
 }

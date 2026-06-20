@@ -27,7 +27,7 @@ const TG_BOT = process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || 'sayin_global_bo
 
 // Simplified to only code entry as per requirements (open bot via Telegram to receive code, then enter code only)
 
-export default function AuthPage() {
+function AuthPageContent() {
   const t = useTranslations();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -251,3 +251,10 @@ export default function AuthPage() {
   );
 }
 
+export default function AuthPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <AuthPageContent />
+    </Suspense>
+  );
+}

@@ -9,7 +9,7 @@
  * language regardless of the language the moderator wrote it in.
  */
 
-import { useEffect, useState } from 'react';
+import { Suspense,  useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -40,7 +40,7 @@ const STATUS_VISUAL: Record<string, { variant: any; key: string; icon: any }> = 
   resolved_invalid: { variant: 'default', key: 'adminMod.status_resolved_invalid', icon: XCircle },
 };
 
-export default function ReportDetailPage() {
+function ReportDetailPageContent() {
   const t = useTranslations();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -211,5 +211,14 @@ export default function ReportDetailPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+
+export default function ReportDetailPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center p-8"><div className="spinner"></div></div>}>
+      <ReportDetailPageContent />
+    </Suspense>
   );
 }

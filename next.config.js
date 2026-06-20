@@ -31,6 +31,7 @@ const nextConfig = {
     unoptimized: true,
   },
 
+  optimizeFonts: false,
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
   },

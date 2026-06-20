@@ -134,9 +134,9 @@ export default async function RootLayout({
       </head>
       <body className="antialiased min-h-[100dvh] bg-bg text-fg pb-[calc(72px+env(safe-area-inset-bottom))] md:pb-0">
         <HydrationReady />
-        <CapacitorNativeProvider />
         <ThemeProvider>
           <IntlClientProvider messages={messages} locale={locale} timeZone="Asia/Tashkent">
+            <CapacitorNativeProvider />
             <MotionProvider>
               <ReCaptchaProvider>
                 {children}
@@ -151,9 +151,6 @@ export default async function RootLayout({
             </MotionProvider>
           </IntlClientProvider>
         </ThemeProvider>
-        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
-          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
-        )}
       </body>
     </html>
   );
