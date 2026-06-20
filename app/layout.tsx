@@ -4,7 +4,7 @@
 import './globals.css';
 
 import type { Metadata, Viewport } from 'next';
-import { Inter, Poppins } from 'next/font/google';
+// Removed next/font/google due to timeouts
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { IntlClientProvider } from '@/components/providers/IntlClientProvider';
 import { ToastContainer } from '@/components/ui/Toast';
@@ -20,24 +20,8 @@ import { AIAssistantButton } from '@/components/ai/AIAssistantButton';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { ReCaptchaProvider } from '@/components/providers/ReCaptchaProvider';
 
-const inter = Inter({
-  subsets: ['latin', 'cyrillic'],
-  variable: '--font-inter',
-  display: 'swap',
-  preload: false,
-  adjustFontFallback: true,
-  fallback: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-});
-
-const poppins = Poppins({
-  weight: ['500', '600', '700', '800'],
-  subsets: ['latin'],
-  variable: '--font-poppins',
-  display: 'swap',
-  preload: false,
-  adjustFontFallback: true,
-  fallback: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-});
+const inter = { variable: '--font-inter', className: 'font-inter' };
+const poppins = { variable: '--font-poppins', className: 'font-poppins' };
 
 export const metadata: Metadata = {
   title: {
