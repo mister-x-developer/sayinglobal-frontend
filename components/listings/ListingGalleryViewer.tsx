@@ -73,6 +73,7 @@ export function ListingGalleryViewer({ images, initialIndex, onClose, title }: L
               className="relative h-full w-full max-h-[85vh] flex items-center justify-center"
               style={{ touchAction: 'pan-y pinch-zoom' }}
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={visibleImage?.image && !visibleImage.image.startsWith('/placeholder') ? visibleImage.image : '/placeholder.jpg'}
                 alt={`${title} - ${index + 1}`}

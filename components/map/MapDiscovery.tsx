@@ -7,12 +7,18 @@ import { useState, useEffect } from 'react';
 import { ErrorBoundary } from '@/components/providers/ErrorBoundary';
 import { listingsApi } from '@/lib/api/listings';
 
+const LoadingMap = () => {
+  const t = useTranslations();
+  return (
+    <div className="w-full h-full bg-bg-subtle animate-pulse rounded-lg flex items-center justify-center">
+      <p className="text-fg-subtle">{t('Map.loadingMap')}</p>
+    </div>
+  );
+};
+
 const Map = dynamic(() => import('./Map'), {
   ssr: false,
-  loading: () => {
-    const t = useTranslations();
-    return <div className="w-full h-full bg-bg-subtle animate-pulse rounded-lg flex items-center justify-center"><p className="text-fg-subtle">{t('Map.loadingMap')}</p></div>;
-  }
+  loading: LoadingMap
 });
 
 interface MapDiscoveryProps {
@@ -30,9 +36,19 @@ export default function MapDiscovery({ className = "h-[500px] w-full" }: MapDisc
   const [radius, setRadius] = useState(100);
 
   useEffect(() => {
-    // In a real app, you would use Geolocation API here
-    // navigator.geolocation.getCurrentPosition(...)
-    
+    if (typeof navigator !== 'undefined' && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setLat(pos.coords.latitude);
+          setLng(pos.coords.longitude);
+        },
+        (err) => console.warn("Geolocation failed or denied, using default Tashkent.", err),
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 300000 }
+      );
+    }
+  }, []);
+
+  useEffect(() => {
     const fetchListings = async () => {
       setLoading(true);
       try {
@@ -72,7 +88,7 @@ export default function MapDiscovery({ className = "h-[500px] w-full" }: MapDisc
           <span>500 km</span>
         </div>
         <p className="text-xs text-fg-subtle mt-3 border-t border-border pt-2">
-          Topilgan e&apos;lonlar: {loading ? '...' : listings.length}
+          {loading ? '...' : t('marketplace.showResults', { count: listings.length })}
         </p>
       </div>
     </div>

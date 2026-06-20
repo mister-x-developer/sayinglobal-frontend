@@ -33,7 +33,13 @@ export default function FollowedSellersPage() {
   useEffect(() => {
     if (!isAuthenticated) return;
     let alive = true;
-    usersApi.following().then((d) => alive && setServerList(d ?? []));
+    usersApi.following().then((d) => {
+      if (!alive) return;
+      const list = d ?? [];
+      setServerList(list);
+      // Hydrate store so FollowButton correctly shows "Following" state
+      useFollowStore.getState().hydrateFromIds(list.map((s: any) => s.public_id));
+    });
     return () => { alive = false; };
   }, [isAuthenticated]);
 

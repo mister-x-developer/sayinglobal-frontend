@@ -48,7 +48,7 @@ export default function AdminAIModerationPage() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => { load(filter); }, [filter, load]);
 

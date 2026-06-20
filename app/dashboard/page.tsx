@@ -280,7 +280,7 @@ function DashboardNearby() {
           <h2 className="text-base sm:text-lg font-bold text-fg">{t('nearby.title')}</h2>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-sm font-medium text-fg-subtle">{items.length} ta e'lon</span>
+          <span className="text-sm font-medium text-fg-subtle">{items.length} ta e&apos;lon</span>
           <ArrowRight className={`h-5 w-5 text-fg-muted transition-transform duration-300 ${expanded ? 'rotate-90' : ''}`} />
         </div>
       </button>

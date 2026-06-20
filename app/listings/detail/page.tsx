@@ -86,12 +86,13 @@ export default function ListingDetailPage() {
     return () => { alive = false; };
   }, [id]);
 
+  const categorySlug = (listing?.category as any)?.slug;
   // Fetch related listings (same category, exclude current) from backend
   useEffect(() => {
-    if (!(listing?.category as any)?.slug || !listing.public_id) return;
+    if (!categorySlug || !listing?.public_id) return;
     let alive = true;
     listingsApi
-      .byCategory((listing.category as any).slug)
+      .byCategory(categorySlug)
       .then((items) => {
         if (!alive) return;
         const filtered = (items ?? [])
@@ -101,7 +102,7 @@ export default function ListingDetailPage() {
       })
       .catch(() => alive && setRelated([]));
     return () => { alive = false; };
-  }, [(listing?.category as any)?.slug, listing?.public_id]);
+  }, [categorySlug, listing?.public_id]);
 
   const images = listing?.images ?? [];
   const visibleImage = images[imgIndex];
@@ -444,7 +445,7 @@ export default function ListingDetailPage() {
                         >
                           {t('common.view')}
                         </Link>
-                        <FollowButton sellerId={listing.seller.public_id} size="sm" />
+                        <FollowButton sellerId={listing.seller.public_id} size="sm" initialIsFollowing={(listing.seller as any).is_following} />
                       </div>
                       <Link
                         href={user?.public_id === listing.seller.public_id ? '/profile' : `/sellers/${listing.seller.public_id}?tab=reviews`}
@@ -778,7 +779,7 @@ export default function ListingDetailPage() {
                         >
                           {t('common.view')}
                         </Link>
-                        <FollowButton sellerId={listing.seller.public_id} size="sm" />
+                        <FollowButton sellerId={listing.seller.public_id} size="sm" initialIsFollowing={(listing.seller as any).is_following} />
                       </div>
                       <Link
                         href={user?.public_id === listing.seller.public_id ? '/profile' : `/sellers/${listing.seller.public_id}?tab=reviews`}

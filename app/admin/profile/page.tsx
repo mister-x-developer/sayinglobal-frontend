@@ -112,7 +112,7 @@ export default function AdminProfilePage() {
               {t('settings.security')}
             </h2>
             <p className="text-sm text-fg-muted mb-4">
-              Kirish Telegram bot orqali amalga oshiriladi. Parol o'rnatish shart emas.
+              Kirish Telegram bot orqali amalga oshiriladi. Parol o&apos;rnatish shart emas.
             </p>
             <div className="flex items-center gap-3 rounded-xl bg-bg-subtle p-4">
               <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-success/10 text-success">

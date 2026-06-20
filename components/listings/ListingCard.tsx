@@ -118,9 +118,9 @@ export function ListingCard({ listing, onFavorite }: Props) {
         <div className="flex flex-col p-4 sm:p-5 h-full">
           {/* Category eyebrow */}
           {categoryLabel && (
-            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.15em] text-brand-primary">
+            <span className="inline-flex items-center rounded-full bg-brand-primary/10 px-2.5 py-0.5 mb-3 text-xs font-medium text-brand-primary">
               {categoryLabel}
-            </p>
+            </span>
           )}
 
           {/* Title */}
@@ -128,20 +128,26 @@ export function ListingCard({ listing, onFavorite }: Props) {
             {localizedTitle}
           </h3>
 
-          {/* Location */}
-          <div className="mt-2.5 flex items-center gap-1.5 text-[13px] text-fg-muted">
-            <MapPin className="h-3.5 w-3.5 flex-shrink-0" strokeWidth={2} />
+          {/* Location & Time */}
+          <div className="flex items-center gap-1.5 text-fg-subtle text-xs mt-3">
+            <MapPin className="w-3.5 h-3.5 shrink-0" />
             <span className="truncate">
               {(() => {
-                if (!listing) return '';
-                if ((listing as any).region_data) {
-                  const reg = (listing as any).region_data[locKey] || (listing as any).region_data.name_uz;
-                  const dist = (listing as any).district_data ? ((listing as any).district_data[locKey] || (listing as any).district_data.name_uz) : '';
-                  if (reg && dist) return `${reg}, ${dist}`;
-                  if (reg) return reg;
-                }
-                return listing.location || '';
+                const rData = (listing as any).region_data;
+                const dData = (listing as any).district_data;
+                const rName = rData ? rData[locKey] || rData.name_uz : listing.region;
+                const dName = dData ? dData[locKey] || dData.name_uz : listing.district;
+                
+                if (dName && rName) return `${dName}, ${rName}`;
+                if (rName) return rName;
+                if (dName) return dName;
+                return listing.location;
               })()}
+            </span>
+            <span className="mx-1.5 inline-block w-1 h-1 rounded-full bg-border" />
+            <Clock className="w-3.5 h-3.5 shrink-0" />
+            <span className="truncate">
+              {formatRelativeTime(listing.created_at || listing.published_at || new Date().toISOString(), locale)}
             </span>
           </div>
 

@@ -8,7 +8,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { motion } from 'framer-motion';
 import { MapPin, Loader2, ArrowLeft, Navigation } from 'lucide-react';
 
@@ -62,6 +62,7 @@ type GeoState =
 
 export default function NearbyListingsPage() {
   const t = useTranslations();
+  const locale = useLocale();
   const searchParams = useSearchParams();
   const initialCat = searchParams.get('category') ?? null;
 
@@ -244,7 +245,6 @@ export default function NearbyListingsPage() {
               </div>
             )}
 
-            {/* Region fallback */}
             {geo.kind === 'denied' && (
               <div className="mt-4">
                 <select
@@ -253,9 +253,13 @@ export default function NearbyListingsPage() {
                   className="input-base h-10 w-full max-w-xs text-sm"
                 >
                   <option value="">{t('listings.region')} — {t('common.all')}</option>
-                  {regions.map((r: any) => (
-                    <option key={r.slug} value={r.slug}>{r.name_uz ?? r.name}</option>
-                  ))}
+                  {regions.map((r: any) => {
+                    const normalizeLocale = (loc: string) => loc.replace('-', '_');
+                    const locKey = `name_${normalizeLocale(locale || 'uz')}`;
+                    return (
+                      <option key={r.slug} value={r.slug}>{r[locKey] || r.name_uz || r.name}</option>
+                    );
+                  })}
                 </select>
               </div>
             )}

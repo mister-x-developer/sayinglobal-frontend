@@ -57,7 +57,8 @@
     "send": "Send",
     "user": "User",
     "you": "You",
-    "alreadyInThisLanguage": "Text is already in this language."
+    "alreadyInThisLanguage": "Text is already in this language.",
+    "other": "Other"
   },
   "landing": {
     "heroTitle": "Digital Livestock Marketplace",
@@ -305,7 +306,9 @@
     "vaccinatedNo": "Not vaccinated",
     "vaccinatedPartial": "Partially vaccinated",
     "days": "days",
-    "day": "day"
+    "day": "day",
+    "selectBreed": "Select Breed",
+    "enterBreed": "Enter Breed"
   },
   "profile": {
     "profile": "Profile",

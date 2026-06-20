@@ -11,7 +11,7 @@ export default function DiscoveryPage() {
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">{t('Map.geoDiscovery')}</h1>
           <p className="text-slate-500 mt-2">
-            Oʻzingizga eng yaqin masofadagi barcha chorva eʼlonlarini xaritada ko'ring va qidiring.
+            Oʻzingizga eng yaqin masofadagi barcha chorva eʼlonlarini xaritada ko&apos;ring va qidiring.
           </p>
         </div>
         

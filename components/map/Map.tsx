@@ -6,7 +6,7 @@ import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { getLocalizedListingTitle } from '@/lib/utils/format';
 
 interface Listing {
@@ -35,6 +35,7 @@ interface MapProps {
 export default function Map({ listings, centerLat = 41.2995, centerLng = 69.2401, radius = 50 }: MapProps) {
   const router = useRouter();
   const locale = useLocale();
+  const t = useTranslations();
 
   return (
     <MapContainer 
@@ -73,7 +74,7 @@ export default function Map({ listings, centerLat = 41.2995, centerLng = 69.2401
                 onClick={() => router.push(`/listings/detail?id=${listing.public_id}`)}
                 className="mt-2 w-full bg-emerald-600 text-white text-xs py-1.5 rounded hover:bg-emerald-700 transition"
               >
-                Ko&apos;rish
+                {t('common.view')}
               </button>
             </div>
           </Popup>

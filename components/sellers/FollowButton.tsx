@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Check, UserPlus } from 'lucide-react';
 import { useFollowStore } from '@/lib/store/follow';
@@ -12,6 +12,7 @@ interface FollowButtonProps {
   variant?: 'primary' | 'secondary';
   className?: string;
   disabled?: boolean;
+  initialIsFollowing?: boolean;
 }
 
 export function FollowButton({
@@ -20,9 +21,17 @@ export function FollowButton({
   variant = 'primary',
   className,
   disabled,
+  initialIsFollowing,
 }: FollowButtonProps) {
   const t = useTranslations();
-  const { isFollowing, toggle } = useFollowStore();
+  const { isFollowing, toggle, syncLocalState } = useFollowStore();
+  
+  useEffect(() => {
+    if (typeof initialIsFollowing === 'boolean') {
+      syncLocalState(sellerId, initialIsFollowing);
+    }
+  }, [sellerId, initialIsFollowing, syncLocalState]);
+
   const following = isFollowing(sellerId);
   const [busy, setBusy] = useState(false);
 

@@ -57,7 +57,8 @@
     "send": "Отправить",
     "user": "Пользователь",
     "you": "Вы",
-    "alreadyInThisLanguage": "Текст уже на этом языке."
+    "alreadyInThisLanguage": "Текст уже на этом языке.",
+    "other": "Другое"
   },
   "landing": {
     "heroTitle": "Цифровой рынок скота",
@@ -305,7 +306,9 @@
     "vaccinatedNo": "Не вакцинирован",
     "vaccinatedPartial": "Частично вакцинирован",
     "days": "дней",
-    "day": "день"
+    "day": "день",
+    "selectBreed": "Выберите породу",
+    "enterBreed": "Введите породу"
   },
   "profile": {
     "profile": "Профиль",

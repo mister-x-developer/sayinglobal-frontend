@@ -21,6 +21,7 @@ interface FollowState {
    * localStorage entry is also cleared by the auth-store logout path.
    */
   reset: () => void;
+  syncLocalState: (publicId: number, isFollowing: boolean) => void;
 }
 
 export const useFollowStore = create<FollowState>()(
@@ -54,6 +55,19 @@ export const useFollowStore = create<FollowState>()(
       },
 
       hydrateFromIds: (ids) => set({ following: ids }),
+
+      syncLocalState: (publicId, isFollowing) => {
+        set((s) => {
+          const currentlyFollowing = s.following.includes(publicId);
+          if (isFollowing && !currentlyFollowing) {
+            return { following: [...s.following, publicId] };
+          }
+          if (!isFollowing && currentlyFollowing) {
+            return { following: s.following.filter((id) => id !== publicId) };
+          }
+          return s; // no change
+        });
+      },
 
       reset: () => set({ following: [] }),
     }),

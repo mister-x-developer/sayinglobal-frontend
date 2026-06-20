@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { App } from '@capacitor/app';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
@@ -99,6 +100,7 @@ export function CapacitorNativeProvider() {
     };
   }, [pathname, router]);
 
+  const t = useTranslations();
   // If offline, render a full-screen native-feeling overlay
   if (isOffline) {
     return (
@@ -110,7 +112,7 @@ export function CapacitorNativeProvider() {
         </div>
         <h2 className="text-2xl font-bold mb-2">{t('Errors.connectionLost')}</h2>
         <p className="text-fg-muted mb-8 max-w-sm">
-          SAYIN GLOBAL tarmog'iga ulanishda xatolik yuz berdi. Iltimos, internet aloqangizni tekshiring.
+          SAYIN GLOBAL tarmog&apos;iga ulanishda xatolik yuz berdi. Iltimos, internet aloqangizni tekshiring.
         </p>
         <button
           onClick={() => window.location.reload()}

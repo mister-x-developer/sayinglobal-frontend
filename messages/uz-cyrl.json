@@ -57,7 +57,8 @@
     "send": "Юбориш",
     "user": "Фойдаланувчи",
     "you": "Сиз",
-    "alreadyInThisLanguage": "Матн аллақачон ушбу тилда."
+    "alreadyInThisLanguage": "Матн аллақачон ушбу тилда.",
+    "other": "Бошқа"
   },
   "landing": {
     "heroTitle": "Рақамли Чорва Бозори",
@@ -305,7 +306,9 @@
     "vaccinatedNo": "Эмланмаган",
     "vaccinatedPartial": "Қисман эмланган",
     "days": "кун",
-    "day": "кун"
+    "day": "кун",
+    "selectBreed": "Зотни танланг",
+    "enterBreed": "Зотни киритинг"
   },
   "profile": {
     "profile": "Профил",
