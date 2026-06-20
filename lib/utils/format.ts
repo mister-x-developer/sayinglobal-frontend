@@ -59,17 +59,67 @@ export function formatPhone(phone: string): string {
   return phone;
 }
 
-export function formatRelativeTime(date: Date | string): string {
+export function formatRelativeTime(date: Date | string, locale: string = 'uz'): string {
   const now = new Date();
   const then = new Date(date);
   const seconds = Math.floor((now.getTime() - then.getTime()) / 1000);
-  if (seconds < 60) return 'hozirgina';
-  if (seconds < 3600) return `${Math.floor(seconds / 60)}\u00A0daqiqa oldin`;
-  if (seconds < 86400) return `${Math.floor(seconds / 3600)}\u00A0soat oldin`;
-  if (seconds < 604800) return `${Math.floor(seconds / 86400)}\u00A0kun oldin`;
-  if (seconds < 2592000) return `${Math.floor(seconds / 604800)}\u00A0hafta oldin`;
-  if (seconds < 31536000) return `${Math.floor(seconds / 2592000)}\u00A0oy oldin`;
-  return `${Math.floor(seconds / 31536000)}\u00A0yil oldin`;
+  
+  const isRu = locale === 'ru';
+  const isCyrl = locale === 'uz-cyrl';
+  const isEn = locale === 'en';
+
+  if (seconds < 60) {
+    if (isRu) return 'только что';
+    if (isCyrl) return 'ҳозиргина';
+    if (isEn) return 'just now';
+    return 'hozirgina';
+  }
+  
+  const m = Math.floor(seconds / 60);
+  if (seconds < 3600) {
+    if (isRu) return `${m}\u00A0минут назад`;
+    if (isCyrl) return `${m}\u00A0дақиқа олдин`;
+    if (isEn) return `${m}\u00A0minutes ago`;
+    return `${m}\u00A0daqiqa oldin`;
+  }
+  
+  const h = Math.floor(seconds / 3600);
+  if (seconds < 86400) {
+    if (isRu) return `${h}\u00A0часов назад`;
+    if (isCyrl) return `${h}\u00A0соат олдин`;
+    if (isEn) return `${h}\u00A0hours ago`;
+    return `${h}\u00A0soat oldin`;
+  }
+  
+  const d = Math.floor(seconds / 86400);
+  if (seconds < 604800) {
+    if (isRu) return `${d}\u00A0дней назад`;
+    if (isCyrl) return `${d}\u00A0кун олдин`;
+    if (isEn) return `${d}\u00A0days ago`;
+    return `${d}\u00A0kun oldin`;
+  }
+  
+  const w = Math.floor(seconds / 604800);
+  if (seconds < 2592000) {
+    if (isRu) return `${w}\u00A0недель назад`;
+    if (isCyrl) return `${w}\u00A0ҳафта олдин`;
+    if (isEn) return `${w}\u00A0weeks ago`;
+    return `${w}\u00A0hafta oldin`;
+  }
+  
+  const mo = Math.floor(seconds / 2592000);
+  if (seconds < 31536000) {
+    if (isRu) return `${mo}\u00A0месяцев назад`;
+    if (isCyrl) return `${mo}\u00A0ой олдин`;
+    if (isEn) return `${mo}\u00A0months ago`;
+    return `${mo}\u00A0oy oldin`;
+  }
+  
+  const y = Math.floor(seconds / 31536000);
+  if (isRu) return `${y}\u00A0лет назад`;
+  if (isCyrl) return `${y}\u00A0йил олдин`;
+  if (isEn) return `${y}\u00A0years ago`;
+  return `${y}\u00A0yil oldin`;
 }
 
 export function formatDate(date: Date | string, format: 'short' | 'long' = 'short'): string {
