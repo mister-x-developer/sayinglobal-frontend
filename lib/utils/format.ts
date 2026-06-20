@@ -11,14 +11,16 @@ export function formatPrice(price: number, currency: string = 'UZS', locale: str
     maximumFractionDigits: 0,
   }).format(price);
 
-  let suffix = currency;
   if (currency === 'UZS' || !currency) {
-    suffix = locale === 'ru' ? 'сум' : locale === 'uz-cyrl' ? 'сўм' : locale === 'en' ? 'UZS' : "soʻm";
-  } else if (currency === 'USD') {
-    suffix = locale === 'ru' ? 'дол.' : 'USD';
+    const suffix = locale === 'ru' ? 'сум' : locale === 'uz-cyrl' ? 'сўм' : locale === 'en' ? 'UZS' : "soʼm";
+    return `${formatted}${NBSP}${suffix}`;
+  }
+  
+  if (currency === 'USD') {
+    return `${formatted}${NBSP}$`;
   }
 
-  return `${formatted}${NBSP}${suffix}`;
+  return `${formatted}${NBSP}${currency}`;
 }
 
 export function formatNumber(num: number): string {
