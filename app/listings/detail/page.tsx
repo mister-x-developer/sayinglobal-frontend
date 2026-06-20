@@ -260,11 +260,9 @@ function ListingDetailPageContent() {
                     )}
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1 min-w-0">
-                        <TranslatableText
-                          text={getLocalizedField(listing as any, 'title', locale) || listing.title}
-                          className="w-full"
-                          textClassName="display-md text-balance"
-                        />
+                        <h1 className="display-md text-balance">
+                          {getLocalizedField(listing as any, 'title', locale) || listing.title}
+                        </h1>
                       </div>
                     </div>
 
@@ -501,9 +499,9 @@ function ListingDetailPageContent() {
                               listing.breed && typeof listing.breed === 'object'
                                 ? (getLocalizedField(listing.breed as any, 'name', locale) || (listing.breed as any)?.name_uz || String(listing.breed))
                                 : (listing as any).breed_custom
-                                  ? getLocalizedField(listing as any, 'breed_custom', locale) || (listing as any).breed_custom
+                                  ? <SpecWithTranslateButton text={(listing as any).breed_custom} />
                                   : typeof listing.breed === 'string'
-                                  ? <InlineTranslatedSpec text={String(listing.breed)} />
+                                  ? <SpecWithTranslateButton text={String(listing.breed)} />
                                   : null
                             }
                           />
@@ -512,14 +510,14 @@ function ListingDetailPageContent() {
                           <SpecItem
                             icon={CheckCircle2}
                             label={t('animal.health')}
-                            value={<InlineTranslatedSpec text={listing.health_status} />}
+                            value={<SpecWithTranslateButton text={listing.health_status} />}
                           />
                         )}
                         {listing.vaccination_status && (
                           <SpecItem
                             icon={Syringe}
                             label={t('animal.vaccination')}
-                            value={<InlineTranslatedSpec text={listing.vaccination_status} />}
+                            value={<SpecWithTranslateButton text={listing.vaccination_status} />}
                           />
                         )}
                         {listing.region && (
@@ -960,24 +958,15 @@ function DetailSkeleton() {
   );
 }
 
-function InlineTranslatedSpec({ text }: { text: string }) {
-  const [displayed, setDisplayed] = React.useState<string>(text);
-  const locale = useLocale() as any;
-
-  React.useEffect(() => {
-    if (!text || locale === 'uz') return;
-    import('@/lib/translation/provider').then(({ translationProvider }) => {
-      translationProvider.translate(text, locale).then((result) => {
-        if (result && result !== text) {
-          // Preserve sentence case: capitalize first letter
-          setDisplayed(result.charAt(0).toUpperCase() + result.slice(1));
-        }
-      }).catch(() => {});
-    });
-  }, [text, locale]);
-
+function SpecWithTranslateButton({ text }: { text: string }) {
+  const [translated, setTranslated] = React.useState<string | null>(null);
   if (!text) return null;
-  return <span>{displayed}</span>;
+  return (
+    <div className="flex items-center gap-2">
+      <span className="whitespace-pre-wrap">{translated ?? text}</span>
+      <TranslateButton text={text} compact onTranslated={setTranslated} />
+    </div>
+  );
 }
 
 
