@@ -51,14 +51,15 @@
     "new": "Новый",
     "page": "{current} / {total}",
     "deleteConfirm": "Вы уверены, что хотите удалить?",
-    "usd": "USD",
+    "usd": "ДОЛ",
     "copy": "Копировать",
     "done": "Готово",
     "send": "Отправить",
     "user": "Пользователь",
     "you": "Вы",
     "alreadyInThisLanguage": "Текст уже на этом языке.",
-    "other": "Другое"
+    "other": "Другое",
+    "uzs": "СУМ"
   },
   "landing": {
     "heroTitle": "Цифровой рынок скота",

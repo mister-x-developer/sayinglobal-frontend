@@ -102,7 +102,7 @@ export default function NewListingPage() {
     if (!form.health_status) e.health_status = t('errors.required');
     // Breed is required: either a dropdown selection or a custom value
     const isOtherBreed = form.breed === '__other__';
-    if (!form.breed.trim() || (isOtherBreed && !form.breed_custom.trim())) {
+    if ((!form.breed.trim() && !form.breed_custom.trim()) || (isOtherBreed && !form.breed_custom.trim())) {
       e.breed = t('errors.required');
     }
     if (!form.gender) e.gender = t('errors.required');
@@ -540,7 +540,7 @@ export default function NewListingPage() {
                     <div className="w-28">
                       <label className="mb-1.5 block text-sm font-medium text-fg">{t('listings.currency')}</label>
                       <select value={form.currency} onChange={(e) => set('currency', e.target.value)} className="input-base w-full cursor-pointer">
-                        <option value="UZS">UZS</option>
+                        <option value="UZS">{t('common.uzs')}</option>
                         <option value="USD">{t('common.usd')}</option>
                       </select>
                     </div>
