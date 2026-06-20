@@ -18,10 +18,10 @@ export default function LandingPage() {
   useEffect(() => {
     import('@capacitor/core').then(({ Capacitor }) => {
       if (Capacitor.isNativePlatform()) {
-        window.location.replace('/dashboard/');
+        router.replace('/dashboard');
       }
     });
-  }, []);
+  }, [router]);
 
   return (
     <div className="min-h-screen flex flex-col">
