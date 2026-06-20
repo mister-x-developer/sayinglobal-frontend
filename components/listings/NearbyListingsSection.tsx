@@ -117,7 +117,7 @@ export function NearbyListingsSection({ listing }: Props) {
           <div key={l.public_id} className="relative">
             <ListingCard listing={l as any} />
             {typeof l.distance_km === 'number' && (
-              <span className="absolute right-3 top-3 rounded-full bg-bg-elevated/90 px-2 py-0.5 text-[10px] font-semibold text-fg-muted backdrop-blur">
+              <span className="absolute left-3 top-3 rounded-full bg-bg-elevated/90 px-2 py-0.5 text-[10px] font-semibold text-fg-muted backdrop-blur">
                 {l.distance_km < 1 ? '< 1 km' : `${l.distance_km.toFixed(1)} km`}
               </span>
             )}

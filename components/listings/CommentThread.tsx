@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { ChevronDown, ChevronUp, CornerDownRight, Flag, ShieldCheck, LogIn, MessageSquare } from 'lucide-react';
 import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
@@ -31,6 +31,7 @@ interface CommentItemProps {
 
 export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentItemProps) {
   const t = useTranslations();
+  const locale = useLocale();
   // Always show replies by default when they exist
   const [repliesOpen, setRepliesOpen] = useState(false); // collapsed by default
   const [replyOpen, setReplyOpen] = useState(false);
@@ -77,7 +78,7 @@ export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentIt
             >
               {comment.user.full_name}
             </Link>
-            <span className="text-xs text-fg-subtle">{formatRelativeTime(comment.created_at)}</span>
+            <span className="text-xs text-fg-subtle">{formatRelativeTime(comment.created_at, locale)}</span>
             {comment.is_edited && (
               <span className="text-xs text-fg-subtle">· {t('comments.edited')}</span>
             )}

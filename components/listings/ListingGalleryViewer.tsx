@@ -41,7 +41,7 @@ export function ListingGalleryViewer({ images, initialIndex, onClose, title }: L
       >
         <button
           onClick={onClose}
-          className="absolute right-4 top-safe-4 z-[110] inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition-colors hover:bg-white/20"
+          className="absolute right-4 top-4 sm:top-6 z-[110] inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition-colors hover:bg-white/20"
         >
           <X className="h-6 w-6" />
         </button>
