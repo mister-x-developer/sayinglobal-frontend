@@ -362,7 +362,7 @@ export default function NewListingPage() {
                       >
                         <option value="">—</option>
                         {HEALTH_KEYS.map((k) => (
-                          <option key={k} value={t(k as any)}>{t(k as any)}</option>
+                          <option key={k} value={k}>{t(k as any)}</option>
                         ))}
                       </select>
                       {errors.health_status && <p className="mt-1 text-xs text-danger">{errors.health_status}</p>}
@@ -378,7 +378,7 @@ export default function NewListingPage() {
                       >
                         <option value="">—</option>
                         {VACCINATION_KEYS.map((k) => (
-                          <option key={k} value={t(k as any)}>{t(k as any)}</option>
+                          <option key={k} value={k}>{t(k as any)}</option>
                         ))}
                       </select>
                     </div>

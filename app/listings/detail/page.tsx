@@ -510,14 +510,14 @@ function ListingDetailPageContent() {
                           <SpecItem
                             icon={CheckCircle2}
                             label={t('animal.health')}
-                            value={<SpecWithTranslateButton text={listing.health_status} />}
+                            value={listing.health_status.startsWith('animal.') ? t(listing.health_status as any) : listing.health_status}
                           />
                         )}
                         {listing.vaccination_status && (
                           <SpecItem
                             icon={Syringe}
                             label={t('animal.vaccination')}
-                            value={<SpecWithTranslateButton text={listing.vaccination_status} />}
+                            value={listing.vaccination_status.startsWith('animal.') ? t(listing.vaccination_status as any) : listing.vaccination_status}
                           />
                         )}
                         {listing.region && (
