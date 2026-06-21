@@ -104,7 +104,7 @@ export function BreedSelector({
   }
 
   // Check if current value matches a known breed
-  const isOther = value === OTHER_VALUE || (value !== '' && !breeds.find((b) => (b.name || b.name_uz) === value));
+  const isOther = value === OTHER_VALUE || (value !== '' && !breeds.find((b) => b.slug === value));
 
   return (
     <div className="space-y-2">
@@ -122,7 +122,7 @@ export function BreedSelector({
       >
         <option value="">{t('animal.selectBreed' as any) || t('animal.breed')}</option>
         {breeds.map((b) => (
-          <option key={b.slug} value={b.name || b.name_uz}>
+          <option key={b.slug} value={b.slug}>
             {b.name || b.name_uz}
           </option>
         ))}
