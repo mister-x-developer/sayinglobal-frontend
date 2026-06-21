@@ -83,12 +83,8 @@ export function IntlClientProvider({
   timeZone?: string;
   children: ReactNode;
 }) {
-  // Determine initial locale: prefer cookie (set by user), then server prop
+  // ALWAYS use serverLocale for initial render to prevent hydration mismatch!
   const getInitialLocale = (): SupportedLocale => {
-    if (typeof window !== 'undefined') {
-      const stored = getStoredLocale();
-      if (stored) return stored;
-    }
     return (SUPPORTED_LOCALES as readonly string[]).includes(serverLocale)
       ? (serverLocale as SupportedLocale)
       : DEFAULT_LOCALE;
@@ -107,6 +103,11 @@ export function IntlClientProvider({
       setLoading(true);
       loadMessages(storedLocale).then((msgs) => {
         setMessages(msgs);
+        setLocaleState(storedLocale);
+        // Update <html lang="..."> attribute
+        if (typeof document !== 'undefined') {
+          document.documentElement.lang = storedLocale;
+        }
         setLoading(false);
       });
     }

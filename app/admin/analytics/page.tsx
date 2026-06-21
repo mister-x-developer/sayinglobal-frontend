@@ -24,8 +24,8 @@ import apiClient from '@/lib/api/client';
 import { formatNumber, formatRelativeTime } from '@/lib/utils/format';
 
 // ── Mini SVG Line Chart (Recharts) ───────────────────────────────────────────
-function MiniLineChart({ data, color }: { data: { date: string; count: number }[]; color: string }) {
-  if (!data || data.length < 2) return <div className="h-16 flex items-center justify-center text-xs text-fg-subtle">{t('Analytics.notEnoughData')}</div>;
+function MiniLineChart({ data, color, emptyText }: { data: { date: string; count: number }[]; color: string; emptyText: string }) {
+  if (!data || data.length < 2) return <div className="h-16 flex items-center justify-center text-xs text-fg-subtle">{emptyText}</div>;
   return (
     <div className="h-16 w-full -ml-2 -mb-2">
       <ResponsiveContainer width="100%" height="100%">
@@ -144,7 +144,7 @@ function StatCard({
       </div>
       {chartData && chartData.length > 1 && chartColor && (
         <div className="px-5 pb-4">
-          <MiniLineChart data={chartData} color={chartColor} />
+          <MiniLineChart data={chartData} color={chartColor} emptyText={sub} />
         </div>
       )}
     </motion.div>
@@ -399,9 +399,9 @@ export default function AdminAnalyticsPage() {
                       <RechartsTooltip 
                         contentStyle={{ backgroundColor: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)', borderRadius: '12px', color: 'var(--color-fg)', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
                         itemStyle={{ color: 'var(--color-fg)' }}
-                        formatter={(value: number, name: string) => {
+                        formatter={(value: any, name: any) => {
                           const translatedName = name === 'active' ? t('listings.active') : name === 'pending' ? t('listings.pending') : name === 'sold' ? t('listings.sold') : name === 'rejected' ? t('listings.rejected') : name === 'draft' ? t('listings.draft') : name;
-                          return [formatNumber(value), translatedName];
+                          return [formatNumber(Number(value)), translatedName];
                         }}
                       />
                     </PieChart>
@@ -523,8 +523,8 @@ export default function AdminAnalyticsPage() {
                         cursor={{ fill: 'currentColor', opacity: 0.05 }}
                         contentStyle={{ backgroundColor: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)', borderRadius: '12px', color: 'var(--color-fg)', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
                         itemStyle={{ color: 'var(--color-fg)' }}
-                        formatter={(value: number, name: string) => [formatNumber(value), t('Analytics.count')]}
-                        labelFormatter={(label) => label.replace(/_/g, ' ')}
+                        formatter={(value: any, name: any) => [formatNumber(Number(value)), t('Analytics.count')]}
+                        labelFormatter={(label) => typeof label === 'string' ? label.replace(/_/g, ' ') : label}
                       />
                       <Bar dataKey="count" fill="#10b981" radius={[0, 4, 4, 0]} barSize={20} />
                     </BarChart>

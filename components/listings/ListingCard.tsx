@@ -38,6 +38,7 @@ export interface ListingCardData {
   is_favorited?: boolean;
   is_negotiable?: boolean;
   created_at?: string;
+  published_at?: string;
 }
 
 interface Props {

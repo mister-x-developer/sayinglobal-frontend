@@ -43,6 +43,7 @@ export default function AdminLoginPage() {
     setSubmitting(true);
     setError(null);
     try {
+      const result = await authApi.adminLogin({ username, password });
       setSession(result.tokens.access, result.tokens.refresh, result.user);
       if (typeof window !== 'undefined' && !Capacitor.isNativePlatform()) {
         window.location.replace('/admin');

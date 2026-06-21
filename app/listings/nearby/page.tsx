@@ -23,7 +23,7 @@ async function getLocationCapacitor(): Promise<{ lat: number; lng: number }> {
   try {
     const { Geolocation } = await import('@capacitor/geolocation');
     const perm = await Geolocation.requestPermissions();
-    if (perm.location === 'granted' || perm.location === 'limited') {
+    if ((perm.location as string) === 'granted' || (perm.location as string) === 'limited') {
       const pos = await Geolocation.getCurrentPosition({ enableHighAccuracy: true, timeout: 10000 });
       return { lat: pos.coords.latitude, lng: pos.coords.longitude };
     }

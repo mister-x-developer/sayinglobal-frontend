@@ -1,6 +1,5 @@
 // Pre-existing Capacitor 8.x type mismatch — the runtime export exists
 // but the .d.ts declarations are incomplete for this version.
-// @ts-expect-error Capacitor 8.x types may not export Capacitor directly
 import { Capacitor } from '@capacitor/core';
 import { App } from '@capacitor/app';
 import { StatusBar, Style } from '@capacitor/status-bar';

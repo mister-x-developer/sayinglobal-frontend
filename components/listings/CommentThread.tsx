@@ -234,7 +234,7 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
   const [text, setText] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [isAuth, setIsAuth] = useState(false);
-  const [currentUser, setCurrentUser] = useState<{ public_id: number; full_name: string; avatar_url?: string } | null>(null);
+  const [currentUser, setCurrentUser] = useState<{ public_id: number; full_name: string; avatar_url?: string; is_admin?: boolean; is_staff?: boolean } | null>(null);
 
   useEffect(() => {
     try {

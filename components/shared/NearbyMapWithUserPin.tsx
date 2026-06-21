@@ -12,6 +12,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { MapPin } from 'lucide-react';
 import {
   DEFAULT_CENTER,
@@ -159,6 +160,7 @@ export function NearbyMapWithUserPin({
   userLocation,
   className = 'h-96 w-full',
 }: NearbyMapWithUserPinProps) {
+  const t = useTranslations();
   const ref = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<any>(null);
   const layerRef = useRef<any>(null);
