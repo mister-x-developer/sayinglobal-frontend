@@ -52,13 +52,13 @@ function isPublicPath(pathname: string): boolean {
   // Per strict requirement: Loginsiz hech narsa ko'rinmasin!
   // Only landing page, auth flows, and legal pages are public.
   if (pathname === '/') return true;
-  if (pathname.startsWith('/auth')) return true;
+  if (pathname.startsWith('/auth') || pathname.startsWith('/admin/login')) return true;
   if (pathname === '/terms' || pathname === '/privacy') return true;
   return false;
 }
 
 function isAdminPath(pathname: string): boolean {
-  return pathname.startsWith('/admin');
+  return pathname.startsWith('/admin') && !pathname.startsWith('/admin/login');
 }
 
 export function middleware(req: NextRequest) {
@@ -77,7 +77,7 @@ export function middleware(req: NextRequest) {
   // If the user is already authenticated, redirect away from auth.
   // Normal users are also redirected from the landing page to /dashboard.
   // Admins are allowed to stay on the landing page if they want.
-  if ((pathname.startsWith('/auth') || (pathname === '/' && !isPlatformAdmin(req))) && isAuthenticated(req)) {
+  if ((pathname.startsWith('/auth') || pathname.startsWith('/admin/login') || (pathname === '/' && !isPlatformAdmin(req))) && isAuthenticated(req)) {
     const nextUrl = req.nextUrl.clone();
     const target = isPlatformAdmin(req)
       ? '/admin'
@@ -92,7 +92,8 @@ export function middleware(req: NextRequest) {
   // Auth guard — redirect unauthenticated users to /auth. Loginsiz hech narsa ko'rinmasin!
   if (!isPublicPath(pathname) && !isAuthenticated(req)) {
     const loginUrl = req.nextUrl.clone();
-    loginUrl.pathname = '/auth';
+    // If they were trying to reach an admin page, redirect to admin login
+    loginUrl.pathname = pathname.startsWith('/admin') ? '/admin/login' : '/auth';
     // Preserve intended destination so we can redirect back after login
     loginUrl.searchParams.set('next', pathname);
     const loginRes = NextResponse.redirect(loginUrl);
