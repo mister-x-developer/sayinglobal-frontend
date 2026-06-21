@@ -16,7 +16,7 @@ export function MobileBottomNav() {
   const t = useTranslations();
   const pathname = usePathname();
   const unreadCount = useNotificationsStore((s) => s.unreadCount);
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
   const hydrated = useAuthHydrated();
 
   // Hide entirely on auth pages, chat detail, or admin routes
@@ -41,8 +41,8 @@ export function MobileBottomNav() {
   const links = [
     { href: '/dashboard', icon: Home, label: t('nav.home') },
     { href: '/listings', icon: LayoutGrid, label: t('nav.listings') },
-    { href: '/listings/new', icon: Plus, label: t('nav.createListing'), primary: true },
-    { href: '/chat', icon: MessageSquareText, label: t('nav.chat') },
+    ...(!(user?.is_admin || user?.is_staff) ? [{ href: '/listings/new', icon: Plus, label: t('nav.createListing'), primary: true }] : []),
+    ...(!(user?.is_admin || user?.is_staff) ? [{ href: '/chat', icon: MessageSquareText, label: t('nav.chat') }] : []),
     { href: '/profile', icon: User, label: t('nav.profile') },
   ];
 

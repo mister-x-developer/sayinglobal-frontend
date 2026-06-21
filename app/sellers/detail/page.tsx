@@ -178,7 +178,7 @@ function SellerDetailPageContent() {
                       </div>
 
                       <div className="flex flex-wrap gap-2">
-                        {user?.public_id !== seller.public_id && (
+                        {user?.public_id !== seller.public_id && !(user?.is_admin || user?.is_staff) && (
                           <Link
                             href={`/chat?with=${seller.public_id}`}
                             className="btn btn-secondary btn-sm"
@@ -187,7 +187,10 @@ function SellerDetailPageContent() {
                             {t('sellers.message')}
                           </Link>
                         )}
+                        {!(user?.is_admin || user?.is_staff) && (
                         <FollowButton sellerId={seller.public_id} size="sm" />
+                        )}
+                        {!(user?.is_admin || user?.is_staff) && (
                         <button
                           type="button"
                           onClick={() => setReportOpen(true)}
@@ -197,6 +200,7 @@ function SellerDetailPageContent() {
                           <Flag className="h-4 w-4" strokeWidth={1.75} />
                           {t('common.report')}
                         </button>
+                        )}
                       </div>
                     </div>
 

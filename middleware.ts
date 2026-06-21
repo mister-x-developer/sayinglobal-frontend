@@ -74,9 +74,10 @@ export function middleware(req: NextRequest) {
     maxAge: 60 * 60 * 24 * 365,
   });
 
-  // If the user is already authenticated, redirect away from landing and auth.
-  // Strict: non-admins to /dashboard, admins to /admin.
-  if ((pathname === '/' || pathname.startsWith('/auth')) && isAuthenticated(req)) {
+  // If the user is already authenticated, redirect away from auth.
+  // Normal users are also redirected from the landing page to /dashboard.
+  // Admins are allowed to stay on the landing page if they want.
+  if ((pathname.startsWith('/auth') || (pathname === '/' && !isPlatformAdmin(req))) && isAuthenticated(req)) {
     const nextUrl = req.nextUrl.clone();
     const target = isPlatformAdmin(req)
       ? '/admin'

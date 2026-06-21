@@ -16,7 +16,6 @@ const apiOrigin = isDev
 
 const nextConfig = {
   reactStrictMode: true,
-  output: 'export',
 
   eslint: {
     // ESLint runs in CI separately; don't let it block the build

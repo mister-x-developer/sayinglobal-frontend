@@ -146,6 +146,7 @@ function MobileDrawer({
                 <UserIcon className="h-[18px] w-[18px]" strokeWidth={1.75} />
                 {t('nav.profile')}
               </Link>
+              {!(user?.is_admin || user?.is_staff) && (
               <Link
                 href="/listings/new"
                 onClick={onClose}
@@ -154,6 +155,7 @@ function MobileDrawer({
                 <Plus className="h-[18px] w-[18px]" strokeWidth={2} />
                 {t('nav.createListing')}
               </Link>
+              )}
 
               <Link
                 href="/profile/favorites"
@@ -309,6 +311,7 @@ export function AppNav() {
             <div className="flex-1" />
 
             <div className="flex shrink-0 items-center gap-1 sm:gap-1.5">
+              {!(user?.is_admin || user?.is_staff) && (
               <Link
                 href="/listings/new"
                 className="hidden md:inline-flex btn btn-primary btn-sm gap-1.5"
@@ -317,6 +320,7 @@ export function AppNav() {
                 <span className="hidden lg:inline">{t('nav.createListing')}</span>
                 <span className="lg:hidden">{t('common.new' as any) ?? 'New'}</span>
               </Link>
+              )}
 
               <Link
                 href="/notifications"

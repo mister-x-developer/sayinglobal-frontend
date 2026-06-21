@@ -212,7 +212,7 @@ export function SellerRatingsThread({ sellerPublicId, listingPublicId }: ThreadP
           <p className="font-display text-xl font-semibold text-fg">{count}</p>
         </div>
 
-        {isAuthenticated && !isSelfSeller && (
+        {isAuthenticated && !isSelfSeller && !(me?.is_admin || me?.is_staff) && (
           <button
             type="button"
             onClick={() => {
@@ -367,7 +367,9 @@ function RatingCard({
   onDelete: () => void;
 }) {
   const t = useTranslations();
+  const me = useAuthStore((s) => s.user);
   const isAuthor = rating.buyer?.public_id === myPublicId;
+  const isAdmin = me?.is_admin || me?.is_staff;
 
   // Always feed the original review text to TranslatableText so the
   // "translate" button actually switches between author wording and UI-lang version.
@@ -422,6 +424,7 @@ function RatingCard({
 
           {/* Actions */}
           <div className="mt-3 flex items-center gap-3 text-xs">
+            {!isAdmin && (
             <button
               type="button"
               onClick={onHelpful}
@@ -437,8 +440,9 @@ function RatingCard({
                 {t('reviews.helpful' as any) ?? 'Helpful'}
               </span>
             </button>
+            )}
 
-            {isSeller && !isAuthor && rating.parent === null && (
+            {isSeller && !isAuthor && rating.parent === null && !isAdmin && (
               <button
                 type="button"
                 onClick={onReply}
@@ -449,7 +453,7 @@ function RatingCard({
               </button>
             )}
 
-            {!isAuthor && (
+            {!isAuthor && !isAdmin && (
               <button
                 type="button"
                 onClick={onReport}

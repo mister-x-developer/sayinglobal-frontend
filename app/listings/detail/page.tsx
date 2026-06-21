@@ -326,7 +326,7 @@ function ListingDetailPageContent() {
                     )}
 
                     <div className="mt-6 space-y-2.5">
-                      {user?.public_id !== listing.seller.public_id && (
+                      {user?.public_id !== listing.seller.public_id && !(user?.is_admin || user?.is_staff) && (
                         <Link
                           href={`/chat?with=${listing.seller.public_id}`}
                           className="btn btn-primary w-full"
@@ -357,6 +357,7 @@ function ListingDetailPageContent() {
                         >
                           <Share2 className="h-4 w-4" strokeWidth={1.75} />
                         </button>
+                        {!(user?.is_admin || user?.is_staff) && (
                         <button
                           type="button"
                           onClick={() => setReportOpen(true)}
@@ -365,6 +366,7 @@ function ListingDetailPageContent() {
                         >
                           <Flag className="h-4 w-4" strokeWidth={1.75} />
                         </button>
+                        )}
                       </div>
                     </div>
 
@@ -444,7 +446,9 @@ function ListingDetailPageContent() {
                         >
                           {t('common.view')}
                         </Link>
+                        {!(user?.is_admin || user?.is_staff) && (
                         <FollowButton sellerId={listing.seller.public_id} size="sm" initialIsFollowing={(listing.seller as any).is_following} />
+                        )}
                       </div>
                       <Link
                         href={user?.public_id === listing.seller.public_id ? '/profile' : `/sellers/${listing.seller.public_id}?tab=reviews`}
@@ -660,7 +664,7 @@ function ListingDetailPageContent() {
                     )}
 
                     <div className="mt-6 space-y-2.5">
-                      {user?.public_id !== listing.seller.public_id && (
+                      {user?.public_id !== listing.seller.public_id && !(user?.is_admin || user?.is_staff) && (
                         <Link
                           href={`/chat?with=${listing.seller.public_id}`}
                           className="btn btn-primary w-full"
@@ -778,7 +782,9 @@ function ListingDetailPageContent() {
                         >
                           {t('common.view')}
                         </Link>
+                        {!(user?.is_admin || user?.is_staff) && (
                         <FollowButton sellerId={listing.seller.public_id} size="sm" initialIsFollowing={(listing.seller as any).is_following} />
+                        )}
                       </div>
                       <Link
                         href={user?.public_id === listing.seller.public_id ? '/profile' : `/sellers/${listing.seller.public_id}?tab=reviews`}

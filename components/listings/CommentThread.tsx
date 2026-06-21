@@ -96,7 +96,7 @@ export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentIt
               onTranslated={setTranslatedContent}
               compact
             />
-            {onReply && (
+            {onReply && !(user?.is_admin || user?.is_staff) && (
               <button
                 type="button"
                 onClick={() => setReplyOpen((v) => !v)}
@@ -126,6 +126,7 @@ export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentIt
               </button>
             )}
             {/* Report button — always visible, not hidden */}
+            {!(user?.is_admin || user?.is_staff) && (
             <button
               type="button"
               onClick={() => setReportOpen(true)}
@@ -136,6 +137,7 @@ export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentIt
               <Flag className="h-3 w-3" strokeWidth={1.75} />
               <span className="hidden sm:inline">{t('comments.report')}</span>
             </button>
+            )}
           </div>
 
           {/* Reply input */}
@@ -325,7 +327,7 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
 
       {/* New comment input */}
       <div className="mt-4">
-        {isAuth ? (
+        {isAuth && !(currentUser?.is_admin || currentUser?.is_staff) ? (
           <>
             <textarea
               value={text}
@@ -347,7 +349,7 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
               </button>
             </div>
           </>
-        ) : (
+        ) : !isAuth ? (
           <div className="rounded-2xl border border-border bg-bg-subtle p-4 text-center">
             <p className="text-sm text-fg-muted mb-3">
               {t('comments.loginToComment') ?? 'Log in to leave a comment'}
@@ -357,7 +359,7 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
               {t('auth.login')}
             </Link>
           </div>
-        )}
+        ) : null}
       </div>
 
       {/* Comments list */}
