@@ -1136,8 +1136,8 @@
   },
   "ai": {
     "openAssistant": "AI Yordamchi",
-    "subtitle": "Chorva bozori yordamchisi",
-    "greeting": "👋 Salom! Chorva bozori haqida savollaringiz bormi?",
+    "subtitle": "Raqamli chorva bozori yordamchisi",
+    "greeting": "👋 Salom! Raqamli chorva bozori haqida savollaringiz bormi?",
     "inputPlaceholder": "Savol yozing...",
     "errorReply": "Xatolik yuz berdi.",
     "prompt": {
