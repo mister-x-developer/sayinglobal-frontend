@@ -78,6 +78,8 @@ export default function ListingsPage() {
       .list({
         category: category === 'all' ? undefined : category,
         region: region ?? undefined,
+        search: search.trim() ? search.trim() : undefined,
+        sort_by: sort,
         status: 'active',
         page: 1,
         page_size: pageSize,
@@ -92,39 +94,9 @@ export default function ListingsPage() {
     return () => {
       alive = false;
     };
-  }, [category, region]);
+  }, [category, region, search, sort]);
 
-  const filtered = useMemo(() => {
-    let arr = items;
-    if (search.trim()) {
-      const q = search.toLowerCase();
-      arr = arr.filter(
-        (l) =>
-          l.title.toLowerCase().includes(q) ||
-          l.description?.toLowerCase().includes(q) ||
-          l.location.toLowerCase().includes(q)
-      );
-    }
-    arr = [...arr];
-    switch (sort) {
-      case 'priceLowToHigh':
-        arr.sort((a, b) => a.price - b.price);
-        break;
-      case 'priceHighToLow':
-        arr.sort((a, b) => b.price - a.price);
-        break;
-      case 'oldestFirst':
-        arr.sort(
-          (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-        );
-        break;
-      default:
-        arr.sort(
-          (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        );
-    }
-    return arr;
-  }, [items, search, sort]);
+  const filtered = items;
 
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
   const hasNextPage = page < totalPages;
@@ -138,6 +110,8 @@ export default function ListingsPage() {
       const res = await listingsApi.list({
         category: category === 'all' ? undefined : category,
         region: region ?? undefined,
+        search: search.trim() ? search.trim() : undefined,
+        sort_by: sort,
         status: 'active',
         page: nextPage,
         page_size: pageSize,

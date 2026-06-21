@@ -84,6 +84,7 @@ export interface ListingFilters {
   status?: string;
   gender?: string;
   search?: string;
+  sort_by?: string;
   page?: number;
   page_size?: number;
 }
