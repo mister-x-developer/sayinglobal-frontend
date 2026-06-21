@@ -497,7 +497,7 @@ function ListingDetailPageContent() {
                             label={t('animal.breed')}
                             value={
                               listing.breed && typeof listing.breed === 'object'
-                                ? (getLocalizedField(listing.breed as any, 'name', locale) || (listing.breed as any)?.name_uz || String(listing.breed))
+                                ? <SpecWithTranslateButton text={(getLocalizedField(listing.breed as any, 'name', locale) || (listing.breed as any)?.name_uz || String(listing.breed))} />
                                 : (listing as any).breed_custom
                                   ? <SpecWithTranslateButton text={(listing as any).breed_custom} />
                                   : typeof listing.breed === 'string'
