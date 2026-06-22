@@ -62,7 +62,7 @@ export function LandingFooter() {
               </li>
               <li>
                 <a href="https://t.me/sayinglobal_support" target="_blank" rel="noopener noreferrer" className="hover:text-fg transition-colors">
-                  {t('common.help')} (Telegram)
+                  {t('common.help')} ({t('common.telegram')})
                 </a>
               </li>
               <li>
