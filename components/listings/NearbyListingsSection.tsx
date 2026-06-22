@@ -37,7 +37,7 @@ export function NearbyListingsSection({ listing }: Props) {
 
     const lat = listing.latitude != null ? Number(listing.latitude) : null;
     const lng = listing.longitude != null ? Number(listing.longitude) : null;
-    const category = (listing.category as any)?.name as string | undefined;
+    const category = (listing.category as any)?.slug as string | undefined;
 
     const fetchNearby = async () => {
       let result: any = null;
@@ -47,8 +47,9 @@ export function NearbyListingsSection({ listing }: Props) {
           const data = await listingsApi.nearby({
             lat, lng, radius_km: 50, category, page_size: 12,
           });
-          if (data.results.length > 1) {
-            result = data;
+          const filtered = data.results.filter((l: any) => l.public_id !== listing.public_id);
+          if (filtered.length > 0) {
+            result = { ...data, results: filtered };
             setMode('gps');
           }
         } catch {/* fall through */}
@@ -62,18 +63,16 @@ export function NearbyListingsSection({ listing }: Props) {
             category,
             page_size: 12,
           });
-          if (data.results.length > 1) {
-            result = data;
+          const filtered = data.results.filter((l: any) => l.public_id !== listing.public_id);
+          if (filtered.length > 0) {
+            result = { ...data, results: filtered };
             setMode('region');
           }
         } catch {/* fall through */}
       }
 
       if (!alive) return;
-      const filtered = ((result?.results as any[]) ?? []).filter(
-        (l) => l.public_id !== listing.public_id,
-      );
-      setItems(filtered as any);
+      setItems((result?.results as any[]) ?? []);
       setLoading(false);
     };
 

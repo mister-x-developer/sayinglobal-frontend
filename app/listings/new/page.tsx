@@ -109,6 +109,7 @@ export default function NewListingPage() {
     }
     if (!form.gender) e.gender = t('errors.required');
     if (!form.weight_kg || isNaN(Number(form.weight_kg)) || Number(form.weight_kg) <= 0) e.weight_kg = t('errors.required');
+    else if (Number(form.weight_kg) > 9999) e.weight_kg = t('validation.maxWeight') || 'Maksimal 9999 kg';
     if (!form.quantity || isNaN(Number(form.quantity)) || Number(form.quantity) <= 0) e.quantity = t('errors.required');
     if (form.latitude == null || form.longitude == null) e.location = t('errors.required');
     if (!age.years && !age.months && !age.days) e.age = t('validation.atLeastOneFieldRequired');

@@ -165,6 +165,8 @@ function EditListingPageContent() {
     else if (form.description.trim().length > 2000) e.description = t('validation.descriptionTooLong');
     const priceNum = Number(form.price);
     if (!form.price || isNaN(priceNum) || priceNum < 0.01 || priceNum > 999999999.99) e.price = t('errors.required');
+    if (!form.weight_kg || isNaN(Number(form.weight_kg)) || Number(form.weight_kg) <= 0) e.weight_kg = t('errors.required');
+    else if (Number(form.weight_kg) > 9999) e.weight_kg = t('validation.maxWeight') || 'Maksimal 9999 kg';
     if (!form.quantity || isNaN(Number(form.quantity)) || Number(form.quantity) <= 0) e.quantity = t('errors.required');
     if (existingImages.length + newImages.length < 3) e.images = "Kamida 3 ta rasm kiritish majburiy";
     if (existingImages.length + newImages.length > 5) e.images = "Koʻpi bilan 5 ta rasm kiritish mumkin";

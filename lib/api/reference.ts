@@ -52,17 +52,17 @@ export interface Category {
   breeds: Breed[];
 }
 
-// In-memory cache — reference data rarely changes
-let regionsCache: Region[] | null = null;
-let categoriesCache: Category[] | null = null;
+// In-memory cache — keyed by locale since responses are localized
+const regionsCache: Record<string, Region[]> = {};
+const categoriesCache: Record<string, Category[]> = {};
 
 export const referenceApi = {
   async getRegions(locale = 'uz'): Promise<Region[]> {
-    if (regionsCache) return regionsCache;
+    if (regionsCache[locale]) return regionsCache[locale];
     try {
       const res = await apiClient.get<Region[]>('/reference/regions/', { params: { locale } });
-      regionsCache = res.data ?? [];
-      return regionsCache;
+      regionsCache[locale] = res.data ?? [];
+      return regionsCache[locale];
     } catch {
       return [];
     }
@@ -80,11 +80,11 @@ export const referenceApi = {
   },
 
   async getCategories(locale = 'uz'): Promise<Category[]> {
-    if (categoriesCache) return categoriesCache;
+    if (categoriesCache[locale]) return categoriesCache[locale];
     try {
       const res = await apiClient.get<Category[]>('/reference/categories/', { params: { locale } });
-      categoriesCache = res.data ?? [];
-      return categoriesCache;
+      categoriesCache[locale] = res.data ?? [];
+      return categoriesCache[locale];
     } catch {
       return [];
     }
@@ -102,7 +102,7 @@ export const referenceApi = {
   },
 
   clearCache() {
-    regionsCache = null;
-    categoriesCache = null;
+    for (const key in regionsCache) delete regionsCache[key];
+    for (const key in categoriesCache) delete categoriesCache[key];
   },
 };
