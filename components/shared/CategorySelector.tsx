@@ -1,8 +1,8 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useCategories, useBreeds } from '@/lib/hooks/useReferenceData';
-import type { Category } from '@/lib/api/reference';
+import type { Category, Breed } from '@/lib/api/reference';
 
 /**
  * Fallback category slugs — used when backend is unavailable.
@@ -22,14 +22,21 @@ interface CategorySelectorProps {
 export function CategorySelector({ value, onChange, error, required }: CategorySelectorProps) {
   const t = useTranslations();
   const { categories: backendCats } = useCategories();
+  const locale = useLocale();
 
-  // When backend data is available, use it (name field is locale-resolved by backend).
-  // When not, fall back to slugs + t() for display names.
+  // Helper to get localized name directly from object as fallback
+  const getLocalizedName = (obj: any, loc: string) => {
+    if (loc === 'ru') return obj.name_ru || obj.name_uz;
+    if (loc === 'en') return obj.name_en || obj.name_uz;
+    if (loc === 'uz-cyrl') return obj.name_uz_cyrl || obj.name_uz;
+    return obj.name_uz;
+  };
+
   const items: Array<{ slug: string; label: string }> =
     backendCats.length > 0
       ? backendCats.map((c: Category) => ({
           slug: c.slug,
-          label: c.name || t(`categories.${c.slug}` as any),
+          label: c.name || getLocalizedName(c, locale) || t(`categories.${c.slug}` as any),
         }))
       : FALLBACK_SLUGS.map((slug) => ({
           slug,
@@ -86,9 +93,9 @@ export function BreedSelector({
   placeholder,
 }: BreedSelectorProps) {
   const t = useTranslations();
+  const locale = useLocale();
   const { breeds } = useBreeds(categorySlug);
 
-  // If no breeds from backend, show only freetext input
   if (breeds.length === 0) {
     return (
       <input
@@ -103,8 +110,14 @@ export function BreedSelector({
     );
   }
 
-  // Check if current value matches a known breed
   const isOther = value === OTHER_VALUE || (value !== '' && !breeds.find((b) => b.slug === value));
+
+  const getLocalizedName = (breed: Breed, loc: string) => {
+    if (loc === 'ru') return breed.name_ru || breed.name_uz;
+    if (loc === 'en') return breed.name_en || breed.name_uz;
+    if (loc === 'uz-cyrl') return breed.name_uz_cyrl || breed.name_uz;
+    return breed.name_uz;
+  };
 
   return (
     <div className="space-y-2">
@@ -123,7 +136,7 @@ export function BreedSelector({
         <option value="">{t('animal.selectBreed' as any) || t('animal.breed')}</option>
         {breeds.map((b) => (
           <option key={b.slug} value={b.slug}>
-            {b.name || b.name_uz}
+            {b.name || getLocalizedName(b, locale)}
           </option>
         ))}
         <option value={OTHER_VALUE}>{t('common.other' as any) || 'Boshqa...'}</option>
