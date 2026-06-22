@@ -60,7 +60,10 @@
     "alreadyInThisLanguage": "Text is already in this language.",
     "other": "Other",
     "uzs": "UZS",
-    "telegramBot": "Telegram bot"
+    "telegramBot": "Telegram bot",
+    "telegram": "Telegram",
+    "instagram": "Instagram",
+    "youtube": "YouTube"
   },
   "landing": {
     "heroTitle": "Digital Livestock Marketplace",

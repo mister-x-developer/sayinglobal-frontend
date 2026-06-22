@@ -60,7 +60,10 @@
     "alreadyInThisLanguage": "Текст уже на этом языке.",
     "other": "Другое",
     "uzs": "СУМ",
-    "telegramBot": "Телеграм бот"
+    "telegramBot": "Телеграм бот",
+    "telegram": "Телеграм",
+    "instagram": "Инстаграм",
+    "youtube": "Ютуб"
   },
   "landing": {
     "heroTitle": "Цифровой рынок скота",

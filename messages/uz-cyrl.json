@@ -60,7 +60,10 @@
     "alreadyInThisLanguage": "Матн аллақачон ушбу тилда.",
     "other": "Бошқа",
     "uzs": "СЎМ",
-    "telegramBot": "Телеграм бот"
+    "telegramBot": "Телеграм бот",
+    "telegram": "Телеграм",
+    "instagram": "Инстаграм",
+    "youtube": "Ютуб"
   },
   "landing": {
     "heroTitle": "Рақамли Чорва Бозори",

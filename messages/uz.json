@@ -60,7 +60,10 @@
     "other": "Boshqa",
     "alreadyInThisLanguage": "Matn allaqachon ushbu tilda.",
     "uzs": "SOʼM",
-    "telegramBot": "Telegram bot"
+    "telegramBot": "Telegram bot",
+    "telegram": "Telegram",
+    "instagram": "Instagram",
+    "youtube": "YouTube"
   },
   "landing": {
     "heroTitle": "Raqamli Chorva Bozori",
