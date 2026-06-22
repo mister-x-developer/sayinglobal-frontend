@@ -170,8 +170,8 @@ export default function NewListingPage() {
         breed_custom: form.breed_custom.trim() || undefined,
         health_status: form.health_status || undefined,
         vaccination_status: form.vaccination_status || undefined,
-        region: form.region_name || form.region,
-        district: form.district_name || form.district,
+        region: form.region,
+        district: form.district,
         // Prefer the explicitly entered location text, otherwise fallback to region, district
         location: form.location.trim() || [form.region_name || form.region, form.district_name || form.district]
           .filter(Boolean).join(', ') || form.region_name || form.region,
