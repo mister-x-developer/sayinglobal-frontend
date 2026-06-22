@@ -603,7 +603,7 @@ export default function EditListingPage() {
                   onChange={(e) => update({ currency: e.target.value })}
                   className="input-base h-12 w-full"
                 >
-                  <option value="UZS">UZS</option>
+                  <option value="UZS">{t('common.uzs')}</option>
                   <option value="USD">{t('common.usd')}</option>
                 </select>
               </div>
