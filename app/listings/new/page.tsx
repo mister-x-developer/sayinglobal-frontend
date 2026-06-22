@@ -21,7 +21,7 @@ import { LocationPicker } from '@/components/shared/LocationPicker';
 import { toast } from '@/components/ui/Toast';
 import { listingsApi } from '@/lib/api/listings';
 import apiClient from '@/lib/api/client';
-import { useAuthStore } from '@/lib/store/auth';
+import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
 
 const GENDERS = [
   { value: 'male', key: 'animal.male' },
@@ -42,16 +42,18 @@ export default function NewListingPage() {
   const t = useTranslations();
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
+  const hydrated = useAuthHydrated();
   const { isAuthenticated, user } = useAuthStore();
 
   useEffect(() => {
+    if (!hydrated) return;
     if (!isAuthenticated) {
-      router.push('/auth');
+      router.push('/auth?next=/listings/new');
     } else if (user && (!user.full_name || user.full_name === user.phone)) {
       toast.error(t('profile.fullNameRequired') || "Iltimos, e'lon berishdan oldin ism-familiyangizni kiriting!");
-      router.push('/profile/edit');
+      router.push('/profile/edit?next=/listings/new');
     }
-  }, [isAuthenticated, user, router, t]);
+  }, [hydrated, isAuthenticated, user, router, t]);
 
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);

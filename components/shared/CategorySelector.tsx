@@ -24,19 +24,11 @@ export function CategorySelector({ value, onChange, error, required }: CategoryS
   const { categories: backendCats } = useCategories();
   const locale = useLocale();
 
-  // Helper to get localized name directly from object as fallback
-  const getLocalizedName = (obj: any, loc: string) => {
-    if (loc === 'ru') return obj.name_ru || obj.name_uz;
-    if (loc === 'en') return obj.name_en || obj.name_uz;
-    if (loc === 'uz-cyrl') return obj.name_uz_cyrl || obj.name_uz;
-    return obj.name_uz;
-  };
-
   const items: Array<{ slug: string; label: string }> =
     backendCats.length > 0
       ? backendCats.map((c: Category) => ({
           slug: c.slug,
-          label: getLocalizedName(c, locale) || c.name || t(`categories.${c.slug}` as any),
+          label: c.name || t(`categories.${c.slug}` as any),
         }))
       : FALLBACK_SLUGS.map((slug) => ({
           slug,
@@ -112,13 +104,6 @@ export function BreedSelector({
 
   const isOther = value === OTHER_VALUE || (value !== '' && !breeds.find((b) => b.slug === value));
 
-  const getLocalizedName = (breed: Breed, loc: string) => {
-    if (loc === 'ru') return breed.name_ru || breed.name_uz;
-    if (loc === 'en') return breed.name_en || breed.name_uz;
-    if (loc === 'uz-cyrl') return breed.name_uz_cyrl || breed.name_uz;
-    return breed.name_uz;
-  };
-
   return (
     <div className="space-y-2">
       <select
@@ -136,7 +121,7 @@ export function BreedSelector({
         <option value="">{t('animal.selectBreed' as any) || t('animal.breed')}</option>
         {breeds.map((b) => (
           <option key={b.slug} value={b.slug}>
-            {getLocalizedName(b, locale) || b.name}
+            {b.name}
           </option>
         ))}
         <option value={OTHER_VALUE}>{t('common.other' as any) || 'Boshqa...'}</option>

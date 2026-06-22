@@ -32,7 +32,7 @@ import { Logo } from '@/components/shared/Logo';
 import { Avatar } from '@/components/ui/Avatar';
 import { ThemeSwitcher } from '@/components/shared/ThemeSwitcher';
 import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher';
-import { useAuthStore } from '@/lib/store/auth';
+import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
 
 const NAV_GROUPS = [
   {
@@ -81,12 +81,11 @@ export function AdminLayout({ children, noPadding = false }: { children: React.R
   const pathname = usePathname();
   const router = useRouter();
   const { user, isAuthenticated, logout } = useAuthStore();
+  const hydrated = useAuthHydrated();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    setHydrated(true);
     // Restore sidebar collapse preference
     try {
       const stored = localStorage.getItem(SIDEBAR_COLLAPSED_KEY);

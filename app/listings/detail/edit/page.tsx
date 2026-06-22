@@ -16,8 +16,8 @@
  * this listing and are not an admin.
  */
 
-import { useEffect, useState, useRef } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState, useRef, Suspense } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import {
@@ -37,7 +37,7 @@ import { toast } from '@/components/ui/Toast';
 import { CategorySelector, BreedSelector } from '@/components/shared/CategorySelector';
 import { LocationSelector } from '@/components/shared/LocationSelector';
 import { LocationPicker } from '@/components/shared/LocationPicker';
-import { useAuthStore } from '@/lib/store/auth';
+import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
 import { listingsApi, type Listing } from '@/lib/api/listings';
 
 interface EditForm {
@@ -64,16 +64,16 @@ interface EditForm {
   quantity: string;
 }
 
-export default function EditListingPage() {
+function EditListingPageContent() {
   const t = useTranslations();
   const router = useRouter();
-  const params = useParams<{ id: string }>();
-  const publicId = Number(params?.id ?? 0);
+  const searchParams = useSearchParams();
+  const publicId = Number(searchParams.get('id') ?? 0);
 
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const user = useAuthStore((s) => s.user);
 
-  const [hydrated, setHydrated] = useState(false);
+  const hydrated = useAuthHydrated();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -87,7 +87,6 @@ export default function EditListingPage() {
   const [uploadingImages, setUploadingImages] = useState(false);
   const imageFileRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => setHydrated(true), []);
   useEffect(() => {
     if (hydrated && !isAuthenticated) router.replace(`/auth?next=/listings/${publicId}/edit`);
   }, [hydrated, isAuthenticated, router, publicId]);
@@ -678,5 +677,20 @@ export default function EditListingPage() {
         </div>
       </Modal>
     </div>
+  );
+}
+
+export default function EditListingPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="flex flex-col items-center gap-2 text-fg-muted">
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-current border-t-transparent" />
+          <p className="text-sm">Yuklanmoqda...</p>
+        </div>
+      </div>
+    }>
+      <EditListingPageContent />
+    </Suspense>
   );
 }

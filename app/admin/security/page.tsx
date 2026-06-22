@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { ShieldAlert, Lock, AlertTriangle, Activity, Loader2 } from 'lucide-react';
 import { AdminLayout } from '@/components/layout/AdminLayout';
 import apiClient from '@/lib/api/client';
-import { useAuthStore } from '@/lib/store/auth';
+import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
 import { useRouter } from 'next/navigation';
 
 interface OtpLockedUser {
@@ -43,16 +43,14 @@ export default function AdminSecurityPage() {
   const t = useTranslations();
   const router = useRouter();
   const { user, isAuthenticated } = useAuthStore();
-  const [hydrated, setHydrated] = useState(false);
+  const hydrated = useAuthHydrated();
   const [data, setData] = useState<SecurityOverview | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => setHydrated(true), []);
-
   useEffect(() => {
     if (hydrated && (!isAuthenticated || (!user?.is_admin && !user?.is_staff))) {
-      router.replace('/auth');
+      router.replace('/auth?next=/admin/security');
     }
   }, [hydrated, isAuthenticated, user, router]);
 

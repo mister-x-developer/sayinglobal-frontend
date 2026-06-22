@@ -62,13 +62,7 @@ export function LocationSelector({
   const [districts, setDistricts] = useState<District[]>([]);
   const [loadingDistricts, setLoadingDistricts] = useState(false);
 
-  // Helper to get localized name directly from object as fallback
-  const getLocalizedName = (obj: any, loc: string) => {
-    if (loc === 'ru') return obj.name_ru || obj.name_uz;
-    if (loc === 'en') return obj.name_en || obj.name_uz;
-    if (loc === 'uz-cyrl') return obj.name_uz_cyrl || obj.name_uz;
-    return obj.name_uz;
-  };
+
 
   // Load districts when region changes
   useEffect(() => {
@@ -99,7 +93,7 @@ export function LocationSelector({
     const slug = e.target.value;
     // Find display name from backend data or fall back to translation key
     const region = backendRegions.find((r) => r.slug === slug);
-    const name = region ? (region.name || getLocalizedName(region, locale)) : t(`regions.${slug}` as any) || slug;
+    const name = region ? region.name : t(`regions.${slug}` as any) || slug;
     onRegionChange(slug, name);
     onDistrictChange('', '');
   };
@@ -107,7 +101,7 @@ export function LocationSelector({
   const handleDistrictChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const slug = e.target.value;
     const district = districts.find((d) => d.slug === slug);
-    const name = district ? (district.name || getLocalizedName(district, locale)) : slug;
+    const name = district ? district.name : slug;
     onDistrictChange(slug, name);
   };
 
@@ -118,7 +112,7 @@ export function LocationSelector({
     backendRegions.length > 0
       ? backendRegions.map((r) => ({
           slug: r.slug,
-          label: r.name || getLocalizedName(r, locale),
+          label: r.name,
         }))
       : FALLBACK_REGION_SLUGS.map((slug) => ({
           slug,
@@ -180,10 +174,10 @@ export function LocationSelector({
               {districtDisabled && !loadingDistricts
                 ? t('validation.regionRequired')
                 : t('listings.district')}
-            </option>
+             </option>
             {districts.map((d) => (
               <option key={d.slug} value={d.slug}>
-                {d.name || getLocalizedName(d, locale)}
+                {d.name}
               </option>
             ))}
           </select>
