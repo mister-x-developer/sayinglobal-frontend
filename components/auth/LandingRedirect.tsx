@@ -16,6 +16,9 @@ export function LandingRedirect() {
   const hydrated = useAuthHydrated();
 
   useEffect(() => {
+    // Prevent redirect loop if the server mistakenly serves index.html for other paths
+    if (typeof window !== 'undefined' && window.location.pathname !== '/') return;
+
     if (hydrated && isAuthenticated) {
       const target = user?.is_admin ? '/admin' : '/dashboard';
       if (typeof window !== 'undefined' && !(window as any).Capacitor?.isNative) {

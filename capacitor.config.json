@@ -4,7 +4,8 @@
   "webDir": "out",
   "server": {
     "hostname": "sayinglobal.vercel.app",
-    "androidScheme": "https"
+    "androidScheme": "https",
+    "errorPath": "error.html"
   },
   "plugins": {
     "SplashScreen": {

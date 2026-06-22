@@ -36,7 +36,7 @@ export function CategorySelector({ value, onChange, error, required }: CategoryS
     backendCats.length > 0
       ? backendCats.map((c: Category) => ({
           slug: c.slug,
-          label: c.name || getLocalizedName(c, locale) || t(`categories.${c.slug}` as any),
+          label: getLocalizedName(c, locale) || c.name || t(`categories.${c.slug}` as any),
         }))
       : FALLBACK_SLUGS.map((slug) => ({
           slug,
@@ -136,7 +136,7 @@ export function BreedSelector({
         <option value="">{t('animal.selectBreed' as any) || t('animal.breed')}</option>
         {breeds.map((b) => (
           <option key={b.slug} value={b.slug}>
-            {b.name || getLocalizedName(b, locale)}
+            {getLocalizedName(b, locale) || b.name}
           </option>
         ))}
         <option value={OTHER_VALUE}>{t('common.other' as any) || 'Boshqa...'}</option>
