@@ -194,15 +194,27 @@ export default function NewListingPage() {
       
       if (uploadedCount === 0 && images.length > 0) {
         toast.error(t('errors.uploadFailed'));
+        // Even if images fail, still submit for review so the listing goes to admin
       }
       
+      // Submit for admin review — listing goes from draft → pending_review
+      try {
+        await listingsApi.submitForReview(String(listing.public_id));
+      } catch (reviewErr) {
+        // If submit fails (e.g. < 3 images uploaded), inform user but still navigate
+        console.warn('Submit for review failed:', reviewErr);
+        toast.error(t('errors.submitReviewFailed' as any) || "E'lon tekshiruvga yuborilmadi. Rasmlarni tekshiring.");
+        setSaving(false);
+        return;
+      }
+
       setSaved(true);
       toast.success(t('create.publishSuccess'));
-      // Use window.location for the same atomic navigation as in auth.
+      // Send to profile (My Listings) since listing is pending review, not yet active
       if (typeof window !== 'undefined') {
-        window.location.href = `/listings/detail?id=${listing.public_id}`;
+        window.location.href = `/profile`;
       } else {
-        router.push(`/listings/detail?id=${listing.public_id}`);
+        router.push(`/profile`);
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : t('errors.saveFailed');

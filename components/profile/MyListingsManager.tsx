@@ -100,6 +100,14 @@ export function MyListingsManager({ initialListings, loading }: Props) {
         );
         toast.success(t('success.updated' as any) || "Sotuvga qaytarildi");
       }
+      else if (action === 'submitReview') {
+        if (!confirm("E'lonni adminga tekshirishga yuborasizmi?")) return;
+        await listingsApi.submitForReview(publicId);
+        setListings((prev) =>
+          prev.map((l) => (l.public_id === publicId ? { ...l, status: 'pending_review' } : l))
+        );
+        toast.success("E'lon tekshiruvga yuborildi!");
+      }
     } catch (e: any) {
       toast.error(e.message || 'Error');
     } finally {
@@ -234,9 +242,20 @@ export function MyListingsManager({ initialListings, loading }: Props) {
 
                     {/* Rejected / Draft Actions */}
                     {['rejected', 'draft', 'archived', 'expired'].includes(l.status) && (
-                      <Link href={`/listings/${l.public_id}/edit`} className="btn btn-primary btn-sm flex-1">
-                        <Edit className="w-4 h-4" /> Tahrirlash
-                      </Link>
+                      <>
+                        <Link href={`/listings/${l.public_id}/edit`} className="btn btn-secondary btn-sm flex-1">
+                          <Edit className="w-4 h-4" /> Tahrirlash
+                        </Link>
+                        {['draft', 'rejected'].includes(l.status) && (
+                          <button
+                            disabled={isMutatingThis}
+                            onClick={() => handleAction('submitReview', l.public_id)}
+                            className="btn btn-primary btn-sm flex-1"
+                          >
+                            <CheckCircle className="w-4 h-4" /> Tekshiruvga yuborish
+                          </button>
+                        )}
+                      </>
                     )}
 
                     {/* Common Delete Action */}

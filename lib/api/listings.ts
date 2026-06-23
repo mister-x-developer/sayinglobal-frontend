@@ -311,6 +311,16 @@ export const listingsApi = {
     return res.data;
   },
 
+  /** Owner: submit a draft/rejected listing for admin review. */
+  async submitForReview(publicId: number | string) {
+    try {
+      const res = await apiClient.post(`/listings/${publicId}/submit-for-review/`);
+      return res.data;
+    } catch (e) {
+      throw new Error(handleApiError(e));
+    }
+  },
+
   /** Owner or Admin: delete/archive a listing. */
   async delete(publicId: number | string) {
     const res = await apiClient.delete(`/listings/${publicId}/delete/`);
