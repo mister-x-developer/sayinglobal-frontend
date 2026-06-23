@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
@@ -33,21 +33,26 @@ export function MyListingsManager({ initialListings, loading }: Props) {
   const [activeTab, setActiveTab] = useState<'all' | 'active' | 'sold' | 'pending' | 'rejected' | 'draft'>('all');
   const [isMutating, setIsMutating] = useState<string | null>(null);
 
-  // Sync state if initialListings changes (e.g., from parent refetch)
-  // In a real app, you might want to use SWR or React Query here
-  // For now, we'll assume the parent fetches once and we manage local state
-  // But to be safe, we update if parent gives new data
-  useState(() => {
+  // Sync state if initialListings changes
+  useEffect(() => {
     setListings(initialListings);
-  });
+  }, [initialListings]);
+
+  const hasKey = (key: string) => {
+    try {
+      return t.has(key as any);
+    } catch {
+      return false;
+    }
+  };
 
   const TABS = [
-    { key: 'all', label: t('profile.allListings' as any) || 'Barchasi' },
-    { key: 'active', label: t('profile.activeListings') || 'Sotuvdagi' },
-    { key: 'sold', label: t('profile.soldListings') || 'Sotilgan' },
-    { key: 'pending', label: t('listings.statusPending' as any) || 'Tekshiruvda' },
-    { key: 'rejected', label: t('listings.statusRejected' as any) || 'Rad etilgan' },
-    { key: 'draft', label: t('listings.statusDraft' as any) || 'Qoralama/Boshqa' },
+    { key: 'all', label: hasKey('profile.allListings') ? t('profile.allListings' as any) : 'Barchasi' },
+    { key: 'active', label: hasKey('profile.activeListings') ? t('profile.activeListings' as any) : 'Sotuvdagi' },
+    { key: 'sold', label: hasKey('profile.soldListings') ? t('profile.soldListings' as any) : 'Sotilgan' },
+    { key: 'pending', label: hasKey('listings.statusPending') ? t('listings.statusPending' as any) : 'Tekshiruvda' },
+    { key: 'rejected', label: hasKey('listings.statusRejected') ? t('listings.statusRejected' as any) : 'Rad etilgan' },
+    { key: 'draft', label: hasKey('listings.statusDraft') ? t('listings.statusDraft' as any) : 'Qoralama/Boshqa' },
   ] as const;
 
   const filteredListings = listings.filter((l) => {
