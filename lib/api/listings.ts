@@ -305,6 +305,18 @@ export const listingsApi = {
     return res.data;
   },
 
+  /** Owner: cancel pending review and return to draft. */
+  async cancelReview(publicId: number | string) {
+    const res = await apiClient.post(`/listings/${publicId}/cancel-review/`);
+    return res.data;
+  },
+
+  /** Owner or Admin: delete/archive a listing. */
+  async delete(publicId: number | string) {
+    const res = await apiClient.delete(`/listings/${publicId}/delete/`);
+    return res.data;
+  },
+
   /** Owner: restore a sold/expired listing. Resets the lifecycle to active. */
   async restore(publicId: number | string) {
     const res = await apiClient.post(`/listings/${publicId}/restore/`);

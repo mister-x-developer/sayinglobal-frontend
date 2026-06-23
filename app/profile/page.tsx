@@ -24,12 +24,12 @@ import {
 
 import { AppNav } from '@/components/layout/AppNav';
 import { Avatar } from '@/components/ui/Avatar';
-import { Badge } from '@/components/ui/Badge';
 import { ListingCard } from '@/components/listings/ListingCard';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { RatingDisplay } from '@/components/shared/RatingDisplay';
 import { SellerRatingsThread } from '@/components/sellers/SellerRatingsThread';
 import { TranslatableText } from '@/components/shared/TranslateButton';
+import { MyListingsManager, type MyListing } from '@/components/profile/MyListingsManager';
 import { useAuthStore } from '@/lib/store/auth';
 import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
@@ -43,7 +43,7 @@ export default function ProfilePage() {
   const { user, isAuthenticated } = useAuthStore();
   const [hydrated, setHydrated] = useState(false);
   const [tab, setTab] = useState<Tab>('listings');
-  const [myListings, setMyListings] = useState<Listing[]>([]);
+  const [myListings, setMyListings] = useState<MyListing[]>([]);
   const [favorites, setFavorites] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -261,34 +261,7 @@ export default function ProfilePage() {
 
               <div className="mt-6 pb-24 md:pb-0">
                 {tab === 'listings' && (
-                  loading ? (
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      {Array.from({ length: 4 }).map((_, i) => (
-                        <div key={i} className="surface-elevated overflow-hidden">
-                          <div className="aspect-[4/3] skeleton" />
-                          <div className="p-4"><div className="skeleton h-4 w-3/4" /></div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : myListings.length === 0 ? (
-                    <EmptyState
-                      icon={Package}
-                      title={t('profile.noListings')}
-                      description={t('empty.noListingsDescription')}
-                      action={
-                        <Link href="/listings/new" className="btn btn-primary btn-sm">
-                          <Plus className="h-4 w-4" strokeWidth={2.25} />
-                          {t('nav.createListing')}
-                        </Link>
-                      }
-                    />
-                  ) : (
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      {myListings.map((l) => (
-                        <ListingCard key={l.public_id} listing={l as any} />
-                      ))}
-                    </div>
-                  )
+                  <MyListingsManager initialListings={myListings} loading={loading} />
                 )}
 
                 {tab === 'favorites' && (
