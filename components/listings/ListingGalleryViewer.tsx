@@ -77,7 +77,7 @@ export function ListingGalleryViewer({ images, initialIndex, onClose, title }: L
               <img
                 src={visibleImage?.image && !visibleImage.image.startsWith('/placeholder') ? visibleImage.image : '/placeholder.jpg'}
                 alt={`${title} - ${index + 1}`}
-                className="max-h-full max-w-full object-contain select-none"
+                className="w-full h-full object-contain select-none"
                 draggable={false}
               />
             </motion.div>
