@@ -176,8 +176,8 @@ export default function NewListingPage() {
         // Prefer the explicitly entered location text, otherwise fallback to region, district
         location: form.location.trim() || [form.region_name || form.region, form.district_name || form.district]
           .filter(Boolean).join(', ') || form.region_name || form.region,
-        latitude: form.latitude ?? undefined,
-        longitude: form.longitude ?? undefined,
+        latitude: form.latitude ? Number(Number(form.latitude).toFixed(6)) : undefined,
+        longitude: form.longitude ? Number(Number(form.longitude).toFixed(6)) : undefined,
       };
       const listing = await listingsApi.create(payload as any);
       

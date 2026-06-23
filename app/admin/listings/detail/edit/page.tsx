@@ -220,8 +220,8 @@ function EditListingPageContent() {
         region: form.region || undefined,
         district: form.district || undefined,
         location: form.location.trim(),
-        latitude: form.latitude ?? undefined,
-        longitude: form.longitude ?? undefined,
+        latitude: form.latitude ? Number(Number(form.latitude).toFixed(6)) : undefined,
+        longitude: form.longitude ? Number(Number(form.longitude).toFixed(6)) : undefined,
       };
       await listingsApi.update(publicId, payload);
 
