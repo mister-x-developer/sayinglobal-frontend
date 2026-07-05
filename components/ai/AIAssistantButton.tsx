@@ -68,8 +68,7 @@ export function AIAssistantButton() {
       setHidden(true);
     } else if (!didDrag.current) {
       // It was a tap, not a drag — navigate
-      const isAdmin = user?.is_staff || user?.is_admin;
-      router.push(isAdmin ? '/admin/ai-agent' : '/chat-ai');
+      router.push('/chat-ai');
     }
     setOverDelete(false);
     didDrag.current = false;
@@ -142,8 +141,6 @@ export function AIAssistantButton() {
           >
             {overDelete ? (
               <X className="h-6 w-6 text-white" strokeWidth={2.5} />
-            ) : isAdmin ? (
-              <AdminAILogo size={32} />
             ) : (
               <UserAILogo size={36} />
             )}

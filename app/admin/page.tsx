@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import {
-  Users, Package, Activity, RefreshCw, Clock, Bot,
+  Users, Package, Activity, RefreshCw, Clock, Flag,
   BarChart3, Database, Network, ChevronRight, LayoutDashboard, Cpu
 } from 'lucide-react';
 import { AdminLayout } from '@/components/layout/AdminLayout';
@@ -380,11 +380,11 @@ export default function AdminDashboardPage() {
                 initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
                 className="grid grid-cols-2 gap-4"
               >
-                <Link href="/admin/ai-agent" className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-border bg-bg-elevated p-6 text-center hover:shadow-md hover:border-brand-primary/50 transition-all">
+                <Link href="/admin/moderation" className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-border bg-bg-elevated p-6 text-center hover:shadow-md hover:border-brand-primary/50 transition-all">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
-                    <Bot className="h-6 w-6" />
+                    <Flag className="h-6 w-6" />
                   </div>
-                  <span className="text-sm font-bold text-fg">{t('Admin.aiCoPilot')}</span>
+                  <span className="text-sm font-bold text-fg">{t('admin.complaints')}</span>
                 </Link>
                 <Link href="/admin/analytics" className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-border bg-bg-elevated p-6 text-center hover:shadow-md hover:border-brand-primary/50 transition-all">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
