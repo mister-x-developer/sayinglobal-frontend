@@ -80,15 +80,18 @@ export function CapacitorNativeProvider() {
     });
 
     // 5. Network (Offline) Detection
+    let wasOffline = false;
     const setupNetwork = async () => {
       const status = await Network.getStatus();
       setIsOffline(!status.connected);
+      wasOffline = !status.connected;
 
       Network.addListener('networkStatusChange', (status) => {
         setIsOffline(!status.connected);
-        if (status.connected) {
+        if (status.connected && wasOffline) {
           Toast.show({ text: 'Internet tarmog\'iga qayta ulandingiz.', duration: 'short' });
         }
+        wasOffline = !status.connected;
       });
     };
     setupNetwork();

@@ -19,6 +19,7 @@ import { FloatingNearbyButton } from '@/components/shared/FloatingNearbyButton';
 import { AIAssistantButton } from '@/components/ai/AIAssistantButton';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { ReCaptchaProvider } from '@/components/providers/ReCaptchaProvider';
+import { ClientAuthGuard } from '@/components/providers/ClientAuthGuard';
 
 const inter = { variable: '--font-inter', className: 'font-inter' };
 const poppins = { variable: '--font-poppins', className: 'font-poppins' };
@@ -111,7 +112,9 @@ export default async function RootLayout({
             <CapacitorNativeProvider />
             <MotionProvider>
               <ReCaptchaProvider>
-                {children}
+                <ClientAuthGuard>
+                  {children}
+                </ClientAuthGuard>
                 <TermsGate />
                 <NotificationSocketProvider />
                 <MobileBottomNav />
