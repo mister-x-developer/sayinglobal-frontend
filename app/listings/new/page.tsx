@@ -22,6 +22,7 @@ import { toast } from '@/components/ui/Toast';
 import { listingsApi } from '@/lib/api/listings';
 import apiClient from '@/lib/api/client';
 import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
+import { plansApi, type UserPlan } from '@/lib/api/plans';
 
 const GENDERS = [
   { value: 'male', key: 'animal.male' },
@@ -59,6 +60,13 @@ export default function NewListingPage() {
   const [saved, setSaved] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [images, setImages] = useState<ImagePreview[]>([]);
+  const [myPlan, setMyPlan] = useState<UserPlan | null>(null);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      plansApi.getMyPlan().then(setMyPlan).catch(console.error);
+    }
+  }, [isAuthenticated]);
 
   const [form, setForm] = useState({
     category: '',
@@ -164,7 +172,7 @@ export default function NewListingPage() {
         age_years: age.years ? Number(age.years) : 0,
         age_months: age.months ? Number(age.months) : 0,
         weight_kg: form.weight_kg ? Number(form.weight_kg) : undefined,
-        quantity: form.quantity ? Number(form.quantity) : 1,
+        quantity: (!myPlan?.plan?.is_wholesale_allowed) ? 1 : (form.quantity ? Number(form.quantity) : 1),
         gender: form.gender || undefined,
         // breed: send null when 'Other' is selected (breed_custom is used instead)
         breed: (form.breed && form.breed !== '__other__') ? form.breed.trim() : undefined,
@@ -308,11 +316,18 @@ export default function NewListingPage() {
                         <input
                           type="number"
                           min={1}
-                          value={form.quantity}
+                          max={myPlan?.plan?.is_wholesale_allowed ? 9999 : 1}
+                          disabled={!myPlan?.plan?.is_wholesale_allowed && myPlan !== null}
+                          value={(!myPlan?.plan?.is_wholesale_allowed && myPlan !== null) ? '1' : form.quantity}
                           onChange={(e) => set('quantity', e.target.value)}
                           placeholder="1"
-                          className="input-base w-full"
+                          className={`input-base w-full ${(!myPlan?.plan?.is_wholesale_allowed && myPlan !== null) ? 'bg-bg-subtle opacity-70 cursor-not-allowed' : ''}`}
                         />
+                        {(!myPlan?.plan?.is_wholesale_allowed && myPlan !== null) && (
+                          <p className="mt-1 text-[10px] text-brand-primary">
+                            1 tadan ortiq sotish uchun tarifingizni yangilang
+                          </p>
+                        )}
                         {errors.quantity && <p className="mt-1 text-xs text-danger">{errors.quantity}</p>}
                       </div>
                       <div>

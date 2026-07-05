@@ -361,7 +361,8 @@
     "noReportsDesc": "Hozircha shikoyatlar yubormagansiz",
     "title": "Profil",
     "security": "Xavfsizlik",
-    "phoneCannotBeChanged": "Telefon raqamini oʻzgartirib boʻlmaydi"
+    "phoneCannotBeChanged": "Telefon raqamini oʻzgartirib boʻlmaydi",
+    "subscriptions": "Tariflar va Limitlar"
   },
   "userStatus": {
     "good": "Yaxshi",
@@ -1095,9 +1096,9 @@
     "tier2": "25 ta referral → Plus tarif",
     "viewPlans": "Tariflarni koʻrish",
     "subtitle": "Tariflarning asosiy farqi — 1 oyda qancha eʼlon joylay olishingiz va bir vaqtning oʻzida qancha faol eʼlon tura olishidir. Standart 10 ta, Plus 25 ta, Pro 50 ta, Premium 100 ta mukofotlangan referral orqali bepul olinadi.",
-    "currentPlan": "Joriy tarifingiz",
+    "currentPlan": "Hozirgi tarifingiz",
     "listingsThisMonth": "eʼlon bu oy",
-    "activeLimit": "Faol limit",
+    "activeLimit": "Faol e'lonlar limiti",
     "until": "Tugash",
     "free": "Bepul",
     "days": "kun",
@@ -1115,7 +1116,7 @@
     "planActivated": "{name} tarifi faollashtirildi!",
     "insufficientReferrals": "Referral yetarli emas",
     "errorTryAgain": "Xato yuz berdi.",
-    "promoCode": "Promo kod",
+    "promoCode": "Promo kodni faollashtirish",
     "promoSubtitle": "Promo kod orqali tarif yoqing",
     "promoApply": "Qoʻllash",
     "promoApplied": "Promo kod qoʻllanildi!",
@@ -1136,7 +1137,10 @@
     "flexibleLimits": "Moslashuvchan limitlar",
     "referralApplied": "Referal qoʻllanildi",
     "useReferralDesc": "Referal kodni kiriting",
-    "useReferralTitle": "Referaldan foydalanish"
+    "useReferralTitle": "Referaldan foydalanish",
+    "monthlyLimit": "Oylik e'lon berish limiti",
+    "upgrade": "Tarifni yangilash",
+    "wholesale": "Ulgurji savdoga ruxsat"
   },
   "ai": {
     "openAssistant": "AI Yordamchi",

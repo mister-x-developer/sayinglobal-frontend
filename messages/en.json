@@ -361,7 +361,8 @@
     "noReports": "No reports",
     "noReportsDesc": "You havenʼt submitted any reports yet",
     "security": "Security",
-    "phoneCannotBeChanged": "Phone number cannot be changed"
+    "phoneCannotBeChanged": "Phone number cannot be changed",
+    "subscriptions": "Plans & Limits"
   },
   "userStatus": {
     "good": "Good",
@@ -1097,7 +1098,7 @@
     "subtitle": "Plans differ by monthly listing quota and how many listings can stay active at once. Standard is free with 10 rewarded referrals, Plus with 25, Pro with 50, and Premium with 100.",
     "currentPlan": "Your current plan",
     "listingsThisMonth": "listings this month",
-    "activeLimit": "Active limit",
+    "activeLimit": "Active listings limit",
     "until": "Until",
     "free": "Free",
     "days": "days",
@@ -1116,7 +1117,7 @@
     "planActivated": "Plan \"{name}\" activated!",
     "insufficientReferrals": "Insufficient referrals",
     "errorTryAgain": "Error. Try again.",
-    "promoCode": "Promo code",
+    "promoCode": "Activate promo code",
     "promoSubtitle": "Activate a plan with a promo code",
     "promoApply": "Apply",
     "promoApplied": "Promo code applied!",
@@ -1136,7 +1137,10 @@
     "flexibleLimits": "Flexible limits",
     "referralApplied": "Referral Applied",
     "useReferralDesc": "Enter a referral code",
-    "useReferralTitle": "Use Referral"
+    "useReferralTitle": "Use Referral",
+    "monthlyLimit": "Monthly listing limit",
+    "upgrade": "Upgrade plan",
+    "wholesale": "Wholesale allowed"
   },
   "ai": {
     "openAssistant": "AI Assistant",
