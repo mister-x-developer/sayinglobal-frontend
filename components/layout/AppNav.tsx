@@ -23,7 +23,6 @@ import {
   MapPin,
   Tag,
   Package,
-  Zap,
 } from 'lucide-react';
 
 import { Logo } from '@/components/shared/Logo';
@@ -166,14 +165,6 @@ function MobileDrawer({
                 {t('nav.createListing')}
               </Link>
               )}
-              <Link
-                href="/profile/subscriptions"
-                onClick={onClose}
-                className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-fg hover:bg-bg-subtle transition-colors"
-              >
-                <Zap className="h-[18px] w-[18px]" strokeWidth={1.75} />
-                {t('profile.subscriptions')}
-              </Link>
 
               <Link
                 href="/profile/favorites"
@@ -408,13 +399,6 @@ export function AppNav() {
                           >
                             <Package className="h-4 w-4" strokeWidth={1.75} />
                             {t('profile.myListings')}
-                          </Link>
-                          <Link
-                            href="/profile/subscriptions"
-                            className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-fg hover:bg-bg-subtle"
-                          >
-                            <Zap className="h-4 w-4" strokeWidth={1.75} />
-                            {t('profile.subscriptions')}
                           </Link>
                           <Link
                             href="/profile/settings"
