@@ -265,10 +265,8 @@
     "statusActive": "Active",
     "quantity": "Quantity",
     "bump": "Bump Listing",
-    "confirmationCode": "Confirmation code",
-    "soldCodeNote": "Your score will increase after confirmation",
-    "soldCodeShare": "Give the code to the buyer",
-    "soldSuccessTitle": "Marked as sold!"
+    "soldSuccessTitle": "Marked as sold!",
+    "markSoldSuccess": "Successfully marked as sold!"
   },
   "categories": {
     "all": "All",

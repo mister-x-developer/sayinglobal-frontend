@@ -354,29 +354,6 @@ export const listingsApi = {
     return res.data;
   },
 
-  /** Buyer confirms purchase with the code received from seller.
-   *  Optionally provide star rating (1-5) and review.
-   *  This makes the sale "confirmed" and contributes to seller's trust_score.
-   */
-  async confirmPurchase(code: string, score?: number, review?: string) {
-    const res = await apiClient.post('/listings/confirm-purchase/', {
-      code: code.toUpperCase(),
-      score,
-      review,
-    });
-    return res.data;
-  },
-
-  /** Admin only: pending buyer confirmations (codes not yet claimed by buyer) */
-  async adminPendingConfirmations() {
-    try {
-      const res = await apiClient.get('/listings/admin/pending-confirmations/');
-      return res.data?.results || [];
-    } catch {
-      return [];
-    }
-  },
-
   /** Public: list seller ratings + reviews thread. */
   async sellerRatings(userPublicId: number | string, page = 1, pageSize = 20) {
     try {

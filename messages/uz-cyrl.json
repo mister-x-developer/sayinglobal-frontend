@@ -265,10 +265,8 @@
     "statusActive": "Фаол",
     "quantity": "Сони / Миқдори",
     "bump": "Эълонни кўтариш",
-    "confirmationCode": "Тасдиқлаш коди",
-    "soldCodeNote": "Тасдиқлангандан сўнг балингиз ошади",
-    "soldCodeShare": "Кодни харидорга беринг",
-    "soldSuccessTitle": "Сотилган деб белгиланди!"
+    "soldSuccessTitle": "Сотилган деб белгиланди!",
+    "markSoldSuccess": "Сотилди деб белгиланди!"
   },
   "categories": {
     "all": "Барчаси",

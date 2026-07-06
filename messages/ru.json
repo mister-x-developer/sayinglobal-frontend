@@ -265,10 +265,8 @@
     "statusActive": "Активно",
     "quantity": "Количество",
     "bump": "Поднять объявление",
-    "confirmationCode": "Код подтверждения",
-    "soldCodeNote": "Ваш рейтинг повысится после подтверждения",
-    "soldCodeShare": "Передайте код покупателю",
-    "soldSuccessTitle": "Отмечено как проданное!"
+    "soldSuccessTitle": "Отмечено как проданное!",
+    "markSoldSuccess": "Успешно отмечено как проданное!"
   },
   "categories": {
     "all": "Все",

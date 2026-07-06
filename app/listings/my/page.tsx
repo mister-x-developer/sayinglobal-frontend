@@ -33,6 +33,7 @@ import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
 import { formatPrice, formatRelativeTime, getLocalizedListingTitle } from '@/lib/utils/format';
 import apiClient from '@/lib/api/client';
+import { toast } from '@/components/ui/Toast';
 
 type StatusFilter = 'all' | 'active' | 'pending' | 'sold' | 'rejected' | 'expired';
 
@@ -68,7 +69,7 @@ export default function MyListingsPage() {
   const [openMenu, setOpenMenu] = useState<number | null>(null);
   const [soldConfirm, setSoldConfirm] = useState<number | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
-  const [soldCode, setSoldCode] = useState<{ id: number; code: string } | null>(null);
+
 
   useEffect(() => { setHydrated(true); }, []);
   /* auth gating handled by middleware */
@@ -110,9 +111,7 @@ export default function MyListingsPage() {
           scheduled_delete_at: result?.scheduled_delete_at ?? null,
         } : l)
       );
-      if (result?.confirmation_code) {
-        setSoldCode({ id, code: result.confirmation_code });
-      }
+      toast.success(t('listings.markSoldSuccess') || 'Sotildi deb belgilandi');
     } catch { load(); }
   };
 
@@ -557,67 +556,7 @@ export default function MyListingsPage() {
         )}
       </AnimatePresence>
 
-      {/* Sold confirmation code display */}
-      <AnimatePresence>
-        {soldCode !== null && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
-              onClick={() => setSoldCode(null)}
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: 8 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96 }}
-              className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-bg-elevated p-4 sm:p-6 shadow-lift"
-            >
-              <div className="text-center">
-                <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-success/12">
-                  <CheckCircle2 className="h-7 w-7 text-success" />
-                </div>
-                <h3 className="mt-4 font-display text-xl font-semibold">{t('listings.soldSuccessTitle')}</h3>
-                <p className="mt-2 text-sm text-fg-muted">
-                  {t('listings.soldCodeShare')}
-                </p>
 
-                <div className="mt-4 rounded-xl border border-success/30 bg-success/5 p-4">
-                  <div className="text-xs text-fg-subtle">{t('listings.confirmationCode')}</div>
-                  <div className="mt-1 font-mono text-3xl font-bold tracking-[4px] text-success select-all">{soldCode.code}</div>
-                </div>
-
-                <p className="mt-3 text-xs text-fg-muted">
-                  {t('listings.soldCodeNote')}
-                </p>
-                <div className="mt-2 text-[10px] text-success/80">
-                  Buyer confirmation page: /confirm-purchase?code={soldCode.code}
-                </div>
-              </div>
-
-              <div className="mt-6 flex gap-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    navigator.clipboard?.writeText(soldCode.code);
-                  }}
-                  className="btn btn-secondary flex-1"
-                >
-                  {t('common.copy')}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSoldCode(null)}
-                  className="btn btn-primary flex-1"
-                >
-                  {t('common.done')}
-                </button>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
 
       {/* Delete confirmation modal */}
       <AnimatePresence>

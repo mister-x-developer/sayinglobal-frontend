@@ -265,10 +265,8 @@
     "statusActive": "Faol",
     "quantity": "Soni / Miqdori",
     "bump": "Eʼlonni koʻtarish",
-    "confirmationCode": "Tasdiqlash kodi",
-    "soldCodeNote": "Tasdiqlangandan soʻng balingiz oshadi",
-    "soldCodeShare": "Kodni xaridorga bering",
-    "soldSuccessTitle": "Sotilgan deb belgilandi!"
+    "soldSuccessTitle": "Sotilgan deb belgilandi!",
+    "markSoldSuccess": "Sotildi deb belgilandi!"
   },
   "categories": {
     "all": "Barchasi",
