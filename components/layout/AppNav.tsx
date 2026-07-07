@@ -148,23 +148,25 @@ function MobileDrawer({
                 <UserIcon className="h-[18px] w-[18px]" strokeWidth={1.75} />
                 {t('nav.profile')}
               </Link>
-              <Link
-                href="/listings/my"
-                onClick={onClose}
-                className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-fg hover:bg-bg-subtle transition-colors"
-              >
-                <Package className="h-[18px] w-[18px]" strokeWidth={1.75} />
-                {t('profile.myListings')}
-              </Link>
               {!(user?.is_admin || user?.is_staff) && (
-              <Link
-                href="/listings/new"
-                onClick={onClose}
-                className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-fg hover:bg-bg-subtle transition-colors"
-              >
-                <Plus className="h-[18px] w-[18px]" strokeWidth={1.75} />
-                {t('nav.createListing')}
-              </Link>
+                <>
+                  <Link
+                    href="/listings/my"
+                    onClick={onClose}
+                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-fg hover:bg-bg-subtle transition-colors"
+                  >
+                    <Package className="h-[18px] w-[18px]" strokeWidth={1.75} />
+                    {t('profile.myListings')}
+                  </Link>
+                  <Link
+                    href="/listings/new"
+                    onClick={onClose}
+                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-fg hover:bg-bg-subtle transition-colors"
+                  >
+                    <Plus className="h-[18px] w-[18px]" strokeWidth={1.75} />
+                    {t('nav.createListing')}
+                  </Link>
+                </>
               )}
 
               <Link
@@ -262,7 +264,11 @@ export function AppNav() {
     return () => document.removeEventListener('mousedown', onClick);
   }, [profileOpen]);
 
-  const links = [
+  const links = user?.is_admin || user?.is_staff ? [
+    { href: '/admin', icon: ShieldCheck, label: t('nav.admin') },
+    { href: '/listings', icon: LayoutGrid, label: t('nav.listings') },
+    { href: '/sellers', icon: ShieldCheck, label: t('nav.sellers') },
+  ] : [
     { href: '/dashboard', icon: Home, label: t('nav.home') },
     { href: '/listings', icon: LayoutGrid, label: t('nav.listings') },
     { href: '/sellers', icon: ShieldCheck, label: t('nav.sellers') },
@@ -395,13 +401,15 @@ export function AppNav() {
                             <UserIcon className="h-4 w-4" strokeWidth={1.75} />
                             {t('nav.profile')}
                           </Link>
-                          <Link
-                            href="/listings/my"
-                            className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-fg hover:bg-bg-subtle"
-                          >
-                            <Package className="h-4 w-4" strokeWidth={1.75} />
-                            {t('profile.myListings')}
-                          </Link>
+                          {!(user.is_admin || user.is_staff) && (
+                            <Link
+                              href="/listings/my"
+                              className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-fg hover:bg-bg-subtle"
+                            >
+                              <Package className="h-4 w-4" strokeWidth={1.75} />
+                              {t('profile.myListings')}
+                            </Link>
+                          )}
                           <Link
                             href="/profile/settings"
                             className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-fg hover:bg-bg-subtle"
