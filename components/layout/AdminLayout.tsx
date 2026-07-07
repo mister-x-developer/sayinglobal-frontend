@@ -54,7 +54,6 @@ const NAV_GROUPS = [
     labelKey: 'admin.users',
     items: [
       { href: '/admin/users', icon: Users, label: 'admin.users' },
-      { href: '/admin/ratings', icon: Star, label: 'admin.ratingsModeration' },
       { href: '/admin/security', icon: ShieldAlert, label: 'security.title' },
     ],
   },
@@ -205,25 +204,31 @@ export function AdminLayout({ children, noPadding = false }: { children: React.R
         ))}
       </div>
 
-      {/* Bottom bar — logout */}
-      <div className="border-t border-border p-3">
-        {collapsed && !isDrawer ? (
-          <button
-            onClick={() => { logout(); router.push('/'); }}
-            className="mx-auto flex h-9 w-9 items-center justify-center rounded-lg text-fg-subtle hover:bg-danger/10 hover:text-danger"
-            aria-label={t('nav.logout')}
-          >
-            <LogOut className="h-4.5 w-4.5" strokeWidth={2} />
-          </button>
-        ) : (
-          <button
-            onClick={() => { logout(); router.push('/'); }}
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-fg-muted hover:bg-danger/10 hover:text-danger transition-colors"
-          >
-            <LogOut className="h-4.5 w-4.5" strokeWidth={2} />
-            <span>{t('nav.logout')}</span>
-          </button>
-        )}
+      {/* Bottom bar — logout & Go to main site */}
+      <div className="border-t border-border p-3 space-y-2">
+        <Link
+          href="/listings"
+          className={`group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-fg-muted hover:bg-brand-primary/10 hover:text-brand-primary transition-colors ${
+            collapsed && !isDrawer ? 'justify-center' : 'w-full'
+          }`}
+          title="Asosiy saytga o'tish (Kuzatuv uchun)"
+        >
+          <LayoutDashboard className="h-4.5 w-4.5 flex-shrink-0" strokeWidth={2} />
+          {(!collapsed || isDrawer) && <span>Saytga o'tish (Kuzatuv)</span>}
+        </Link>
+        <button
+          onClick={() => {
+            logout();
+            router.push('/');
+          }}
+          className={`group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-fg-muted hover:bg-danger/10 hover:text-danger transition-colors ${
+            collapsed && !isDrawer ? 'justify-center mx-auto w-9 h-9' : 'w-full'
+          }`}
+          title={t('admin.logout')}
+        >
+          <LogOut className="h-4.5 w-4.5 flex-shrink-0" strokeWidth={2} />
+          {(!collapsed || isDrawer) && <span>{t('admin.logout')}</span>}
+        </button>
       </div>
     </nav>
   );

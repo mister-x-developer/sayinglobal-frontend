@@ -609,7 +609,7 @@
     "confirmReject": "Rad etishni tasdiqlash",
     "rejectionReasonPlaceholder": "Rad etish sababi",
     "rejectionReasonRequired": "Sababni kiritish majburiy",
-    "ratingsModeration": "Sharhlarni moderatsiya",
+    "ratingsModeration": "Shikoyatlar",
     "broadcastTitle": "Sarlavha",
     "broadcastSent": "Xabar yuborildi",
     "createBroadcast": "Yangi xabar",
@@ -1083,7 +1083,7 @@
     "sort_highest": "Yuqori baho",
     "sort_lowest": "Past baho",
     "sort_most_useful": "Eng foydali",
-    "moderation": "Sharhlarni moderatsiya"
+    "moderation": "Shikoyatlar"
   },
   "plans": {
     "title": "Tariflar",
