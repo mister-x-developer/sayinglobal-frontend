@@ -140,14 +140,16 @@ function MobileDrawer({
 
               <div className="my-2 h-px bg-border" />
 
-              <Link
-                href="/profile"
-                onClick={onClose}
-                className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-fg hover:bg-bg-subtle transition-colors"
-              >
-                <UserIcon className="h-[18px] w-[18px]" strokeWidth={1.75} />
-                {t('nav.profile')}
-              </Link>
+              {!(user?.is_admin || user?.is_staff) && (
+                <Link
+                  href="/profile"
+                  onClick={onClose}
+                  className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-fg hover:bg-bg-subtle transition-colors"
+                >
+                  <UserIcon className="h-[18px] w-[18px]" strokeWidth={1.75} />
+                  {t('nav.profile')}
+                </Link>
+              )}
               {!(user?.is_admin || user?.is_staff) && (
                 <>
                   <Link
@@ -394,29 +396,31 @@ export function AppNav() {
                           </div>
                         </div>
                         <div className="p-1.5">
-                          <Link
-                            href="/profile"
-                            className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-fg hover:bg-bg-subtle"
-                          >
-                            <UserIcon className="h-4 w-4" strokeWidth={1.75} />
-                            {t('nav.profile')}
-                          </Link>
                           {!(user.is_admin || user.is_staff) && (
-                            <Link
-                              href="/listings/my"
-                              className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-fg hover:bg-bg-subtle"
-                            >
-                              <Package className="h-4 w-4" strokeWidth={1.75} />
-                              {t('profile.myListings')}
-                            </Link>
+                            <>
+                              <Link
+                                href="/profile"
+                                className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-fg hover:bg-bg-subtle"
+                              >
+                                <UserIcon className="h-4 w-4" strokeWidth={1.75} />
+                                {t('nav.profile')}
+                              </Link>
+                              <Link
+                                href="/listings/my"
+                                className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-fg hover:bg-bg-subtle"
+                              >
+                                <Package className="h-4 w-4" strokeWidth={1.75} />
+                                {t('profile.myListings')}
+                              </Link>
+                              <Link
+                                href="/profile/settings"
+                                className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-fg hover:bg-bg-subtle"
+                              >
+                                <Settings className="h-4 w-4" strokeWidth={1.75} />
+                                {t('nav.settings')}
+                              </Link>
+                            </>
                           )}
-                          <Link
-                            href="/profile/settings"
-                            className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-fg hover:bg-bg-subtle"
-                          >
-                            <Settings className="h-4 w-4" strokeWidth={1.75} />
-                            {t('nav.settings')}
-                          </Link>
                           {(user.is_staff || user.is_admin) && (
                             <Link
                               href="/admin"

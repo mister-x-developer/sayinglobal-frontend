@@ -111,8 +111,8 @@ export function middleware(req: NextRequest) {
     return adminRes;
   }
 
-  // Admin redirect — admins should not use user dashboard or user listings
-  if ((pathname.startsWith('/dashboard') || pathname.startsWith('/listings/my') || pathname.startsWith('/chat')) && isPlatformAdmin(req)) {
+  // Admin redirect — admins should not use user dashboard, profile, or user listings
+  if ((pathname.startsWith('/dashboard') || pathname.startsWith('/listings/my') || pathname.startsWith('/chat') || pathname.startsWith('/profile')) && isPlatformAdmin(req)) {
     const adminUrl = req.nextUrl.clone();
     adminUrl.pathname = '/admin';
     adminUrl.search = '';
