@@ -150,7 +150,7 @@ export default function SubscriptionsPage() {
                   )}
                   {myPlan.plan.can_bump_listings && (
                     <span className="flex items-center gap-1.5 text-brand-primary">
-                      <Zap className="h-4 w-4" /> Oyiga {myPlan.plan.monthly_bump_limit} marta ko'tarish
+                      <Zap className="h-4 w-4" /> Oyiga {myPlan.plan.monthly_bump_limit} marta ko&apos;tarish
                     </span>
                   )}
                 </div>
@@ -158,7 +158,7 @@ export default function SubscriptionsPage() {
             ) : (
               <div className="surface-elevated p-8 text-center">
                 <AlertCircle className="h-10 w-10 mx-auto text-fg-muted mb-3" />
-                <p className="text-fg-muted">Tarif ma'lumotlari topilmadi.</p>
+                <p className="text-fg-muted">Tarif ma&apos;lumotlari topilmadi.</p>
               </div>
             )}
 
@@ -199,11 +199,11 @@ export default function SubscriptionsPage() {
                     <ul className="space-y-3 text-sm flex-1 mb-8">
                       <li className="flex items-start gap-2">
                         <CheckCircle2 className="h-4 w-4 text-brand-primary mt-0.5 shrink-0" />
-                        <span>Oylik chegara: {p.monthly_listing_limit} e'lon</span>
+                        <span>Oylik chegara: {p.monthly_listing_limit} e&apos;lon</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <CheckCircle2 className="h-4 w-4 text-brand-primary mt-0.5 shrink-0" />
-                        <span>Faol e'lonlar: {p.active_listing_limit} ta</span>
+                        <span>Faol e&apos;lonlar: {p.active_listing_limit} ta</span>
                       </li>
                       {p.is_wholesale_allowed && (
                         <li className="flex items-start gap-2">
@@ -214,7 +214,7 @@ export default function SubscriptionsPage() {
                       {p.can_bump_listings && (
                         <li className="flex items-start gap-2">
                           <CheckCircle2 className="h-4 w-4 text-brand-primary mt-0.5 shrink-0" />
-                          <span>E'lonni tez-tez tepaga chiqarish</span>
+                          <span>E&apos;lonni tez-tez tepaga chiqarish</span>
                         </li>
                       )}
                     </ul>

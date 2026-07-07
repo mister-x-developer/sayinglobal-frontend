@@ -23,6 +23,7 @@ import {
   MapPin,
   Tag,
   Package,
+  BookOpen
 } from 'lucide-react';
 
 import { Logo } from '@/components/shared/Logo';
@@ -266,6 +267,7 @@ export function AppNav() {
     { href: '/listings', icon: LayoutGrid, label: t('nav.listings') },
     { href: '/sellers', icon: ShieldCheck, label: t('nav.sellers') },
     { href: '/chat', icon: MessageSquareText, label: t('nav.chat') },
+    { href: '/guide', icon: BookOpen, label: 'Qo\'llanma' },
   ];
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');

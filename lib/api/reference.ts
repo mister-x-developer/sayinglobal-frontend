@@ -44,7 +44,8 @@ export interface Category {
   slug: string;
   name: string;
   description: string;
-  icon: string;
+  icon: string | null;
+  image: string | null;
   name_uz: string;
   name_uz_cyrl: string;
   name_ru: string;

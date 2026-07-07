@@ -47,7 +47,7 @@ const NAV_GROUPS = [
     items: [
       { href: '/admin/listings', icon: LayoutGrid, label: 'admin.listings' },
       { href: '/admin/moderation', icon: Flag, label: 'admin.complaints' },
-      { href: '/admin/ai-moderation', icon: ShieldCheck, label: 'admin.aiModeration' },
+
     ],
   },
   {
@@ -69,6 +69,12 @@ const NAV_GROUPS = [
     items: [
       { href: '/admin/audit', icon: ScrollText, label: 'admin.auditLogs' },
       { href: '/admin/health', icon: Activity, label: 'admin.systemHealth' },
+    ],
+  },
+  {
+    labelKey: 'admin.guide',
+    items: [
+      { href: '/admin/guide', icon: ScrollText, label: 'Qo\'llanma' },
     ],
   },
 ] as const;
