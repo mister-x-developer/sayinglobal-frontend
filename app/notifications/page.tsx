@@ -73,7 +73,8 @@ export default function NotificationsPage() {
   const t = useTranslations();
   const locale = useLocale();
   const router = useRouter();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
+  const isAdmin = user?.is_admin_account || user?.is_staff;
   const { items, setItems, markRead, markAllRead, remove } = useNotificationsStore();
   const [hydrated, setHydrated] = useState(false);
   const [filter, setFilter] = useState<Filter>('all');
@@ -114,7 +115,10 @@ export default function NotificationsPage() {
   const filtered = items.filter((n) => matchesFilter(n, filter));
   const unreadCount = items.filter((n) => !n.is_read).length;
 
-  const FILTERS: { key: Filter; label: string }[] = [
+  const FILTERS: { key: Filter; label: string }[] = isAdmin ? [
+    { key: 'all', label: t('common.all') },
+    { key: 'unread', label: `${t('notifications.title')} (${unreadCount})` },
+  ] : [
     { key: 'all', label: t('common.all') },
     { key: 'unread', label: `${t('notifications.title')} (${unreadCount})` },
     { key: 'messages', label: t('chat.title') },
