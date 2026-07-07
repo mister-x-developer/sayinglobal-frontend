@@ -3,6 +3,8 @@
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { BookOpen, Search, ShieldCheck, Tag, MapPin, Heart, Star, MessageCircle, AlertCircle } from 'lucide-react';
+import { AppNav } from '@/components/layout/AppNav';
+import { LandingFooter } from '@/components/layout/LandingFooter';
 
 export default function UserGuidePage() {
   const t = useTranslations();
@@ -41,8 +43,10 @@ export default function UserGuidePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-bg text-fg py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto space-y-12">
+    <div className="min-h-screen bg-bg text-fg flex flex-col">
+      <AppNav />
+      <main className="flex-1 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto space-y-12">
         
         {/* Header */}
         <motion.div 
@@ -87,6 +91,8 @@ export default function UserGuidePage() {
           </button>
         </motion.div>
       </div>
+      </main>
+      <LandingFooter />
     </div>
   );
 }
