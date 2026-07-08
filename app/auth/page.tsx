@@ -252,8 +252,9 @@ function AuthPageContent() {
 }
 
 export default function AuthPage() {
+  const t = useTranslations();
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">{t('common.loading') || 'Loading...'}</div>}>
       <AuthPageContent />
     </Suspense>
   );

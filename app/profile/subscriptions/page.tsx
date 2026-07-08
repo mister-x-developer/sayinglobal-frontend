@@ -93,14 +93,14 @@ export default function SubscriptionsPage() {
                         <h2 className="text-xl font-bold">{myPlan.plan.name_uz || myPlan.plan.name}</h2>
                         <div className="flex items-center gap-2 mt-1 text-sm text-fg-subtle">
                           {myPlan.is_active ? (
-                            <Badge variant="success" size="sm">Faol</Badge>
+                            <Badge variant="success" size="sm">{t('plans.statusActive')}</Badge>
                           ) : (
-                            <Badge variant="error" size="sm">Faol emas</Badge>
+                            <Badge variant="error" size="sm">{t('plans.statusInactive')}</Badge>
                           )}
                           <span>
                             {myPlan.expires_at 
-                              ? `Tugaydi: ${new Date(myPlan.expires_at).toLocaleDateString()}` 
-                              : 'Muddatsiz'}
+                              ? t('plans.expiresOn', { date: new Date(myPlan.expires_at).toLocaleDateString() })
+                              : t('plans.unlimitedTime')}
                           </span>
                         </div>
                       </div>
@@ -134,7 +134,7 @@ export default function SubscriptionsPage() {
                         {t('plans.activeLimit')}
                       </div>
                       <div className="flex items-baseline gap-2">
-                        <span className="text-2xl font-bold text-fg">Maks</span>
+                        <span className="text-2xl font-bold text-fg">{t('plans.max')}</span>
                         <span className="text-sm font-medium text-fg-muted">/ {myPlan.plan.active_listing_limit}</span>
                       </div>
                     </div>
@@ -150,7 +150,7 @@ export default function SubscriptionsPage() {
                   )}
                   {myPlan.plan.can_bump_listings && (
                     <span className="flex items-center gap-1.5 text-brand-primary">
-                      <Zap className="h-4 w-4" /> Oyiga {myPlan.plan.monthly_bump_limit} marta ko&apos;tarish
+                      <Zap className="h-4 w-4" /> {t('plans.bumpLimit', { limit: myPlan.plan.monthly_bump_limit })}
                     </span>
                   )}
                 </div>
@@ -158,7 +158,7 @@ export default function SubscriptionsPage() {
             ) : (
               <div className="surface-elevated p-8 text-center">
                 <AlertCircle className="h-10 w-10 mx-auto text-fg-muted mb-3" />
-                <p className="text-fg-muted">Tarif ma&apos;lumotlari topilmadi.</p>
+                <p className="text-fg-muted">{t('plans.noPlanData')}</p>
               </div>
             )}
 
@@ -171,7 +171,7 @@ export default function SubscriptionsPage() {
                   value={promoCode} 
                   onChange={(e) => setPromoCode(e.target.value)} 
                   className="input-base flex-1" 
-                  placeholder="PROMO-KOD" 
+                  placeholder={t('plans.promoPlaceholder')}
                 />
                 <button type="submit" disabled={promoLoading || !promoCode} className="btn btn-primary">
                   {promoLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : t('common.save')}
@@ -187,34 +187,34 @@ export default function SubscriptionsPage() {
                   <div key={p.id} className="surface-elevated p-6 flex flex-col relative group hover:border-brand-primary/50 transition-colors">
                     {p.id === myPlan?.plan?.id && (
                       <div className="absolute top-0 right-0 bg-brand-primary text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-bl-xl rounded-tr-2xl">
-                        Joriy
+                        {t('plans.current')}
                       </div>
                     )}
                     <h3 className="text-lg font-bold">{p.name_uz || p.name}</h3>
                     <div className="mt-2 text-3xl font-black tracking-tight text-brand-primary">
-                      {Number(p.price_uzs) === 0 ? 'Bepul' : `${Number(p.price_uzs).toLocaleString()} UZS`}
+                      {Number(p.price_uzs) === 0 ? t('plans.free') : `${Number(p.price_uzs).toLocaleString()} UZS`}
                     </div>
-                    <p className="text-sm text-fg-subtle mt-1 mb-6">/ {p.duration_days} kun</p>
+                    <p className="text-sm text-fg-subtle mt-1 mb-6">{t('plans.durationDays', { days: p.duration_days })}</p>
                     
                     <ul className="space-y-3 text-sm flex-1 mb-8">
                       <li className="flex items-start gap-2">
                         <CheckCircle2 className="h-4 w-4 text-brand-primary mt-0.5 shrink-0" />
-                        <span>Oylik chegara: {p.monthly_listing_limit} e&apos;lon</span>
+                        <span>{t('plans.featureMonthlyLimit', { limit: p.monthly_listing_limit })}</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <CheckCircle2 className="h-4 w-4 text-brand-primary mt-0.5 shrink-0" />
-                        <span>Faol e&apos;lonlar: {p.active_listing_limit} ta</span>
+                        <span>{t('plans.featureActiveLimit', { limit: p.active_listing_limit })}</span>
                       </li>
                       {p.is_wholesale_allowed && (
                         <li className="flex items-start gap-2">
                           <CheckCircle2 className="h-4 w-4 text-brand-primary mt-0.5 shrink-0" />
-                          <span>Ulgurji savdoga ruxsat</span>
+                          <span>{t('plans.featureWholesale')}</span>
                         </li>
                       )}
                       {p.can_bump_listings && (
                         <li className="flex items-start gap-2">
                           <CheckCircle2 className="h-4 w-4 text-brand-primary mt-0.5 shrink-0" />
-                          <span>E&apos;lonni tez-tez tepaga chiqarish</span>
+                          <span>{t('plans.featureBump')}</span>
                         </li>
                       )}
                     </ul>
@@ -223,7 +223,7 @@ export default function SubscriptionsPage() {
                       disabled={p.id === myPlan?.plan?.id}
                       className={`btn w-full ${p.id === myPlan?.plan?.id ? 'btn-secondary opacity-50' : 'btn-primary'}`}
                     >
-                      {p.id === myPlan?.plan?.id ? 'Hozirgi tarifingiz' : 'Sotib olish (Tez kunda)'}
+                      {p.id === myPlan?.plan?.id ? t('plans.yourCurrentPlan') : t('plans.buySoon')}
                     </button>
                   </div>
                 ))}

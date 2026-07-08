@@ -71,42 +71,42 @@ export function MyListingsManager({ initialListings, loading }: Props) {
 
     try {
       if (action === 'delete') {
-        if (!confirm(t('listings.deleteConfirm' as any) || "Ushbu e'lonni o'chirishni xohlaysizmi?")) return;
+        if (!confirm(t('listings.deleteConfirm' as any))) return;
         await listingsApi.delete(publicId);
         setListings((prev) => prev.filter((l) => l.public_id !== publicId));
-        toast.success(t('success.deleted' as any) || "O'chirildi");
+        toast.success(t('success.deleted' as any));
       } 
       else if (action === 'markSold') {
-        if (!confirm(t('listings.markSoldConfirm' as any) || "E'lonni sotildi deb belgilaysizmi?")) return;
+        if (!confirm(t('listings.markSoldConfirm' as any))) return;
         await listingsApi.markSold(publicId);
         setListings((prev) =>
           prev.map((l) => (l.public_id === publicId ? { ...l, status: 'sold' } : l))
         );
-        toast.success(t('success.updated' as any) || "Sotildi deb belgilandi");
+        toast.success(t('success.updated' as any));
       }
       else if (action === 'cancelReview') {
-        if (!confirm(t('listings.cancelReviewConfirm' as any) || "Tekshiruvni bekor qilasizmi? E'lon qoralamaga qaytadi.")) return;
+        if (!confirm(t('listings.cancelReviewConfirm' as any))) return;
         await listingsApi.cancelReview(publicId);
         setListings((prev) =>
           prev.map((l) => (l.public_id === publicId ? { ...l, status: 'draft' } : l))
         );
-        toast.success(t('success.updated' as any) || "Tekshiruv bekor qilindi");
+        toast.success(t('success.updated' as any));
       }
       else if (action === 'restore') {
-        if (!confirm(t('listings.restoreConfirm' as any) || "E'lonni qayta sotuvga qo'yasizmi? U yana tekshiruvdan o'tadi.")) return;
+        if (!confirm(t('listings.restoreConfirm' as any))) return;
         await listingsApi.restore(publicId);
         setListings((prev) =>
           prev.map((l) => (l.public_id === publicId ? { ...l, status: 'pending_review' } : l))
         );
-        toast.success(t('success.updated' as any) || "Sotuvga qaytarildi");
+        toast.success(t('success.updated' as any));
       }
       else if (action === 'submitReview') {
-        if (!confirm("E'lonni adminga tekshirishga yuborasizmi?")) return;
+        if (!confirm(t('listings.submitReviewConfirm' as any))) return;
         await listingsApi.submitForReview(publicId);
         setListings((prev) =>
           prev.map((l) => (l.public_id === publicId ? { ...l, status: 'pending_review' } : l))
         );
-        toast.success("E'lon tekshiruvga yuborildi!");
+        toast.success(t('success.updated' as any));
       }
     } catch (e: any) {
       toast.error(e.message || 'Error');
@@ -204,11 +204,11 @@ export function MyListingsManager({ initialListings, loading }: Props) {
                     
                     {/* Status badge overlaid on top left */}
                     <div className="absolute top-3 left-3 z-10">
-                      {l.status === 'active' && <span className="px-2 py-1 bg-success text-white text-xs font-bold rounded-md shadow-sm uppercase tracking-wide">Sotuvda</span>}
-                      {l.status === 'sold' && <span className="px-2 py-1 bg-fg-muted text-white text-xs font-bold rounded-md shadow-sm uppercase tracking-wide">Sotilgan</span>}
-                      {(l.status === 'pending' || l.status === 'pending_review') && <span className="px-2 py-1 bg-warning text-white text-xs font-bold rounded-md shadow-sm uppercase tracking-wide">Kutilmoqda</span>}
-                      {l.status === 'rejected' && <span className="px-2 py-1 bg-danger text-white text-xs font-bold rounded-md shadow-sm uppercase tracking-wide">Rad etilgan</span>}
-                      {['draft', 'archived', 'expired'].includes(l.status) && <span className="px-2 py-1 bg-bg-muted text-fg text-xs font-bold rounded-md shadow-sm uppercase tracking-wide border border-border">Qoralama</span>}
+                      {l.status === 'active' && <span className="px-2 py-1 bg-success text-white text-xs font-bold rounded-md shadow-sm uppercase tracking-wide">{t('listings.statusActive' as any)}</span>}
+                      {l.status === 'sold' && <span className="px-2 py-1 bg-fg-muted text-white text-xs font-bold rounded-md shadow-sm uppercase tracking-wide">{t('listings.statusSold' as any)}</span>}
+                      {(l.status === 'pending' || l.status === 'pending_review') && <span className="px-2 py-1 bg-warning text-white text-xs font-bold rounded-md shadow-sm uppercase tracking-wide">{t('listings.statusPending' as any)}</span>}
+                      {l.status === 'rejected' && <span className="px-2 py-1 bg-danger text-white text-xs font-bold rounded-md shadow-sm uppercase tracking-wide">{t('listings.statusRejected' as any)}</span>}
+                      {['draft', 'archived', 'expired'].includes(l.status) && <span className="px-2 py-1 bg-bg-muted text-fg text-xs font-bold rounded-md shadow-sm uppercase tracking-wide border border-border">{t('listings.statusDraft' as any)}</span>}
                     </div>
                   </div>
 
@@ -218,10 +218,10 @@ export function MyListingsManager({ initialListings, loading }: Props) {
                     {l.status === 'active' && (
                       <>
                         <Link href={`/listings/${l.public_id}/edit`} className="btn btn-secondary btn-sm flex-1">
-                          <Edit className="w-4 h-4" /> Tahrirlash
+                          <Edit className="w-4 h-4" /> {t('actions.edit' as any)}
                         </Link>
                         <button disabled={isMutatingThis} onClick={() => handleAction('markSold', l.public_id)} className="btn btn-success btn-sm flex-1">
-                          <CheckCircle className="w-4 h-4" /> Sotildi
+                          <CheckCircle className="w-4 h-4" /> {t('actions.markSold' as any)}
                         </button>
                       </>
                     )}
@@ -229,14 +229,14 @@ export function MyListingsManager({ initialListings, loading }: Props) {
                     {/* Pending Actions */}
                     {(l.status === 'pending' || l.status === 'pending_review') && (
                       <button disabled={isMutatingThis} onClick={() => handleAction('cancelReview', l.public_id)} className="btn btn-warning btn-sm flex-1">
-                        <XCircle className="w-4 h-4" /> Bekor qilish
+                        <XCircle className="w-4 h-4" /> {t('actions.cancel' as any)}
                       </button>
                     )}
 
                     {/* Sold Actions */}
                     {l.status === 'sold' && (
                       <button disabled={isMutatingThis} onClick={() => handleAction('restore', l.public_id)} className="btn btn-primary btn-sm flex-1">
-                        <RefreshCw className="w-4 h-4" /> Tiklash
+                        <RefreshCw className="w-4 h-4" /> {t('actions.restore' as any)}
                       </button>
                     )}
 
@@ -244,7 +244,7 @@ export function MyListingsManager({ initialListings, loading }: Props) {
                     {['rejected', 'draft', 'archived', 'expired'].includes(l.status) && (
                       <>
                         <Link href={`/listings/${l.public_id}/edit`} className="btn btn-secondary btn-sm flex-1">
-                          <Edit className="w-4 h-4" /> Tahrirlash
+                          <Edit className="w-4 h-4" /> {t('actions.edit' as any)}
                         </Link>
                         {['draft', 'rejected'].includes(l.status) && (
                           <button
@@ -252,7 +252,7 @@ export function MyListingsManager({ initialListings, loading }: Props) {
                             onClick={() => handleAction('submitReview', l.public_id)}
                             className="btn btn-primary btn-sm flex-1"
                           >
-                            <CheckCircle className="w-4 h-4" /> Tekshiruvga yuborish
+                            <CheckCircle className="w-4 h-4" /> {t('actions.submitReview' as any)}
                           </button>
                         )}
                       </>

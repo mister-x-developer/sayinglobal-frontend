@@ -10,34 +10,34 @@ export default function AdminGuidePage() {
 
   const sections = [
     {
-      title: "Asosiy Ko'rsatkichlar (Dashboard)",
+      title: t('AdminGuide.sections.dashboard.title'),
       icon: <Activity className="w-8 h-8 text-brand-primary" />,
-      content: "Dashboard sahifasida platformaning umumiy holati, yangi foydalanuvchilar, e'lonlar va tranzaksiyalar soni aks etadi. Tizim holatini shu yerdan kuzatib boring."
+      content: t('AdminGuide.sections.dashboard.content')
     },
     {
-      title: "Moderatsiya va Shikoyatlar",
+      title: t('AdminGuide.sections.moderation.title'),
       icon: <Flag className="w-8 h-8 text-red-500" />,
-      content: "Foydalanuvchilar tomonidan tushgan shikoyatlarni (spam, firibgarlik) zudlik bilan tekshiring. E'lonlarni yoki foydalanuvchilarni bloklash vakolati sizda mavjud."
+      content: t('AdminGuide.sections.moderation.content')
     },
     {
-      title: "Foydalanuvchilarni Boshqarish",
+      title: t('AdminGuide.sections.users.title'),
       icon: <Users className="w-8 h-8 text-blue-500" />,
-      content: "Foydalanuvchilar ro'yxatida ularning holatini (faol, bloklangan, tasdiqlanmagan) ko'rishingiz, shubhali akkauntlarni tekshirishingiz mumkin. "
+      content: t('AdminGuide.sections.users.content')
     },
     {
-      title: "Ommaviy Xabarlar (Broadcasts)",
+      title: t('AdminGuide.sections.broadcasts.title'),
       icon: <Megaphone className="w-8 h-8 text-amber-500" />,
-      content: "Barcha foydalanuvchilarga yoki ma'lum bir guruhga tizim yangiliklari, ogohlantirishlar yoki reklama xabarlarini yuborish uchun shu bo'limdan foydalaning."
+      content: t('AdminGuide.sections.broadcasts.content')
     },
     {
-      title: "Tizim Xavfsizligi",
+      title: t('AdminGuide.sections.security.title'),
       icon: <ShieldAlert className="w-8 h-8 text-indigo-500" />,
-      content: "Admin parollari va tizim loglarini muntazam tekshirib turing. Shubhali IP manzillar yoki ketma-ket xato kirish urinishlariga e'tibor qarating."
+      content: t('AdminGuide.sections.security.content')
     },
     {
-      title: "Kategoriyalar va Zotlar",
+      title: t('AdminGuide.sections.categories.title'),
       icon: <Database className="w-8 h-8 text-emerald-500" />,
-      content: "Ma'lumotnomalar bo'limida hayvon turlari (Qoramol, Qo'y, Ot va h.k.) va ularning zotlarini boshqarishingiz mumkin. Keraksiz toifalarni (masalan, baliq, quyon) o'chirishingiz mumkin."
+      content: t('AdminGuide.sections.categories.content')
     }
   ];
 
@@ -53,8 +53,8 @@ export default function AdminGuidePage() {
           <div className="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-brand-primary/10 text-brand-primary mb-2 shadow-inner">
             <BookOpen className="w-12 h-12" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-black tracking-tight text-fg">Administrator Qo&apos;llanmasi</h1>
-          <p className="text-lg text-fg-muted max-w-2xl mx-auto">Platformani samarali boshqarish, xavfsizlikni ta&apos;minlash va moderatsiya qilish bo&apos;yicha to&apos;liq yo&apos;riqnoma.</p>
+          <h1 className="text-4xl md:text-5xl font-black tracking-tight text-fg">{t('AdminGuide.title')}</h1>
+          <p className="text-lg text-fg-muted max-w-2xl mx-auto">{t('AdminGuide.subtitle')}</p>
         </motion.div>
 
         {/* Content Grid */}

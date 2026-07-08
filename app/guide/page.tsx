@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { BookOpen, Search, ShieldCheck, Tag, MapPin, Heart, Star, MessageCircle, AlertCircle } from 'lucide-react';
 import { AppNav } from '@/components/layout/AppNav';
 import { LandingFooter } from '@/components/layout/LandingFooter';
@@ -11,34 +12,34 @@ export default function UserGuidePage() {
 
   const sections = [
     {
-      title: "Platformaga Kirish",
+      title: t('Guide.sections.login.title'),
       icon: <ShieldCheck className="w-8 h-8 text-brand-primary" />,
-      content: "Sayin Global platformasi sizga qishloq xo'jaligi hayvonlarini ishonchli sotib olish va sotish imkonini beradi. Ro'yxatdan o'tish uchun telefon raqamingizdan foydalaning va profilingizni to'ldiring."
+      content: t('Guide.sections.login.content')
     },
     {
-      title: "E'lonlar Qidirish",
+      title: t('Guide.sections.search.title'),
       icon: <Search className="w-8 h-8 text-indigo-500" />,
-      content: "Asosiy sahifadagi qidiruv orqali yoki toifalar (Qoramol, Qo'y, Echki va h.k.) bo'yicha hayvonlarni izlashingiz mumkin. Filtrlar yordamida narx, viloyat va zotini tanlang."
+      content: t('Guide.sections.search.content')
     },
     {
-      title: "E'lon Joylash",
+      title: t('Guide.sections.post.title'),
       icon: <Tag className="w-8 h-8 text-emerald-500" />,
-      content: "O'z hayvoningizni sotish uchun 'E'lon berish' tugmasini bosing. Sifatli rasm yuklang, aniq narx va ma'lumotlarni kiriting. Bu xaridorlar e'tiborini tez tortadi."
+      content: t('Guide.sections.post.content')
     },
     {
-      title: "Xavfsizlik va Ishonch",
+      title: t('Guide.sections.security.title'),
       icon: <Star className="w-8 h-8 text-amber-500" />,
-      content: "Boshqa foydalanuvchilar bilan muomala qilganda, ularning reytingiga va sharhlariga e'tibor bering. To'lovlarni faqat ishonch hosil qilgandan so'ng amalga oshiring."
+      content: t('Guide.sections.security.content')
     },
     {
-      title: "Sotuvchi bilan Bog'lanish",
+      title: t('Guide.sections.contact.title'),
       icon: <MessageCircle className="w-8 h-8 text-blue-500" />,
-      content: "Sotuvchi bilan bevosita platformamizdagi chat orqali yozishishingiz yoki ko'rsatilgan telefon raqamiga qo'ng'iroq qilishingiz mumkin."
+      content: t('Guide.sections.contact.content')
     },
     {
-      title: "Shikoyat Qilish",
+      title: t('Guide.sections.report.title'),
       icon: <AlertCircle className="w-8 h-8 text-red-500" />,
-      content: "Agar e'lon yoki sotuvchi qoidalarni buzsa, sahifadagi 'Shikoyat qilish' tugmasi orqali adminga xabar bering. Biz darhol chora ko'ramiz."
+      content: t('Guide.sections.report.content')
     }
   ];
 
@@ -56,8 +57,8 @@ export default function UserGuidePage() {
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-brand-primary/10 text-brand-primary mb-4">
             <BookOpen className="w-10 h-10" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-black tracking-tight text-fg">Platformadan Foydalanish Qo&apos;llanmasi</h1>
-          <p className="text-lg text-fg-muted max-w-2xl mx-auto">Sayin Global platformasida qanday qilib to&apos;g&apos;ri, xavfsiz va samarali savdo qilish bo&apos;yicha to&apos;liq ma&apos;lumot.</p>
+          <h1 className="text-4xl md:text-5xl font-black tracking-tight text-fg">{t('Guide.title')}</h1>
+          <p className="text-lg text-fg-muted max-w-2xl mx-auto">{t('Guide.subtitle')}</p>
         </motion.div>
 
         {/* Content Grid */}
@@ -84,11 +85,13 @@ export default function UserGuidePage() {
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}
           className="mt-12 p-8 bg-brand-primary/5 border border-brand-primary/20 rounded-3xl text-center"
         >
-          <h4 className="text-xl font-bold text-fg mb-2">Qo&apos;shimcha savollaringiz bormi?</h4>
-          <p className="text-fg-muted mb-6">Bizning qo&apos;llab-quvvatlash xizmatimiz sizga doim yordam berishga tayyor.</p>
-          <button className="px-8 py-3 bg-brand-primary text-white font-bold rounded-xl hover:bg-brand-primary-hover transition-colors shadow-lg shadow-brand-primary/25">
-            Admin bilan bog&apos;lanish
-          </button>
+          <h4 className="text-xl font-bold text-fg mb-2">{t('Guide.footer.title')}</h4>
+          <p className="text-fg-muted mb-6">{t('Guide.footer.subtitle')}</p>
+          <Link href="/chat-ai">
+            <button className="px-8 py-3 bg-brand-primary text-white font-bold rounded-xl hover:bg-brand-primary-hover transition-colors shadow-lg shadow-brand-primary/25">
+              {t('Guide.footer.button')}
+            </button>
+          </Link>
         </motion.div>
       </div>
       </main>

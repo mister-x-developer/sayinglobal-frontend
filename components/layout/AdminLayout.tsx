@@ -214,7 +214,7 @@ export function AdminLayout({ children, noPadding = false }: { children: React.R
           title="Asosiy saytga o'tish (Kuzatuv uchun)"
         >
           <LayoutDashboard className="h-4.5 w-4.5 flex-shrink-0" strokeWidth={2} />
-          {(!collapsed || isDrawer) && <span>Saytga o&apos;tish (Kuzatuv)</span>}
+          {(!collapsed || isDrawer) && <span>{t('admin.nav.visitSite') || 'Saytga o\'tish (Kuzatuv)'}</span>}
         </Link>
         <button
           onClick={() => {

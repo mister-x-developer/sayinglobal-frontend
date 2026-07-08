@@ -669,7 +669,7 @@ export default function EditListingPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-2 text-fg-muted">
           <div className="h-6 w-6 animate-spin rounded-full border-2 border-current border-t-transparent" />
-          <p className="text-sm">Yuklanmoqda...</p>
+          <p className="text-sm">Loading...</p>
         </div>
       </div>
     }>
