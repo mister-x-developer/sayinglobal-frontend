@@ -35,6 +35,8 @@ export interface User {
   is_verified?: boolean;
   is_staff?: boolean;
   is_admin?: boolean;
+  /** True for developer/superuser accounts — separate from public marketplace users */
+  is_admin_account?: boolean;
   date_joined?: string;
   terms_accepted_at?: string | null;
 }

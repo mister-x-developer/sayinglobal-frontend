@@ -58,7 +58,7 @@ export default function ProfilePage() {
     Promise.all([listingsApi.my(), listingsApi.favorites()])
       .then(([mine, favs]) => {
         if (!alive) return;
-        setMyListings(mine ?? []);
+        setMyListings((mine ?? []) as MyListing[]);
         setFavorites(favs ?? []);
       })
       .catch(() => {

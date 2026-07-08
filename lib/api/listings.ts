@@ -339,6 +339,20 @@ export const listingsApi = {
     return res.data;
   },
 
+  /**
+   * Admin: get pending sale confirmation codes.
+   * Returns list of buyer confirmation codes waiting for seller acceptance.
+   */
+  async adminPendingConfirmations(): Promise<any[]> {
+    try {
+      const res = await apiClient.get('/listings/admin/pending-confirmations/');
+      const data = res.data;
+      return Array.isArray(data) ? data : (data?.results ?? []);
+    } catch {
+      return [];
+    }
+  },
+
   /** Bump a listing to the top */
   async bump(publicId: number | string) {
     const res = await apiClient.post(`/listings/${publicId}/bump/`);

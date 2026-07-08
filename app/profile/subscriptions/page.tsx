@@ -95,7 +95,7 @@ export default function SubscriptionsPage() {
                           {myPlan.is_active ? (
                             <Badge variant="success" size="sm">Faol</Badge>
                           ) : (
-                            <Badge variant="danger" size="sm">Faol emas</Badge>
+                            <Badge variant="error" size="sm">Faol emas</Badge>
                           )}
                           <span>
                             {myPlan.expires_at 
