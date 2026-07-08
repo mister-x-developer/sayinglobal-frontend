@@ -54,6 +54,16 @@ const nextConfig = {
     ];
     return config;
   },
+
+  async redirects() {
+    return [
+      {
+        source: '/notifications/:id(\\d+)',
+        destination: '/notifications/detail?id=:id',
+        permanent: false,
+      },
+    ];
+  },
 };
 
 // IMPORTANT: We intentionally do NOT wrap the config with `withSentryConfig`.
