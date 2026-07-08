@@ -4,9 +4,10 @@ import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import {
   Users, Package, Activity, RefreshCw, Clock, Flag,
-  BarChart3, Database, Network, ChevronRight, LayoutDashboard, Cpu, TrendingUp, Search
+  BarChart3, Database, Network, ChevronRight, LayoutDashboard, Cpu, TrendingUp, Search, LayoutGrid
 } from 'lucide-react';
 import { AdminLayout } from '@/components/layout/AdminLayout';
 import { formatNumber } from '@/lib/utils/format';
@@ -113,6 +114,7 @@ function PremiumStatCard({ label, value, sub, subValue, trend, icon: Icon, color
 
 export default function AdminDashboardPage() {
   const t = useTranslations();
+  const router = useRouter();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
