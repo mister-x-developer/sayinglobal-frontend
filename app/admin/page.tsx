@@ -340,7 +340,7 @@ export default function AdminDashboardPage() {
                       <TrendingUp className="h-6 w-6 text-brand-primary" />
                       Platform Engagement
                     </h3>
-                    <p className="text-fg-subtle font-medium mt-2">{t('admin.stats.overallViewDesc') || 'Barcha e\'lonlar bo\'yicha ko\'rishlar soni.'}</p>
+                    <p className="text-fg-subtle font-medium mt-2">{t('admin.overallViewDesc')}</p>
                   </div>
                   <div className="text-right">
                     <div className="text-4xl font-black text-fg tracking-tighter">{formatNumber(displayStats.engagement.total_views)}</div>
@@ -439,8 +439,8 @@ export default function AdminDashboardPage() {
                     <Search className="w-32 h-32" />
                  </div>
                  <div className="relative z-10">
-                    <h3 className="text-lg font-black text-fg mb-2">{t('admin.search.title') || 'Global Qidiruv'}</h3>
-                    <p className="text-sm font-medium text-fg-subtle mb-4">{t('admin.search.desc') || 'Foydalanuvchilar, e\'lonlar yoki shikoyatlarni tez toping.'}</p>
+                    <h3 className="text-lg font-black text-fg mb-2">{t('admin.searchTitle')}</h3>
+                    <p className="text-sm font-medium text-fg-subtle mb-4">{t('admin.searchDesc')}</p>
                     <div className="relative">
                        <input type="text" placeholder="Search ID or name..." className="w-full bg-bg border border-border/50 rounded-xl py-3 pl-10 pr-4 text-sm font-medium focus:outline-none focus:border-brand-primary/50 focus:ring-1 focus:ring-brand-primary/50 transition-all shadow-inner" />
                        <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-fg-muted" />

@@ -670,7 +670,10 @@
     "selected": "tanlandi",
     "clearSelection": "Tanlovni tozalash",
     "noReportsInFilter": "Bu filtrda shikoyatlar yoʻq",
-    "visitSite": "Saytga o'tish (Kuzatuv)"
+    "visitSite": "Saytga o'tish (Kuzatuv)",
+    "overallViewDesc": "Barcha e'lonlar bo'yicha platformada ko'rishlar soni.",
+    "searchTitle": "Global Qidiruv",
+    "searchDesc": "Foydalanuvchilar, e'lonlar yoki shikoyatlarni qidirish."
   },
   "analytics": {
     "title": "Analitika",

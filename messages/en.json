@@ -670,7 +670,10 @@
     "selected": "selected",
     "clearSelection": "Clear selection",
     "noReportsInFilter": "No reports in this filter",
-    "visitSite": "Visit Site (Monitor)"
+    "visitSite": "Visit Site (Monitor)",
+    "overallViewDesc": "Total number of views across all listings on the platform.",
+    "searchTitle": "Global Search",
+    "searchDesc": "Quickly search for users, listings, or complaints."
   },
   "analytics": {
     "title": "Analytics",
