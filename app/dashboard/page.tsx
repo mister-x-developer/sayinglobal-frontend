@@ -92,7 +92,7 @@ export default function DashboardPage() {
           </motion.div>
 
           {/* Quick links */}
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-5 sm:gap-4">
             {[
               {
                 href: '/listings',
@@ -129,16 +129,16 @@ export default function DashboardPage() {
                 >
                   <Link
                     href={q.href}
-                    className="surface-elevated group flex h-full items-center justify-between p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift"
+                    className="surface-elevated group flex h-full items-center justify-between p-3 sm:p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift"
                   >
-                    <div className="flex items-center gap-3">
-                      <div className={`inline-flex h-11 w-11 items-center justify-center rounded-xl ${q.tone}`}>
-                        <Icon className="h-5 w-5" strokeWidth={1.75} />
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                      <div className={`inline-flex h-9 w-9 sm:h-11 sm:w-11 items-center justify-center rounded-xl ${q.tone}`}>
+                        <Icon className="h-4 w-4 sm:h-5 sm:w-5" strokeWidth={1.75} />
                       </div>
-                      <span className="font-semibold text-fg">{q.label}</span>
+                      <span className="font-semibold text-[13px] sm:text-base text-fg">{q.label}</span>
                     </div>
                     <ArrowRight
-                      className="h-4 w-4 text-fg-subtle transition-transform group-hover:translate-x-0.5"
+                      className="hidden sm:block h-4 w-4 text-fg-subtle transition-transform group-hover:translate-x-0.5"
                       strokeWidth={2}
                     />
                   </Link>
@@ -156,13 +156,14 @@ export default function DashboardPage() {
               </Link>
             </div>
 
-            <div className="mt-5 grid grid-cols-3 gap-3 sm:grid-cols-3 lg:grid-cols-9">
+            <div className="mt-4 flex overflow-x-auto gap-3 pb-2 snap-x snap-mandatory no-scrollbar sm:grid sm:grid-cols-3 lg:grid-cols-9 sm:overflow-visible">
               {categories.map((cat, i) => (
                 <motion.div
                   key={cat.slug}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: i * 0.04 }}
+                  className="w-24 sm:w-auto shrink-0 snap-start"
                 >
                   <Link
                     href={`/listings?category=${cat.slug}`}
