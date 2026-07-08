@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/Badge';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { toast } from '@/components/ui/Toast';
 import { moderationApi, type AdminReportRecord } from '@/lib/api/moderation';
-import { Flag, RefreshCw, CheckCircle2, XCircle, Eye, Bot } from 'lucide-react';
+import { Flag, RefreshCw, CheckCircle2, XCircle, Eye } from 'lucide-react';
 
 import { useRouter } from 'next/navigation';
 
@@ -19,8 +19,6 @@ export default function AdminModerationPage() {
   const [reports, setReports] = useState<AdminReportRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'under_review' | 'resolved_valid' | 'resolved_invalid'>('pending');
-  const [aiLoading, setAiLoading] = useState<number | null>(null);
-
   const fetchReports = useCallback(async () => {
     setLoading(true);
     try {
@@ -34,19 +32,6 @@ export default function AdminModerationPage() {
   }, [statusFilter]);
 
   useEffect(() => { fetchReports(); }, [fetchReports]);
-
-  const runAI = async (id: number) => {
-    setAiLoading(id);
-    try {
-      const res = await moderationApi.adminAIReviewReport(id);
-      toast.success(`AI priority: ${res.priority_score?.toFixed(2)}`);
-      if (res.explanation) toast.info(res.explanation.slice(0, 120));
-    } catch {
-      toast.error('AI review failed');
-    } finally {
-      setAiLoading(null);
-    }
-  };
 
   return (
     <AdminLayout>
@@ -94,9 +79,7 @@ export default function AdminModerationPage() {
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <button onClick={(e) => { e.stopPropagation(); runAI(r.public_id); }} disabled={aiLoading === r.public_id} className="btn btn-sm btn-secondary">
-                      <Bot className="h-3.5 w-3.5" />
-                    </button>
+
                     <button onClick={(e) => { e.stopPropagation(); router.push(`/admin/moderation/detail?id=${r.public_id}`); }} className="btn btn-sm btn-primary">
                       {t('common.details')}
                     </button>

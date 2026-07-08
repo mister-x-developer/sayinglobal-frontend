@@ -28,7 +28,6 @@ import {
   RefreshCw,
   Loader2,
   Flag,
-  Bot,
 } from 'lucide-react';
 
 import { AdminLayout } from '@/components/layout/AdminLayout';
@@ -57,7 +56,6 @@ function AdminListingDetailPageContent() {
   const [submitting, setSubmitting] = useState<'approve' | 'reject' | 'restore' | null>(null);
   const [rejectionReason, setRejectionReason] = useState('');
   const [showRejectBox, setShowRejectBox] = useState(false);
-  const [aiReviewResult, setAiReviewResult] = useState<string | null>(null);
 
   const fetchAll = async () => {
     setLoading(true);
@@ -404,39 +402,6 @@ function AdminListingDetailPageContent() {
               <div className="surface-elevated p-6">
                 <h3 className="text-eyebrow">{t('admin.actions')}</h3>
                 <div className="mt-3 space-y-2">
-                  <button
-                    type="button"
-                    onClick={async () => {
-                      if (!listing) return;
-                      setSubmitting('approve'); // misuse just for loading spinner visually
-                      setAiReviewResult(null);
-                      try {
-                        const res = await moderationApi.adminAIReviewListing(listing.public_id);
-                        setAiReviewResult(res.explanation);
-                        if (res.is_flagged) {
-                          setRejectionReason(`[AI xulosasi]:\
-${res.explanation}`);
-                          setShowRejectBox(true);
-                        }
-                      } catch (e: any) {
-                        toast.error(e.message || t('common.error'));
-                      } finally {
-                        setSubmitting(null);
-                      }
-                    }}
-                    disabled={submitting !== null}
-                    className="btn btn-secondary w-full bg-brand-accent/10 text-brand-accent hover:bg-brand-accent/20 border-brand-accent/20"
-                  >
-                    <Bot className="h-4 w-4" strokeWidth={2.25}/>
-                    {t('admin.aiModeration')}
-                  </button>
-
-                  {aiReviewResult && (
-                    <div className="rounded-lg bg-bg-subtle p-3 text-xs text-fg-muted whitespace-pre-line mb-3">
-                      <strong>{t('AI.advice')}</strong><br />
-                      {aiReviewResult}
-                    </div>
-                  )}
 
                   {(listing.status === 'pending' || listing.status === 'pending_review') && (
                     <button
