@@ -211,10 +211,10 @@ export function AdminLayout({ children, noPadding = false }: { children: React.R
           className={`group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-fg-muted hover:bg-brand-primary/10 hover:text-brand-primary transition-colors ${
             collapsed && !isDrawer ? 'justify-center' : 'w-full'
           }`}
-          title="Asosiy saytga o'tish (Kuzatuv uchun)"
+          title={t('admin.visitSite')}
         >
           <LayoutDashboard className="h-4.5 w-4.5 flex-shrink-0" strokeWidth={2} />
-          {(!collapsed || isDrawer) && <span>{t('admin.nav.visitSite') || 'Saytga o\'tish (Kuzatuv)'}</span>}
+          {(!collapsed || isDrawer) && <span>{t('admin.visitSite')}</span>}
         </Link>
         <button
           onClick={() => {

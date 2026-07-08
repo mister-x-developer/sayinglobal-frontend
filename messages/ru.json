@@ -669,7 +669,8 @@
     "aiAnalysis": "ИИ анализ",
     "selected": "выбрано",
     "clearSelection": "Очистить выбор",
-    "noReportsInFilter": "В этом фильтре нет жалоб"
+    "noReportsInFilter": "В этом фильтре нет жалоб",
+    "visitSite": "Перейти на сайт (Наблюдение)"
   },
   "analytics": {
     "title": "Аналитика",
@@ -996,15 +997,15 @@
       "restricted": "Ограничен",
       "blocked": "Заблокирован"
     },
-    "status_pending": "Ожидает",
+    "status_pending": "В ожидании",
     "status_under_review": "На рассмотрении",
-    "status_resolved_valid": "Подтверждено",
+    "status_resolved_valid": "Одобрено",
     "status_resolved_invalid": "Отклонено",
     "severity": "Серьёзность",
     "assignedTo": "Назначено",
     "reason_fake_animal_age": "Неверный возраст животного",
     "reason_hidden_illness": "Скрытая болезнь",
-    "reason_fake_vaccination": "Ложные данные о вакцинации",
+    "reason_fake_vaccination": "Фальшивая вакцинация",
     "reason_misleading_photos": "Вводящие в заблуждение фото",
     "reason_fraudulent_pricing": "Мошенническая цена",
     "reason_duplicate_listing": "Дублирующее объявление",
@@ -1016,8 +1017,8 @@
     "reason_repeated_violations": "Повторные нарушения",
     "reason_aggressive_behavior": "Агрессивное поведение",
     "reason_scam_attempt": "Попытка мошенничества",
-    "reason_no_show_after_deal": "Не явился после договорённости",
-    "reason_false_identity": "Ложная личность",
+    "reason_no_show_after_deal": "Неявка после сделки",
+    "reason_false_identity": "Фальшивая личность",
     "reason_repeated_fake_listings": "Повторные фиктивные объявления",
     "reason_demanding_prepayment_scam": "Подозрительные требования предоплаты",
     "reason_harassment": "Преследование или угрозы",
@@ -1032,7 +1033,8 @@
     "reason_impersonation": "Выдача себя за другого",
     "reason_listing_already_sold": "Уже продано, но ещё в продаже",
     "bulkAiCheck": "Проверить все новые через AI",
-    "loading": "Загрузка..."
+    "loading": "Загрузка...",
+    "status_all": "Все"
   },
   "referral": {
     "title": "Реферальная система",

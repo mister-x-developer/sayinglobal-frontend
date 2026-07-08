@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 
 import { AppNav } from '@/components/layout/AppNav';
+import { AdminLayout } from '@/components/layout/AdminLayout';
 import { Avatar } from '@/components/ui/Avatar';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { NotificationSkeleton } from '@/components/shared/LoadingStates';
@@ -74,7 +75,7 @@ export default function NotificationsPage() {
   const locale = useLocale();
   const router = useRouter();
   const { isAuthenticated, user } = useAuthStore();
-  const isAdmin = user?.is_admin_account || user?.is_staff;
+  const isAdmin = user?.is_admin || user?.is_staff;
   const { items, setItems, markRead, markAllRead, remove } = useNotificationsStore();
   const [hydrated, setHydrated] = useState(false);
   const [filter, setFilter] = useState<Filter>('all');
@@ -126,96 +127,107 @@ export default function NotificationsPage() {
     { key: 'social', label: t('sellers.title') },
   ];
 
+  const content = (
+    <div className="container-page py-8 sm:py-10">
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45 }}
+        className="flex flex-wrap items-end justify-between gap-3"
+      >
+        <div>
+          <p className="text-eyebrow">{t('notifications.title')}</p>
+          <h1 className="display-md mt-2">{t('notifications.title')}</h1>
+          {unreadCount > 0 && (
+            <p className="mt-2 text-fg-muted">
+              {unreadCount} {t('notifications.title').toLowerCase()}
+            </p>
+          )}
+        </div>
+
+        {unreadCount > 0 && (
+          <button
+            type="button"
+            onClick={handleMarkAllRead}
+            className="btn btn-secondary btn-sm"
+          >
+            <CheckCheck className="h-4 w-4" strokeWidth={1.75} />
+            {t('notifications.markAllRead')}
+          </button>
+        )}
+      </motion.div>
+
+      {/* Filter tabs */}
+      <div className="no-scrollbar mt-6 flex gap-2 overflow-x-auto border-b border-border pb-0">
+        {FILTERS.map((f) => {
+          const active = filter === f.key;
+          return (
+            <button
+              key={f.key}
+              type="button"
+              onClick={() => setFilter(f.key)}
+              className={`relative h-11 flex-shrink-0 px-4 text-sm font-semibold transition-colors ${
+                active ? 'text-brand-primary' : 'text-fg-muted hover:text-fg'
+              }`}
+            >
+              {f.label}
+              {active && (
+                <motion.span
+                  layoutId="notif-tab"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-brand-primary"
+                />
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* List */}
+      <div className="mt-4">
+        {loading ? (
+          <div className="space-y-2">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <NotificationSkeleton key={i} />
+            ))}
+          </div>
+        ) : filtered.length === 0 ? (
+          <EmptyState
+            icon={Bell}
+            title={t('empty.noNotifications')}
+            description={t('empty.noNotificationsDescription')}
+          />
+        ) : (
+          <div className="space-y-1">
+            <AnimatePresence initial={false}>
+              {filtered.map((n) => (
+                <NotificationRow
+                  key={n.public_id}
+                  notification={n}
+                  onMarkRead={handleMarkRead}
+                  onRemove={handleRemove}
+                  locale={locale}
+                />
+              ))}
+            </AnimatePresence>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  if (isAdmin) {
+    return (
+      <AdminLayout>
+        {content}
+      </AdminLayout>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <AppNav />
-
       <main className="flex-1">
-        <div className="container-page py-8 sm:py-10">
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45 }}
-            className="flex flex-wrap items-end justify-between gap-3"
-          >
-            <div>
-              <p className="text-eyebrow">{t('notifications.title')}</p>
-              <h1 className="display-md mt-2">{t('notifications.title')}</h1>
-              {unreadCount > 0 && (
-                <p className="mt-2 text-fg-muted">
-                  {unreadCount} {t('notifications.title').toLowerCase()}
-                </p>
-              )}
-            </div>
-
-            {unreadCount > 0 && (
-              <button
-                type="button"
-                onClick={handleMarkAllRead}
-                className="btn btn-secondary btn-sm"
-              >
-                <CheckCheck className="h-4 w-4" strokeWidth={1.75} />
-                {t('notifications.markAllRead')}
-              </button>
-            )}
-          </motion.div>
-
-          {/* Filter tabs */}
-          <div className="no-scrollbar mt-6 flex gap-2 overflow-x-auto border-b border-border pb-0">
-            {FILTERS.map((f) => {
-              const active = filter === f.key;
-              return (
-                <button
-                  key={f.key}
-                  type="button"
-                  onClick={() => setFilter(f.key)}
-                  className={`relative h-11 flex-shrink-0 px-4 text-sm font-semibold transition-colors ${
-                    active ? 'text-brand-primary' : 'text-fg-muted hover:text-fg'
-                  }`}
-                >
-                  {f.label}
-                  {active && (
-                    <motion.span
-                      layoutId="notif-tab"
-                      className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-brand-primary"
-                    />
-                  )}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* List */}
-          <div className="mt-4">
-            {loading ? (
-              <div className="space-y-2">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <NotificationSkeleton key={i} />
-                ))}
-              </div>
-            ) : filtered.length === 0 ? (
-              <EmptyState
-                icon={Bell}
-                title={t('empty.noNotifications')}
-                description={t('empty.noNotificationsDescription')}
-              />
-            ) : (
-              <div className="space-y-1">
-                <AnimatePresence initial={false}>
-                  {filtered.map((n) => (
-                    <NotificationRow
-                      key={n.public_id}
-                      notification={n}
-                      onMarkRead={handleMarkRead}
-                      onRemove={handleRemove}
-                      locale={locale}
-                    />
-                  ))}
-                </AnimatePresence>
-              </div>
-            )}
-          </div>
-        </div>
+        {content}
       </main>
     </div>
   );

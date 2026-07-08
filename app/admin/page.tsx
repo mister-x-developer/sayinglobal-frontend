@@ -163,35 +163,33 @@ export default function AdminDashboardPage() {
 
   useEffect(() => { load(); }, [load]);
 
-  const DEMO_STATS = {
-    users: { total: 12847, active: 3241, new_today: 47 },
-    listings: { total: 8934, active: 1823, sold: 4102, pending: 12, new_today: 34 },
-    messages: { total: 67423, today: 312 },
-    engagement: { total_views: 284910, views_today: 1847 }
-  };
-
   const displayStats = stats ? {
     users: {
-      total: stats.users.total > 0 ? stats.users.total : DEMO_STATS.users.total,
-      active: stats.users.active > 0 ? stats.users.active : DEMO_STATS.users.active,
-      new_today: stats.users.new_today > 0 ? stats.users.new_today : DEMO_STATS.users.new_today,
+      total: stats.users.total || 0,
+      active: stats.users.active || 0,
+      new_today: stats.users.new_today || 0,
     },
     listings: {
-      total: stats.listings.total > 0 ? stats.listings.total : DEMO_STATS.listings.total,
-      active: stats.listings.active > 0 ? stats.listings.active : DEMO_STATS.listings.active,
-      sold: stats.listings.sold > 0 ? stats.listings.sold : DEMO_STATS.listings.sold,
-      pending: stats.listings.pending > 0 ? stats.listings.pending : DEMO_STATS.listings.pending,
-      new_today: stats.listings.new_today > 0 ? stats.listings.new_today : DEMO_STATS.listings.new_today,
+      total: stats.listings.total || 0,
+      active: stats.listings.active || 0,
+      sold: stats.listings.sold || 0,
+      pending: stats.listings.pending || 0,
+      new_today: stats.listings.new_today || 0,
     },
     messages: {
-      total: stats.messages.total > 0 ? stats.messages.total : DEMO_STATS.messages.total,
-      today: stats.messages.today > 0 ? stats.messages.today : DEMO_STATS.messages.today,
+      total: stats.messages.total || 0,
+      today: stats.messages.today || 0,
     },
     engagement: {
-      total_views: stats.engagement.total_views > 0 ? stats.engagement.total_views : DEMO_STATS.engagement.total_views,
-      views_today: stats.engagement.views_today > 0 ? stats.engagement.views_today : DEMO_STATS.engagement.views_today,
+      total_views: stats.engagement.total_views || 0,
+      views_today: stats.engagement.views_today || 0,
     }
-  } : DEMO_STATS;
+  } : {
+    users: { total: 0, active: 0, new_today: 0 },
+    listings: { total: 0, active: 0, sold: 0, pending: 0, new_today: 0 },
+    messages: { total: 0, today: 0 },
+    engagement: { total_views: 0, views_today: 0 }
+  };
 
   const sparklineMock1 = [28, 35, 42, 38, 51, 47, 60, 72, 68, 85, 90, 110];
   const sparklineMock2 = [12, 18, 15, 24, 22, 30, 28, 35, 32, 41, 38, 45];
@@ -293,7 +291,7 @@ export default function AdminDashboardPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr className="bg-bg hover:bg-bg-subtle transition-all duration-300 rounded-xl group shadow-sm hover:shadow-md cursor-pointer" onClick={() => window.location.href = '/admin/moderation'}>
+                      <tr className="bg-bg hover:bg-bg-subtle transition-all duration-300 rounded-xl group shadow-sm hover:shadow-md cursor-pointer" onClick={() => router.push('/admin/moderation')}>
                         <td className="px-6 py-5 rounded-l-xl">
                           <span className="inline-flex items-center gap-2 rounded-lg bg-danger/10 px-3 py-1 text-xs font-black text-danger border border-danger/20">
                             <span className="h-2 w-2 rounded-full bg-danger animate-pulse"></span>{t('Admin.critical')}
@@ -308,7 +306,7 @@ export default function AdminDashboardPage() {
                           </span>
                         </td>
                       </tr>
-                      <tr className="bg-bg hover:bg-bg-subtle transition-all duration-300 rounded-xl group shadow-sm hover:shadow-md cursor-pointer" onClick={() => window.location.href = '/admin/listings?status=pending'}>
+                      <tr className="bg-bg hover:bg-bg-subtle transition-all duration-300 rounded-xl group shadow-sm hover:shadow-md cursor-pointer" onClick={() => router.push('/admin/listings?status=pending')}>
                         <td className="px-6 py-5 rounded-l-xl">
                           <span className="inline-flex items-center gap-2 rounded-lg bg-warning/10 px-3 py-1 text-xs font-black text-warning border border-warning/20">
                             <span className="h-2 w-2 rounded-full bg-warning"></span>{t('Admin.high')}
@@ -360,8 +358,15 @@ export default function AdminDashboardPage() {
               {/* Quick Actions (Interactive Glass Cards) */}
               <motion.div 
                 initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5, type: "spring" }}
-                className="grid grid-cols-2 gap-5"
+                className="grid grid-cols-3 gap-5"
               >
+                <Link href="/admin/listings" className="group flex flex-col items-center justify-center gap-4 rounded-3xl border border-border/50 bg-bg-elevated/80 backdrop-blur-md p-8 text-center hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/0 to-brand-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all duration-300 shadow-inner">
+                    <LayoutGrid className="h-8 w-8" />
+                  </div>
+                  <span className="text-base font-black text-fg tracking-wide">{t('admin.listings')}</span>
+                </Link>
                 <Link href="/admin/moderation" className="group flex flex-col items-center justify-center gap-4 rounded-3xl border border-border/50 bg-bg-elevated/80 backdrop-blur-md p-8 text-center hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/0 to-brand-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all duration-300 shadow-inner">

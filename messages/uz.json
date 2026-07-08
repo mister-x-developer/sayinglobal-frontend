@@ -669,7 +669,8 @@
     "aiAnalysis": "AI tahlil",
     "selected": "tanlandi",
     "clearSelection": "Tanlovni tozalash",
-    "noReportsInFilter": "Bu filtrda shikoyatlar yoʻq"
+    "noReportsInFilter": "Bu filtrda shikoyatlar yoʻq",
+    "visitSite": "Saytga o'tish (Kuzatuv)"
   },
   "analytics": {
     "title": "Analitika",
@@ -997,16 +998,16 @@
       "blocked": "Bloklangan"
     },
     "status_pending": "Kutilmoqda",
-    "status_under_review": "Koʻrib chiqilmoqda",
-    "status_resolved_valid": "Tasdiqlandi",
-    "status_resolved_invalid": "Rad etildi",
+    "status_under_review": "Ko'rib chiqilmoqda",
+    "status_resolved_valid": "Tasdiqlangan",
+    "status_resolved_invalid": "Rad etilgan",
     "severity": "Darajasi",
     "assignedTo": "Tayinlangan",
     "reason_fake_animal_age": "Yoshi toʻgʻri emas",
     "reason_hidden_illness": "Kasallik yashirilgan",
-    "reason_fake_vaccination": "Soxta vaksina",
+    "reason_fake_vaccination": "Soxta emlash",
     "reason_misleading_photos": "Rasmlar notoʻgʻri",
-    "reason_fraudulent_pricing": "Narx aldamchi",
+    "reason_fraudulent_pricing": "Soxta narx",
     "reason_duplicate_listing": "Takroriy eʼlon",
     "reason_false_breed_claim": "Zot notoʻgʻri",
     "reason_fake_location": "Joylashuv soxta",
@@ -1014,10 +1015,10 @@
     "reason_prohibited_animal": "Taqiqlangan jonzot",
     "reason_misleading_description": "Notoʻgʻri tavsif",
     "reason_repeated_violations": "Qayta-qayta qoidabuzarlik",
-    "reason_aggressive_behavior": "Tajovuzkor muomala",
+    "reason_aggressive_behavior": "Tajovuzkor xulq",
     "reason_scam_attempt": "Firibgarlik urinishi",
-    "reason_no_show_after_deal": "Kelishuvdan keyin kelmadi",
-    "reason_false_identity": "Yolgʻon shaxs",
+    "reason_no_show_after_deal": "Kelishuvdan so'ng kelmaslik",
+    "reason_false_identity": "Soxta shaxsiyat",
     "reason_repeated_fake_listings": "Qayta soxta eʼlonlar",
     "reason_demanding_prepayment_scam": "Oldindan toʻlov firibgarlik",
     "reason_harassment": "Bezovta qilish",
@@ -1032,7 +1033,8 @@
     "reason_impersonation": "Soxta shaxsiyat",
     "reason_listing_already_sold": "Sotilgan lekin hali sotuvda",
     "bulkAiCheck": "Barcha yangilarini sunʼiy intellekt orqali tekshirish",
-    "loading": "Yuklanmoqda..."
+    "loading": "Yuklanmoqda...",
+    "status_all": "Barchasi"
   },
   "referral": {
     "title": "Referal tizimi",

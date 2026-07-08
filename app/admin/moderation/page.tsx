@@ -90,7 +90,7 @@ export default function AdminModerationPage() {
         <div className="mt-6 flex flex-wrap gap-1.5">
           {(['all','pending','under_review','resolved_valid','resolved_invalid'] as const).map(s => (
             <button key={s} onClick={() => setStatusFilter(s)} className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${statusFilter === s ? 'bg-brand-primary text-white' : 'bg-bg-subtle text-fg-muted hover:bg-bg-elevated'}`}>
-              {s.replace(/_/g, ' ')}
+              {t(`adminMod.status_${s}` as any) || s.replace(/_/g, ' ')}
             </button>
           ))}
         </div>
@@ -106,9 +106,11 @@ export default function AdminModerationPage() {
                 <div key={r.public_id} className="flex items-center gap-4 p-4 hover:bg-bg-subtle/60 cursor-pointer" onClick={() => { setSelected(r); setNotes(''); }}>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <Badge variant={r.status === 'pending' ? 'warning' : r.status.includes('valid') ? 'success' : 'default'} size="sm">{r.status.replace(/_/g,' ')}</Badge>
-                      <span className="font-medium text-fg">{r.reason_code}</span>
-                      <span className="text-xs text-fg-subtle">#{r.public_id}</span>
+                      <Badge variant={r.status === 'pending' ? 'warning' : r.status.includes('valid') ? 'success' : 'default'} size="sm">
+                        {t(`adminMod.status_${r.status}` as any) || r.status.replace(/_/g,' ')}
+                      </Badge>
+                      <span className="font-medium text-fg">{t(`adminMod.reason_${r.reason_code}` as any) || r.reason_code}</span>
+                      <span className="text-xs text-fg-subtle">#{r.public_id || 'N/A'}</span>
                     </div>
                     <p className="text-sm text-fg-muted line-clamp-1 mt-0.5">{r.description || 'No description provided'}</p>
                     <p className="text-xs text-fg-subtle mt-1">

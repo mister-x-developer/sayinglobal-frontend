@@ -669,7 +669,8 @@
     "aiAnalysis": "AI таҳлил",
     "selected": "танланди",
     "clearSelection": "Танловни тозалаш",
-    "noReportsInFilter": "Бу филтрда шикоятлар йўқ"
+    "noReportsInFilter": "Бу филтрда шикоятлар йўқ",
+    "visitSite": "Сайтга ўтиш (Кузатув)"
   },
   "analytics": {
     "title": "Аналитика",
@@ -998,15 +999,15 @@
     },
     "status_pending": "Кутилмоқда",
     "status_under_review": "Кўриб чиқилмоқда",
-    "status_resolved_valid": "Тасдиқланди",
-    "status_resolved_invalid": "Рад этилди",
+    "status_resolved_valid": "Тасдиқланган",
+    "status_resolved_invalid": "Рад этилган",
     "severity": "Даражаси",
     "assignedTo": "Тайинланган",
     "reason_fake_animal_age": "Ёши тўғри эмас",
     "reason_hidden_illness": "Касаллик яширилган",
-    "reason_fake_vaccination": "Сохта вакцина",
+    "reason_fake_vaccination": "Сохта эмлаш",
     "reason_misleading_photos": "Расмлар нотўғри",
-    "reason_fraudulent_pricing": "Нарх алдамчи",
+    "reason_fraudulent_pricing": "Сохта нарх",
     "reason_duplicate_listing": "Такрорий эълон",
     "reason_false_breed_claim": "Зот нотўғри",
     "reason_fake_location": "Жойлашув сохта",
@@ -1014,10 +1015,10 @@
     "reason_prohibited_animal": "Тақиқланган жонивор",
     "reason_misleading_description": "Нотўғри тавсиф",
     "reason_repeated_violations": "Қайта-қайта қоидабузарлик",
-    "reason_aggressive_behavior": "Тажовузкор муомала",
+    "reason_aggressive_behavior": "Тажовузкор хулқ",
     "reason_scam_attempt": "Фирибгарлик уриниши",
-    "reason_no_show_after_deal": "Келишувдан кейин келмади",
-    "reason_false_identity": "Ёлғон шахс",
+    "reason_no_show_after_deal": "Келишувдан сўнг келмаслик",
+    "reason_false_identity": "Сохта шахсият",
     "reason_repeated_fake_listings": "Қайта сохта эълонлар",
     "reason_demanding_prepayment_scam": "Олдиндан тўлов фирибгарлик",
     "reason_harassment": "Безовта қилиш",
@@ -1032,7 +1033,8 @@
     "reason_impersonation": "Сохта шахсият",
     "reason_listing_already_sold": "Сотилган лекин ҳали сотувда",
     "bulkAiCheck": "Барча янгиларини сунъий интеллект орқали текшириш",
-    "loading": "Юкланмоқда..."
+    "loading": "Юкланмоқда...",
+    "status_all": "Барчаси"
   },
   "referral": {
     "title": "Реферал тизими",

@@ -291,16 +291,14 @@ function AdminListingDetailPageContent() {
               )}
 
               {/* Reports against this listing */}
-              <div className="surface-elevated p-6">
-                <div className="mb-4 flex items-center gap-2">
-                  <Flag className="h-5 w-5 text-warning" strokeWidth={1.75} />
-                  <h2 className="display-sm">{t('admin.relatedReports')}</h2>
-                  <Badge variant="warning" size="sm">{reports.length}</Badge>
-                </div>
+              {reports.length > 0 && (
+                <div className="surface-elevated p-6">
+                  <div className="mb-4 flex items-center gap-2">
+                    <Flag className="h-5 w-5 text-warning" strokeWidth={1.75} />
+                    <h2 className="display-sm">{t('admin.relatedReports')}</h2>
+                    <Badge variant="warning" size="sm">{reports.length}</Badge>
+                  </div>
 
-                {reports.length === 0 ? (
-                  <p className="text-sm text-fg-muted">{t('admin.noReports')}</p>
-                ) : (
                   <ul className="divide-y divide-border">
                     {reports.map((r) => (
                       <li key={r.public_id} className="py-4 first:pt-0 last:pb-0">
@@ -330,42 +328,8 @@ function AdminListingDetailPageContent() {
                       </li>
                     ))}
                   </ul>
-                )}
-              </div>
-              {/* Comments */}
-              <div className="surface-elevated p-6">
-                <CommentSection
-                  listingId={listing.public_id}
-                  sellerId={listing.seller.public_id}
-                  initialComments={comments}
-                />
-              </div>
-
-              {/* Public seller reviews */}
-              <div className="surface-elevated p-6">
-                <h2 className="display-sm mb-4">{t('sellers.reviews')}</h2>
-                <SellerRatingsThread
-                  sellerPublicId={listing.seller.public_id}
-                  listingPublicId={listing.public_id}
-                />
-              </div>
-              {/* Comments */}
-              <div className="surface-elevated p-6">
-                <CommentSection
-                  listingId={listing.public_id}
-                  sellerId={listing.seller.public_id}
-                  initialComments={comments}
-                />
-              </div>
-
-              {/* Public seller reviews */}
-              <div className="surface-elevated p-6">
-                <h2 className="display-sm mb-4">{t('sellers.reviews')}</h2>
-                <SellerRatingsThread
-                  sellerPublicId={listing.seller.public_id}
-                  listingPublicId={listing.public_id}
-                />
-              </div>
+                </div>
+              )}
               {/* Comments */}
               <div className="surface-elevated p-6">
                 <CommentSection
