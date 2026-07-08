@@ -359,7 +359,8 @@
     "noReports": "Шикоятлар йўқ",
     "noReportsDesc": "Ҳозирча шикоятлар юбормагансиз",
     "security": "Хавфсизлик",
-    "phoneCannotBeChanged": "Телефон рақамини ўзгартириб бўлмайди"
+    "phoneCannotBeChanged": "Телефон рақамини ўзгартириб бўлмайди",
+    "subscriptions": "Тарифлар ва Лимитлар"
   },
   "userStatus": {
     "good": "Яхши",
@@ -384,7 +385,7 @@
     "nightMode": "Тунги режим",
     "systemMode": "Автоматик",
     "emailNotifications": "Email билдиришномалар",
-    "pushNotifications": "Push билдиришномалар",
+    "pushNotifications": "Пуш билдиришномалар",
     "messageNotifications": "Хабар билдиришномалари",
     "commentNotifications": "Изоҳ билдиришномалари",
     "favoriteNotifications": "Сараланган билдиришномалари",
@@ -1134,7 +1135,10 @@
     "flexibleLimits": "Мослашувчан лимитлар",
     "referralApplied": "Реферал қўлланилди",
     "useReferralDesc": "Реферал кодни киритинг",
-    "useReferralTitle": "Рефералдан фойдаланиш"
+    "useReferralTitle": "Рефералдан фойдаланиш",
+    "monthlyLimit": "Ойлик эълон бериш лимити",
+    "upgrade": "Тарифни янгилаш",
+    "wholesale": "Улгуржи савдога рухсат"
   },
   "ai": {
     "openAssistant": "AI Ёрдамчи",
