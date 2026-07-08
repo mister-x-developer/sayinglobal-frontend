@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import {
@@ -52,6 +53,7 @@ const STATUS_BADGE: Record<string, any> = {
 
 export default function AdminUsersPage() {
   const t = useTranslations();
+  const router = useRouter();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
@@ -213,7 +215,11 @@ export default function AdminUsersPage() {
                 </thead>
                 <tbody>
                   {filtered.map((user, i) => (
-                    <tr key={user.public_id} className="group transition-colors">
+                    <tr
+                      key={user.public_id}
+                      className="group cursor-pointer transition-colors hover:bg-bg-subtle/50"
+                      onClick={() => router.push(`/admin/users/detail?id=${user.public_id}`)}
+                    >
                       <td>
                         <div className="flex items-center gap-3">
                           <Avatar src={null} name={user.full_name} size="sm" />
@@ -245,8 +251,9 @@ export default function AdminUsersPage() {
                         <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button
                             type="button"
-                            onClick={() => setSelectedUser(user)}
+                            onClick={(e) => { e.stopPropagation(); setSelectedUser(user); }}
                             className="btn btn-secondary btn-sm h-8 px-2.5"
+                            title={t('common.quickView') || 'Quick View'}
                           >
                             <Eye className="h-3.5 w-3.5" strokeWidth={2} />
                           </button>

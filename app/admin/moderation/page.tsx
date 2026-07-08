@@ -11,13 +11,14 @@ import { toast } from '@/components/ui/Toast';
 import { moderationApi, type AdminReportRecord } from '@/lib/api/moderation';
 import { Flag, RefreshCw, CheckCircle2, XCircle, Eye, Bot } from 'lucide-react';
 
+import { useRouter } from 'next/navigation';
+
 export default function AdminModerationPage() {
   const t = useTranslations();
+  const router = useRouter();
   const [reports, setReports] = useState<AdminReportRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'under_review' | 'resolved_valid' | 'resolved_invalid'>('pending');
-  const [selected, setSelected] = useState<AdminReportRecord | null>(null);
-  const [notes, setNotes] = useState('');
   const [aiLoading, setAiLoading] = useState<number | null>(null);
 
   const fetchReports = useCallback(async () => {
@@ -33,31 +34,6 @@ export default function AdminModerationPage() {
   }, [statusFilter]);
 
   useEffect(() => { fetchReports(); }, [fetchReports]);
-
-  const startReview = async (r: AdminReportRecord) => {
-    try {
-      const updated = await moderationApi.adminStartReview(r.public_id);
-      setReports(prev => prev.map(x => x.public_id === r.public_id ? { ...x, ...updated } as any : x));
-      setSelected(updated as any);
-      setNotes('');
-      toast.success('Review started');
-    } catch (e: any) { toast.error(e.message || 'Failed'); }
-  };
-
-  const resolve = async (valid: boolean) => {
-    if (!selected) return;
-    try {
-      if (valid) {
-        await moderationApi.adminResolveValid(selected.public_id, notes || 'Valid report');
-      } else {
-        await moderationApi.adminResolveInvalid(selected.public_id, notes || 'Invalid report');
-      }
-      toast.success(valid ? 'Resolved as valid' : 'Resolved as invalid');
-      setSelected(null);
-      setNotes('');
-      fetchReports();
-    } catch (e: any) { toast.error(e.message || 'Failed to resolve'); }
-  };
 
   const runAI = async (id: number) => {
     setAiLoading(id);
@@ -103,7 +79,7 @@ export default function AdminModerationPage() {
           ) : (
             <div className="divide-y divide-border">
               {reports.map((r) => (
-                <div key={r.public_id} className="flex items-center gap-4 p-4 hover:bg-bg-subtle/60 cursor-pointer" onClick={() => { setSelected(r); setNotes(''); }}>
+                <div key={r.public_id} className="flex items-center gap-4 p-4 hover:bg-bg-subtle/60 cursor-pointer" onClick={() => router.push(`/admin/moderation/detail?id=${r.public_id}`)}>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <Badge variant={r.status === 'pending' ? 'warning' : r.status.includes('valid') ? 'success' : 'default'} size="sm">
@@ -121,8 +97,8 @@ export default function AdminModerationPage() {
                     <button onClick={(e) => { e.stopPropagation(); runAI(r.public_id); }} disabled={aiLoading === r.public_id} className="btn btn-sm btn-secondary">
                       <Bot className="h-3.5 w-3.5" />
                     </button>
-                    <button onClick={(e) => { e.stopPropagation(); startReview(r); }} className="btn btn-sm btn-primary">
-                      {t('admin.review')}
+                    <button onClick={(e) => { e.stopPropagation(); router.push(`/admin/moderation/detail?id=${r.public_id}`); }} className="btn btn-sm btn-primary">
+                      {t('common.details')}
                     </button>
                   </div>
                 </div>
@@ -131,56 +107,6 @@ export default function AdminModerationPage() {
           )}
         </div>
       </div>
-
-      {/* Side drawer for resolution */}
-      <AnimatePresence>
-        {selected && (
-          <div className="fixed inset-0 z-[70] flex justify-end bg-black/40" onClick={() => setSelected(null)}>
-            <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 30, stiffness: 280 }} className="w-full max-w-md h-full bg-bg border-l border-border p-6 overflow-auto" onClick={e => e.stopPropagation()}>
-              <div className="flex justify-between items-start">
-                <div>
-                  <h2 className="text-xl font-semibold">{t('admin.review')} #{selected.public_id}</h2>
-                  <p className="text-sm text-fg-muted">{selected.reason_code} • {selected.severity}</p>
-                </div>
-                <button onClick={() => setSelected(null)} className="text-fg-subtle">✕</button>
-              </div>
-
-              <div className="mt-6 space-y-4 text-sm">
-                <div>
-                  <div className="text-fg-subtle text-xs">{t('Moderation.complainant')}</div>
-                  <div>{selected.complainant?.full_name}</div>
-                </div>
-                <div>
-                  <div className="text-fg-subtle text-xs">{t('Moderation.reported')}</div>
-                  <div>{selected.reported_user?.full_name || '—'}</div>
-                </div>
-                <div>
-                  <div className="text-fg-subtle text-xs mb-1">{t('Moderation.description')}</div>
-                  <div className="rounded bg-bg-subtle p-3 whitespace-pre-wrap">{selected.description || '—'}</div>
-                </div>
-
-                <div>
-                  <label className="text-xs text-fg-subtle">{t('Moderation.moderatorNotes')}</label>
-                  <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={4} className="input-base w-full mt-1" placeholder="What did you find? Why this decision?" />
-                </div>
-              </div>
-
-              <div className="mt-6 flex gap-2">
-                <button onClick={() => resolve(true)} className="btn flex-1 bg-success/10 text-success hover:bg-success/20">
-                  <CheckCircle2 className="h-4 w-4 mr-1.5" /> {t('admin.markValid')}
-                </button>
-                <button onClick={() => resolve(false)} className="btn flex-1 bg-danger/10 text-danger hover:bg-danger/20">
-                  <XCircle className="h-4 w-4 mr-1.5" /> {t('admin.markInvalid')}
-                </button>
-              </div>
-
-              <button onClick={() => runAI(selected.public_id)} disabled={!!aiLoading} className="mt-3 w-full btn btn-secondary">
-                <Bot className="h-4 w-4 mr-2" /> {t('admin.runAiPriority')}
-              </button>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
     </AdminLayout>
   );
 }
