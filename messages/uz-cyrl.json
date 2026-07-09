@@ -63,7 +63,12 @@
     "telegramBot": "Телеграм бот",
     "telegram": "Телеграм",
     "instagram": "Инстаграм",
-    "youtube": "Ютуб"
+    "youtube": "Ютуб",
+    "clear": "Clear",
+    "quickView": "Quick View",
+    "viewDetails": "View Details",
+    "viewGallery": "View Gallery",
+    "viewImage": "View Image"
   },
   "landing": {
     "heroTitle": "Рақамли Чорва Бозори",
@@ -266,7 +271,17 @@
     "quantity": "Сони / Миқдори",
     "bump": "Эълонни кўтариш",
     "soldSuccessTitle": "Сотилган деб белгиланди!",
-    "markSoldSuccess": "Сотилди деб белгиланди!"
+    "markSoldSuccess": "Сотилди деб белгиланди!",
+    "cancelReviewConfirm": "Cancel Review Confirm",
+    "deletesIn": "Deletes In",
+    "markSoldConfirm": "Mark Sold Confirm",
+    "rejectedOn": "Rejected On",
+    "restoreConfirm": "Restore Confirm",
+    "statusDraft": "Status Draft",
+    "statusPending": "Status Pending",
+    "statusRejected": "Status Rejected",
+    "statusSold": "Status Sold",
+    "submitReviewConfirm": "Submit Review Confirm"
   },
   "categories": {
     "all": "Барчаси",
@@ -360,7 +375,9 @@
     "noReportsDesc": "Ҳозирча шикоятлар юбормагансиз",
     "security": "Хавфсизлик",
     "phoneCannotBeChanged": "Телефон рақамини ўзгартириб бўлмайди",
-    "subscriptions": "Тарифлар ва Лимитлар"
+    "subscriptions": "Тарифлар ва Лимитлар",
+    "allListings": "All Listings",
+    "fullNameRequired": "Full Name Required"
   },
   "userStatus": {
     "good": "Яхши",
@@ -673,7 +690,8 @@
     "visitSite": "Сайтга ўтиш (Кузатув)",
     "overallViewDesc": "Барча эълонлар бўйича платформада кўришлар сони.",
     "searchTitle": "Глобал Қидирув",
-    "searchDesc": "Фойдаланувчилар, эълонлар ёки шикоятларни қидириш."
+    "searchDesc": "Фойдаланувчилар, эълонлар ёки шикоятларни қидириш.",
+    "admin": "Admin"
   },
   "analytics": {
     "title": "Аналитика",
@@ -771,7 +789,8 @@
     "generic": "Хатолик юз берди",
     "network": "Тармоқ хатоси",
     "commentFailed": "Шарҳ қўшиб бўлмади",
-    "replyFailed": "Жавоб қўшиб бўлмади"
+    "replyFailed": "Жавоб қўшиб бўлмади",
+    "submitReviewFailed": "Submit Review Failed"
   },
   "success": {
     "saved": "Муваффақиятли сақланди",
@@ -828,7 +847,8 @@
     "openOnMap": "Харитада очиш",
     "titleTooLong": "Сарлавҳа 100 белгидан ошмаслиги керак",
     "descriptionTooLong": "Тавсиф 2000 белгидан ошмаслиги керак",
-    "messageTooLong": "Хабар 1000 белгидан ошмаслиги керак"
+    "messageTooLong": "Хабар 1000 белгидан ошмаслиги керак",
+    "maxWeight": "Max Weight"
   },
   "profileInfo": {
     "title": "Муҳим маълумот",
@@ -1143,7 +1163,23 @@
     "useReferralTitle": "Рефералдан фойдаланиш",
     "monthlyLimit": "Ойлик эълон бериш лимити",
     "upgrade": "Тарифни янгилаш",
-    "wholesale": "Улгуржи савдога рухсат"
+    "wholesale": "Улгуржи савдога рухсат",
+    "bumpLimit": "Bump Limit",
+    "buySoon": "Buy Soon",
+    "current": "Current",
+    "durationDays": "Duration Days",
+    "expiresOn": "Expires On",
+    "featureActiveLimit": "Feature Active Limit",
+    "featureBump": "Feature Bump",
+    "featureMonthlyLimit": "Feature Monthly Limit",
+    "featureWholesale": "Feature Wholesale",
+    "max": "Max",
+    "noPlanData": "No Plan Data",
+    "promoPlaceholder": "Promo Placeholder",
+    "statusActive": "Status Active",
+    "statusInactive": "Status Inactive",
+    "unlimitedTime": "Unlimited Time",
+    "yourCurrentPlan": "Your Current Plan"
   },
   "ai": {
     "openAssistant": "AI Ёрдамчи",
@@ -1453,7 +1489,9 @@
     "hidden": "яширин",
     "edited": "таҳрирланган",
     "infrastructure": "Инфратузилма",
-    "responseTime": "Жавоб вақти"
+    "responseTime": "Жавоб вақти",
+    "hide": "Hide",
+    "unhide": "Unhide"
   },
   "AdminHealth": {
     "totalUsers": "Жами фойдаланувчилар",
@@ -1474,5 +1512,77 @@
     "reviewNow": "Ҳозир кўриб чиқиш →",
     "cacheMiss": "Кеш топилмади",
     "error": "Хато"
+  },
+  "AdminGuide": {
+    "sections": {
+      "broadcasts": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "categories": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "dashboard": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "moderation": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "security": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "users": {
+        "content": "Content",
+        "title": "Title"
+      }
+    },
+    "subtitle": "Subtitle",
+    "title": "Title"
+  },
+  "Guide": {
+    "footer": {
+      "button": "Button",
+      "subtitle": "Subtitle",
+      "title": "Title"
+    },
+    "sections": {
+      "contact": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "login": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "post": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "report": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "search": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "security": {
+        "content": "Content",
+        "title": "Title"
+      }
+    },
+    "subtitle": "Subtitle",
+    "title": "Title"
+  },
+  "actions": {
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "markSold": "Mark Sold",
+    "restore": "Restore",
+    "submitReview": "Submit Review"
   }
 }

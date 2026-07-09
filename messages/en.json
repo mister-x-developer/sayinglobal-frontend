@@ -63,7 +63,12 @@
     "telegramBot": "Telegram bot",
     "telegram": "Telegram",
     "instagram": "Instagram",
-    "youtube": "YouTube"
+    "youtube": "YouTube",
+    "clear": "Clear",
+    "quickView": "Quick View",
+    "viewDetails": "View Details",
+    "viewGallery": "View Gallery",
+    "viewImage": "View Image"
   },
   "landing": {
     "heroTitle": "Digital Livestock Marketplace",
@@ -266,7 +271,17 @@
     "quantity": "Quantity",
     "bump": "Bump Listing",
     "soldSuccessTitle": "Marked as sold!",
-    "markSoldSuccess": "Successfully marked as sold!"
+    "markSoldSuccess": "Successfully marked as sold!",
+    "cancelReviewConfirm": "Cancel Review Confirm",
+    "deletesIn": "Deletes In",
+    "markSoldConfirm": "Mark Sold Confirm",
+    "rejectedOn": "Rejected On",
+    "restoreConfirm": "Restore Confirm",
+    "statusDraft": "Status Draft",
+    "statusPending": "Status Pending",
+    "statusRejected": "Status Rejected",
+    "statusSold": "Status Sold",
+    "submitReviewConfirm": "Submit Review Confirm"
   },
   "categories": {
     "all": "All",
@@ -360,7 +375,9 @@
     "noReportsDesc": "You havenʼt submitted any reports yet",
     "security": "Security",
     "phoneCannotBeChanged": "Phone number cannot be changed",
-    "subscriptions": "Plans & Limits"
+    "subscriptions": "Plans & Limits",
+    "allListings": "All Listings",
+    "fullNameRequired": "Full Name Required"
   },
   "userStatus": {
     "good": "Good",
@@ -673,7 +690,8 @@
     "visitSite": "Visit Site (Monitor)",
     "overallViewDesc": "Total number of views across all listings on the platform.",
     "searchTitle": "Global Search",
-    "searchDesc": "Quickly search for users, listings, or complaints."
+    "searchDesc": "Quickly search for users, listings, or complaints.",
+    "admin": "Admin"
   },
   "analytics": {
     "title": "Analytics",
@@ -771,7 +789,8 @@
     "generic": "An error occurred",
     "network": "Network error",
     "commentFailed": "Failed to add comment",
-    "replyFailed": "Failed to add reply"
+    "replyFailed": "Failed to add reply",
+    "submitReviewFailed": "Submit Review Failed"
   },
   "success": {
     "saved": "Saved successfully",
@@ -828,7 +847,8 @@
     "openOnMap": "Open on map",
     "titleTooLong": "Title must not exceed 100 characters",
     "descriptionTooLong": "Description must not exceed 2000 characters",
-    "messageTooLong": "Message must not exceed 1000 characters"
+    "messageTooLong": "Message must not exceed 1000 characters",
+    "maxWeight": "Max Weight"
   },
   "profileInfo": {
     "title": "Important information",
@@ -1143,7 +1163,23 @@
     "useReferralTitle": "Use Referral",
     "monthlyLimit": "Monthly listing limit",
     "upgrade": "Upgrade plan",
-    "wholesale": "Wholesale allowed"
+    "wholesale": "Wholesale allowed",
+    "bumpLimit": "Bump Limit",
+    "buySoon": "Buy Soon",
+    "current": "Current",
+    "durationDays": "Duration Days",
+    "expiresOn": "Expires On",
+    "featureActiveLimit": "Feature Active Limit",
+    "featureBump": "Feature Bump",
+    "featureMonthlyLimit": "Feature Monthly Limit",
+    "featureWholesale": "Feature Wholesale",
+    "max": "Max",
+    "noPlanData": "No Plan Data",
+    "promoPlaceholder": "Promo Placeholder",
+    "statusActive": "Status Active",
+    "statusInactive": "Status Inactive",
+    "unlimitedTime": "Unlimited Time",
+    "yourCurrentPlan": "Your Current Plan"
   },
   "ai": {
     "openAssistant": "AI Assistant",
@@ -1453,7 +1489,9 @@
     "hidden": "hidden",
     "edited": "edited",
     "infrastructure": "Infrastructure",
-    "responseTime": "Response time"
+    "responseTime": "Response time",
+    "hide": "Hide",
+    "unhide": "Unhide"
   },
   "AdminHealth": {
     "totalUsers": "Total users",
@@ -1474,5 +1512,77 @@
     "reviewNow": "Review now →",
     "cacheMiss": "Cache miss",
     "error": "Error"
+  },
+  "AdminGuide": {
+    "sections": {
+      "broadcasts": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "categories": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "dashboard": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "moderation": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "security": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "users": {
+        "content": "Content",
+        "title": "Title"
+      }
+    },
+    "subtitle": "Subtitle",
+    "title": "Title"
+  },
+  "Guide": {
+    "footer": {
+      "button": "Button",
+      "subtitle": "Subtitle",
+      "title": "Title"
+    },
+    "sections": {
+      "contact": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "login": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "post": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "report": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "search": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "security": {
+        "content": "Content",
+        "title": "Title"
+      }
+    },
+    "subtitle": "Subtitle",
+    "title": "Title"
+  },
+  "actions": {
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "markSold": "Mark Sold",
+    "restore": "Restore",
+    "submitReview": "Submit Review"
   }
 }

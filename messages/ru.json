@@ -63,7 +63,12 @@
     "telegramBot": "Телеграм бот",
     "telegram": "Телеграм",
     "instagram": "Инстаграм",
-    "youtube": "Ютуб"
+    "youtube": "Ютуб",
+    "clear": "Clear",
+    "quickView": "Quick View",
+    "viewDetails": "View Details",
+    "viewGallery": "View Gallery",
+    "viewImage": "View Image"
   },
   "landing": {
     "heroTitle": "Цифровой рынок скота",
@@ -266,7 +271,17 @@
     "quantity": "Количество",
     "bump": "Поднять объявление",
     "soldSuccessTitle": "Отмечено как проданное!",
-    "markSoldSuccess": "Успешно отмечено как проданное!"
+    "markSoldSuccess": "Успешно отмечено как проданное!",
+    "cancelReviewConfirm": "Cancel Review Confirm",
+    "deletesIn": "Deletes In",
+    "markSoldConfirm": "Mark Sold Confirm",
+    "rejectedOn": "Rejected On",
+    "restoreConfirm": "Restore Confirm",
+    "statusDraft": "Status Draft",
+    "statusPending": "Status Pending",
+    "statusRejected": "Status Rejected",
+    "statusSold": "Status Sold",
+    "submitReviewConfirm": "Submit Review Confirm"
   },
   "categories": {
     "all": "Все",
@@ -360,7 +375,9 @@
     "noReportsDesc": "Вы пока не отправляли жалобы",
     "security": "Безопасность",
     "phoneCannotBeChanged": "Номер телефона не может быть изменен",
-    "subscriptions": "Тарифы и лимиты"
+    "subscriptions": "Тарифы и лимиты",
+    "allListings": "All Listings",
+    "fullNameRequired": "Full Name Required"
   },
   "userStatus": {
     "good": "Хорошо",
@@ -673,7 +690,8 @@
     "visitSite": "Перейти на сайт (Наблюдение)",
     "overallViewDesc": "Количество просмотров по всем объявлениям на платформе.",
     "searchTitle": "Глобальный поиск",
-    "searchDesc": "Быстрый поиск пользователей, объявлений или жалоб."
+    "searchDesc": "Быстрый поиск пользователей, объявлений или жалоб.",
+    "admin": "Admin"
   },
   "analytics": {
     "title": "Аналитика",
@@ -771,7 +789,8 @@
     "generic": "Произошла ошибка",
     "network": "Ошибка сети",
     "commentFailed": "Не удалось добавить комментарий",
-    "replyFailed": "Не удалось добавить ответ"
+    "replyFailed": "Не удалось добавить ответ",
+    "submitReviewFailed": "Submit Review Failed"
   },
   "success": {
     "saved": "Успешно сохранено",
@@ -828,7 +847,8 @@
     "openOnMap": "Открыть на карте",
     "titleTooLong": "Заголовок не должен превышать 100 символов",
     "descriptionTooLong": "Описание не должно превышать 2000 символов",
-    "messageTooLong": "Сообщение не должно превышать 1000 символов"
+    "messageTooLong": "Сообщение не должно превышать 1000 символов",
+    "maxWeight": "Max Weight"
   },
   "profileInfo": {
     "title": "Важная информация",
@@ -1143,7 +1163,23 @@
     "useReferralTitle": "Использовать реферал",
     "monthlyLimit": "Ежемесячный лимит объявлений",
     "upgrade": "Обновить тариф",
-    "wholesale": "Разрешена оптовая продажа"
+    "wholesale": "Разрешена оптовая продажа",
+    "bumpLimit": "Bump Limit",
+    "buySoon": "Buy Soon",
+    "current": "Current",
+    "durationDays": "Duration Days",
+    "expiresOn": "Expires On",
+    "featureActiveLimit": "Feature Active Limit",
+    "featureBump": "Feature Bump",
+    "featureMonthlyLimit": "Feature Monthly Limit",
+    "featureWholesale": "Feature Wholesale",
+    "max": "Max",
+    "noPlanData": "No Plan Data",
+    "promoPlaceholder": "Promo Placeholder",
+    "statusActive": "Status Active",
+    "statusInactive": "Status Inactive",
+    "unlimitedTime": "Unlimited Time",
+    "yourCurrentPlan": "Your Current Plan"
   },
   "ai": {
     "openAssistant": "AI Помощник",
@@ -1453,7 +1489,9 @@
     "hidden": "скрытый",
     "edited": "отредактировано",
     "infrastructure": "Инфраструктура",
-    "responseTime": "Время отклика"
+    "responseTime": "Время отклика",
+    "hide": "Hide",
+    "unhide": "Unhide"
   },
   "AdminHealth": {
     "totalUsers": "Всего пользователей",
@@ -1474,5 +1512,77 @@
     "reviewNow": "Рассмотреть сейчас →",
     "cacheMiss": "Промах кэша",
     "error": "Ошибка"
+  },
+  "AdminGuide": {
+    "sections": {
+      "broadcasts": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "categories": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "dashboard": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "moderation": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "security": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "users": {
+        "content": "Content",
+        "title": "Title"
+      }
+    },
+    "subtitle": "Subtitle",
+    "title": "Title"
+  },
+  "Guide": {
+    "footer": {
+      "button": "Button",
+      "subtitle": "Subtitle",
+      "title": "Title"
+    },
+    "sections": {
+      "contact": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "login": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "post": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "report": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "search": {
+        "content": "Content",
+        "title": "Title"
+      },
+      "security": {
+        "content": "Content",
+        "title": "Title"
+      }
+    },
+    "subtitle": "Subtitle",
+    "title": "Title"
+  },
+  "actions": {
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "markSold": "Mark Sold",
+    "restore": "Restore",
+    "submitReview": "Submit Review"
   }
 }
