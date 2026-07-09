@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { User, Shield, Key, LogOut, Save, Loader2 } from 'lucide-react';
+import { User, Shield, Key, LogOut, Save, Loader2, Camera } from 'lucide-react';
 import { AdminLayout } from '@/components/layout/AdminLayout';
 import { Avatar } from '@/components/ui/Avatar';
 import { useAuthStore } from '@/lib/store/auth';
@@ -18,11 +18,32 @@ export default function AdminProfilePage() {
   const [saving, setSaving] = useState(false);
   const [fullName, setFullName] = useState(user?.full_name ?? '');
   const [bio, setBio] = useState((user as any)?.bio ?? '');
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error(t('errors.fileTooLarge'));
+      return;
+    }
+    setAvatarFile(file);
+    const reader = new FileReader();
+    reader.onloadend = () => setAvatarPreview(reader.result as string);
+    reader.readAsDataURL(file);
+  };
 
   const save = async () => {
     setSaving(true);
     try {
-      const updated = await usersApi.updateProfile({ full_name: fullName, bio });
+      const fd = new FormData();
+      fd.append('full_name', fullName.trim());
+      if (bio) fd.append('bio', bio);
+      if (avatarFile) fd.append('avatar', avatarFile);
+
+      const updated = await usersApi.updateProfile(fd);
       updateUser(updated);
       toast.success(t('success.saved'));
     } catch {
@@ -52,12 +73,29 @@ export default function AdminProfilePage() {
           {/* Avatar + info */}
           <div className="surface-elevated p-6 mb-6">
             <div className="flex items-center gap-4">
-              <Avatar
-                src={user?.avatar_url ?? user?.avatar ?? null}
-                name={user?.full_name}
-                size="xl"
-                ring
-              />
+              <div className="relative flex-shrink-0">
+                <Avatar
+                  src={avatarPreview ?? user?.avatar_url ?? user?.avatar ?? null}
+                  name={user?.full_name}
+                  size="xl"
+                  ring
+                />
+                <button
+                  type="button"
+                  onClick={() => fileRef.current?.click()}
+                  className="absolute -bottom-1 -right-1 inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-bg-elevated bg-brand-primary text-white shadow-sm transition-transform hover:scale-105"
+                  aria-label={t('profile.uploadAvatar')}
+                >
+                  <Camera className="h-4 w-4" strokeWidth={2.25} />
+                </button>
+                <input
+                  ref={fileRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={handleAvatarChange}
+                  className="hidden"
+                />
+              </div>
               <div>
                 <p className="text-xl font-bold text-fg">{user?.full_name}</p>
                 <p className="text-sm text-fg-muted">{user?.phone}</p>

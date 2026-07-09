@@ -44,8 +44,7 @@ export const usersApi = {
     try {
       const res = await apiClient.put<User>(
         '/users/profile/update/',
-        data,
-        isForm ? { headers: { 'Content-Type': 'multipart/form-data' } } : undefined
+        data
       );
       return res.data;
     } catch (e) {
