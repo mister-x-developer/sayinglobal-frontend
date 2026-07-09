@@ -66,20 +66,17 @@ export function HowItWorks() {
             const Icon = step.icon;
             return (
               <motion.div data-motion key={step.number} variants={item}>
-                <div className="surface-elevated group relative h-full overflow-hidden p-8 transition-all duration-400 hover:-translate-y-2 hover:shadow-lift sm:p-10">
-                  <div className="absolute inset-0 border-2 border-transparent transition-colors duration-400 group-hover:border-brand-primary/20 rounded-2xl pointer-events-none" />
-                  <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/5 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none rounded-2xl" />
-                  
-                  <div className="relative z-10 flex items-start justify-between">
-                    <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary transition-all duration-500 group-hover:bg-gradient-to-br group-hover:from-brand-primary group-hover:to-brand-accent group-hover:text-white shadow-sm group-hover:shadow-brand-primary/25 group-hover:scale-110">
+                <div className="surface-elevated group h-full p-8 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift sm:p-10">
+                  <div className="flex items-start justify-between">
+                    <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary transition-colors group-hover:bg-brand-primary group-hover:text-white">
                       <Icon className="h-6 w-6" strokeWidth={1.75} />
                     </div>
-                    <span className="font-display text-6xl font-extrabold text-fg-subtle/10 transition-all duration-500 group-hover:scale-105 group-hover:-translate-y-2 group-hover:bg-gradient-to-br group-hover:from-brand-primary/40 group-hover:to-brand-accent/40 group-hover:bg-clip-text group-hover:text-transparent">
+                    <span className="font-display text-6xl font-extrabold text-fg-subtle/20 transition-colors group-hover:text-fg-subtle/30">
                       {step.number}
                     </span>
                   </div>
-                  <h3 className="display-sm mt-8 text-xl relative z-10 transition-colors group-hover:text-brand-primary">{step.title}</h3>
-                  <p className="mt-4 leading-relaxed text-fg-muted relative z-10">
+                  <h3 className="display-sm mt-8 text-xl">{step.title}</h3>
+                  <p className="mt-4 leading-relaxed text-fg-muted">
                     {step.description}
                   </p>
                 </div>

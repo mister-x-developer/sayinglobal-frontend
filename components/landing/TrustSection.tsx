@@ -69,15 +69,12 @@ export function TrustSection() {
             const Icon = f.icon;
             return (
               <motion.div data-motion key={f.title} variants={item}>
-                <div className="surface-elevated group relative h-full overflow-hidden p-7 transition-all duration-400 hover:-translate-y-1 hover:shadow-lift sm:p-8">
-                  <div className="absolute inset-0 border border-transparent transition-colors duration-400 group-hover:border-fg-muted/10 rounded-2xl pointer-events-none" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/[0.02] dark:from-white/[0.02] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none rounded-2xl" />
-                  
-                  <div className={`relative z-10 inline-flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-500 group-hover:scale-110 group-hover:shadow-md ${f.tone}`}>
+                <div className="surface-elevated h-full p-7 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift sm:p-8">
+                  <div className={`inline-flex h-12 w-12 items-center justify-center rounded-xl ${f.tone}`}>
                     <Icon className="h-5.5 w-5.5" strokeWidth={1.75} />
                   </div>
-                  <h3 className="relative z-10 mt-6 font-display text-lg font-semibold text-fg transition-colors duration-300">{f.title}</h3>
-                  <p className="relative z-10 mt-3 leading-relaxed text-fg-muted">
+                  <h3 className="mt-6 font-display text-lg font-semibold text-fg">{f.title}</h3>
+                  <p className="mt-3 leading-relaxed text-fg-muted">
                     {f.description}
                   </p>
                 </div>
