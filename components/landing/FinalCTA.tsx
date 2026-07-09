@@ -17,24 +17,27 @@ export function FinalCTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-          className="relative overflow-hidden rounded-3xl border border-border bg-bg-elevated p-12 text-center sm:p-20 lg:p-24"
+          className="relative overflow-hidden rounded-[2rem] border border-border/80 bg-bg-elevated/70 p-12 text-center shadow-soft backdrop-blur-xl sm:p-20 lg:p-24"
         >
-          {/* Atmospheric orbs */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -top-40 -left-40 h-96 w-96 rounded-full opacity-40 blur-3xl"
-            style={{ background: 'radial-gradient(circle, rgb(31 122 82 / 0.4), transparent 70%)' }}
+            className="pointer-events-none absolute -top-40 -left-40 h-96 w-96 rounded-full opacity-40 blur-[100px] animate-pulse"
+            style={{ background: 'radial-gradient(circle, rgb(var(--brand-primary) / 0.5), transparent 70%)', animationDuration: '7s' }}
           />
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -bottom-40 -right-40 h-96 w-96 rounded-full opacity-40 blur-3xl"
-            style={{ background: 'radial-gradient(circle, rgb(0 184 159 / 0.35), transparent 70%)' }}
+            className="pointer-events-none absolute -bottom-40 -right-40 h-96 w-96 rounded-full opacity-40 blur-[100px] animate-pulse"
+            style={{ background: 'radial-gradient(circle, rgb(var(--brand-accent) / 0.4), transparent 70%)', animationDuration: '9s', animationDelay: '1s' }}
           />
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 rounded-3xl"
+            className="pointer-events-none absolute inset-0 rounded-[2rem] border border-white/10 mix-blend-overlay"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 rounded-[2rem]"
             style={{
-              background: 'radial-gradient(ellipse at 50% 0%, rgb(31 122 82 / 0.06), transparent 60%)',
+              background: 'radial-gradient(ellipse at 50% 0%, rgb(var(--brand-primary) / 0.08), transparent 60%)',
             }}
           />
 
