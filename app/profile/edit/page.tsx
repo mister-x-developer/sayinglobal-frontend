@@ -90,9 +90,19 @@ export default function EditProfilePage() {
       if (avatarFile) fd.append('avatar', avatarFile);
 
       const updated = await usersApi.updateProfile(fd);
+      
+      // Bypass browser cache for the new avatar
+      if (updated.avatar_url) {
+        updated.avatar_url = `${updated.avatar_url.split('?')[0]}?t=${Date.now()}`;
+      }
+      
       updateUser(updated);
+      setAvatarPreview(null);
+      setAvatarFile(null);
       setSaved(true);
-      setTimeout(() => router.push('/profile'), 1200);
+      
+      // Redirect immediately
+      router.push('/profile');
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : t('errors.saveFailed');
       let displayMsg = msg;

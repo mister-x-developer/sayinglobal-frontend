@@ -44,8 +44,18 @@ export default function AdminProfilePage() {
       if (avatarFile) fd.append('avatar', avatarFile);
 
       const updated = await usersApi.updateProfile(fd);
+      
+      // Bypass browser cache for the new avatar
+      if (updated.avatar_url) {
+        updated.avatar_url = `${updated.avatar_url.split('?')[0]}?t=${Date.now()}`;
+      }
+      
       updateUser(updated);
+      setAvatarPreview(null);
+      setAvatarFile(null);
       toast.success(t('success.saved'));
+      
+      // Optionally reload or redirect if you want
     } catch {
       toast.error(t('errors.saveFailed'));
     } finally {
