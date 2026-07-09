@@ -154,6 +154,7 @@ function SellerDetailPageContent() {
                     name={seller.full_name}
                     size="2xl"
                     ring
+                    enlargeable
                     className="flex-shrink-0"
                   />
                   <div className="min-w-0 flex-1">

@@ -118,6 +118,7 @@ export default function ProfilePage() {
                 name={profile.full_name}
                 size="2xl"
                 ring
+                enlargeable
                 className="flex-shrink-0"
               />
 

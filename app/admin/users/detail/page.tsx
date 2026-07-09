@@ -185,7 +185,7 @@ function AdminUserDetailPageContent() {
             {/* Header */}
             <div className="surface-elevated p-6">
               <div className="flex items-center gap-4">
-                <Avatar src={user.avatar_url} name={user.full_name} size="xl" ring />
+                <Avatar src={user.avatar_url} name={user.full_name} size="xl" ring enlargeable />
                 <div className="min-w-0 flex-1">
                   <h1 className="display-sm">{user.full_name}</h1>
                   <p className="mt-1 text-sm text-fg-muted">
