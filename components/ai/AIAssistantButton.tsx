@@ -53,9 +53,11 @@ export function AIAssistantButton() {
 
   const onPointerMove = (e: React.PointerEvent) => {
     if (!dragging) return;
-    didDrag.current = true;
     const newX = e.clientX - startPos.current.x;
     const newY = e.clientY - startPos.current.y;
+    if (Math.abs(newX - pos.x) > 5 || Math.abs(newY - pos.y) > 5) {
+      didDrag.current = true;
+    }
     setPos({ x: newX, y: newY });
     setOverDelete(checkOverDelete(e.clientX, e.clientY));
   };

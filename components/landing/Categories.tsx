@@ -28,7 +28,7 @@ export function Categories() {
             <Link
               key={cat.slug}
               href={`/listings?category=${cat.slug}`}
-              className="group surface-elevated relative flex aspect-square flex-col items-center justify-end overflow-hidden p-0 transition-all duration-300 hover:-translate-y-1 hover:shadow-lift hover:border-brand-primary/30 animate-slide-up"
+              className="group surface-elevated relative flex aspect-square flex-col items-center justify-end overflow-hidden p-0 transition-all duration-400 hover:-translate-y-2 hover:shadow-lift hover:border-brand-primary/30 active:scale-95 animate-slide-up"
               style={{ animationDelay: `${index * 50}ms` }}
             >
               {/* Image */}

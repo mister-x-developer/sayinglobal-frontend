@@ -30,16 +30,16 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary: [
-          'bg-brand-primary text-white',
-          'hover:bg-brand-primary/95',
-          'shadow-[0_4px_12px_rgb(var(--brand-primary)/0.25)] hover:shadow-[0_6px_16px_rgb(var(--brand-primary)/0.35)] hover:-translate-y-[1px]',
-          'active:translate-y-[1px] active:shadow-[0_2px_8px_rgb(var(--brand-primary)/0.15)]',
+          'bg-gradient-to-r from-brand-primary to-brand-accent text-white',
+          'hover:opacity-90',
+          'shadow-[0_4px_12px_rgb(var(--brand-primary)/0.25)] hover:shadow-[0_6px_20px_rgb(var(--brand-primary)/0.4)] hover:-translate-y-[2px]',
+          'active:translate-y-[1px] active:scale-95 active:shadow-[0_2px_8px_rgb(var(--brand-primary)/0.2)]',
         ].join(' '),
-        secondary: 'bg-bg-elevated text-fg border border-border hover:bg-bg-subtle hover:-translate-y-[1px] shadow-sm active:translate-y-0',
-        outline: 'border-2 border-brand-primary text-brand-primary bg-transparent hover:bg-brand-primary/5 active:bg-brand-primary/10',
-        ghost: 'bg-transparent text-fg hover:bg-bg-subtle active:bg-bg-subtle/80',
-        danger: 'bg-danger text-white hover:bg-danger/90 hover:-translate-y-[1px] shadow-[0_4px_12px_rgb(var(--danger)/0.25)] hover:shadow-[0_6px_16px_rgb(var(--danger)/0.35)]',
-        success: 'bg-success text-white hover:bg-success/90 hover:-translate-y-[1px] shadow-[0_4px_12px_rgb(var(--success)/0.25)] hover:shadow-[0_6px_16px_rgb(var(--success)/0.35)]',
+        secondary: 'bg-bg-elevated text-fg border border-border hover:bg-bg-subtle hover:-translate-y-[2px] shadow-sm active:translate-y-0 active:scale-95',
+        outline: 'border-2 border-brand-primary text-brand-primary bg-transparent hover:bg-brand-primary/5 active:bg-brand-primary/10 active:scale-95',
+        ghost: 'bg-transparent text-fg hover:bg-bg-subtle active:bg-bg-subtle/80 active:scale-95',
+        danger: 'bg-danger text-white hover:bg-danger/90 hover:-translate-y-[2px] shadow-[0_4px_12px_rgb(var(--danger)/0.25)] hover:shadow-[0_6px_20px_rgb(var(--danger)/0.4)] active:scale-95',
+        success: 'bg-success text-white hover:bg-success/90 hover:-translate-y-[2px] shadow-[0_4px_12px_rgb(var(--success)/0.25)] hover:shadow-[0_6px_20px_rgb(var(--success)/0.4)] active:scale-95',
       },
       size: {
         sm: 'h-9 px-4 text-sm rounded-xl',

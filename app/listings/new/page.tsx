@@ -271,10 +271,11 @@ export default function NewListingPage() {
                 </div>
                 <div className="space-y-5">
                   <div>
-                    <label className="mb-2 block text-[13px] font-semibold uppercase tracking-wider text-fg-subtle">
+                    <label htmlFor="title-input" className="mb-2 block text-[13px] font-semibold uppercase tracking-wider text-fg-subtle">
                       {t('listings.title2')} <span className="text-danger">*</span>
                     </label>
                     <input
+                      id="title-input"
                       value={form.title}
                       onChange={(e) => set('title', e.target.value)}
                       placeholder={t('create.titlePlaceholder')}
@@ -284,10 +285,11 @@ export default function NewListingPage() {
                   </div>
 
                   <div>
-                    <label className="mb-2 block text-[13px] font-semibold uppercase tracking-wider text-fg-subtle">
+                    <label htmlFor="description-input" className="mb-2 block text-[13px] font-semibold uppercase tracking-wider text-fg-subtle">
                       {t('listings.description')} <span className="text-danger">*</span>
                     </label>
                     <textarea
+                      id="description-input"
                       value={form.description}
                       onChange={(e) => set('description', e.target.value)}
                       placeholder={t('create.descriptionPlaceholder')}
@@ -302,10 +304,11 @@ export default function NewListingPage() {
 
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-fg">
+                        <label htmlFor="quantity-input" className="mb-1.5 block text-sm font-medium text-fg">
                           {t('listings.quantity')} <span className="text-danger">*</span>
                         </label>
                         <input
+                          id="quantity-input"
                           type="number"
                           min={1}
                           value={form.quantity}
@@ -316,10 +319,11 @@ export default function NewListingPage() {
                         {errors.quantity && <p className="mt-1 text-xs text-danger">{errors.quantity}</p>}
                       </div>
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-fg">
+                        <label htmlFor="weight-input" className="mb-1.5 block text-sm font-medium text-fg">
                           {t('animal.weight')} ({t('animal.kg')}) <span className="text-danger">*</span>
                         </label>
                         <input
+                          id="weight-input"
                           type="number"
                           min={0}
                           value={form.weight_kg}

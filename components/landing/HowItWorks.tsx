@@ -66,7 +66,7 @@ export function HowItWorks() {
             const Icon = step.icon;
             return (
               <motion.div data-motion key={step.number} variants={item}>
-                <div className="surface-elevated group h-full p-8 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift sm:p-10">
+                <div className="surface-elevated group h-full p-8 transition-all duration-400 hover:-translate-y-2 hover:shadow-lift sm:p-10">
                   <div className="flex items-start justify-between">
                     <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary transition-colors group-hover:bg-brand-primary group-hover:text-white">
                       <Icon className="h-6 w-6" strokeWidth={1.75} />

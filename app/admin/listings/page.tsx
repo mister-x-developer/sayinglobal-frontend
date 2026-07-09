@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import {
   Search, X, Eye, CheckCircle2, XCircle, LayoutGrid, RefreshCw,
   Trash2, Square, CheckSquare, MinusSquare,
@@ -32,6 +33,7 @@ const STATUS_BADGE: Record<string, any> = {
 };
 
 export default function AdminListingsPage() {
+  const router = useRouter();
   const t = useTranslations();
   const locale = useLocale();
   const [search, setSearch] = useState('');

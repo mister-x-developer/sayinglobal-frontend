@@ -244,6 +244,52 @@ function DashboardNearby() {
       setLoading(false);
       return;
     }
+
+    const fetchGeo = () => {
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          try {
+            const data = await listingsApi.nearby({
+              lat: pos.coords.latitude,
+              lng: pos.coords.longitude,
+              radius_km: 50,
+              page_size: 8,
+            });
+            setItems(data.results);
+            setHasGeo(true);
+          } catch {
+            /* ignore */
+          } finally {
+            setLoading(false);
+          }
+        },
+        () => setLoading(false),
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 5 * 60_000 },
+      );
+    };
+
+    // Check if we already have permission
+    if (navigator.permissions && navigator.permissions.query) {
+      navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+        if (result.state === 'granted') {
+          fetchGeo();
+        } else {
+          setLoading(false);
+          // Wait for user interaction to prompt
+        }
+      }).catch(() => {
+        // Fallback for browsers that don't support permissions API properly
+        setLoading(false);
+      });
+    } else {
+      // If permissions API not supported, don't auto-prompt to respect UX
+      setLoading(false);
+    }
+  }, []);
+
+  const requestGeo = () => {
+    if (typeof navigator === 'undefined' || !navigator.geolocation) return;
+    setLoading(true);
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
         try {
@@ -264,9 +310,26 @@ function DashboardNearby() {
       () => setLoading(false),
       { enableHighAccuracy: true, timeout: 5000, maximumAge: 5 * 60_000 },
     );
-  }, []);
+  };
 
-  if (loading || !hasGeo || items.length === 0) return null;
+  if (loading) return null;
+  
+  if (!hasGeo) {
+    return (
+      <div className="surface-elevated rounded-2xl overflow-hidden border border-border p-5 text-center">
+        <div className="mx-auto mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary">
+          <MapPin className="h-6 w-6" strokeWidth={1.75} />
+        </div>
+        <h2 className="text-lg font-bold text-fg">{t('nearby.title')}</h2>
+        <p className="mt-1 text-sm text-fg-muted">Yaqiningizdagi e&apos;lonlarni ko&apos;rish uchun joylashuvga ruxsat bering</p>
+        <button onClick={requestGeo} className="btn btn-primary mt-4">
+          Joylashuvni aniqlash
+        </button>
+      </div>
+    );
+  }
+
+  if (items.length === 0) return null;
 
   return (
     <div className="surface-elevated rounded-2xl overflow-hidden border border-border">

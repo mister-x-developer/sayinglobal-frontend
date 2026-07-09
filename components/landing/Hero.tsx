@@ -19,18 +19,18 @@ export function Hero() {
       <div className="container-page relative z-10 pt-24 pb-32 sm:pt-32 sm:pb-44 lg:pt-44 lg:pb-64">
         {/* Trust pill — left aligned */}
         <div
-          className="inline-flex items-center gap-2 rounded-full border border-border bg-bg-elevated/80 px-5 py-2.5 text-sm font-semibold text-fg-muted backdrop-blur-sm animate-fade-in"
+          className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-bg-elevated/70 px-5 py-2.5 text-sm font-semibold text-fg-muted shadow-sm backdrop-blur-md animate-fade-in"
           style={{ animationDelay: '0ms' }}
         >
           <ShieldCheck className="h-4 w-4 text-brand-accent" strokeWidth={2.25} />
           <span>{t('landing.trustTitle')}</span>
-          <span className="h-1 w-1 rounded-full bg-fg-subtle" />
-          <span className="text-brand-primary">{t('landing.trustFeature1Title')}</span>
+          <span className="h-1 w-1 rounded-full bg-border-strong" />
+          <span className="bg-gradient-to-r from-brand-primary to-brand-accent bg-clip-text text-transparent">{t('landing.trustFeature1Title')}</span>
         </div>
 
         {/* Headline — full container width, dominant scale */}
         <h1
-          className="display-xl mt-10 text-balance animate-slide-up"
+          className="display-xl mt-10 max-w-4xl text-balance bg-gradient-to-br from-fg to-fg-muted bg-clip-text text-transparent animate-slide-up leading-tight sm:text-6xl md:text-7xl"
           style={{ animationDelay: '80ms' }}
         >
           {t('landing.heroTitle')}
@@ -38,7 +38,7 @@ export function Hero() {
 
         {/* Subtitle — generous reading width */}
         <p
-          className="mt-8 max-w-3xl text-pretty text-lg leading-relaxed text-fg-muted animate-slide-up sm:text-xl lg:text-2xl lg:leading-relaxed"
+          className="mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-fg-muted animate-slide-up sm:text-xl lg:text-2xl"
           style={{ animationDelay: '160ms' }}
         >
           {t('landing.heroDescription')}

@@ -13,6 +13,7 @@ import { EmptyState } from '@/components/shared/EmptyState';
 import { ListingGridSkeleton } from '@/components/shared/LoadingStates';
 import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
+import { useDebounce } from '@/lib/hooks/useDebounce';
 
 const CATS = [
   { key: 'all' },
@@ -58,6 +59,8 @@ export default function ListingsPage() {
   const [page, setPage] = useState(1);
   const pageSize = 20;
 
+  const debouncedSearch = useDebounce(search, 500);
+
   const { scrollY } = useScroll();
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -94,7 +97,7 @@ export default function ListingsPage() {
     return () => {
       alive = false;
     };
-  }, [category, region, search, sort]);
+  }, [category, region, debouncedSearch, sort]);
 
   const filtered = items;
 
@@ -264,6 +267,21 @@ export default function ListingsPage() {
                 icon={LayoutGrid}
                 title={t('marketplace.noResults')}
                 description={t('marketplace.tryAdjusting')}
+                action={
+                  (search || category !== 'all' || region !== null) ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSearch('');
+                        setCategory('all');
+                        setRegion(null);
+                      }}
+                      className="btn btn-secondary"
+                    >
+                      {t('common.clear')}
+                    </button>
+                  ) : undefined
+                }
               />
             ) : (
               <>

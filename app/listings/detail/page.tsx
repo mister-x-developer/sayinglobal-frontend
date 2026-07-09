@@ -173,13 +173,15 @@ function ListingDetailPageContent() {
                     {/* Main image */}
                     <div className="relative aspect-[4/3] overflow-hidden sm:rounded-2xl bg-bg-subtle -mx-4 sm:mx-0">
                       <AnimatePresence mode="wait" initial={false}>
-                        <motion.div
+                        <motion.button
                           key={imgIndex}
+                          type="button"
+                          aria-label={t('common.viewGallery' as any) || 'Rasm galereyasini ochish'}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           exit={{ opacity: 0 }}
                           transition={{ duration: 0.3 }}
-                          className="absolute inset-0 cursor-zoom-in"
+                          className="absolute inset-0 cursor-zoom-in w-full h-full block text-left"
                           onClick={() => setGalleryOpen(true)}
                         >
                           <ListingImage
@@ -190,7 +192,7 @@ function ListingDetailPageContent() {
                             sizes="(max-width: 1024px) 100vw, 60vw"
                             priority
                           />
-                        </motion.div>
+                        </motion.button>
                       </AnimatePresence>
 
                       {/* Nav arrows */}
@@ -226,6 +228,7 @@ function ListingDetailPageContent() {
                           <button
                             key={img.id}
                             type="button"
+                            aria-label={`${t('common.viewImage' as any) || 'Rasmni ko`rish'} ${i + 1}`}
                             onClick={() => setImgIndex(i)}
                             className={`relative aspect-square overflow-hidden rounded-xl border-2 transition-all ${
                               i === imgIndex

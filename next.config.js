@@ -14,7 +14,10 @@ const apiOrigin = isDev
   ? (process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000').replace(/\/api\/?$/, '')
   : PRODUCTION_API_ORIGIN;
 
+const isCapacitor = process.env.CAPACITOR_BUILD === 'true';
+
 const nextConfig = {
+  ...(isCapacitor ? { output: 'export' } : {}),
   reactStrictMode: true,
 
   eslint: {
@@ -55,15 +58,17 @@ const nextConfig = {
     return config;
   },
 
-  async redirects() {
-    return [
-      {
-        source: '/notifications/:id(\\d+)',
-        destination: '/notifications/detail?id=:id',
-        permanent: false,
-      },
-    ];
-  },
+  ...(isCapacitor ? {} : {
+    async redirects() {
+      return [
+        {
+          source: '/notifications/:id(\\d+)',
+          destination: '/notifications/detail?id=:id',
+          permanent: false,
+        },
+      ];
+    },
+  }),
 };
 
 // IMPORTANT: We intentionally do NOT wrap the config with `withSentryConfig`.
