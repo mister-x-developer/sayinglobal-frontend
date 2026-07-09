@@ -49,11 +49,11 @@ export function Categories() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent transition-opacity duration-300 group-hover:from-black/85" />
 
               {/* Label */}
-              <div className="relative z-10 mx-3 mb-3 w-[calc(100%-24px)] overflow-hidden rounded-xl bg-black/20 p-2.5 text-center backdrop-blur-md transition-all duration-300 group-hover:bg-black/40 sm:p-3">
+              <div className="relative z-10 w-full p-3 sm:p-4 text-center">
                 <p className="text-sm font-semibold text-white sm:text-base">
                   {cat.name}
                 </p>
-                <p className="mt-0.5 hidden text-[11px] text-white/80 transition-opacity duration-300 group-hover:text-white sm:block">
+                <p className="mt-0.5 hidden text-[11px] text-white/80 sm:block">
                   {cat.description}
                 </p>
               </div>
