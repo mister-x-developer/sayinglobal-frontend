@@ -39,6 +39,12 @@ export function ClientAuthGuard({ children }: { children: React.ReactNode }) {
       return;
     }
 
+    // Native apps do not use the landing page.
+    if (pathname === '/' && !isAuthenticated && Capacitor.isNativePlatform()) {
+      router.replace('/auth');
+      return;
+    }
+
     // Unauthenticated user trying to access private page
     if (!isPublicPath(pathname) && !isAuthenticated) {
       const target = pathname.startsWith('/admin') ? '/admin/login' : '/auth';
@@ -52,13 +58,6 @@ export function ClientAuthGuard({ children }: { children: React.ReactNode }) {
       return;
     }
   }, [hasHydrated, pathname, isAuthenticated, user, router]);
-
-  const isNative = typeof window !== 'undefined' && Capacitor.isNativePlatform();
-
-  // Prevent flash of protected content on mobile before auth state is loaded from storage
-  if (isNative && !hasHydrated && !isPublicPath(pathname || '')) {
-    return null;
-  }
 
   // Prevent flash of protected content while redirecting
   if (hasHydrated && !isPublicPath(pathname || '') && !isAuthenticated) {

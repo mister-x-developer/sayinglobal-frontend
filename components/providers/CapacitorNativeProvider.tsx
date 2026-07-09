@@ -21,6 +21,7 @@ export function CapacitorNativeProvider() {
   const pathname = usePathname();
   const [isOffline, setIsOffline] = useState(false);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const hasHydrated = useAuthStore((s) => s._hasHydrated);
 
   useEffect(() => {
     // Only run this logic if we are running as a native app via Capacitor
@@ -28,8 +29,8 @@ export function CapacitorNativeProvider() {
       return;
     }
 
-    // 1. Hide Splash Screen after React has mounted and hydrated
-    SplashScreen.hide().catch(() => {});
+    // 1. Hide Splash Screen after React has mounted, hydrated, and any redirects have fired
+    // This is handled in a separate useEffect below that tracks hasHydrated and pathname.
 
     // 2. Configure Keyboard behavior (resize body to avoid overlapping inputs)
     Keyboard.setResizeMode({ mode: 'body' as any }).catch(() => {});
@@ -102,6 +103,19 @@ export function CapacitorNativeProvider() {
       observer.disconnect();
     };
   }, [pathname, router]);
+
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform()) return;
+    
+    // We want to hide the splash screen only AFTER we are fully hydrated.
+    // Also, if the user opens the app and starts on the landing page ('/'), 
+    // ClientAuthGuard will redirect them to '/auth' or '/dashboard'.
+    // We wait until they are no longer on '/' before hiding the splash screen 
+    // so they don't see the landing page flash.
+    if (hasHydrated && pathname !== '/') {
+      SplashScreen.hide().catch(() => {});
+    }
+  }, [hasHydrated, pathname]);
 
   const t = useTranslations();
   // If offline, render a full-screen native-feeling overlay
