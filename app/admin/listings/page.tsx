@@ -327,36 +327,6 @@ export default function AdminListingsPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={async () => {
-                    setBulkLoading('approve'); // reusing bulk loading state to disable buttons
-                    const ids = Array.from(selected);
-                    let ok = 0;
-                    for (const id of ids) {
-                      try {
-                        const res = await moderationApi.adminAIReviewListing(id);
-                        if (!res.is_flagged) {
-                          await listingsApi.approve(id);
-                          ok++;
-                        }
-                      } catch { /* continue */ }
-                    }
-                    if (ok > 0) {
-                      setListings((prev) => prev.map((l) =>
-                        selected.has(l.id) && l.status === 'pending' ? { ...l, status: 'active' } : l
-                      ));
-                    }
-                    setSelected(new Set());
-                    setBulkLoading(null);
-                    toast.success(`${ok}/${ids.length} ${t('admin.aiApproved')}`);
-                  }}
-                  disabled={!!bulkLoading}
-                  className="btn btn-sm bg-brand-accent/12 text-brand-accent hover:bg-brand-accent/20 disabled:opacity-50"
-                >
-                  <RefreshCw className="h-3.5 w-3.5" strokeWidth={2.25} />
-                  {t('admin.aiAnalysis')}
-                </button>
-                <button
-                  type="button"
                   onClick={() => { setRejectReason(''); setShowRejectModal('bulk'); }}
                   disabled={!!bulkLoading}
                   className="btn btn-sm bg-danger/12 text-danger hover:bg-danger/20 disabled:opacity-50"
@@ -506,29 +476,6 @@ export default function AdminListingsPage() {
                             </button>
                             {l.status === 'pending' && (
                               <>
-                                <button
-                                  type="button"
-                                  onClick={async (e) => {
-                                    e.stopPropagation();
-                                    try {
-                                      toast.info(t('admin.aiAnalyzing'));
-                                      const res = await moderationApi.adminAIReviewListing(l.id);
-                                      if (!res.is_flagged) {
-                                        await listingsApi.approve(l.id);
-                                        setListings((prev) => prev.map((item) => item.id === l.id ? { ...item, status: 'active' } : item));
-                                        toast.success(t('admin.aiApproved'));
-                                      } else {
-                                        toast.error(`${t('admin.aiRejected')}: ${res.explanation}`);
-                                      }
-                                    } catch {
-                                      toast.error(t('admin.aiError'));
-                                    }
-                                  }}
-                                  className="btn btn-sm bg-brand-accent/12 text-brand-accent hover:bg-brand-accent/20 h-8 px-2.5"
-                                  aria-label="AI Review"
-                                >
-                                  <RefreshCw className="h-3.5 w-3.5" strokeWidth={2.25} />
-                                </button>
                                 <button
                                   type="button"
                                   onClick={(e) => handleApprove(l.id, e)}

@@ -44,7 +44,8 @@ export const usersApi = {
     try {
       const res = await apiClient.put<User>(
         '/users/profile/update/',
-        data
+        data,
+        isForm ? { headers: { 'Content-Type': 'multipart/form-data' } } : undefined
       );
       return res.data;
     } catch (e) {
@@ -155,6 +156,7 @@ export const usersApi = {
           if (!seller || typeof (seller.public_id || seller.id) !== 'number') continue;
           if (!map.has((seller.public_id || seller.id))) {
             map.set((seller.public_id || seller.id), {
+              public_id: (seller.public_id || seller.id),
               id: (seller.public_id || seller.id),
               full_name: seller.full_name,
               avatar_url: seller.avatar_url,

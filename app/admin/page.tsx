@@ -212,22 +212,22 @@ export default function AdminDashboardPage() {
         {/* Top Operations Bar */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
-          className="sticky top-0 z-40 border-b border-border/50 bg-bg/60 px-6 py-5 backdrop-blur-xl shadow-sm"
+          className="sticky top-0 z-40 border-b border-border/50 bg-bg/60 px-4 py-4 md:px-6 md:py-5 backdrop-blur-xl shadow-sm"
         >
-          <div className="mx-auto flex w-full items-center justify-between">
-            <div className="flex items-center gap-5">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-primary to-brand-primary-hover text-white shadow-lg shadow-brand-primary/20 transform hover:scale-105 transition-transform">
-                <LayoutDashboard className="h-7 w-7" />
+          <div className="mx-auto flex w-full flex-col gap-4 md:flex-row md:items-center justify-between">
+            <div className="flex items-center gap-3 md:gap-5">
+              <div className="flex shrink-0 h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-primary to-brand-primary-hover text-white shadow-lg shadow-brand-primary/20 transform hover:scale-105 transition-transform">
+                <LayoutDashboard className="h-6 w-6 md:h-7 md:w-7" />
               </div>
-              <div>
-                <h1 className="text-3xl font-black leading-none text-fg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-fg to-fg-muted">{t('Admin.commandCenter')}</h1>
-                <p className="mt-1.5 text-xs font-bold text-fg-subtle uppercase tracking-widest flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
-                  SYS_TIME: {new Date().toISOString().replace('T', ' ').slice(0, 19)} UTC
+              <div className="min-w-0">
+                <h1 className="text-xl md:text-3xl font-black leading-none text-fg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-fg to-fg-muted truncate">{t('Admin.commandCenter')}</h1>
+                <p className="mt-1.5 text-[10px] md:text-xs font-bold text-fg-subtle uppercase tracking-widest flex items-center gap-1.5 md:gap-2">
+                  <span className="w-1.5 h-1.5 md:w-2 md:h-2 shrink-0 rounded-full bg-success animate-pulse" />
+                  <span className="truncate">SYS_TIME: {new Date().toISOString().replace('T', ' ').slice(0, 19)} UTC</span>
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 md:gap-4 w-full md:w-auto">
               <div className="hidden sm:flex items-center gap-3 rounded-xl border border-border/50 bg-bg-elevated/50 backdrop-blur-md px-5 py-2.5 shadow-sm">
                 <div className={`h-3 w-3 rounded-full shadow-[0_0_10px_currentColor] ${clusterHasError ? 'bg-danger text-danger animate-pulse' : 'bg-success text-success'}`} />
                 <span className="text-xs font-bold uppercase tracking-widest text-fg-muted">{t('Admin.clusterState')}</span>
@@ -238,10 +238,10 @@ export default function AdminDashboardPage() {
               <button 
                 onClick={() => load(true)} 
                 disabled={refreshing} 
-                className="flex h-11 items-center gap-2 rounded-xl bg-fg px-6 text-sm font-bold text-bg transition-all active:scale-95 disabled:opacity-50 hover:shadow-lg hover:shadow-fg/20"
+                className="flex flex-1 md:flex-none justify-center h-11 items-center gap-2 rounded-xl bg-fg px-4 md:px-6 text-sm font-bold text-bg transition-all active:scale-95 disabled:opacity-50 hover:shadow-lg hover:shadow-fg/20 shrink-0"
               >
-                <RefreshCw className={`h-4.5 w-4.5 ${refreshing ? 'animate-spin' : ''}`} />
-                {t('Admin.syncData')}
+                <RefreshCw className={`h-4 md:h-4.5 w-4 md:w-4.5 shrink-0 ${refreshing ? 'animate-spin' : ''}`} />
+                <span className="truncate">{t('Admin.syncData')}</span>
               </button>
             </div>
           </div>

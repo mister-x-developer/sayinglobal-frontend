@@ -31,7 +31,7 @@ import type { Notification, NotificationType } from '@/lib/api/notifications';
 import { formatRelativeTime } from '@/lib/utils/format';
 import { useLocale } from 'next-intl';
 
-type Filter = 'all' | 'unread' | 'messages' | 'listings' | 'social';
+type Filter = 'all' | 'unread' | 'messages' | 'listings' | 'social' | 'system' | 'moderation';
 
 const TYPE_ICON: Record<NotificationType, typeof Bell> = {
   message_received: MessageSquareText,
@@ -67,6 +67,8 @@ function matchesFilter(n: Notification, filter: Filter): boolean {
   if (filter === 'messages') return n.notification_type === 'message_received';
   if (filter === 'listings') return ['listing_comment', 'listing_favorite', 'listing_sold', 'listing_expired'].includes(n.notification_type);
   if (filter === 'social') return ['follow', 'rating'].includes(n.notification_type);
+  if (filter === 'system') return ['system', 'system_alert', 'admin_message', 'broadcast'].includes(n.notification_type);
+  if (filter === 'moderation') return ['complaint_update', 'listing_comment'].includes(n.notification_type);
   return true;
 }
 
@@ -106,6 +108,9 @@ export default function NotificationsPage() {
   const handleMarkAllRead = async () => {
     markAllRead();
     await notificationsApi.markAllRead();
+    if (filter === 'unread') {
+      setFilter('all');
+    }
   };
 
   const handleRemove = async (id: number) => {
@@ -119,6 +124,8 @@ export default function NotificationsPage() {
   const FILTERS: { key: Filter; label: string }[] = isAdmin ? [
     { key: 'all', label: t('common.all') },
     { key: 'unread', label: `${t('notifications.title')} (${unreadCount})` },
+    { key: 'system', label: 'Tizim' },
+    { key: 'moderation', label: 'Moderatsiya' },
   ] : [
     { key: 'all', label: t('common.all') },
     { key: 'unread', label: `${t('notifications.title')} (${unreadCount})` },
