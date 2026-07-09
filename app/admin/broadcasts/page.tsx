@@ -28,7 +28,7 @@ import apiClient from '@/lib/api/client';
 import { formatRelativeTime } from '@/lib/utils/format';
 
 interface BroadcastItem {
-  public_id: number;
+  id: number;
   title: string;
   title_uz?: string;
   title_uz_cyrl?: string;
@@ -119,9 +119,9 @@ export default function AdminBroadcastsPage() {
   };
 
   const sendBroadcast = async (b: BroadcastItem) => {
-    setSending(b.public_id);
+    setSending(b.id);
     try {
-      await apiClient.post(`/notifications/broadcasts/${b.public_id}/send/`);
+      await apiClient.post(`/notifications/broadcasts/${b.id}/send/`);
       toast.success(t('admin.broadcastSent'));
       await load();
     } catch {
@@ -240,9 +240,9 @@ export default function AdminBroadcastsPage() {
                 </thead>
                 <tbody>
                   {list.map((b, i) => (
-                    <tr key={b.public_id} className="group transition-colors">
+                    <tr key={b.id} className="group transition-colors">
                       <td>
-                        <Link href={`/admin/broadcasts/detail?id=${b.public_id}`} className="cell-title hover:text-brand-primary transition-colors">
+                        <Link href={`/admin/broadcasts/detail?id=${b.id}`} className="cell-title hover:text-brand-primary transition-colors">
                           {localizedTitle(b, locale)}
                         </Link>
                         <p className="cell-subtle">{formatRelativeTime(b.created_at)}</p>
@@ -294,17 +294,17 @@ export default function AdminBroadcastsPage() {
                       </td>
                       <td className="text-right">
                         <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <Link href={`/admin/broadcasts/detail?id=${b.public_id}`} className="btn btn-secondary btn-sm h-8">
+                          <Link href={`/admin/broadcasts/detail?id=${b.id}`} className="btn btn-secondary btn-sm h-8">
                             {t('common.view')}
                           </Link>
                           {b.status !== 'sent' && (
                             <button
                               type="button"
                               onClick={() => sendBroadcast(b)}
-                              disabled={sending === b.public_id}
+                              disabled={sending === b.id}
                               className="btn btn-primary btn-sm h-8"
                             >
-                              {sending === b.public_id ? (
+                              {sending === b.id ? (
                                 <Loader2 className="h-3.5 w-3.5 animate-spin" strokeWidth={2} />
                               ) : (
                                 <Send className="h-3.5 w-3.5" strokeWidth={2} />

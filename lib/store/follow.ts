@@ -1,6 +1,6 @@
 /**
  * Follow store — optimistic follow/unfollow with localStorage persistence.
- * Uses public_id (number) as the identifier.
+ * Uses id (number) as the identifier.
  */
 
 import { create } from 'zustand';

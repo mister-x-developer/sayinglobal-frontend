@@ -10,7 +10,7 @@ import { useAuthStore } from '@/lib/store/auth';
 import { FollowButton } from './FollowButton';
 
 export interface SellerCardData {
-  public_id: number;
+  id: number;
   full_name: string;
   avatar_url?: string;
   bio?: string;

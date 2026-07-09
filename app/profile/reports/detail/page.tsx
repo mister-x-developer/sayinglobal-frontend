@@ -106,7 +106,7 @@ function ReportDetailPageContent() {
                               : t('report.titleSeller' as any)}
                           </h1>
                           <p className="mt-1 text-sm text-fg-muted">
-                            #{report.public_id} · {formatDate(report.created_at)}
+                            #{report.id} · {formatDate(report.created_at)}
                           </p>
                         </div>
                         <Badge variant={cfg.variant} size="md" className="flex items-center gap-1">

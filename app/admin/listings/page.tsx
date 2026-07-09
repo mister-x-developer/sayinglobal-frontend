@@ -108,14 +108,14 @@ export default function AdminListingsPage() {
 
   // ── Selection helpers ──────────────────────────────────────────────────────
 
-  const allSelected = filtered.length > 0 && filtered.every((l) => selected.has(l.public_id));
-  const someSelected = filtered.some((l) => selected.has(l.public_id));
+  const allSelected = filtered.length > 0 && filtered.every((l) => selected.has(l.id));
+  const someSelected = filtered.some((l) => selected.has(l.id));
 
   const toggleAll = () => {
     if (allSelected) {
       setSelected(new Set());
     } else {
-      setSelected(new Set(filtered.map((l) => l.public_id)));
+      setSelected(new Set(filtered.map((l) => l.id)));
     }
   };
 
@@ -134,7 +134,7 @@ export default function AdminListingsPage() {
     e.stopPropagation();
     try {
       await listingsApi.approve(id);
-      setListings((prev) => prev.map((l) => l.public_id === id ? { ...l, status: 'active' } : l));
+      setListings((prev) => prev.map((l) => l.id === id ? { ...l, status: 'active' } : l));
       toast.success(t('success.approved'));
     } catch {
       toast.error(t('errors.generic'));
@@ -144,7 +144,7 @@ export default function AdminListingsPage() {
   const handleReject = async (id: number, reason: string) => {
     try {
       await listingsApi.reject(id, reason || 'Rejected by admin');
-      setListings((prev) => prev.map((l) => l.public_id === id ? { ...l, status: 'rejected' } : l));
+      setListings((prev) => prev.map((l) => l.id === id ? { ...l, status: 'rejected' } : l));
       toast.success(t('success.rejected'));
     } catch {
       toast.error(t('errors.generic'));
@@ -164,7 +164,7 @@ export default function AdminListingsPage() {
       } catch { /* continue */ }
     }
     setListings((prev) => prev.map((l) =>
-      selected.has(l.public_id) ? { ...l, status: 'active' } : l
+      selected.has(l.id) ? { ...l, status: 'active' } : l
     ));
     setSelected(new Set());
     setBulkLoading(null);
@@ -182,7 +182,7 @@ export default function AdminListingsPage() {
       } catch { /* continue */ }
     }
     setListings((prev) => prev.map((l) =>
-      selected.has(l.public_id) ? { ...l, status: 'rejected' } : l
+      selected.has(l.id) ? { ...l, status: 'rejected' } : l
     ));
     setSelected(new Set());
     setBulkLoading(null);
@@ -202,7 +202,7 @@ export default function AdminListingsPage() {
         ok++;
       } catch { /* continue */ }
     }
-    setListings((prev) => prev.filter((l) => !selected.has(l.public_id)));
+    setListings((prev) => prev.filter((l) => !selected.has(l.id)));
     setSelected(new Set());
     setBulkLoading(null);
     toast.success(`${ok}/${ids.length} removed`);
@@ -291,7 +291,7 @@ export default function AdminListingsPage() {
               {pendingConfirmations.slice(0, 5).map((c, i) => (
                 <div key={i} className="flex justify-between bg-bg p-2 rounded">
                   <div>
-                    <span className="font-mono">{c.code}</span> — {c.seller} for listing #{c.listing_public_id}
+                    <span className="font-mono">{c.code}</span> — {c.seller} for listing #{c.listing_id}
                   </div>
                   <div className="text-fg-subtle">{new Date(c.created_at).toLocaleDateString()}</div>
                 </div>
@@ -342,7 +342,7 @@ export default function AdminListingsPage() {
                     }
                     if (ok > 0) {
                       setListings((prev) => prev.map((l) =>
-                        selected.has(l.public_id) && l.status === 'pending' ? { ...l, status: 'active' } : l
+                        selected.has(l.id) && l.status === 'pending' ? { ...l, status: 'active' } : l
                       ));
                     }
                     setSelected(new Set());
@@ -431,7 +431,7 @@ export default function AdminListingsPage() {
                 </thead>
                 <tbody>
                   {filtered.map((l, i) => {
-                    const isSelected = selected.has(l.public_id);
+                    const isSelected = selected.has(l.id);
                     const primaryImg = l.primary_image?.image_url || l.primary_image?.image || l.images?.[0]?.image_url || l.images?.[0]?.image;
                     return (
                       <tr
@@ -440,13 +440,13 @@ export default function AdminListingsPage() {
                           'group cursor-pointer transition-colors',
                           isSelected && 'bg-brand-primary/5'
                         )}
-                        onClick={() => router.push(`/admin/listings/detail?id=${l.public_id}`)}
+                        onClick={() => router.push(`/admin/listings/detail?id=${l.id}`)}
                       >
-                        <td className="w-10" onClick={(e) => { e.stopPropagation(); toggleOne(l.public_id); }}>
+                        <td className="w-10" onClick={(e) => { e.stopPropagation(); toggleOne(l.id); }}>
                           <button
                             type="button"
                             className="flex items-center justify-center text-fg-subtle hover:text-fg"
-                            aria-label={`Select listing ${l.public_id}`}
+                            aria-label={`Select listing ${l.id}`}
                           >
                             {isSelected
                               ? <CheckSquare className="h-4 w-4 text-brand-primary" strokeWidth={2} />
@@ -498,7 +498,7 @@ export default function AdminListingsPage() {
                           <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button
                               type="button"
-                              onClick={(e) => { e.stopPropagation(); router.push(`/admin/listings/detail?id=${l.public_id}`); }}
+                              onClick={(e) => { e.stopPropagation(); router.push(`/admin/listings/detail?id=${l.id}`); }}
                               className="btn btn-sm btn-secondary h-8 px-2.5"
                               aria-label="View listing"
                             >
@@ -512,10 +512,10 @@ export default function AdminListingsPage() {
                                     e.stopPropagation();
                                     try {
                                       toast.info(t('admin.aiAnalyzing'));
-                                      const res = await moderationApi.adminAIReviewListing(l.public_id);
+                                      const res = await moderationApi.adminAIReviewListing(l.id);
                                       if (!res.is_flagged) {
-                                        await listingsApi.approve(l.public_id);
-                                        setListings((prev) => prev.map((item) => item.public_id === l.public_id ? { ...item, status: 'active' } : item));
+                                        await listingsApi.approve(l.id);
+                                        setListings((prev) => prev.map((item) => item.id === l.id ? { ...item, status: 'active' } : item));
                                         toast.success(t('admin.aiApproved'));
                                       } else {
                                         toast.error(`${t('admin.aiRejected')}: ${res.explanation}`);
@@ -531,7 +531,7 @@ export default function AdminListingsPage() {
                                 </button>
                                 <button
                                   type="button"
-                                  onClick={(e) => handleApprove(l.public_id, e)}
+                                  onClick={(e) => handleApprove(l.id, e)}
                                   className="btn btn-sm bg-success/12 text-success hover:bg-success/20 h-8 px-2.5"
                                   aria-label="Approve"
                                 >
@@ -539,7 +539,7 @@ export default function AdminListingsPage() {
                                 </button>
                                 <button
                                   type="button"
-                                  onClick={(e) => { e.stopPropagation(); setRejectReason(''); setShowRejectModal(l.public_id); }}
+                                  onClick={(e) => { e.stopPropagation(); setRejectReason(''); setShowRejectModal(l.id); }}
                                   className="btn btn-sm bg-danger/12 text-danger hover:bg-danger/20 h-8 px-2.5"
                                   aria-label="Reject"
                                 >

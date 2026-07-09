@@ -1,5 +1,5 @@
 /**
- * Notifications store — uses public_id (number) as the identifier.
+ * Notifications store — uses id (number) as the identifier.
  * Unread count is always derived from items to stay consistent.
  */
 
@@ -39,7 +39,7 @@ export const useNotificationsStore = create<NotificationsState>((set) => ({
   markRead: (publicId) =>
     set((state) => {
       const items = state.items.map((n) =>
-        n.public_id === publicId
+        n.id === publicId
           ? { ...n, is_read: true, read_at: new Date().toISOString() }
           : n
       );
@@ -54,7 +54,7 @@ export const useNotificationsStore = create<NotificationsState>((set) => ({
 
   remove: (publicId) =>
     set((state) => {
-      const items = state.items.filter((n) => n.public_id !== publicId);
+      const items = state.items.filter((n) => n.id !== publicId);
       return { items, unreadCount: countUnread(items) };
     }),
 

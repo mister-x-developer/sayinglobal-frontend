@@ -11,7 +11,7 @@ import { getLocalizedListingTitle } from '@/lib/utils/format';
 
 interface Listing {
   id: string;
-  public_id: string;
+  id: string;
   title: string;
   title_uz?: string;
   title_uz_cyrl?: string;
@@ -51,7 +51,7 @@ export default function Map({ listings, centerLat = 41.2995, centerLng = 69.2401
       
       {listings.filter(l => l.latitude && l.longitude).map(listing => (
         <Marker 
-          key={listing.id} 
+          key={listing.public_id} 
           position={[Number(listing.latitude), Number(listing.longitude)]}
         >
           <Popup>

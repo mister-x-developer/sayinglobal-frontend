@@ -30,7 +30,7 @@ import apiClient from '@/lib/api/client';
 import { formatDate, formatRelativeTime } from '@/lib/utils/format';
 
 interface Broadcast {
-  public_id: number;
+  id: number;
   title: string;
   title_uz?: string;
   title_uz_cyrl?: string;
@@ -96,7 +96,7 @@ function AdminBroadcastDetailPageContent() {
     if (!b) return;
     setSubmitting('send');
     try {
-      await apiClient.post(`/notifications/broadcasts/${b.public_id}/send/`);
+      await apiClient.post(`/notifications/broadcasts/${b.id}/send/`);
       toast.success(t('admin.broadcastSent'));
       await fetchAll();
     } catch {
@@ -111,7 +111,7 @@ function AdminBroadcastDetailPageContent() {
     if (!confirm(t('common.delete') + '?')) return;
     setSubmitting('delete');
     try {
-      await apiClient.delete(`/notifications/broadcasts/${b.public_id}/`);
+      await apiClient.delete(`/notifications/broadcasts/${b.id}/`);
       toast.success(t('success.deleted' as any) ?? t('success.updated'));
       router.push('/admin/broadcasts');
     } catch {
@@ -125,7 +125,7 @@ function AdminBroadcastDetailPageContent() {
     if (!b) return;
     setSubmitting('save');
     try {
-      const res = await apiClient.patch(`/notifications/broadcasts/${b.public_id}/`, {
+      const res = await apiClient.patch(`/notifications/broadcasts/${b.id}/`, {
         title: title.trim(),
         message: message.trim(),
         // original_locale is auto-detected on the backend from the text
@@ -187,7 +187,7 @@ function AdminBroadcastDetailPageContent() {
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <p className="text-eyebrow">{t('admin.broadcast')}</p>
-                  <h1 className="display-md mt-2">#{b.public_id}</h1>
+                  <h1 className="display-md mt-2">#{b.id}</h1>
                 </div>
                 <Badge
                   variant={isSent ? 'success' : b.status === 'draft' ? 'default' : 'warning'}

@@ -75,7 +75,7 @@ function AdminReportDetailPageContent() {
     setLoading(true);
     try {
       const data = await moderationApi.adminList({ page_size: 200 });
-      const found = data.results.find((r) => r.public_id === id) ?? null;
+      const found = data.results.find((r) => r.id === id) ?? null;
       setReport(found);
       if (found?.resolution_notes) setNotes(found.resolution_notes);
     } catch {
@@ -91,7 +91,7 @@ function AdminReportDetailPageContent() {
     if (!report) return;
     setSubmitting('review');
     try {
-      await moderationApi.adminStartReview(report.public_id);
+      await moderationApi.adminStartReview(report.id);
       toast.success(t('success.updated'));
       await load();
     } catch {
@@ -108,7 +108,7 @@ function AdminReportDetailPageContent() {
     }
     setSubmitting('valid');
     try {
-      await moderationApi.adminResolveValid(report.public_id, notes.trim());
+      await moderationApi.adminResolveValid(report.id, notes.trim());
       toast.success(t('success.updated'));
       await load();
     } catch {
@@ -125,7 +125,7 @@ function AdminReportDetailPageContent() {
     }
     setSubmitting('invalid');
     try {
-      await moderationApi.adminResolveInvalid(report.public_id, notes.trim());
+      await moderationApi.adminResolveInvalid(report.id, notes.trim());
       toast.success(t('success.updated'));
       await load();
     } catch {
@@ -139,7 +139,7 @@ function AdminReportDetailPageContent() {
     if (!report) return;
     setTranslating(field);
     try {
-      const result = await moderationApi.adminTranslateReportText(report.public_id, field, translateLang);
+      const result = await moderationApi.adminTranslateReportText(report.id, field, translateLang);
       setTranslatedTexts((prev) => ({ ...prev, [field]: result.translated }));
     } catch {
       toast.error(t('errors.generic'));
@@ -180,7 +180,7 @@ function AdminReportDetailPageContent() {
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <p className="text-eyebrow">
-                      {t('admin.complaints')} #{report.public_id}
+                      {t('admin.complaints')} #{report.id}
                     </p>
                     <h1 className="display-md mt-2">
                       {report.report_type === 'listing'

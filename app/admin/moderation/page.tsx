@@ -65,7 +65,7 @@ export default function AdminModerationPage() {
           ) : (
             <div className="divide-y divide-border">
               {reports.map((r) => (
-                <Link key={r.public_id} href={`/admin/moderation/detail?id=${r.public_id}`} className="block w-full">
+                <Link key={r.id} href={`/admin/moderation/detail?id=${r.id}`} className="block w-full">
                   <div className="flex items-center gap-4 p-4 hover:bg-bg-subtle/60 cursor-pointer">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
@@ -73,7 +73,7 @@ export default function AdminModerationPage() {
                           {t(`adminMod.status_${r.status}` as any) || r.status.replace(/_/g,' ')}
                         </Badge>
                         <span className="font-medium text-fg">{t(`adminMod.reason_${r.reason_code}` as any) || r.reason_code}</span>
-                        <span className="text-xs text-fg-subtle">#{r.public_id || 'N/A'}</span>
+                        <span className="text-xs text-fg-subtle">#{r.id || 'N/A'}</span>
                       </div>
                       <p className="text-sm text-fg-muted line-clamp-1 mt-0.5">{r.description || 'No description provided'}</p>
                       <p className="text-xs text-fg-subtle mt-1">

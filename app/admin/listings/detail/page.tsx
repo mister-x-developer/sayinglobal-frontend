@@ -69,7 +69,7 @@ function AdminListingDetailPageContent() {
       ]);
       setListing(detail ?? null);
       setComments(commentsData ?? []);
-      // Filter on the client to those reports targeting THIS listing public_id.
+      // Filter on the client to those reports targeting THIS listing id.
       const all = (reportsResp as any)?.results ?? [];
       const filtered = all.filter((r: any) => r?.listing?.public_id === id);
       setReports(filtered);
@@ -299,7 +299,7 @@ function AdminListingDetailPageContent() {
 
                   <ul className="divide-y divide-border">
                     {reports.map((r) => (
-                      <li key={r.public_id} className="py-4 first:pt-0 last:pb-0">
+                      <li key={r.id} className="py-4 first:pt-0 last:pb-0">
                         <div className="flex items-center justify-between gap-3">
                           <div className="flex items-center gap-2">
                             <Avatar src={r.complainant?.avatar_url} name={r.complainant?.full_name} size="sm" />

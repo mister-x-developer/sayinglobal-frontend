@@ -94,7 +94,7 @@ export default function MyListingsPage() {
     setDeleteConfirm(null);
     try {
       await listingsApi.remove(id);
-      setItems((prev) => prev.filter((l) => l.public_id !== id));
+      setItems((prev) => prev.filter((l) => l.id !== id));
     } catch { load(); }
   };
 
@@ -104,7 +104,7 @@ export default function MyListingsPage() {
     try {
       const result = await listingsApi.markSold(id);
       setItems((prev) =>
-        prev.map((l) => l.public_id === id ? {
+        prev.map((l) => l.id === id ? {
           ...l,
           status: 'sold',
           sold_at: new Date().toISOString(),
@@ -301,7 +301,7 @@ export default function MyListingsPage() {
                       className="surface-elevated group relative flex items-start gap-4 p-4 transition-all hover:shadow-lift"
                     >
                       {/* Thumbnail */}
-                      <Link href={`/listings/detail?id=${l.public_id}`} className="relative h-20 w-24 flex-shrink-0 overflow-hidden rounded-xl sm:h-24 sm:w-32">
+                      <Link href={`/listings/detail?id=${l.id}`} className="relative h-20 w-24 flex-shrink-0 overflow-hidden rounded-xl sm:h-24 sm:w-32">
                         <ListingImage
                           src={l.images?.[0]?.image && !l.images[0].image.startsWith('/placeholder') ? l.images[0].image : null}
                           alt={l.title}
@@ -313,7 +313,7 @@ export default function MyListingsPage() {
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-start justify-between gap-2">
                           <div className="min-w-0 flex-1">
-                            <Link href={`/listings/detail?id=${l.public_id}`} className="font-display text-base font-semibold text-fg hover:underline line-clamp-1">
+                            <Link href={`/listings/detail?id=${l.id}`} className="font-display text-base font-semibold text-fg hover:underline line-clamp-1">
                               {getLocalizedListingTitle(l, locale)}
                             </Link>
                             <p className="mt-1 text-sm text-fg-muted">
@@ -394,20 +394,20 @@ export default function MyListingsPage() {
                       <div className="relative flex-shrink-0">
                         <button
                           type="button"
-                          onClick={() => setOpenMenu(openMenu === l.public_id ? null : l.public_id)}
+                          onClick={() => setOpenMenu(openMenu === l.id ? null : l.id)}
                           className="inline-flex h-9 w-9 items-center justify-center rounded-full text-fg-subtle hover:bg-bg-subtle"
                           aria-label="More actions"
                         >
                           <MoreVertical className="h-4 w-4" strokeWidth={1.75} />
                         </button>
 
-                        {openMenu === l.public_id && (
+                        {openMenu === l.id && (
                           <>
                             <div className="fixed inset-0 z-10" role="presentation" onClick={() => setOpenMenu(null)} onKeyDown={(e) => { if (e.key === 'Escape') setOpenMenu(null); }} />
                             <div className="absolute right-0 top-10 z-20 w-48 overflow-hidden rounded-xl border border-border bg-bg-elevated shadow-lift">
                               <div className="p-1">
                                 <Link
-                                  href={`/listings/detail?id=${l.public_id}`}
+                                  href={`/listings/detail?id=${l.id}`}
                                   onClick={() => setOpenMenu(null)}
                                   className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-fg hover:bg-bg-subtle"
                                 >
@@ -416,7 +416,7 @@ export default function MyListingsPage() {
                                 </Link>
                                 {['active', 'pending', 'pending_review', 'rejected', 'expired'].includes(l.status) && (
                                   <Link
-                                    href={`/listings/${l.public_id}/edit`}
+                                    href={`/listings/${l.id}/edit`}
                                     onClick={() => setOpenMenu(null)}
                                     className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-fg hover:bg-bg-subtle"
                                   >
@@ -431,7 +431,7 @@ export default function MyListingsPage() {
                                       onClick={async () => {
                                         setOpenMenu(null);
                                         try {
-                                          await listingsApi.bump(l.public_id);
+                                          await listingsApi.bump(l.id);
                                           toast.success(t('listings.bumpSuccess' as any) || 'Listing bumped successfully');
                                           load();
                                         } catch (e) {
@@ -448,7 +448,7 @@ export default function MyListingsPage() {
                                       onClick={async () => {
                                         setOpenMenu(null);
                                         try {
-                                          await listingsApi.restore(l.public_id);
+                                          await listingsApi.restore(l.id);
                                           toast.success(t('listings.renewSuccess' as any) || 'Listing renewed successfully');
                                           load();
                                         } catch (e) {
@@ -462,7 +462,7 @@ export default function MyListingsPage() {
                                     </button>
                                     <button
                                       type="button"
-                                      onClick={() => { setOpenMenu(null); setSoldConfirm(l.public_id); }}
+                                      onClick={() => { setOpenMenu(null); setSoldConfirm(l.id); }}
                                       className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-success hover:bg-success/10"
                                     >
                                       <ShoppingCart className="h-4 w-4" strokeWidth={1.75} />
@@ -476,7 +476,7 @@ export default function MyListingsPage() {
                                     onClick={async () => {
                                       setOpenMenu(null);
                                       try {
-                                        await listingsApi.restore(l.public_id);
+                                        await listingsApi.restore(l.id);
                                         toast.success(t('listings.restoreSuccess' as any) || 'Listing restored successfully');
                                         load();
                                       } catch (e) {
@@ -492,7 +492,7 @@ export default function MyListingsPage() {
                                 <div className="my-1 h-px bg-border" />
                                 <button
                                   type="button"
-                                  onClick={() => { setOpenMenu(null); setDeleteConfirm(l.public_id); }}
+                                  onClick={() => { setOpenMenu(null); setDeleteConfirm(l.id); }}
                                   className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-danger hover:bg-danger/10"
                                 >
                                   <Trash2 className="h-4 w-4" strokeWidth={1.75} />

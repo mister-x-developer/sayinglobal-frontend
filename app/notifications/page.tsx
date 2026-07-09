@@ -201,7 +201,7 @@ export default function NotificationsPage() {
             <AnimatePresence initial={false}>
               {filtered.map((n) => (
                 <NotificationRow
-                  key={n.public_id}
+                  key={n.id}
                   notification={n}
                   onMarkRead={handleMarkRead}
                   onRemove={handleRemove}
@@ -260,10 +260,10 @@ function NotificationRow({
   const title = getLocaleText(n.title, n.title_uz, n.title_uz_cyrl, n.title_ru, n.title_en);
   const message = getLocaleText(n.message, n.message_uz, n.message_uz_cyrl, n.message_ru, n.message_en);
 
-  const dest = n.action_url ?? `/notifications/detail?id=${n.public_id}`;
+  const dest = n.action_url ?? `/notifications/detail?id=${n.id}`;
 
   const handleRowClick = () => {
-    if (!n.is_read) onMarkRead(n.public_id);
+    if (!n.is_read) onMarkRead(n.id);
     router.push(dest);
   };
 
@@ -316,7 +316,7 @@ function NotificationRow({
         {!n.is_read && (
           <button
             type="button"
-            onClick={(e) => { e.stopPropagation(); onMarkRead(n.public_id); }}
+            onClick={(e) => { e.stopPropagation(); onMarkRead(n.id); }}
             className="inline-flex h-8 w-8 items-center justify-center rounded-full text-fg-subtle hover:bg-bg-subtle hover:text-brand-primary"
             aria-label={t('notifications.markAllRead')}
           >
@@ -325,7 +325,7 @@ function NotificationRow({
         )}
         <button
           type="button"
-          onClick={(e) => { e.stopPropagation(); e.preventDefault(); onRemove(n.public_id); }}
+          onClick={(e) => { e.stopPropagation(); e.preventDefault(); onRemove(n.id); }}
           className="inline-flex h-8 w-8 items-center justify-center rounded-full text-fg-subtle hover:bg-danger/10 hover:text-danger"
           aria-label={t('common.delete')}
         >

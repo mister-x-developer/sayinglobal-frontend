@@ -50,7 +50,7 @@ const STATUS_BADGE: Record<string, any> = {
 };
 
 interface AdminUserRecord {
-  public_id: number;
+  id: number;
   full_name: string;
   phone?: string | null;
   telegram_username?: string | null;
@@ -259,7 +259,7 @@ function AdminUserDetailPageContent() {
                 </h2>
                 <ul className="divide-y divide-border">
                   {receivedReports.map((r) => (
-                    <li key={r.public_id} className="py-3">
+                    <li key={r.id} className="py-3">
                       <Link href={`/admin/moderation`} className="flex items-center justify-between hover:bg-bg-subtle rounded-lg px-2 py-1 -mx-2">
                         <div className="min-w-0">
                           <p className="text-sm text-fg">{r.complainant?.full_name} → {r.report_type}</p>
@@ -341,7 +341,7 @@ function AdminUserDetailPageContent() {
                 <h3 className="text-eyebrow">{t('admin.reportsFiled')}</h3>
                 <ul className="mt-3 space-y-2 text-sm">
                   {filedReports.map((r) => (
-                    <li key={r.public_id} className="flex items-center justify-between rounded-lg bg-bg-subtle px-3 py-2">
+                    <li key={r.id} className="flex items-center justify-between rounded-lg bg-bg-subtle px-3 py-2">
                       <span className="text-fg-muted truncate">{r.report_type}</span>
                       <Badge variant={r.status === 'pending' ? 'warning' : 'default'} size="sm">
                         {r.status}

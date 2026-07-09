@@ -128,7 +128,7 @@ export function SellerRatingsThread({ sellerPublicId, listingPublicId }: ThreadP
   };
 
   const startEdit = (r: RatingRecord) => {
-    setEditingId(r.public_id);
+    setEditingId(r.id);
     setComposeScore(r.score || 5);
     setComposeBody(r.review || '');
     setShowCompose(true);
@@ -148,9 +148,9 @@ export function SellerRatingsThread({ sellerPublicId, listingPublicId }: ThreadP
   const handleHelpful = async (r: RatingRecord) => {
     try {
       const fn = r.is_helpful ? ratingsApi.unhelpful : ratingsApi.helpful;
-      const data = await fn(r.public_id);
+      const data = await fn(r.id);
       setItems((prev) => prev.map((it) =>
-        it.public_id === r.public_id
+        it.id === r.id
           ? { ...it, is_helpful: data.is_helpful, helpful_count: data.helpful_count }
           : it,
       ));
@@ -162,7 +162,7 @@ export function SellerRatingsThread({ sellerPublicId, listingPublicId }: ThreadP
   const handleReport = (r: RatingRecord) => {
     setReportTarget({
       kind: 'rating',
-      publicId: r.public_id,
+      publicId: r.id,
       fullName: r.buyer?.full_name ?? (t('common.user') ?? 'User'),
     });
   };
@@ -171,7 +171,7 @@ export function SellerRatingsThread({ sellerPublicId, listingPublicId }: ThreadP
     const body = window.prompt(t('reviews.replyPrompt' as any) ?? 'Your reply');
     if (!body || !body.trim()) return;
     try {
-      await ratingsApi.reply(r.public_id, { review: body.trim(), locale });
+      await ratingsApi.reply(r.id, { review: body.trim(), locale });
       await reload();
     } catch {
       toast.error(t('errors.generic'));
@@ -323,7 +323,7 @@ export function SellerRatingsThread({ sellerPublicId, listingPublicId }: ThreadP
         <ul className="mt-4 space-y-3">
           {items.map((r) => (
             <RatingCard
-              key={r.public_id}
+              key={r.id}
               rating={r}
               myPublicId={me?.public_id}
               isSeller={isSelfSeller}
@@ -331,7 +331,7 @@ export function SellerRatingsThread({ sellerPublicId, listingPublicId }: ThreadP
               onReply={() => handleReply(r)}
               onReport={() => handleReport(r)}
               onEdit={() => startEdit(r)}
-              onDelete={() => handleDelete(r.public_id)}
+              onDelete={() => handleDelete(r.id)}
             />
           ))}
         </ul>
@@ -412,9 +412,9 @@ function RatingCard({
               />
             </div>
           ) : null}
-          {rating.listing_title && rating.listing_public_id && (
+          {rating.listing_title && rating.listing_id && (
             <a
-              href={`/listings/detail?id=${rating.listing_public_id}`}
+              href={`/listings/detail?id=${rating.listing_id}`}
               className="mt-2 inline-flex items-center gap-1 rounded-full bg-bg-subtle px-2 py-0.5 text-[11px] text-fg-muted hover:underline"
             >
               <MessageSquareText className="h-3 w-3" strokeWidth={1.75} />
@@ -490,7 +490,7 @@ function RatingCard({
           {rating.replies && rating.replies.length > 0 && (
             <ul className="mt-3 space-y-2 border-l-2 border-border pl-3">
               {rating.replies.map((rep) => (
-                <li key={rep.public_id} className="flex items-start gap-2">
+                <li key={rep.id} className="flex items-start gap-2">
                   <Avatar src={rep.buyer?.avatar_url} name={rep.buyer?.full_name} size="sm" />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">

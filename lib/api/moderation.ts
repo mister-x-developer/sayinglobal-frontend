@@ -3,10 +3,10 @@
  *
  * Backend endpoints (under /api/moderation/v2/):
  *   GET  /reasons/                          — reason catalogue
- *   POST /reports/listing/{public_id}/      — submit listing report
- *   POST /reports/seller/{public_id}/       — submit seller report
+ *   POST /reports/listing/{id}/      — submit listing report
+ *   POST /reports/seller/{id}/       — submit seller report
  *   GET  /reports/                          — current user's reports
- *   GET  /reports/{public_id}/              — single report
+ *   GET  /reports/{id}/              — single report
  */
 import apiClient, { handleApiError } from './client';
 
@@ -32,14 +32,14 @@ export interface ReasonsCatalogue {
 }
 
 export interface ReportRecord {
-  public_id: number;
+  id: number;
   report_type: 'listing' | 'seller';
   reason_code: string;
   severity: ReportSeverity;
   description: string;
   status: ReportStatus;
-  listing: { public_id: number; title: string } | null;
-  reported_user: { public_id: number; full_name: string; avatar_url?: string } | null;
+  listing: { id: number; title: string } | null;
+  reported_user: { id: number; full_name: string; avatar_url?: string } | null;
   resolution_notes: string;
   created_at: string;
   updated_at: string;
@@ -126,7 +126,7 @@ export const moderationApi = {
     userPublicId: number,
     targetStatus: 'good' | 'warning' | 'restricted',
     reason: string,
-  ): Promise<{ user_public_id: number; old_status: string; new_status: string }> {
+  ): Promise<{ user_id: number; old_status: string; new_status: string }> {
     try {
       const res = await apiClient.post(
         `/moderation/v2/admin/users/${userPublicId}/restore-status/`,
@@ -263,7 +263,7 @@ export const moderationApi = {
 // ── Admin types ────────────────────────────────────────────────────────────
 
 export interface AdminUserMini {
-  public_id: number;
+  id: number;
   full_name: string;
   avatar_url?: string;
   phone?: string | null;

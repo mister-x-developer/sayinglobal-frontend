@@ -119,10 +119,10 @@ class NotificationSocketService {
             data[`message_${localeKey}`] || data.message_uz || data.body || data.message || '';
 
           // Build notification object with all locale fields
-          // notification_id is now a 9-digit public_id (int), not UUID
+          // notification_id is now a 9-digit id (int), not UUID
           const notifPublicId = data.notification_id ? Number(data.notification_id) : 0;
           const notifItem = {
-            public_id: notifPublicId || Date.now(),
+            id: notifPublicId || Date.now(),
             notification_type: (data.notif_type || data.notification_type || 'system') as any,
             title: localizedTitle,
             title_uz: data.title_uz || data.title || '',
@@ -136,7 +136,7 @@ class NotificationSocketService {
             message_en: data.message_en || data.body || '',
             is_read: false,
             created_at: new Date().toISOString(),
-            // action_url from backend (already uses public_id routes)
+            // action_url from backend (already uses id routes)
             action_url: data.action_url || (notifPublicId ? `/notifications/${notifPublicId}` : undefined),
           };
 
@@ -149,9 +149,9 @@ class NotificationSocketService {
               const actionUrl = notifItem.action_url;
               const markAsRead = () => {
                 // Mark notification as read when toast is clicked
-                if (notifItem.public_id) {
-                  notificationSocket.markRead(notifItem.public_id);
-                  useNotificationsStore.getState().markRead(notifItem.public_id);
+                if (notifItem.id) {
+                  notificationSocket.markRead(notifItem.id);
+                  useNotificationsStore.getState().markRead(notifItem.id);
                 }
               };
               if (localizedTitle) {
@@ -220,12 +220,12 @@ class NotificationSocketService {
     }
   }
 
-  /** Mark a notification as read by its public_id (9-digit int). */
+  /** Mark a notification as read by its id (9-digit int). */
   markRead(publicId: number): void {
     if (this.ws?.readyState === WebSocket.OPEN) {
       this.ws.send(JSON.stringify({
         action: 'mark_read',
-        notification_id: publicId,  // backend accepts public_id (int)
+        notification_id: publicId,  // backend accepts id (int)
       }));
     }
   }

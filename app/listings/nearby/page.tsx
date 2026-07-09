@@ -118,11 +118,11 @@ export default function NearbyListingsPage() {
 
   const mapMarkers = useMemo(() =>
     results.filter((r) => r.latitude != null && r.longitude != null).map((r) => ({
-      id: r.public_id,
+      id: r.id,
       lat: Number(r.latitude),
       lng: Number(r.longitude),
       label: r.title,
-      href: `/listings/detail?id=${r.public_id}`,
+      href: `/listings/detail?id=${r.id}`,
       imageUrl: r.primary_image?.image ?? r.images?.[0]?.image ?? undefined,
       price: r.price ? new Intl.NumberFormat('uz-UZ').format(Number(r.price)) + " so'm" : undefined,
       distanceKm: typeof r.distance_km === 'number' ? r.distance_km : undefined,

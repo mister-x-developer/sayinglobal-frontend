@@ -1516,67 +1516,67 @@
   "AdminGuide": {
     "sections": {
       "broadcasts": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Barcha foydalanuvchilarga muhim yangiliklar, oʻzgarishlar yoki ogohlantirishlarni ommaviy tarzda yuborish.",
+        "title": "Xabarlar"
       },
       "categories": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Eʻlonlar uchun toifalar yaratish, ularni tahrirlash va tuzilmani foydalanuvchilar uchun qulaylashtirish.",
+        "title": "Kategoriyalar"
       },
       "dashboard": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Umumiy statistika, soʻnggi faolliklar va tizimning asosiy koʻrsatkichlarini bitta joyda kuzatib borish imkoniyati.",
+        "title": "Boshqaruv paneli"
       },
       "moderation": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Yangi kelib tushgan eʻlonlarni tekshirish, tasdiqlash yoki qoidalarga zid boʻlsa rad etish boʻlimi.",
+        "title": "Moderatsiya"
       },
       "security": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Tizimning xavfsizlik sozlamalarini boshqarish va ehtimoliy xavflarni oldini olish boʻyicha choralar.",
+        "title": "Xavfsizlik"
       },
       "users": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Tizimdagi barcha aʻzolarni boshqarish, ularning holatini kuzatish va kerak boʻlganda cheklovlar oʻrnatish.",
+        "title": "Foydalanuvchilar"
       }
     },
-    "subtitle": "Subtitle",
-    "title": "Title"
+    "subtitle": "Platformani boshqarish boʻyicha qisqacha maʻlumotlar",
+    "title": "Admin Qoʻllanma"
   },
   "Guide": {
     "footer": {
-      "button": "Button",
-      "subtitle": "Subtitle",
-      "title": "Title"
+      "button": "Yordam soʻrash",
+      "subtitle": "Bizning mutaxassislarimiz sizga yordam berishga tayyor.",
+      "title": "Yana savollaringiz bormi?"
     },
     "sections": {
       "contact": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Har qanday savollar boʻyicha qoʻllab-quvvatlash xizmatiga murojaat qiling.",
+        "title": "Biz bilan bogʻlanish"
       },
       "login": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Telegram bot orqali xavfsiz va tez roʻyxatdan oʻtishingiz mumkin.",
+        "title": "Qanday kirish mumkin?"
       },
       "post": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Eʻlon berish uchun kerakli maʻlumotlarni toʻldiring va rasmlar yuklang.",
+        "title": "Eʻlon berish"
       },
       "report": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Shubhali eʻlonlar yoki foydalanuvchilar haqida administratorlarga xabar bering.",
+        "title": "Shikoyat qilish"
       },
       "search": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Kerakli chorva mollarini kategoriya, narx va joylashuv boʻyicha izlang.",
+        "title": "Qidiruv tizimi"
       },
       "security": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Savdo vaqtida ehtiyot boʻling va pul oʻtkazmalarida hushyorlikni saqlang.",
+        "title": "Xavfsizlik"
       }
     },
-    "subtitle": "Subtitle",
-    "title": "Title"
+    "subtitle": "Platformadan foydalanish boʻyicha yordam",
+    "title": "Qoʻllanma va Qoidalar"
   },
   "actions": {
     "cancel": "Cancel",

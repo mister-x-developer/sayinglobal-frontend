@@ -8,6 +8,7 @@ import type { User } from '../store/auth';
 
 export interface SellerSummary {
   public_id: number;
+  id?: number;
   full_name: string;
   avatar_url?: string;
   bio?: string;
@@ -152,10 +153,10 @@ export const usersApi = {
         const map = new Map<number, SellerSummary>();
         for (const item of items) {
           const seller = item?.seller;
-          if (!seller || typeof seller.public_id !== 'number') continue;
-          if (!map.has(seller.public_id)) {
-            map.set(seller.public_id, {
-              public_id: seller.public_id,
+          if (!seller || typeof (seller.public_id || seller.id) !== 'number') continue;
+          if (!map.has((seller.public_id || seller.id))) {
+            map.set((seller.public_id || seller.id), {
+              id: (seller.public_id || seller.id),
               full_name: seller.full_name,
               avatar_url: seller.avatar_url,
               bio: seller.bio,

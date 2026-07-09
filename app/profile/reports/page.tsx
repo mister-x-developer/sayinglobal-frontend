@@ -82,9 +82,9 @@ export default function MyReportsPage() {
                 {reports.map((r) => {
                   const cfg = STATUS_BADGE[r.status];
                   return (
-                    <li key={r.public_id}>
+                    <li key={r.id}>
                       <Link
-                        href={`/profile/reports/detail?id=${r.public_id}`}
+                        href={`/profile/reports/detail?id=${r.id}`}
                         className="surface-elevated group flex items-start gap-4 p-4 transition-all hover:-translate-y-0.5 hover:shadow-lift"
                       >
                         <div className="inline-flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-bg-subtle text-fg-muted">

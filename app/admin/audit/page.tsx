@@ -15,7 +15,7 @@ interface AuditLog {
   action_type: string;
   moderator: { full_name: string } | null;
   target_user: { full_name: string } | null;
-  listing: { title: string; public_id: number } | null;
+  listing: { title: string; id: number } | null;
   reason: string;
   created_at: string;
 }

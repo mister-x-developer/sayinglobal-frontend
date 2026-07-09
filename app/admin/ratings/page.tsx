@@ -53,8 +53,8 @@ export default function AdminRatingsPage() {
 
   const toggle = async (r: RatingRecord) => {
     try {
-      const updated = await ratingsApi.update(r.public_id, { is_hidden: !r.is_hidden });
-      setItems((prev) => prev.map((it) => it.public_id === r.public_id ? updated : it));
+      const updated = await ratingsApi.update(r.id, { is_hidden: !r.is_hidden });
+      setItems((prev) => prev.map((it) => it.id === r.id ? updated : it));
       toast.success(t('success.updated'));
     } catch {
       toast.error(t('errors.generic'));
@@ -64,8 +64,8 @@ export default function AdminRatingsPage() {
   const remove = async (r: RatingRecord) => {
     if (!confirm(t('common.delete') + '?')) return;
     try {
-      await ratingsApi.remove(r.public_id);
-      setItems((prev) => prev.filter((it) => it.public_id !== r.public_id));
+      await ratingsApi.remove(r.id);
+      setItems((prev) => prev.filter((it) => it.id !== r.id));
       toast.success(t('success.deleted'));
     } catch {
       toast.error(t('errors.generic'));
@@ -105,7 +105,7 @@ export default function AdminRatingsPage() {
             <ul className="divide-y divide-border">
               {items.map((r, i) => (
                 <motion.li
-                  key={r.public_id}
+                  key={r.id}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.3, delay: i * 0.03 }}

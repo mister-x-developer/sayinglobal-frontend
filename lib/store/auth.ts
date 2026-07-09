@@ -22,6 +22,7 @@ import { persist } from 'zustand/middleware';
 import { useEffect, useState } from 'react';
 
 export interface User {
+  id?: number;
   public_id: number;
   phone: string;
   full_name: string;
@@ -80,7 +81,7 @@ function writeAuthCookie(payload: {
       accessToken: payload.accessToken,
       user: payload.user
         ? {
-            public_id: payload.user.public_id,
+            id: payload.user.id,
             is_admin: isAdminUser,
             is_staff: !!payload.user.is_staff,
             terms_accepted_at: payload.user.terms_accepted_at ?? null,

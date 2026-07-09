@@ -14,7 +14,7 @@ export interface ListingImage {
 }
 
 export interface ListingSeller {
-  public_id: number;
+  id: number;
   full_name: string;
   phone?: string;
   avatar_url?: string;
@@ -25,7 +25,7 @@ export interface ListingSeller {
 }
 
 export interface Listing {
-  public_id: number;
+  id: number;
   seller: ListingSeller;
   category: { id?: string; name: string; name_uz?: string };
   title: string;

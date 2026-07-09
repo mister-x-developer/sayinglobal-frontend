@@ -4,28 +4,28 @@
  * Wraps the seller-rating endpoints under `/api/listings/`:
  *   GET  /listings/seller/<user_id>/ratings/        — list + replies (sortable)
  *   POST /listings/rate/                            — create or update review
- *   PATCH /listings/ratings/<public_id>/            — edit review
- *   DELETE /listings/ratings/<public_id>/           — soft-delete
- *   POST /listings/ratings/<public_id>/reply/       — reply (seller answers)
- *   POST /listings/ratings/<public_id>/helpful/     — mark helpful
- *   DELETE /listings/ratings/<public_id>/helpful/   — unmark
- *   POST /listings/ratings/<public_id>/report/      — flag for moderation
+ *   PATCH /listings/ratings/<id>/            — edit review
+ *   DELETE /listings/ratings/<id>/           — soft-delete
+ *   POST /listings/ratings/<id>/reply/       — reply (seller answers)
+ *   POST /listings/ratings/<id>/helpful/     — mark helpful
+ *   DELETE /listings/ratings/<id>/helpful/   — unmark
+ *   POST /listings/ratings/<id>/report/      — flag for moderation
  */
 import apiClient from './client';
 
 export interface RatingUserMini {
-  public_id: number;
+  id: number;
   full_name: string;
   avatar_url?: string;
 }
 
 export interface RatingRecord {
-  public_id: number;
+  id: number;
   seller: RatingUserMini | null;
   buyer: RatingUserMini | null;
   listing: number | null;
   listing_title?: string | null;
-  listing_public_id?: number | null;
+  listing_id?: number | null;
   parent: number | null;
   score: number;
   review: string;

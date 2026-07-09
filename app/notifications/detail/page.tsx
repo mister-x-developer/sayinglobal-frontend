@@ -22,7 +22,7 @@ import type { Notification } from '@/lib/api/notifications';
 import { formatDate, formatRelativeTime } from '@/lib/utils/format';
 
 interface NotificationRecord {
-  public_id: number;
+  id: number;
   notification_type: string;
   title: string;
   title_uz?: string;

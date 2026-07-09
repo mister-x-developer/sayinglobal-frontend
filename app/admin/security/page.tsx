@@ -21,14 +21,14 @@ interface HighFailureUser {
 }
 
 interface SuspiciousEvent {
-  user_public_id: string | null;
+  user_id: string | null;
   ip_address: string | null;
   metadata: Record<string, unknown>;
   created_at: string;
 }
 
 interface SessionAnomaly {
-  user_public_id: string;
+  user_id: string;
   distinct_ip_count: number;
 }
 
@@ -163,8 +163,8 @@ export default function AdminSecurityPage() {
                         <span className="font-mono text-xs text-fg-muted">{e.ip_address ?? t('security.unknown')}</span>
                         <span className="text-xs text-fg-subtle">{new Date(e.created_at).toLocaleString()}</span>
                       </div>
-                      {e.user_public_id && (
-                        <p className="mt-1 text-xs text-fg-muted">{t('security.userLabel')}: {e.user_public_id}</p>
+                      {e.user_id && (
+                        <p className="mt-1 text-xs text-fg-muted">{t('security.userLabel')}: {e.user_id}</p>
                       )}
                     </div>
                   ))}
@@ -192,7 +192,7 @@ export default function AdminSecurityPage() {
                   <tbody className="divide-y divide-border">
                     {data.session_anomalies.map((a, i) => (
                       <tr key={i}>
-                        <td className="py-2 font-mono text-xs text-fg">{a.user_public_id}</td>
+                        <td className="py-2 font-mono text-xs text-fg">{a.user_id}</td>
                         <td className="py-2 text-warning font-semibold">{a.distinct_ip_count}</td>
                       </tr>
                     ))}

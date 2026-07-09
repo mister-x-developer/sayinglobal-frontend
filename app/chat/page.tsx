@@ -36,7 +36,7 @@ interface Message {
 
 function normalizeChatMessage(raw: any): Message {
   return {
-    id: String(raw.public_id ?? raw.id ?? `msg-${raw.created_at ?? Date.now()}`),
+    id: String(raw.id ?? raw.id ?? `msg-${raw.created_at ?? Date.now()}`),
     sender_id: String(raw.sender?.public_id ?? raw.sender_id ?? ''),
     content: raw.content ?? raw.text ?? '',
     created_at: raw.created_at ?? new Date().toISOString(),
@@ -90,8 +90,8 @@ export default function ChatPage() {
   // Track our pending optimistic message ids to prevent WS echo duplication
   const pendingOptimisticIds = useRef<Set<string>>(new Set());
 
-  // My public_id as string — used for isMe check
-  const myId = user?.public_id != null ? String(user.public_id) : null;
+  // My id as string — used for isMe check
+  const myId = user?.public_id != null ? String(user?.public_id) : null;
 
   const scrollToBottom = (smooth = true) => {
     setTimeout(() => {
@@ -126,10 +126,10 @@ export default function ChatPage() {
     const sellerId = Number(withId);
     if (!sellerId) return;
     const existing = conversations.find((c) =>
-      c.participants?.some((p: any) => p.public_id === sellerId)
+      c.participants?.some((p: any) => p.id === sellerId)
     );
     if (existing) {
-      if (activeConv?.public_id !== existing.public_id) {
+      if (activeConv?.id !== existing.id) {
         openConversation(existing);
         window.history.replaceState(null, '', '/chat');
       }
@@ -141,7 +141,7 @@ export default function ChatPage() {
           last_message: typeof (conv as any).last_message === 'object'
             ? (conv as any).last_message?.content ?? '' : (conv as any).last_message ?? '',
         };
-        setConversations((prev) => prev.some((c) => c.public_id === norm.public_id) ? prev : [norm, ...prev]);
+        setConversations((prev) => prev.some((c) => c.id === norm.id) ? prev : [norm, ...prev]);
         openConversation(norm);
         window.history.replaceState(null, '', '/chat');
       }).catch(() => {});
@@ -165,7 +165,7 @@ export default function ChatPage() {
     setMessagesLoading(true);
     setMoreOpen(false);
     setTypingUserId(null);
-    chatApi.getMessages(conv.id ?? conv.public_id).then((msgs: any) => {
+    chatApi.getMessages(conv.id ?? conv.id).then((msgs: any) => {
       const list = Array.isArray(msgs) ? msgs : msgs?.results ?? [];
       const mapped: Message[] = list.map(normalizeChatMessage).reverse();
       setMessages(mapped);
@@ -174,8 +174,8 @@ export default function ChatPage() {
 
     // Connect WebSocket for real-time messages
     const token = useAuthStore.getState().accessToken;
-    if (token && (conv.id ?? conv.public_id)) {
-      chatSocket.connect(String(conv.id ?? conv.public_id), token, {
+    if (token && (conv.id ?? conv.id)) {
+      chatSocket.connect(String(conv.id ?? conv.id), token, {
         onMessage: (msg) => {
           setMessages((prev) => {
             const incoming = normalizeChatMessage(msg);
@@ -190,7 +190,7 @@ export default function ChatPage() {
           scrollToBottom();
           // Update conversation last_message
           setConversations((prev) => prev.map((c) =>
-            c.public_id === conv.public_id
+            c.id === conv.id
               ? { ...c, last_message: msg.content, last_message_time: msg.created_at }
               : c
           ));
@@ -233,15 +233,15 @@ export default function ChatPage() {
       setSending(false);
     } else {
       try {
-        const sent = await chatApi.sendMessage(activeConv.id ?? activeConv.public_id, content);
+        const sent = await chatApi.sendMessage(activeConv.id ?? activeConv.id, content);
         if (sent) {
-          const sentId = String((sent as any).public_id ?? (sent as any).id ?? optimistic.id);
+          const sentId = String((sent as any).id ?? (sent as any).id ?? optimistic.id);
           pendingOptimisticIds.current.delete(optimistic.id);
           setMessages((prev) => prev.map((m) =>
             m.id === optimistic.id ? { ...m, id: sentId } : m
           ));
           setConversations((prev) => prev.map((c) =>
-            c.public_id === activeConv.public_id
+            c.id === activeConv.id
               ? { ...c, last_message: content, last_message_time: new Date().toISOString() }
               : c
           ));
@@ -265,14 +265,14 @@ export default function ChatPage() {
       m.id === msgId ? { ...m, failed: false } : m
     ));
     try {
-      const sent = await chatApi.sendMessage(activeConv.id ?? activeConv.public_id, content);
+      const sent = await chatApi.sendMessage(activeConv.id ?? activeConv.id, content);
       if (sent) {
-        const sentId = String((sent as any).public_id ?? (sent as any).id ?? msgId);
+        const sentId = String((sent as any).id ?? (sent as any).id ?? msgId);
         setMessages((prev) => prev.map((m) =>
           m.id === msgId ? { ...m, id: sentId, failed: false } : m
         ));
         setConversations((prev) => prev.map((c) =>
-          c.public_id === activeConv.public_id
+          c.id === activeConv.id
             ? { ...c, last_message: content, last_message_time: new Date().toISOString() }
             : c
         ));
@@ -323,8 +323,8 @@ export default function ChatPage() {
   });
 
   const getOther = (conv: Conversation) =>
-    conv.participants?.find((p: any) => String(p.public_id) !== myId) ??
-    conv.participants?.[0] ?? { public_id: 0, full_name: '—', avatar_url: '' };
+    conv.participants?.find((p: any) => String(p.id) !== myId) ??
+    conv.participants?.[0] ?? { id: 0, full_name: '—', avatar_url: '' };
 
   const isMyMessage = (msg: Message) => {
     if (!myId) return false;
@@ -369,10 +369,10 @@ export default function ChatPage() {
               <div className="p-2 space-y-0.5">
                 {filteredConvs.map((conv) => {
                   const other = getOther(conv);
-                  const isActive = activeConv?.public_id === conv.public_id;
+                  const isActive = activeConv?.id === conv.id;
                   return (
                     <button
-                      key={conv.public_id}
+                      key={conv.id}
                       type="button"
                       onClick={() => openConversation(conv)}
                       className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-colors ${
@@ -436,7 +436,7 @@ export default function ChatPage() {
                 >
                   <ArrowLeft className="h-5 w-5" strokeWidth={1.75} />
                 </button>
-                <Link href={`/sellers/detail?id=${getOther(activeConv).public_id}`} className="flex flex-1 items-center gap-3 min-w-0">
+                <Link href={`/sellers/detail?id=${getOther(activeConv).id}`} className="flex flex-1 items-center gap-3 min-w-0">
                   <div className="relative flex-shrink-0">
                     <Avatar
                       src={(getOther(activeConv) as any).avatar_url}
@@ -480,7 +480,7 @@ export default function ChatPage() {
                           className="absolute right-0 top-10 z-50 min-w-[160px] overflow-hidden rounded-xl border border-border bg-bg-elevated shadow-lift"
                         >
                           <Link
-                            href={`/sellers/detail?id=${getOther(activeConv).public_id}`}
+                            href={`/sellers/detail?id=${getOther(activeConv).id}`}
                             className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-fg hover:bg-bg-subtle"
                             onClick={() => setMoreOpen(false)}
                           >
@@ -725,7 +725,7 @@ export default function ChatPage() {
           open={reportOpen}
           target={{
             kind: 'chat',
-            publicId: getOther(activeConv).public_id as number,
+            publicId: getOther(activeConv).id as number,
             fullName: getOther(activeConv).full_name,
           }}
           onClose={() => setReportOpen(false)}

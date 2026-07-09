@@ -29,7 +29,7 @@ import { formatDate, formatRelativeTime } from '@/lib/utils/format';
 import apiClient from '@/lib/api/client';
 
 interface AdminUser {
-  public_id: number;
+  id: number;
   full_name: string;
   phone: string | null;
   telegram_username: string | null;
@@ -86,13 +86,13 @@ export default function AdminUsersPage() {
 
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
 
-  const handleAction = async (userId: number, action: 'warn' | 'restrict' | 'block' | 'unblock') => {
+  const handleAction = async (userPublicId: number, action: 'warn' | 'restrict' | 'block' | 'unblock') => {
     setActionLoading(true);
     const endpointMap: Record<string, string> = {
-      warn: `/moderation/users/${userId}/warn/`,
-      restrict: `/moderation/users/${userId}/restrict/`,
-      block: `/moderation/users/${userId}/block/`,
-      unblock: `/moderation/users/${userId}/unblock/`,
+      warn: `/moderation/users/${userPublicId}/warn/`,
+      restrict: `/moderation/users/${userPublicId}/restrict/`,
+      block: `/moderation/users/${userPublicId}/block/`,
+      unblock: `/moderation/users/${userPublicId}/unblock/`,
     };
     const statusMap: Record<string, string> = {
       warn: 'warning', restrict: 'restricted', block: 'blocked', unblock: 'good'
@@ -100,9 +100,9 @@ export default function AdminUsersPage() {
     try {
       await apiClient.post(endpointMap[action], { reason: action });
       setUsers((prev) => prev.map((u) =>
-        u.public_id === userId ? { ...u, status: statusMap[action] as any } : u
+        u.public_id === userPublicId ? { ...u, status: statusMap[action] as any } : u
       ));
-      if (selectedUser?.public_id === userId) {
+      if (selectedUser?.public_id === userPublicId) {
         setSelectedUser((prev) => prev ? { ...prev, status: statusMap[action] as any } : null);
       }
       toast.success(t('success.updated'));

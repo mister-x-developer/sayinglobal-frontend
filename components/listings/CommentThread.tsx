@@ -14,8 +14,8 @@ import { useAuthStore } from '@/lib/store/auth';
 import { formatRelativeTime } from '@/lib/utils/format';
 
 export interface Comment {
-  public_id: number | string;
-  user: { public_id: number | string; full_name: string; avatar_url?: string; is_seller?: boolean };
+  id: number | string;
+  user: { id: number | string; full_name: string; avatar_url?: string; is_seller?: boolean };
   content: string;
   created_at: string;
   is_edited?: boolean;
@@ -48,7 +48,7 @@ export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentIt
     if (!replyText.trim() || !onReply) return;
     setSubmitting(true);
     try {
-      await onReply(comment.public_id, replyText.trim());
+      await onReply(comment.id, replyText.trim());
       setReplyText('');
       setReplyOpen(false);
     } finally {
@@ -197,7 +197,7 @@ export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentIt
           >
             {comment.replies!.map((reply) => (
               <CommentItem
-                key={reply.public_id}
+                key={reply.id}
                 comment={reply}
                 depth={depth + 1}
                 sellerId={sellerId}
@@ -213,7 +213,7 @@ export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentIt
         open={reportOpen}
         target={{
           kind: 'comment',
-          publicId: comment.public_id as number,
+          publicId: comment.id as number,
           fullName: comment.user.full_name,
         }}
         onClose={() => setReportOpen(false)}
@@ -234,7 +234,7 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
   const [text, setText] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [isAuth, setIsAuth] = useState(false);
-  const [currentUser, setCurrentUser] = useState<{ public_id: number; full_name: string; avatar_url?: string; is_admin?: boolean; is_staff?: boolean } | null>(null);
+  const [currentUser, setCurrentUser] = useState<{ id: number; full_name: string; avatar_url?: string; is_admin?: boolean; is_staff?: boolean } | null>(null);
 
   useEffect(() => {
     try {
@@ -263,9 +263,9 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
       const created = await listingsApi.createComment(listingId, text.trim());
       // Use real data from backend if available, else optimistic
       const newComment: Comment = {
-        public_id: created?.public_id ?? `local-${Date.now()}`,
+        id: created?.id ?? `local-${Date.now()}`,
         user: {
-          public_id: currentUser?.public_id ?? 0,
+          id: currentUser?.id ?? 0,
           full_name: currentUser?.full_name ?? (t('common.you') ?? 'You'),
           avatar_url: currentUser?.avatar_url,
         },
@@ -288,9 +288,9 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
       const { listingsApi } = await import('@/lib/api/listings');
       const created = await listingsApi.createComment(listingId, content, String(parentId));
       const newReply: Comment = {
-        public_id: created?.public_id ?? `local-${Date.now()}`,
+        id: created?.id ?? `local-${Date.now()}`,
         user: {
-          public_id: currentUser?.public_id ?? 0,
+          id: currentUser?.id ?? 0,
           full_name: currentUser?.full_name ?? (t('common.you') ?? 'You'),
           avatar_url: currentUser?.avatar_url,
         },
@@ -299,7 +299,7 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
       };
       setComments((prev) =>
         prev.map((c) =>
-          c.public_id === parentId
+          c.id === parentId
             ? { ...c, replies: [...(c.replies ?? []), newReply] }
             : c
         )
@@ -369,7 +369,7 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
         ) : (
           comments.map((c) => (
             <CommentItem
-              key={c.public_id}
+              key={c.id}
               comment={c}
               sellerId={sellerId}
               onReply={isAuth ? handleReply : undefined}

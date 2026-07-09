@@ -1,5 +1,5 @@
 /**
- * Notifications API — uses public_id (number) for all external identifiers.
+ * Notifications API — uses id (number) for all external identifiers.
  */
 
 import apiClient, { handleApiError } from './client';
@@ -18,7 +18,7 @@ export type NotificationType =
   | 'system';
 
 export interface Notification {
-  public_id: number;
+  id: number;
   notification_type: NotificationType;
   title: string;
   title_uz?: string;
@@ -35,8 +35,8 @@ export interface Notification {
   created_at: string;
   read_at?: string | null;
   action_url?: string;
-  from_user?: { public_id: number; full_name: string; avatar_url?: string } | null;
-  listing?: { public_id: number; title: string } | null;
+  from_user?: { id: number; full_name: string; avatar_url?: string } | null;
+  listing?: { id: number; title: string } | null;
   metadata?: Record<string, unknown>;
 }
 

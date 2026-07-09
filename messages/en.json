@@ -1516,67 +1516,67 @@
   "AdminGuide": {
     "sections": {
       "broadcasts": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Send important news, updates, or warnings in bulk to all users.",
+        "title": "Broadcasts"
       },
       "categories": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Create, edit, and organize categories to make them convenient for users.",
+        "title": "Categories"
       },
       "dashboard": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Track overall statistics, recent activities, and key system metrics all in one place.",
+        "title": "Dashboard"
       },
       "moderation": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Review newly submitted listings, approve them, or reject them if they violate the rules.",
+        "title": "Moderation"
       },
       "security": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Manage system security settings and take measures to prevent potential risks.",
+        "title": "Security"
       },
       "users": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Manage all system members, monitor their status, and apply restrictions when necessary.",
+        "title": "Users"
       }
     },
-    "subtitle": "Subtitle",
-    "title": "Title"
+    "subtitle": "A brief guide on managing the platform",
+    "title": "Admin Guide"
   },
   "Guide": {
     "footer": {
-      "button": "Button",
-      "subtitle": "Subtitle",
-      "title": "Title"
+      "button": "Request Support",
+      "subtitle": "Our experts are ready to help you.",
+      "title": "Still have questions?"
     },
     "sections": {
       "contact": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Contact support if you have any questions.",
+        "title": "Contact Us"
       },
       "login": {
-        "content": "Content",
-        "title": "Title"
+        "content": "You can register safely and quickly via our Telegram bot.",
+        "title": "How to Login?"
       },
       "post": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Fill in the required information and upload photos to post a listing.",
+        "title": "Posting a Listing"
       },
       "report": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Report suspicious listings or users to administrators.",
+        "title": "Reporting"
       },
       "search": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Search for livestock by category, price, and location.",
+        "title": "Search System"
       },
       "security": {
-        "content": "Content",
-        "title": "Title"
+        "content": "Be careful when trading and stay alert during money transfers.",
+        "title": "Security"
       }
     },
-    "subtitle": "Subtitle",
-    "title": "Title"
+    "subtitle": "Help on using the platform",
+    "title": "Guide and Rules"
   },
   "actions": {
     "cancel": "Cancel",

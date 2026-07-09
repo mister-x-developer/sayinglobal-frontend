@@ -286,7 +286,7 @@ export default function ProfilePage() {
                 )}
                 {tab === 'reviews' && user?.public_id && (
                   <div className="surface-elevated p-4 sm:p-6">
-                    <SellerRatingsThread sellerPublicId={user.public_id} />
+                    <SellerRatingsThread sellerPublicId={user?.public_id} />
                   </div>
                 )}
               </div>

@@ -6,7 +6,7 @@
 import apiClient, { handleApiError } from './client';
 
 export interface ChatUser {
-  public_id: number;
+  id: number;
   full_name: string;
   avatar_url?: string;
 }
@@ -20,7 +20,7 @@ export interface ChatMessage {
 }
 
 export interface Conversation {
-  public_id: number;  // 9-digit numeric — the primary external identifier
+  id: number;  // 9-digit numeric — the primary external identifier
   id?: string;        // deprecated — kept for backward compat, may be absent
   participants: ChatUser[];
   last_message?: string;
