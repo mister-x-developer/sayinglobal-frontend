@@ -132,10 +132,10 @@ export default function DashboardPage() {
                     className="surface-elevated group flex h-full items-center justify-between p-3 sm:p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-                      <div className={`inline-flex h-9 w-9 sm:h-11 sm:w-11 items-center justify-center rounded-xl ${q.tone}`}>
+                      <div className={`inline-flex h-9 w-9 sm:h-11 sm:w-11 items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-110 ${q.tone}`}>
                         <Icon className="h-4 w-4 sm:h-5 sm:w-5" strokeWidth={1.75} />
                       </div>
-                      <span className="font-semibold text-[13px] sm:text-base text-fg">{q.label}</span>
+                      <span className="font-semibold text-[13px] sm:text-base text-fg transition-colors duration-300">{q.label}</span>
                     </div>
                     <ArrowRight
                       className="hidden sm:block h-4 w-4 text-fg-subtle transition-transform group-hover:translate-x-0.5"
@@ -181,8 +181,8 @@ export default function DashboardPage() {
                         }}
                       />
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent transition-opacity duration-300 group-hover:from-black/85" />
-                    <div className="relative z-10 w-full p-2 text-center">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent transition-opacity duration-300 group-hover:from-black/90" />
+                    <div className="relative z-10 mx-2 mb-2 w-[calc(100%-16px)] overflow-hidden rounded-lg bg-black/20 p-1.5 text-center backdrop-blur-md transition-all duration-300 group-hover:bg-black/40">
                       <p className="text-xs font-semibold text-white sm:text-sm">
                         {cat.name_uz || cat.name || cat.slug}
                       </p>

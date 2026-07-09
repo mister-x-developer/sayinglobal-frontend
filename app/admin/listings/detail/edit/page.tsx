@@ -201,7 +201,15 @@ function EditListingPageContent() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form || !listing) return;
-    if (!validateEdit()) return;
+    if (!validateEdit()) {
+      setTimeout(() => {
+        const firstError = document.querySelector('.text-danger');
+        if (firstError) {
+          firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 50);
+      return;
+    }
     setSaving(true);
     try {
       const payload: any = {

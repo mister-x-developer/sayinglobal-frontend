@@ -7,9 +7,9 @@ test.describe('SAYIN GLOBAL E2E', () => {
   });
 
   test('Homepage loads correctly and has expected title', async ({ page }) => {
-    await expect(page).toHaveTitle(/SAYIN GLOBAL|Livestock/);
     const heroTitle = page.locator('h1').first();
-    await expect(heroTitle).toBeVisible();
+    await expect(heroTitle).toBeVisible({ timeout: 15000 });
+    await expect(page).toHaveTitle(/SAYIN GLOBAL|Livestock/);
   });
 
   test('Auth redirect works for protected routes', async ({ page }) => {

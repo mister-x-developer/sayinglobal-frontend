@@ -81,7 +81,7 @@ export default function ListingsPage() {
       .list({
         category: category === 'all' ? undefined : category,
         region: region ?? undefined,
-        search: search.trim() ? search.trim() : undefined,
+        search: debouncedSearch.trim() ? debouncedSearch.trim() : undefined,
         sort_by: sort,
         status: 'active',
         page: 1,

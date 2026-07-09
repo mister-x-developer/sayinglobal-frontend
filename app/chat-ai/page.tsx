@@ -7,6 +7,7 @@ import { Send, Loader2, Sparkles, MessageSquarePlus, MessageSquare, Clock, Arrow
 import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
 import { UserAILogo, AdminAILogo } from '@/components/ai/AILogos';
 import apiClient from '@/lib/api/client';
+import { toast } from '@/components/ui/Toast';
 
 interface Message {
   id: string;
@@ -95,7 +96,7 @@ export default function ChatAIPage() {
       setMessages(res.data.messages || []);
       setShowHistory(false);
     } catch (e) {
-      console.error(e);
+      toast.error(t('ai.loadError') || 'Failed to load session');
     }
   };
 

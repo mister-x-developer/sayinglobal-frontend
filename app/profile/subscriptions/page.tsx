@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { AppNav } from '@/components/layout/AppNav';
@@ -17,11 +17,7 @@ export default function SubscriptionsPage() {
   const [promoCode, setPromoCode] = useState('');
   const [promoLoading, setPromoLoading] = useState(false);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     try {
       const [planData, allPlans] = await Promise.all([
@@ -31,11 +27,15 @@ export default function SubscriptionsPage() {
       setMyPlan(planData);
       setPlans(allPlans);
     } catch (e) {
-      console.error(e);
+      toast.error(t('common.error') || 'Failed to load subscription data');
     } finally {
       setLoading(false);
     }
-  };
+  }, [t]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handlePromo = async (e: React.FormEvent) => {
     e.preventDefault();

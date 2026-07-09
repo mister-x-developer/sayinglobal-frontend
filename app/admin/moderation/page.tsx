@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import Link from 'next/link';
 import { AdminLayout } from '@/components/layout/AdminLayout';
 import { Badge } from '@/components/ui/Badge';
 import { EmptyState } from '@/components/shared/EmptyState';
@@ -64,27 +65,28 @@ export default function AdminModerationPage() {
           ) : (
             <div className="divide-y divide-border">
               {reports.map((r) => (
-                <div key={r.public_id} className="flex items-center gap-4 p-4 hover:bg-bg-subtle/60 cursor-pointer" onClick={() => router.push(`/admin/moderation/detail?id=${r.public_id}`)}>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <Badge variant={r.status === 'pending' ? 'warning' : r.status.includes('valid') ? 'success' : 'default'} size="sm">
-                        {t(`adminMod.status_${r.status}` as any) || r.status.replace(/_/g,' ')}
-                      </Badge>
-                      <span className="font-medium text-fg">{t(`adminMod.reason_${r.reason_code}` as any) || r.reason_code}</span>
-                      <span className="text-xs text-fg-subtle">#{r.public_id || 'N/A'}</span>
+                <Link key={r.public_id} href={`/admin/moderation/detail?id=${r.public_id}`} className="block w-full">
+                  <div className="flex items-center gap-4 p-4 hover:bg-bg-subtle/60 cursor-pointer">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <Badge variant={r.status === 'pending' ? 'warning' : r.status.includes('valid') ? 'success' : 'default'} size="sm">
+                          {t(`adminMod.status_${r.status}` as any) || r.status.replace(/_/g,' ')}
+                        </Badge>
+                        <span className="font-medium text-fg">{t(`adminMod.reason_${r.reason_code}` as any) || r.reason_code}</span>
+                        <span className="text-xs text-fg-subtle">#{r.public_id || 'N/A'}</span>
+                      </div>
+                      <p className="text-sm text-fg-muted line-clamp-1 mt-0.5">{r.description || 'No description provided'}</p>
+                      <p className="text-xs text-fg-subtle mt-1">
+                        {r.complainant?.full_name} → {r.reported_user?.full_name || '—'}
+                      </p>
                     </div>
-                    <p className="text-sm text-fg-muted line-clamp-1 mt-0.5">{r.description || 'No description provided'}</p>
-                    <p className="text-xs text-fg-subtle mt-1">
-                      {r.complainant?.full_name} → {r.reported_user?.full_name || '—'}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <span className="btn btn-sm btn-primary">
+                        {t('common.details')}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-
-                    <button onClick={(e) => { e.stopPropagation(); router.push(`/admin/moderation/detail?id=${r.public_id}`); }} className="btn btn-sm btn-primary">
-                      {t('common.details')}
-                    </button>
-                  </div>
-                </div>
+                </Link>
               ))}
             </div>
           )}

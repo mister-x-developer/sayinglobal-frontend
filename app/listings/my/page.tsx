@@ -403,7 +403,7 @@ export default function MyListingsPage() {
 
                         {openMenu === l.public_id && (
                           <>
-                            <div className="fixed inset-0 z-10" onClick={() => setOpenMenu(null)} />
+                            <div className="fixed inset-0 z-10" role="presentation" onClick={() => setOpenMenu(null)} onKeyDown={(e) => { if (e.key === 'Escape') setOpenMenu(null); }} />
                             <div className="absolute right-0 top-10 z-20 w-48 overflow-hidden rounded-xl border border-border bg-bg-elevated shadow-lift">
                               <div className="p-1">
                                 <Link
@@ -432,9 +432,10 @@ export default function MyListingsPage() {
                                         setOpenMenu(null);
                                         try {
                                           await listingsApi.bump(l.public_id);
+                                          toast.success(t('listings.bumpSuccess' as any) || 'Listing bumped successfully');
                                           load();
                                         } catch (e) {
-                                          console.error('Failed to bump listing', e);
+                                          toast.error(t('listings.bumpError' as any) || 'Failed to bump listing');
                                         }
                                       }}
                                       className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-brand-primary hover:bg-brand-primary/10"
@@ -448,9 +449,10 @@ export default function MyListingsPage() {
                                         setOpenMenu(null);
                                         try {
                                           await listingsApi.restore(l.public_id);
+                                          toast.success(t('listings.renewSuccess' as any) || 'Listing renewed successfully');
                                           load();
                                         } catch (e) {
-                                          console.error('Failed to renew listing', e);
+                                          toast.error(t('listings.renewError' as any) || 'Failed to renew listing');
                                         }
                                       }}
                                       className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-brand-primary hover:bg-brand-primary/10"
@@ -475,9 +477,10 @@ export default function MyListingsPage() {
                                       setOpenMenu(null);
                                       try {
                                         await listingsApi.restore(l.public_id);
+                                        toast.success(t('listings.restoreSuccess' as any) || 'Listing restored successfully');
                                         load();
-                                      } catch {
-                                        console.error('Failed to restore/renew');
+                                      } catch (e) {
+                                        toast.error(t('listings.restoreError' as any) || 'Failed to restore listing');
                                       }
                                     }}
                                     className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-brand-primary hover:bg-brand-primary/10"

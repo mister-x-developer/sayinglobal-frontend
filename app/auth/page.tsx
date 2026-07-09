@@ -127,6 +127,14 @@ function AuthPageContent() {
     }
   };
 
+  // UX Improvement: Auto-submit when code is fully entered
+  useEffect(() => {
+    if (code.length === 5 && !submitting && !errorMessage && lockRetryAfter === 0) {
+      handleVerify();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [code]);
+
   return (
     <div className="min-h-screen flex flex-col">
       <LandingNav />

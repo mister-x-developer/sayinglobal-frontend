@@ -504,10 +504,12 @@ export default function ChatPage() {
 
               {/* Messages area — wrapped in ErrorBoundary for granular crash recovery */}
               <ErrorBoundary>
-              <div
-                className="flex-1 overflow-y-auto px-4 py-4 space-y-1"
-                onClick={() => setMoreOpen(false)}
-              >
+                <div
+                  className="flex-1 overflow-y-auto px-4 py-4 space-y-1"
+                  role="presentation"
+                  onClick={() => setMoreOpen(false)}
+                  onKeyDown={(e) => { if (e.key === 'Escape') setMoreOpen(false); }}
+                >
                 {/* Messages loading skeleton */}
                 {messagesLoading && (
                   <div className="space-y-3 py-2">

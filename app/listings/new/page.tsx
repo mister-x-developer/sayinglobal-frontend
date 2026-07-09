@@ -149,7 +149,16 @@ export default function NewListingPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validate()) return;
+    if (!validate()) {
+      // UX Improvement: Scroll to the first error so the user knows what went wrong
+      setTimeout(() => {
+        const firstError = document.querySelector('.text-danger');
+        if (firstError) {
+          firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 50);
+      return;
+    }
 
 
     setSaving(true);
@@ -568,7 +577,9 @@ export default function NewListingPage() {
                     <div
                       role="switch"
                       aria-checked={form.is_negotiable}
+                      tabIndex={0}
                       onClick={() => set('is_negotiable', !form.is_negotiable)}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); set('is_negotiable', !form.is_negotiable); } }}
                       className={`relative inline-flex h-6 w-11 flex-shrink-0 rounded-full transition-colors ${form.is_negotiable ? 'bg-brand-primary' : 'bg-border-strong'}`}
                     >
                       <span className={`pointer-events-none inline-block h-5 w-5 translate-y-0.5 rounded-full bg-white shadow-sm transition-transform ${form.is_negotiable ? 'translate-x-5' : 'translate-x-0.5'}`} />

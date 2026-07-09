@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 import { ErrorBoundary } from '@/components/providers/ErrorBoundary';
 import { listingsApi } from '@/lib/api/listings';
+import { toast } from '@/components/ui/Toast';
 
 const LoadingMap = () => {
   const t = useTranslations();
@@ -55,7 +56,7 @@ export default function MapDiscovery({ className = "h-[500px] w-full" }: MapDisc
         const data = await listingsApi.nearby({ lat, lng, radius_km: radius, page_size: 100 });
         setListings(data.results || []);
       } catch (err) {
-        console.error("Error fetching map listings", err);
+        toast.error(t('Map.errorFetching') || 'Failed to fetch nearby listings');
       } finally {
         setLoading(false);
       }
