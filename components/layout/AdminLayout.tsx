@@ -33,6 +33,7 @@ import { Avatar } from '@/components/ui/Avatar';
 import { ThemeSwitcher } from '@/components/shared/ThemeSwitcher';
 import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher';
 import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
+import { useNotificationsStore } from '@/lib/store/notifications';
 
 const NAV_GROUPS = [
   {
@@ -86,8 +87,17 @@ export function AdminLayout({ children, noPadding = false }: { children: React.R
   const router = useRouter();
   const { user, isAuthenticated, logout } = useAuthStore();
   const hydrated = useAuthHydrated();
+  const { unreadCount, setUnreadCount } = useNotificationsStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+
+  // Load unread count on mount when authenticated
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    import('@/lib/api/notifications').then(({ notificationsApi }) => {
+      notificationsApi.unreadCount().then((count) => setUnreadCount(count));
+    });
+  }, [isAuthenticated, setUnreadCount]);
 
   useEffect(() => {
     // Restore sidebar collapse preference
@@ -306,9 +316,18 @@ export function AdminLayout({ children, noPadding = false }: { children: React.R
           <div className="flex-1" />
 
           <div className="flex items-center gap-1.5">
-            <Link href="/notifications" className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-fg-muted hover:bg-bg-subtle hover:text-fg">
-              <Bell className="h-4.5 w-4.5" />
-            </Link>
+              <Link
+                href="/notifications"
+                aria-label={t('nav.notifications')}
+                className="relative inline-flex h-9 w-9 items-center justify-center rounded-full text-fg hover:bg-bg-subtle"
+              >
+                <Bell className="h-[18px] w-[18px]" strokeWidth={1.75} />
+                {unreadCount > 0 && (
+                  <span className="absolute right-1 top-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-primary px-1 text-[10px] font-bold text-white">
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </Link>
             <LanguageSwitcher />
             <ThemeSwitcher />
             <Link href="/dashboard" className="btn btn-ghost btn-sm text-fg-muted hidden sm:inline-flex">
