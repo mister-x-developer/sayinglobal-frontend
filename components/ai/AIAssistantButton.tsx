@@ -79,7 +79,9 @@ export function AIAssistantButton() {
   // Hide conditions
   if (!mounted) return null;
   if (!isAuthenticated || !user?.terms_accepted_at) return null;
-  if (pathname.startsWith('/chat-ai') || pathname.startsWith('/admin/ai-agent')) return null;
+  
+  const isAdmin = user?.is_staff || user?.is_admin;
+  if (isAdmin || pathname.startsWith('/admin') || pathname.startsWith('/chat-ai')) return null;
   if (hidden) return null;
 
   // Clamp position to keep it on screen
