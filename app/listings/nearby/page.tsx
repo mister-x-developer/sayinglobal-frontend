@@ -222,28 +222,29 @@ export default function NearbyListingsPage() {
               ))}
             </div>
 
-            {/* Radius (GPS mode) */}
-            {geo.kind === 'granted' && (
-              <div className="mt-4 flex items-center gap-2">
-                <span className="text-xs font-semibold text-fg-subtle uppercase tracking-wider">
-                  {t('nearby.radius')}:
-                </span>
-                {RADIUS_OPTIONS.map((r) => (
-                  <button
-                    key={r}
-                    type="button"
-                    onClick={() => setRadius(r)}
-                    className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
-                      r === radius
-                        ? 'bg-brand-primary text-white shadow-sm'
-                        : 'bg-bg-subtle text-fg-muted hover:bg-bg-elevated'
-                    }`}
-                  >
-                    {r} km
-                  </button>
-                ))}
-              </div>
-            )}
+            {/* Radius (Always visible) */}
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              <span className="text-xs font-semibold text-fg-subtle uppercase tracking-wider">
+                {t('nearby.radius')}:
+              </span>
+              {RADIUS_OPTIONS.map((r) => (
+                <button
+                  key={r}
+                  type="button"
+                  onClick={() => {
+                    setRadius(r);
+                    if (geo.kind !== 'granted') requestGeo();
+                  }}
+                  className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
+                    r === radius && geo.kind === 'granted'
+                      ? 'bg-brand-primary text-white shadow-sm'
+                      : 'bg-bg-subtle text-fg-muted hover:bg-bg-elevated'
+                  }`}
+                >
+                  {r} km
+                </button>
+              ))}
+            </div>
 
             {geo.kind === 'denied' && (
               <div className="mt-4">
@@ -272,7 +273,7 @@ export default function NearbyListingsPage() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="mb-8 overflow-hidden rounded-2xl border border-border shadow-soft"
+            className="mb-8 overflow-hidden rounded-2xl border border-border shadow-soft relative"
           >
             <NearbyMapWithUserPin
               center={center}
@@ -281,6 +282,18 @@ export default function NearbyListingsPage() {
               userLocation={geo.kind === 'granted' ? [geo.lat, geo.lng] : null}
               className="h-72 w-full sm:h-96"
             />
+            {/* My Location Button */}
+            <button
+              onClick={requestGeo}
+              className="absolute bottom-4 right-4 z-[400] flex h-12 w-12 items-center justify-center rounded-full bg-white text-brand-primary shadow-lg ring-1 ring-black/5 transition-transform active:scale-90 hover:bg-gray-50"
+              aria-label="Mening joylashuvim"
+            >
+              {geo.kind === 'requesting' ? (
+                <Loader2 className="h-6 w-6 animate-spin" strokeWidth={2.5} />
+              ) : (
+                <Navigation className="h-6 w-6" strokeWidth={2.5} />
+              )}
+            </button>
           </motion.div>
 
           {/* Results */}
