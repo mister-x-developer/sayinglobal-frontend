@@ -30,7 +30,7 @@ interface Props {
 export function MyListingsManager({ initialListings, loading }: Props) {
   const t = useTranslations();
   const [listings, setListings] = useState<MyListing[]>(initialListings);
-  const [activeTab, setActiveTab] = useState<'all' | 'active' | 'sold' | 'pending' | 'rejected' | 'draft'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'active' | 'sold' | 'pending' | 'rejected' | 'archived' | 'draft'>('all');
   const [isMutating, setIsMutating] = useState<string | null>(null);
 
   // Sync state if initialListings changes
@@ -52,6 +52,7 @@ export function MyListingsManager({ initialListings, loading }: Props) {
     { key: 'sold', label: hasKey('profile.soldListings') ? t('profile.soldListings' as any) : 'Sotilgan' },
     { key: 'pending', label: hasKey('listings.statusPending') ? t('listings.statusPending' as any) : 'Tekshiruvda' },
     { key: 'rejected', label: hasKey('listings.statusRejected') ? t('listings.statusRejected' as any) : 'Rad etilgan' },
+    { key: 'archived', label: hasKey('listings.statusArchived') ? t('listings.statusArchived' as any) : 'Olib tashlangan' },
     { key: 'draft', label: hasKey('listings.statusDraft') ? t('listings.statusDraft' as any) : 'Qoralama/Boshqa' },
   ] as const;
 
@@ -61,7 +62,8 @@ export function MyListingsManager({ initialListings, loading }: Props) {
     if (activeTab === 'sold') return l.status === 'sold';
     if (activeTab === 'pending') return l.status === 'pending' || l.status === 'pending_review';
     if (activeTab === 'rejected') return l.status === 'rejected';
-    if (activeTab === 'draft') return ['draft', 'archived', 'expired'].includes(l.status);
+    if (activeTab === 'archived') return ['archived'].includes(l.status);
+    if (activeTab === 'draft') return ['draft', 'expired'].includes(l.status);
     return true;
   });
 
