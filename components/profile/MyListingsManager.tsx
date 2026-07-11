@@ -73,14 +73,14 @@ export function MyListingsManager({ initialListings, loading }: Props) {
       if (action === 'delete') {
         if (!confirm(t('listings.deleteConfirm' as any))) return;
         await listingsApi.delete(publicId);
-        setListings((prev) => prev.filter((l) => l.public_id !== publicId));
+        setListings((prev) => prev.filter((l) => l.id !== publicId));
         toast.success(t('success.deleted' as any));
       } 
       else if (action === 'markSold') {
         if (!confirm(t('listings.markSoldConfirm' as any))) return;
         await listingsApi.markSold(publicId);
         setListings((prev) =>
-          prev.map((l) => (l.public_id === publicId ? { ...l, status: 'sold' } : l))
+          prev.map((l) => (l.id === publicId ? { ...l, status: 'sold' } : l))
         );
         toast.success(t('success.updated' as any));
       }
@@ -88,7 +88,7 @@ export function MyListingsManager({ initialListings, loading }: Props) {
         if (!confirm(t('listings.cancelReviewConfirm' as any))) return;
         await listingsApi.cancelReview(publicId);
         setListings((prev) =>
-          prev.map((l) => (l.public_id === publicId ? { ...l, status: 'draft' } : l))
+          prev.map((l) => (l.id === publicId ? { ...l, status: 'draft' } : l))
         );
         toast.success(t('success.updated' as any));
       }
@@ -96,7 +96,7 @@ export function MyListingsManager({ initialListings, loading }: Props) {
         if (!confirm(t('listings.restoreConfirm' as any))) return;
         await listingsApi.restore(publicId);
         setListings((prev) =>
-          prev.map((l) => (l.public_id === publicId ? { ...l, status: 'pending_review' } : l))
+          prev.map((l) => (l.id === publicId ? { ...l, status: 'pending_review' } : l))
         );
         toast.success(t('success.updated' as any));
       }
@@ -104,7 +104,7 @@ export function MyListingsManager({ initialListings, loading }: Props) {
         if (!confirm(t('listings.submitReviewConfirm' as any))) return;
         await listingsApi.submitForReview(publicId);
         setListings((prev) =>
-          prev.map((l) => (l.public_id === publicId ? { ...l, status: 'pending_review' } : l))
+          prev.map((l) => (l.id === publicId ? { ...l, status: 'pending_review' } : l))
         );
         toast.success(t('success.updated' as any));
       }
@@ -189,14 +189,14 @@ export function MyListingsManager({ initialListings, loading }: Props) {
         ) : (
           <div className="grid gap-6 sm:grid-cols-2">
             {filteredListings.map((l) => {
-              const isMutatingThis = isMutating === String(l.public_id);
+              const isMutatingThis = isMutating === String(l.id);
               return (
                 <motion.div
                   layout
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
-                  key={l.public_id}
+                  key={l.id}
                   className="flex flex-col gap-2"
                 >
                   <div className="relative">
@@ -217,10 +217,10 @@ export function MyListingsManager({ initialListings, loading }: Props) {
                     {/* Active Actions */}
                     {l.status === 'active' && (
                       <>
-                        <Link href={`/listings/${l.public_id}/edit`} className="btn btn-secondary btn-sm flex-1">
+                        <Link href={`/listings/${l.id}/edit`} className="btn btn-secondary btn-sm flex-1">
                           <Edit className="w-4 h-4" /> {t('actions.edit' as any)}
                         </Link>
-                        <button disabled={isMutatingThis} onClick={() => handleAction('markSold', l.public_id)} className="btn btn-success btn-sm flex-1">
+                        <button disabled={isMutatingThis} onClick={() => handleAction('markSold', l.id)} className="btn btn-success btn-sm flex-1">
                           <CheckCircle className="w-4 h-4" /> {t('actions.markSold' as any)}
                         </button>
                       </>
@@ -228,14 +228,14 @@ export function MyListingsManager({ initialListings, loading }: Props) {
 
                     {/* Pending Actions */}
                     {(l.status === 'pending' || l.status === 'pending_review') && (
-                      <button disabled={isMutatingThis} onClick={() => handleAction('cancelReview', l.public_id)} className="btn btn-warning btn-sm flex-1">
+                      <button disabled={isMutatingThis} onClick={() => handleAction('cancelReview', l.id)} className="btn btn-warning btn-sm flex-1">
                         <XCircle className="w-4 h-4" /> {t('actions.cancel' as any)}
                       </button>
                     )}
 
                     {/* Sold Actions */}
                     {l.status === 'sold' && (
-                      <button disabled={isMutatingThis} onClick={() => handleAction('restore', l.public_id)} className="btn btn-primary btn-sm flex-1">
+                      <button disabled={isMutatingThis} onClick={() => handleAction('restore', l.id)} className="btn btn-primary btn-sm flex-1">
                         <RefreshCw className="w-4 h-4" /> {t('actions.restore' as any)}
                       </button>
                     )}
@@ -243,13 +243,13 @@ export function MyListingsManager({ initialListings, loading }: Props) {
                     {/* Rejected / Draft Actions */}
                     {['rejected', 'draft', 'archived', 'expired'].includes(l.status) && (
                       <>
-                        <Link href={`/listings/${l.public_id}/edit`} className="btn btn-secondary btn-sm flex-1">
+                        <Link href={`/listings/${l.id}/edit`} className="btn btn-secondary btn-sm flex-1">
                           <Edit className="w-4 h-4" /> {t('actions.edit' as any)}
                         </Link>
                         {['draft', 'rejected'].includes(l.status) && (
                           <button
                             disabled={isMutatingThis}
-                            onClick={() => handleAction('submitReview', l.public_id)}
+                            onClick={() => handleAction('submitReview', l.id)}
                             className="btn btn-primary btn-sm flex-1"
                           >
                             <CheckCircle className="w-4 h-4" /> {t('actions.submitReview' as any)}
@@ -259,7 +259,7 @@ export function MyListingsManager({ initialListings, loading }: Props) {
                     )}
 
                     {/* Common Delete Action */}
-                    <button disabled={isMutatingThis} onClick={() => handleAction('delete', l.public_id)} className="btn btn-danger btn-sm px-3" aria-label="O'chirish">
+                    <button disabled={isMutatingThis} onClick={() => handleAction('delete', l.id)} className="btn btn-danger btn-sm px-3" aria-label="O'chirish">
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>

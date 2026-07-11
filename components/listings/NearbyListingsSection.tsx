@@ -47,7 +47,7 @@ export function NearbyListingsSection({ listing }: Props) {
           const data = await listingsApi.nearby({
             lat, lng, radius_km: 50, category, page_size: 12,
           });
-          const filtered = data.results.filter((l: any) => l.public_id !== listing.public_id);
+          const filtered = data.results.filter((l: any) => l.id !== listing.id);
           if (filtered.length > 0) {
             result = { ...data, results: filtered };
             setMode('gps');
@@ -63,7 +63,7 @@ export function NearbyListingsSection({ listing }: Props) {
             category,
             page_size: 12,
           });
-          const filtered = data.results.filter((l: any) => l.public_id !== listing.public_id);
+          const filtered = data.results.filter((l: any) => l.id !== listing.id);
           if (filtered.length > 0) {
             result = { ...data, results: filtered };
             setMode('region');
@@ -78,7 +78,7 @@ export function NearbyListingsSection({ listing }: Props) {
 
     fetchNearby();
     return () => { alive = false; };
-  }, [listing.public_id, listing.latitude, listing.longitude, listing.region, listing.district, listing.category]);
+  }, [listing.id, listing.latitude, listing.longitude, listing.region, listing.district, listing.category]);
 
   if (loading) return null;
   if (items.length === 0) return null;
@@ -113,7 +113,7 @@ export function NearbyListingsSection({ listing }: Props) {
 
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         {items.slice(0, 4).map((l) => (
-          <div key={l.public_id} className="relative">
+          <div key={l.id} className="relative">
             <ListingCard listing={l as any} />
             {typeof l.distance_km === 'number' && (
               <span className="absolute left-3 top-3 rounded-full bg-bg-elevated/90 px-2 py-0.5 text-[10px] font-semibold text-fg-muted backdrop-blur">

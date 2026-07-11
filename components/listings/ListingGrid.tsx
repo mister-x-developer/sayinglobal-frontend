@@ -51,7 +51,7 @@ export function ListingGrid({
       className={`grid gap-4 ${GRID_CLASSES[columns]}`}
     >
       {listings.map((listing) => (
-        <motion.div data-motion key={listing.public_id} variants={item}>
+        <motion.div data-motion key={listing.id} variants={item}>
           <ListingCard listing={listing} onFavorite={onFavorite} />
         </motion.div>
       ))}

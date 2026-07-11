@@ -67,6 +67,7 @@ export function CapacitorNativeProvider() {
       // If the user is on the primary "root" views, exit the app instead of navigating back
       const isRootView =
         pathname === '/' ||
+        pathname === '/index.html' ||
         pathname === '/dashboard' ||
         pathname === '/admin' ||
         pathname === '/auth';

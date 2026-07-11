@@ -71,7 +71,7 @@ function AdminListingDetailPageContent() {
       setComments(commentsData ?? []);
       // Filter on the client to those reports targeting THIS listing id.
       const all = (reportsResp as any)?.results ?? [];
-      const filtered = all.filter((r: any) => r?.listing?.public_id === id);
+      const filtered = all.filter((r: any) => r?.listing?.id === id);
       setReports(filtered);
     } catch {
       setListing(null);
@@ -235,7 +235,7 @@ function AdminListingDetailPageContent() {
                     center={[Number(listing.latitude), Number(listing.longitude)]}
                     zoom={13}
                     markers={[{
-                      id: listing.public_id,
+                      id: listing.id,
                       lat: Number(listing.latitude),
                       lng: Number(listing.longitude),
                       label: listing.title,
@@ -256,6 +256,12 @@ function AdminListingDetailPageContent() {
                 <div className="surface-elevated p-6">
                   <h2 className="display-sm mb-4">{t('listings.specifications')}</h2>
                   <dl className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                    {listing.category && listing.category.name && (
+                      <div>
+                        <dt className="text-xs text-fg-subtle">{t('listings.category' as any) ?? 'Kategoriya'}</dt>
+                        <dd className="mt-1 text-sm font-semibold text-fg">{listing.category.name}</dd>
+                      </div>
+                    )}
                     {listing.breed && (
                       <div>
                         <dt className="text-xs text-fg-subtle">{t('listings.breed')}</dt>
@@ -331,8 +337,8 @@ function AdminListingDetailPageContent() {
               {/* Comments */}
               <div className="surface-elevated p-6">
                 <CommentSection
-                  listingId={listing.public_id}
-                  sellerId={listing.seller.public_id}
+                  listingId={listing.id}
+                  sellerId={listing.seller.id}
                   initialComments={comments}
                 />
               </div>
@@ -341,8 +347,8 @@ function AdminListingDetailPageContent() {
               <div className="surface-elevated p-6">
                 <h2 className="display-sm mb-4">{t('sellers.reviews')}</h2>
                 <SellerRatingsThread
-                  sellerPublicId={listing.seller.public_id}
-                  listingPublicId={listing.public_id}
+                  sellerPublicId={listing.seller.id}
+                  listingPublicId={listing.id}
                 />
               </div>
             </div>
@@ -352,7 +358,7 @@ function AdminListingDetailPageContent() {
               {/* Seller card */}
               <div className="surface-elevated p-6">
                 <h3 className="text-eyebrow">{t('listings.seller')}</h3>
-                <Link href={`/sellers/detail?id=${listing.seller.public_id}`} className="mt-3 flex items-center gap-3 group">
+                <Link href={`/sellers/detail?id=${listing.seller.id}`} className="mt-3 flex items-center gap-3 group">
                   <Avatar src={listing.seller.avatar_url} name={listing.seller.full_name} size="lg" />
                   <div className="min-w-0 flex-1">
                     <p className="font-semibold text-fg group-hover:text-brand-primary truncate">{listing.seller.full_name}</p>

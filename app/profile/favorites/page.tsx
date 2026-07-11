@@ -47,7 +47,7 @@ export default function FavoritesPage() {
   }, [isAuthenticated]);
 
   const handleUnfavorite = async (id: number) => {
-    setItems((prev) => prev.filter((l) => l.public_id !== id));
+    setItems((prev) => prev.filter((l) => l.id !== id));
     try {
       await listingsApi.toggleFavorite(id);
     } catch {}
@@ -130,7 +130,7 @@ export default function FavoritesPage() {
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {items.map((l) => (
                   <ListingCard
-                    key={l.public_id}
+                    key={l.id}
                     listing={{ ...l, is_favorited: true } as any}
                     onFavorite={handleUnfavorite}
                   />
@@ -140,12 +140,12 @@ export default function FavoritesPage() {
               <div className="space-y-3">
                 {items.map((l, i) => (
                   <motion.div
-                    key={l.public_id}
+                    key={l.id}
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.35, delay: i * 0.04 }}
                   >
-                    <Link href={`/listings/detail?id=${l.public_id}`} className="surface-elevated group flex items-start gap-4 p-4 transition-all hover:-translate-y-0.5 hover:shadow-lift">
+                    <Link href={`/listings/detail?id=${l.id}`} className="surface-elevated group flex items-start gap-4 p-4 transition-all hover:-translate-y-0.5 hover:shadow-lift">
                       <div className="relative h-20 w-24 flex-shrink-0 overflow-hidden rounded-xl bg-bg-subtle sm:h-24 sm:w-32">
                         <div className="absolute inset-0 flex items-center justify-center text-fg-subtle opacity-40">
                           <svg width="40" height="40" viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="1.4">
@@ -164,7 +164,7 @@ export default function FavoritesPage() {
                       </div>
                       <button
                         type="button"
-                        onClick={(e) => { e.preventDefault(); handleUnfavorite(l.public_id); }}
+                        onClick={(e) => { e.preventDefault(); handleUnfavorite(l.id); }}
                         className="flex-shrink-0 text-danger"
                         aria-label="Remove from favorites"
                       >

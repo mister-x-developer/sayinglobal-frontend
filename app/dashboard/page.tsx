@@ -234,131 +234,24 @@ export default function DashboardPage() {
  */
 function DashboardNearby() {
   const t = useTranslations();
-  const [items, setItems] = useState<(Listing & { distance_km?: number })[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [hasGeo, setHasGeo] = useState(false);
-  const [expanded, setExpanded] = useState(false);
-
-  useEffect(() => {
-    if (typeof navigator === 'undefined' || !navigator.geolocation) {
-      setLoading(false);
-      return;
-    }
-
-    const fetchGeo = () => {
-      navigator.geolocation.getCurrentPosition(
-        async (pos) => {
-          try {
-            const data = await listingsApi.nearby({
-              lat: pos.coords.latitude,
-              lng: pos.coords.longitude,
-              radius_km: 50,
-              page_size: 8,
-            });
-            setItems(data.results);
-            setHasGeo(true);
-          } catch {
-            /* ignore */
-          } finally {
-            setLoading(false);
-          }
-        },
-        () => setLoading(false),
-        { enableHighAccuracy: true, timeout: 5000, maximumAge: 5 * 60_000 },
-      );
-    };
-
-    // Check if we already have permission
-    if (navigator.permissions && navigator.permissions.query) {
-      navigator.permissions.query({ name: 'geolocation' }).then((result) => {
-        if (result.state === 'granted') {
-          fetchGeo();
-        } else {
-          setLoading(false);
-          // Wait for user interaction to prompt
-        }
-      }).catch(() => {
-        // Fallback for browsers that don't support permissions API properly
-        setLoading(false);
-      });
-    } else {
-      // If permissions API not supported, don't auto-prompt to respect UX
-      setLoading(false);
-    }
-  }, []);
-
-  const requestGeo = () => {
-    if (typeof navigator === 'undefined' || !navigator.geolocation) return;
-    setLoading(true);
-    navigator.geolocation.getCurrentPosition(
-      async (pos) => {
-        try {
-          const data = await listingsApi.nearby({
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude,
-            radius_km: 50,
-            page_size: 8,
-          });
-          setItems(data.results);
-          setHasGeo(true);
-        } catch {
-          /* ignore */
-        } finally {
-          setLoading(false);
-        }
-      },
-      () => setLoading(false),
-      { enableHighAccuracy: true, timeout: 5000, maximumAge: 5 * 60_000 },
-    );
-  };
-
-  if (loading) return null;
-  
-  if (!hasGeo) {
-    return (
-      <div className="surface-elevated rounded-2xl overflow-hidden border border-border p-5 text-center">
-        <div className="mx-auto mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary">
-          <MapPin className="h-6 w-6" strokeWidth={1.75} />
-        </div>
-        <h2 className="text-lg font-bold text-fg">{t('nearby.title')}</h2>
-        <p className="mt-1 text-sm text-fg-muted">Yaqiningizdagi e&apos;lonlarni ko&apos;rish uchun joylashuvga ruxsat bering</p>
-        <button onClick={requestGeo} className="btn btn-primary mt-4">
-          Joylashuvni aniqlash
-        </button>
-      </div>
-    );
-  }
-
-  if (items.length === 0) return null;
 
   return (
-    <div className="surface-elevated rounded-2xl overflow-hidden border border-border">
-      <button 
-        onClick={() => setExpanded(!expanded)} 
+    <div className="surface-elevated rounded-2xl overflow-hidden border border-border group">
+      <Link 
+        href="/listings/nearby"
         className="w-full flex items-center justify-between p-4 sm:p-5 hover:bg-bg-subtle transition-colors"
       >
         <div className="flex items-center gap-3">
-          <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-success/12 text-success">
+          <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-success/12 text-success transition-transform duration-300 group-hover:scale-110">
             <MapPin className="h-5 w-5" strokeWidth={1.75} />
           </div>
           <h2 className="text-base sm:text-lg font-bold text-fg">{t('nearby.title')}</h2>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-sm font-medium text-fg-subtle">{items.length} ta e&apos;lon</span>
-          <ArrowRight className={`h-5 w-5 text-fg-muted transition-transform duration-300 ${expanded ? 'rotate-90' : ''}`} />
+          <span className="text-sm font-medium text-brand-primary group-hover:underline">Ko&apos;rish</span>
+          <ArrowRight className="h-5 w-5 text-fg-muted transition-transform duration-300 group-hover:translate-x-1" />
         </div>
-      </button>
-      
-      {expanded && (
-        <div className="p-4 sm:p-5 pt-0 border-t border-border mt-1">
-           <div className="flex justify-end mb-4">
-             <Link href="/listings/nearby" className="text-sm font-semibold text-brand-primary hover:underline">
-               {t('common.showAll')}
-             </Link>
-           </div>
-           <ListingGrid listings={items as any} />
-        </div>
-      )}
+      </Link>
     </div>
   );
 }

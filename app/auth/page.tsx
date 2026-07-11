@@ -43,13 +43,11 @@ function AuthPageContent() {
   // NOTE: Only redirect after hydration to avoid false redirects on cold start.
   useEffect(() => {
     if (!isAuthenticated) return;
-    const target = nextPath || (currentUser?.is_admin ? '/admin' : '/dashboard');
-    if (typeof window !== 'undefined' && !(window as any).Capacitor?.isNative) {
+    const target = nextPath || (currentUser?.is_admin || currentUser?.is_admin_account ? '/admin' : '/dashboard');
+    if (typeof window !== 'undefined') {
       window.location.replace(target);
-    } else {
-      router.replace(target);
     }
-  }, [isAuthenticated, currentUser?.is_admin, nextPath, router]);
+  }, [isAuthenticated, currentUser?.is_admin, currentUser?.is_admin_account, nextPath, router]);
 
   const [code, setCode] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -86,7 +84,7 @@ function AuthPageContent() {
       // Decide destination. is_admin → /admin, otherwise honour ?next=, fall
       // back to /dashboard.
       const target =
-        nextPath || (result.user?.is_admin ? '/admin' : '/dashboard');
+        nextPath || (result.user?.is_admin || result.user?.is_admin_account ? '/admin' : '/dashboard');
 
       // Critical fix for the "Redirecting..." freeze that users hit on
       // successful login: do a full document navigation so the destination
@@ -97,11 +95,11 @@ function AuthPageContent() {
       //
       // Tradeoff: ~200 ms extra paint vs hard guarantee the user actually
       // lands on the destination — chosen deliberately.
-      if (typeof window !== 'undefined' && !Capacitor.isNativePlatform()) {
+      if (typeof window !== 'undefined') {
         window.location.replace(target);
-        return;
+      } else {
+        router.replace(target);
       }
-      router.replace(target);
     } catch (err: unknown) {
       if (err instanceof AuthApiError) {
         if (err.message === 'invalid_or_expired_code' || err.status === 400) {

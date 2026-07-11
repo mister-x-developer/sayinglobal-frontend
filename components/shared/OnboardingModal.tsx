@@ -107,13 +107,15 @@ export function OnboardingModal() {
 
   useEffect(() => {
     if (!isAuthenticated || !user?.terms_accepted_at) return;
+    if (user?.is_admin || user?.is_staff || user?.is_admin_account || window.location.pathname.startsWith('/admin')) return;
+
     const done = localStorage.getItem(STORAGE_KEY);
     if (!done) {
       // Small delay so the page loads first
       const t = setTimeout(() => setVisible(true), 800);
       return () => clearTimeout(t);
     }
-  }, [isAuthenticated, user?.terms_accepted_at]);
+  }, [isAuthenticated, user?.terms_accepted_at, user?.is_admin, user?.is_staff, user?.is_admin_account]);
 
   const dismiss = () => {
     localStorage.setItem(STORAGE_KEY, '1');

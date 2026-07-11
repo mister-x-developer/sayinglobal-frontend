@@ -81,8 +81,9 @@ export function FloatingNearbyButton() {
 
   // Hide on auth pages, landing, admin, chat detail
   if (
-    pathname.startsWith('/auth') ||
     pathname === '/' ||
+    pathname === '/index.html' ||
+    pathname.startsWith('/auth') ||
     pathname.startsWith('/admin') ||
     /^\/chat\/[^/]+$/.test(pathname)
   ) {

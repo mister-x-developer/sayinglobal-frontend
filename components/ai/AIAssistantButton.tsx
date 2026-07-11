@@ -7,7 +7,7 @@ import { X } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore } from '@/lib/store/auth';
 import { Logo } from '@/components/shared/Logo';
-import { UserAILogo, AdminAILogo } from '@/components/ai/AILogos';
+import { UserAILogo } from '@/components/ai/AILogos';
 
 const STORAGE_KEY = 'sayin_ai_btn_hidden';
 
@@ -81,9 +81,6 @@ export function AIAssistantButton() {
   if (!isAuthenticated || !user?.terms_accepted_at) return null;
   if (pathname.startsWith('/chat-ai') || pathname.startsWith('/admin/ai-agent')) return null;
   if (hidden) return null;
-
-
-  const isAdmin = user?.is_staff || user?.is_admin;
 
   // Clamp position to keep it on screen
   const clampedX = Math.max(-(windowSize.width - 80), Math.min(pos.x, 0));

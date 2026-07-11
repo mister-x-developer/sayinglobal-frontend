@@ -9,8 +9,7 @@ import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
 import { getLocalizedListingTitle } from '@/lib/utils/format';
 
-interface Listing {
-  id: string;
+export interface Listing {
   id: string;
   title: string;
   title_uz?: string;
@@ -51,7 +50,7 @@ export default function Map({ listings, centerLat = 41.2995, centerLng = 69.2401
       
       {listings.filter(l => l.latitude && l.longitude).map(listing => (
         <Marker 
-          key={listing.public_id} 
+          key={listing.id} 
           position={[Number(listing.latitude), Number(listing.longitude)]}
         >
           <Popup>
@@ -71,7 +70,7 @@ export default function Map({ listings, centerLat = 41.2995, centerLng = 69.2401
                 {Number(listing.price).toLocaleString()} {listing.currency}
               </p>
               <button 
-                onClick={() => router.push(`/listings/detail?id=${listing.public_id}`)}
+                onClick={() => router.push(`/listings/detail?id=${listing.id}`)}
                 className="mt-2 w-full bg-emerald-600 text-white text-xs py-1.5 rounded hover:bg-emerald-700 transition"
               >
                 {t('common.view')}

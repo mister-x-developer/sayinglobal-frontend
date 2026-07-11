@@ -158,7 +158,7 @@ function ReportDetailPageContent() {
                       {report.report_type === 'listing' ? (
                         report.listing ? (
                           <Link
-                            href={`/listings/detail?id=${report.listing.public_id}`}
+                            href={`/listings/detail?id=${report.listing.id}`}
                             className="mt-3 flex items-center gap-3 group"
                           >
                             <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-bg-subtle">
@@ -166,7 +166,7 @@ function ReportDetailPageContent() {
                             </div>
                             <div className="min-w-0">
                               <p className="font-semibold text-fg group-hover:text-brand-primary truncate">{report.listing.title}</p>
-                              <p className="text-xs text-fg-muted">#{report.listing.public_id}</p>
+                              <p className="text-xs text-fg-muted">#{report.listing.id}</p>
                             </div>
                           </Link>
                         ) : (
@@ -174,13 +174,13 @@ function ReportDetailPageContent() {
                         )
                       ) : report.reported_user ? (
                         <Link
-                          href={`/sellers/detail?id=${report.reported_user.public_id}`}
+                          href={`/sellers/detail?id=${report.reported_user.id}`}
                           className="mt-3 flex items-center gap-3 group"
                         >
                           <Avatar src={report.reported_user.avatar_url} name={report.reported_user.full_name} size="md" />
                           <div className="min-w-0">
                             <p className="font-semibold text-fg group-hover:text-brand-primary truncate">{report.reported_user.full_name}</p>
-                            <p className="text-xs text-fg-muted">#{report.reported_user.public_id}</p>
+                            <p className="text-xs text-fg-muted">#{report.reported_user.id}</p>
                           </div>
                         </Link>
                       ) : (

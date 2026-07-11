@@ -100,9 +100,9 @@ export default function AdminUsersPage() {
     try {
       await apiClient.post(endpointMap[action], { reason: action });
       setUsers((prev) => prev.map((u) =>
-        u.public_id === userPublicId ? { ...u, status: statusMap[action] as any } : u
+        u.id === userPublicId ? { ...u, status: statusMap[action] as any } : u
       ));
-      if (selectedUser?.public_id === userPublicId) {
+      if (selectedUser?.id === userPublicId) {
         setSelectedUser((prev) => prev ? { ...prev, status: statusMap[action] as any } : null);
       }
       toast.success(t('success.updated'));
@@ -216,9 +216,9 @@ export default function AdminUsersPage() {
                 <tbody>
                   {filtered.map((user, i) => (
                     <tr
-                      key={user.public_id}
+                      key={user.id}
                       className="group cursor-pointer transition-colors hover:bg-bg-subtle/50"
-                      onClick={() => router.push(`/admin/users/detail?id=${user.public_id}`)}
+                      onClick={() => router.push(`/admin/users/detail?id=${user.id}`)}
                     >
                       <td>
                         <div className="flex items-center gap-3">
@@ -258,7 +258,7 @@ export default function AdminUsersPage() {
                             <Eye className="h-3.5 w-3.5" strokeWidth={2} />
                           </button>
                           <Link
-                            href={`/admin/users/detail?id=${user.public_id}`}
+                            href={`/admin/users/detail?id=${user.id}`}
                             className="btn btn-primary btn-sm h-8 px-2.5"
                           >
                             {t('common.details')}
@@ -356,7 +356,7 @@ export default function AdminUsersPage() {
                 <button
                   type="button"
                   disabled={actionLoading}
-                  onClick={() => handleAction(selectedUser.public_id, 'unblock')}
+                  onClick={() => handleAction(selectedUser.id, 'unblock')}
                   className="btn btn-sm bg-success/12 text-success hover:bg-success/20 disabled:opacity-50"
                 >
                   <CheckCircle2 className="h-4 w-4" strokeWidth={2.25} />
@@ -367,7 +367,7 @@ export default function AdminUsersPage() {
                 <button
                   type="button"
                   disabled={actionLoading}
-                  onClick={() => handleAction(selectedUser.public_id, 'warn')}
+                  onClick={() => handleAction(selectedUser.id, 'warn')}
                   className="btn btn-sm bg-warning/12 text-warning hover:bg-warning/20 disabled:opacity-50"
                 >
                   <AlertTriangle className="h-4 w-4" strokeWidth={2.25} />
@@ -378,7 +378,7 @@ export default function AdminUsersPage() {
                 <button
                   type="button"
                   disabled={actionLoading}
-                  onClick={() => handleAction(selectedUser.public_id, 'restrict')}
+                  onClick={() => handleAction(selectedUser.id, 'restrict')}
                   className="btn btn-sm bg-danger/12 text-danger hover:bg-danger/20 disabled:opacity-50"
                 >
                   <AlertTriangle className="h-4 w-4" strokeWidth={2.25} />
@@ -389,7 +389,7 @@ export default function AdminUsersPage() {
                 <button
                   type="button"
                   disabled={actionLoading}
-                  onClick={() => handleAction(selectedUser.public_id, 'block')}
+                  onClick={() => handleAction(selectedUser.id, 'block')}
                   className="btn btn-sm bg-danger/12 text-danger hover:bg-danger/20 disabled:opacity-50"
                 >
                   <Ban className="h-4 w-4" strokeWidth={2.25} />

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import { Send, Loader2, Sparkles, MessageSquarePlus, MessageSquare, Clock, ArrowLeft, Menu } from 'lucide-react';
 import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
-import { UserAILogo, AdminAILogo } from '@/components/ai/AILogos';
+import { UserAILogo } from '@/components/ai/AILogos';
 import apiClient from '@/lib/api/client';
 import { toast } from '@/components/ui/Toast';
 
@@ -61,7 +61,7 @@ export default function ChatAIPage() {
 
   if (!hydrated || !isAuthenticated) return null;
 
-  const isAdmin = user?.is_staff || user?.is_admin;
+
 
   const sendMessage = async (text: string) => {
     if (!text.trim() || loading) return;
@@ -106,25 +106,18 @@ export default function ChatAIPage() {
     setShowHistory(false);
   };
 
-  const AILogo = isAdmin ? AdminAILogo : UserAILogo;
-  const aiTitle = isAdmin ? t('ai.adminTitle') : t('ai.title');
-  const aiSubtitle = isAdmin ? t('ai.adminSubtitle') : t('ai.subtitle');
-  const greeting = isAdmin ? t('ai.adminGreeting') : t('ai.greeting');
+  const AILogo = UserAILogo;
+  const aiTitle = t('ai.title');
+  const aiSubtitle = t('ai.subtitle');
+  const greeting = t('ai.greeting');
 
-  // Quick prompts based on role
-  const quickPrompts = isAdmin
-    ? [
-        { key: 'adminCheckNew', icon: '🔍' },
-        { key: 'adminComplaints', icon: '⚠️' },
-        { key: 'adminStats', icon: '📊' },
-        { key: 'adminSpam', icon: '🚨' },
-      ]
-    : [
-        { key: 'findCattle', icon: '🐄' },
-        { key: 'findHorse', icon: '🐎' },
-        { key: 'priceCheck', icon: '💰' },
-        { key: 'nearbyListings', icon: '📍' },
-      ];
+  // Quick prompts
+  const quickPrompts = [
+    { key: 'findCattle', icon: '🐄' },
+    { key: 'findHorse', icon: '🐎' },
+    { key: 'priceCheck', icon: '💰' },
+    { key: 'nearbyListings', icon: '📍' },
+  ];
 
   return (
     <div className="fixed inset-0 z-[100] flex flex-col bg-bg-elevated pt-safe pb-safe">

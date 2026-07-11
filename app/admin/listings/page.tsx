@@ -405,7 +405,7 @@ export default function AdminListingsPage() {
                     const primaryImg = l.primary_image?.image_url || l.primary_image?.image || l.images?.[0]?.image_url || l.images?.[0]?.image;
                     return (
                       <tr
-                        key={l.public_id}
+                        key={l.id}
                         className={cn(
                           'group cursor-pointer transition-colors',
                           isSelected && 'bg-brand-primary/5'

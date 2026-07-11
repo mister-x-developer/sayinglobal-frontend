@@ -45,6 +45,12 @@ const TYPE_ICON: Record<NotificationType, typeof Bell> = {
   admin_message: Megaphone,
   broadcast: Megaphone,
   system: Bell,
+  system_alert: Bell,
+  listing_status: Package,
+  listing_approved: CheckCheck,
+  listing_rejected: Trash2,
+  listing_expiring_soon: Package,
+  new_listing_from_followed: Users,
 };
 
 const TYPE_TONE: Record<NotificationType, string> = {
@@ -59,13 +65,19 @@ const TYPE_TONE: Record<NotificationType, string> = {
   admin_message: 'bg-brand-primary/10 text-brand-primary',
   broadcast: 'bg-brand-primary/10 text-brand-primary',
   system: 'bg-bg-subtle text-fg-muted',
+  system_alert: 'bg-warning/12 text-warning',
+  listing_status: 'bg-info/12 text-info',
+  listing_approved: 'bg-success/12 text-success',
+  listing_rejected: 'bg-danger/12 text-danger',
+  listing_expiring_soon: 'bg-warning/12 text-warning',
+  new_listing_from_followed: 'bg-brand-primary/10 text-brand-primary',
 };
 
 function matchesFilter(n: Notification, filter: Filter): boolean {
   if (filter === 'all') return true;
   if (filter === 'unread') return !n.is_read;
   if (filter === 'messages') return n.notification_type === 'message_received';
-  if (filter === 'listings') return ['listing_comment', 'listing_favorite', 'listing_sold', 'listing_expired'].includes(n.notification_type);
+  if (filter === 'listings') return ['listing_comment', 'listing_favorite', 'listing_sold', 'listing_expired', 'listing_status', 'listing_approved', 'listing_rejected', 'listing_expiring_soon', 'new_listing_from_followed'].includes(n.notification_type);
   if (filter === 'social') return ['follow', 'rating'].includes(n.notification_type);
   if (filter === 'system') return ['system', 'system_alert', 'admin_message', 'broadcast'].includes(n.notification_type);
   if (filter === 'moderation') return ['complaint_update', 'listing_comment'].includes(n.notification_type);

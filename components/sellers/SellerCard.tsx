@@ -36,7 +36,7 @@ export function SellerCard({ seller }: { seller: SellerCardData }) {
       className="surface-elevated overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift"
     >
       {/* Top section */}
-      <Link href={user?.public_id === seller.public_id ? '/profile' : `/sellers/detail?id=${seller.public_id}`} className="block p-5 group">
+      <Link href={user?.public_id === seller.id ? '/profile' : `/sellers/detail?id=${seller.id}`} className="block p-5 group">
         <div className="flex items-start gap-4">
           <Avatar src={seller.avatar_url} name={seller.full_name} size="lg" ring />
           <div className="min-w-0 flex-1">
@@ -87,13 +87,13 @@ export function SellerCard({ seller }: { seller: SellerCardData }) {
       {/* Actions */}
       <div className="grid grid-cols-2 gap-2 border-t border-border p-4">
         <Link
-          href={`/chat?with=${seller.public_id}`}
+          href={`/chat?with=${seller.id}`}
           className="btn btn-secondary btn-sm"
         >
           <MessageSquareText className="h-4 w-4" strokeWidth={1.75} />
           {t('sellers.message')}
         </Link>
-        <FollowButton sellerId={seller.public_id} size="sm" />
+        <FollowButton sellerId={seller.id} size="sm" />
       </div>
     </motion.article>
   );

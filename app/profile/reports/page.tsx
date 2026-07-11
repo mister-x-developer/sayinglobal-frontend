@@ -98,8 +98,8 @@ export default function MyReportsPage() {
                           <div className="flex items-start justify-between gap-3">
                             <p className="font-semibold text-fg">
                               {r.report_type === 'listing'
-                                ? r.listing?.title ?? `#${r.listing?.public_id}`
-                                : r.reported_user?.full_name ?? `#${r.reported_user?.public_id}`}
+                                ? r.listing?.title ?? `#${r.listing?.id}`
+                                : r.reported_user?.full_name ?? `#${r.reported_user?.id}`}
                             </p>
                             <Badge variant={cfg.variant} size="sm">{t(cfg.key as any)}</Badge>
                           </div>

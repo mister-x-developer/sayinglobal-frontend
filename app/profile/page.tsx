@@ -280,7 +280,7 @@ export default function ProfilePage() {
                   ) : (
                     <div className="grid gap-4 sm:grid-cols-2">
                       {favorites.map((l) => (
-                        <ListingCard key={l.public_id} listing={l as any} />
+                        <ListingCard key={l.id} listing={l as any} />
                       ))}
                     </div>
                   )

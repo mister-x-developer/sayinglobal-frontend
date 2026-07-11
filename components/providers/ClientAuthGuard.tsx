@@ -7,7 +7,7 @@ import { Capacitor } from '@capacitor/core';
 
 function isPublicPath(pathname: string): boolean {
   if (!pathname) return true;
-  if (pathname === '/') return true;
+  if (pathname === '/' || pathname === '/index.html') return true;
   if (pathname.startsWith('/auth') || pathname.startsWith('/admin/login')) return true;
   if (pathname === '/terms' || pathname === '/privacy') return true;
   return false;
@@ -31,7 +31,7 @@ export function ClientAuthGuard({ children }: { children: React.ReactNode }) {
 
     // If authenticated and on an auth page or on landing page (unless admin)
     if (
-      (pathname.startsWith('/auth') || pathname.startsWith('/admin/login') || (pathname === '/' && !isPlatformAdmin)) &&
+      (pathname.startsWith('/auth') || pathname.startsWith('/admin/login') || ((pathname === '/' || pathname === '/index.html') && !isPlatformAdmin)) &&
       isAuthenticated
     ) {
       const target = isPlatformAdmin ? '/admin' : '/dashboard';
@@ -40,7 +40,7 @@ export function ClientAuthGuard({ children }: { children: React.ReactNode }) {
     }
 
     // Native apps do not use the landing page.
-    if (pathname === '/' && !isAuthenticated && Capacitor.isNativePlatform()) {
+    if ((pathname === '/' || pathname === '/index.html') && !isAuthenticated && Capacitor.isNativePlatform()) {
       router.replace('/auth');
       return;
     }

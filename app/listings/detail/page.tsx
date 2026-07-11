@@ -90,20 +90,20 @@ function ListingDetailPageContent() {
   const categorySlug = (listing?.category as any)?.slug;
   // Fetch related listings (same category, exclude current) from backend
   useEffect(() => {
-    if (!categorySlug || !listing?.public_id) return;
+    if (!categorySlug || !listing?.id) return;
     let alive = true;
     listingsApi
       .byCategory(categorySlug)
       .then((items) => {
         if (!alive) return;
         const filtered = (items ?? [])
-          .filter((l) => l.public_id !== listing.public_id)
+          .filter((l) => l.id !== listing.id)
           .slice(0, 4);
         setRelated(filtered);
       })
       .catch(() => alive && setRelated([]));
     return () => { alive = false; };
-  }, [categorySlug, listing?.public_id]);
+  }, [categorySlug, listing?.id]);
 
   const images = listing?.images ?? [];
   const visibleImage = images[imgIndex];
@@ -127,7 +127,7 @@ function ListingDetailPageContent() {
   const handleFavorite = async () => {
     setFavorited((v) => !v);
     if (!listing) return;
-    try { await listingsApi.toggleFavorite(listing.public_id); } catch {}
+    try { await listingsApi.toggleFavorite(listing.id); } catch {}
   };
 
   const prevImage = () => setImgIndex((i) => (i === 0 ? images.length - 1 : i - 1));
@@ -329,9 +329,9 @@ function ListingDetailPageContent() {
                     )}
 
                     <div className="mt-6 space-y-2.5">
-                      {user?.public_id !== listing.seller.public_id && !(user?.is_admin || user?.is_staff) && (
+                      {user?.public_id !== listing.seller.id && !(user?.is_admin || user?.is_staff) && (
                         <Link
-                          href={`/chat?with=${listing.seller.public_id}`}
+                          href={`/chat?with=${listing.seller.id}`}
                           className="btn btn-primary w-full"
                         >
                           <MessageSquareText className="h-4 w-4" strokeWidth={2.25} />
@@ -403,7 +403,7 @@ function ListingDetailPageContent() {
 
                     <div className="p-5">
                       <Link
-                        href={user?.public_id === listing.seller.public_id ? '/profile' : `/sellers/detail?id=${listing.seller.public_id}`}
+                        href={user?.public_id === listing.seller.id ? '/profile' : `/sellers/detail?id=${listing.seller.id}`}
                         className="flex items-start gap-3 group"
                       >
                         <Avatar
@@ -444,17 +444,17 @@ function ListingDetailPageContent() {
 
                       <div className="mt-4 grid grid-cols-2 gap-2">
                         <Link
-                          href={user?.public_id === listing.seller.public_id ? '/profile' : `/sellers/detail?id=${listing.seller.public_id}`}
+                          href={user?.public_id === listing.seller.id ? '/profile' : `/sellers/detail?id=${listing.seller.id}`}
                           className="btn btn-secondary btn-sm"
                         >
                           {t('common.view')}
                         </Link>
                         {!(user?.is_admin || user?.is_staff) && (
-                        <FollowButton sellerId={listing.seller.public_id} size="sm" initialIsFollowing={(listing.seller as any).is_following} />
+                        <FollowButton sellerId={listing.seller.id} size="sm" initialIsFollowing={(listing.seller as any).is_following} />
                         )}
                       </div>
                       <Link
-                        href={user?.public_id === listing.seller.public_id ? '/profile' : `/sellers/${listing.seller.public_id}?tab=reviews`}
+                        href={user?.public_id === listing.seller.id ? '/profile' : `/sellers/${listing.seller.id}?tab=reviews`}
                         className="mt-2 block w-full rounded-xl border border-border bg-bg-subtle/60 px-3 py-2 text-center text-xs font-semibold text-fg-muted hover:bg-bg-subtle"
                       >
                         {t('reviews.viewAll')}
@@ -580,7 +580,7 @@ function ListingDetailPageContent() {
                         center={[Number(listing.latitude), Number(listing.longitude)]}
                         zoom={13}
                         markers={[{
-                          id: listing.public_id,
+                          id: listing.id,
                           lat: Number(listing.latitude),
                           lng: Number(listing.longitude),
                           label: listing.title,
@@ -615,8 +615,8 @@ function ListingDetailPageContent() {
                     className="surface-elevated p-4 sm:p-6"
                   >
                     <CommentSection
-                      listingId={listing.public_id}
-                      sellerId={listing.seller.public_id}
+                      listingId={listing.id}
+                      sellerId={listing.seller.id}
                       initialComments={comments}
                     />
                   </motion.div>
@@ -629,8 +629,8 @@ function ListingDetailPageContent() {
                   >
                     <h2 className="display-sm mb-4">{t('sellers.reviews')}</h2>
                     <SellerRatingsThread
-                      sellerPublicId={listing.seller.public_id}
-                      listingPublicId={listing.public_id}
+                      sellerPublicId={listing.seller.id}
+                      listingPublicId={listing.id}
                     />
                   </motion.div>
 
@@ -667,9 +667,9 @@ function ListingDetailPageContent() {
                     )}
 
                     <div className="mt-6 space-y-2.5">
-                      {user?.public_id !== listing.seller.public_id && !(user?.is_admin || user?.is_staff) && (
+                      {user?.public_id !== listing.seller.id && !(user?.is_admin || user?.is_staff) && (
                         <Link
-                          href={`/chat?with=${listing.seller.public_id}`}
+                          href={`/chat?with=${listing.seller.id}`}
                           className="btn btn-primary w-full"
                         >
                           <MessageSquareText className="h-4 w-4" strokeWidth={2.25} />
@@ -739,7 +739,7 @@ function ListingDetailPageContent() {
 
                     <div className="p-5">
                       <Link
-                        href={user?.public_id === listing.seller.public_id ? '/profile' : `/sellers/detail?id=${listing.seller.public_id}`}
+                        href={user?.public_id === listing.seller.id ? '/profile' : `/sellers/detail?id=${listing.seller.id}`}
                         className="flex items-start gap-3 group"
                       >
                         <Avatar
@@ -780,17 +780,17 @@ function ListingDetailPageContent() {
 
                       <div className="mt-4 grid grid-cols-2 gap-2">
                         <Link
-                          href={user?.public_id === listing.seller.public_id ? '/profile' : `/sellers/detail?id=${listing.seller.public_id}`}
+                          href={user?.public_id === listing.seller.id ? '/profile' : `/sellers/detail?id=${listing.seller.id}`}
                           className="btn btn-secondary btn-sm"
                         >
                           {t('common.view')}
                         </Link>
                         {!(user?.is_admin || user?.is_staff) && (
-                        <FollowButton sellerId={listing.seller.public_id} size="sm" initialIsFollowing={(listing.seller as any).is_following} />
+                        <FollowButton sellerId={listing.seller.id} size="sm" initialIsFollowing={(listing.seller as any).is_following} />
                         )}
                       </div>
                       <Link
-                        href={user?.public_id === listing.seller.public_id ? '/profile' : `/sellers/${listing.seller.public_id}?tab=reviews`}
+                        href={user?.public_id === listing.seller.id ? '/profile' : `/sellers/${listing.seller.id}?tab=reviews`}
                         className="mt-2 block w-full rounded-xl border border-border bg-bg-subtle/60 px-3 py-2 text-center text-xs font-semibold text-fg-muted hover:bg-bg-subtle"
                       >
                         {t('reviews.viewAll')}
@@ -833,7 +833,7 @@ function ListingDetailPageContent() {
         open={reportOpen}
         target={
           listing
-            ? { kind: 'listing', publicId: listing.public_id as any, title: listing.title }
+            ? { kind: 'listing', publicId: listing.id as any, title: listing.title }
             : null
         }
         onClose={() => setReportOpen(false)}

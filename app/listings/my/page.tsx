@@ -293,7 +293,7 @@ export default function MyListingsPage() {
 
                   return (
                     <motion.div
-                      key={l.public_id}
+                      key={l.id}
                       initial={{ opacity: 0, y: 6 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -6 }}

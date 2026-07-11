@@ -271,7 +271,7 @@ export function AdminLayout({ children, noPadding = false }: { children: React.R
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 320 }}
-              className="fixed inset-y-0 left-0 z-50 w-64 border-r border-border bg-bg-elevated lg:hidden"
+              className="fixed inset-y-0 left-0 z-50 w-64 border-r border-border bg-bg-elevated lg:hidden flex flex-col pt-safe pb-safe"
             >
               <div className="flex h-16 items-center justify-between border-b border-border px-5">
                 <div className="flex items-center gap-2">
@@ -298,7 +298,7 @@ export function AdminLayout({ children, noPadding = false }: { children: React.R
       {/* Main content area */}
       <div className={`flex min-w-0 flex-1 flex-col h-[100dvh] overflow-hidden transition-all duration-300 ${collapsed ? 'lg:pl-16' : 'lg:pl-64'}`}>
         {/* Calm top bar */}
-        <header className="flex h-14 flex-shrink-0 items-center gap-3 border-b border-border bg-bg px-4 sm:px-6">
+        <header className="flex min-h-[3.5rem] flex-shrink-0 items-center gap-3 border-b border-border bg-bg px-4 sm:px-6 pt-safe pb-2 sm:pb-0">
           <button
             type="button"
             onClick={() => setSidebarOpen(true)}

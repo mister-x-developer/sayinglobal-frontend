@@ -20,8 +20,7 @@ export interface ChatMessage {
 }
 
 export interface Conversation {
-  id: number;  // 9-digit numeric — the primary external identifier
-  id?: string;        // deprecated — kept for backward compat, may be absent
+  id: number;
   participants: ChatUser[];
   last_message?: string;
   last_message_time?: string;

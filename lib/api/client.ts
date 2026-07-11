@@ -126,6 +126,12 @@ apiClient.interceptors.request.use(
       }
     }
 
+    if (config.data instanceof FormData) {
+      if (config.headers) {
+        delete config.headers['Content-Type'];
+      }
+    }
+
     // Do NOT attach a stale Bearer token to OTP/auth login endpoints.
     // Allow /users/auth/terms/ and similar authenticated endpoints.
     const isOtpEndpoint = config.url?.includes('/auth/login') || config.url?.includes('/auth/verify');
@@ -175,6 +181,7 @@ apiClient.interceptors.request.use(
         const match = document.cookie.match(new RegExp('(^| )sayin-locale=([^;]+)'));
         if (match) {
           let locale = match[2];
+          config.headers['X-Locale'] = locale; // Added explicitly for sayin backend
           if (locale === 'uz-cyrl') locale = 'uz-cyrl,uz;q=0.9'; // fallback to uz
           config.headers['Accept-Language'] = locale;
         }

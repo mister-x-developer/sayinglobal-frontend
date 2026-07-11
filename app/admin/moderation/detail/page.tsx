@@ -206,7 +206,7 @@ function AdminReportDetailPageContent() {
                   <div>
                     <p className="font-semibold text-fg">{report.complainant?.full_name}</p>
                     <p className="text-xs text-fg-muted">{report.complainant?.phone}</p>
-                    <Link href={`/admin/users/detail?id=${report.complainant?.public_id}`} className="text-xs text-brand-primary hover:underline">
+                    <Link href={`/admin/users/detail?id=${report.complainant?.id}`} className="text-xs text-brand-primary hover:underline">
                       {t('admin.viewDetails' as any)}
                     </Link>
                   </div>
@@ -218,24 +218,24 @@ function AdminReportDetailPageContent() {
                 <h2 className="text-eyebrow mb-3">{t('report.subject')}</h2>
                 {report.report_type === 'listing' ? (
                   report.listing ? (
-                    <Link href={`/admin/listings/detail?id=${report.listing.public_id}`} className="group flex items-center gap-3 hover:text-brand-primary">
+                    <Link href={`/admin/listings/detail?id=${report.listing.id}`} className="group flex items-center gap-3 hover:text-brand-primary">
                       <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-bg-subtle">
                         <Package className="h-5 w-5 text-fg-muted" strokeWidth={1.75} />
                       </div>
                       <div>
                         <p className="font-semibold text-fg group-hover:text-brand-primary">{report.listing.title}</p>
-                        <p className="text-xs text-fg-muted">#{report.listing.public_id}</p>
+                        <p className="text-xs text-fg-muted">#{report.listing.id}</p>
                       </div>
                     </Link>
                   ) : (
                     <p className="text-sm text-fg-muted">—</p>
                   )
                 ) : report.reported_user ? (
-                  <Link href={`/admin/users/detail?id=${report.reported_user.public_id}`} className="group flex items-center gap-3 hover:text-brand-primary">
+                  <Link href={`/admin/users/detail?id=${report.reported_user.id}`} className="group flex items-center gap-3 hover:text-brand-primary">
                     <Avatar src={report.reported_user.avatar_url} name={report.reported_user.full_name} size="lg" />
                     <div>
                       <p className="font-semibold text-fg group-hover:text-brand-primary">{report.reported_user.full_name}</p>
-                      <p className="text-xs text-fg-muted">#{report.reported_user.public_id}</p>
+                      <p className="text-xs text-fg-muted">#{report.reported_user.id}</p>
                     </div>
                   </Link>
                 ) : (
@@ -414,7 +414,7 @@ function AdminReportDetailPageContent() {
                     Blocked holatdan chiqarish alohida «unblock» tugmasi orqali.
                   </p>
                   <RestoreStatusPanel
-                    userPublicId={report.reported_user.public_id}
+                    userPublicId={report.reported_user.id}
                     currentStatus={report.reported_user.status as any}
                     onRestored={load}
                   />

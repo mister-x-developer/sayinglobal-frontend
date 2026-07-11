@@ -16,10 +16,10 @@ export default function LandingPage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.location.pathname !== '/') return;
+    if (typeof window !== 'undefined' && window.location.pathname !== '/' && window.location.pathname !== '/index.html') return;
     import('@capacitor/core').then(({ Capacitor }) => {
       if (Capacitor.isNativePlatform()) {
-        router.replace('/dashboard');
+        window.location.replace('/dashboard');
       }
     });
   }, [router]);

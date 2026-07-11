@@ -20,6 +20,7 @@ export interface Comment {
   created_at: string;
   is_edited?: boolean;
   replies?: Comment[];
+  parent?: number | string;
 }
 
 interface CommentItemProps {
@@ -41,7 +42,7 @@ export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentIt
   const [reportOpen, setReportOpen] = useState(false);
 
   const { user } = useAuthStore();
-  const isSeller = comment.user.public_id === sellerId;
+  const isSeller = comment.user.id === sellerId;
   const hasReplies = (comment.replies?.length ?? 0) > 0;
 
   const handleReply = async () => {
@@ -59,7 +60,7 @@ export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentIt
   return (
     <div className={depth > 0 ? 'ml-8 border-l-2 border-border pl-4' : ''}>
       <div className="group flex gap-3 py-3">
-        <Link href={user?.public_id == comment.user.public_id ? '/profile' : `/sellers/detail?id=${comment.user.public_id}`} className="flex-shrink-0">
+        <Link href={user?.public_id == comment.user.id ? '/profile' : `/sellers/detail?id=${comment.user.id}`} className="flex-shrink-0">
           <Avatar src={comment.user.avatar_url} name={comment.user.full_name} size="sm" />
         </Link>
 
@@ -73,7 +74,7 @@ export function CommentItem({ comment, depth = 0, sellerId, onReply }: CommentIt
               </Badge>
             )}
             <Link
-              href={user?.public_id === comment.user.public_id ? '/profile' : `/sellers/detail?id=${comment.user.public_id}`}
+              href={user?.public_id === comment.user.id ? '/profile' : `/sellers/detail?id=${comment.user.id}`}
               className="text-sm font-semibold text-fg hover:underline"
             >
               {comment.user.full_name}
@@ -257,55 +258,86 @@ export function CommentSection({ listingId, sellerId, initialComments = [] }: Co
 
   const handleSubmit = async () => {
     if (!text.trim()) return;
-    setSubmitting(true);
+    const bodyText = text.trim();
+    
+    // Optimistic UI update
+    const tempId = `local-${Date.now()}`;
+    const newComment: Comment = {
+      id: tempId,
+      user: {
+        id: currentUser?.id ?? 0,
+        full_name: currentUser?.full_name ?? (t('common.you') ?? 'You'),
+        avatar_url: currentUser?.avatar_url,
+      },
+      content: bodyText,
+      created_at: new Date().toISOString(),
+      replies: [],
+    };
+    
+    setComments((prev) => [newComment, ...prev]);
+    setText('');
+    
+    // Background API call
     try {
       const { listingsApi } = await import('@/lib/api/listings');
-      const created = await listingsApi.createComment(listingId, text.trim());
-      // Use real data from backend if available, else optimistic
-      const newComment: Comment = {
-        id: created?.id ?? `local-${Date.now()}`,
-        user: {
-          id: currentUser?.id ?? 0,
-          full_name: currentUser?.full_name ?? (t('common.you') ?? 'You'),
-          avatar_url: currentUser?.avatar_url,
-        },
-        content: text.trim(),
-        created_at: created?.created_at ?? new Date().toISOString(),
-        replies: [],
-      };
-      setComments((prev) => [newComment, ...prev]);
-      setText('');
+      const created = await listingsApi.createComment(listingId, bodyText);
+      // Update with real backend data
+      setComments((prev) => prev.map(c => c.id === tempId ? { ...c, id: created.id, created_at: created.created_at } : c));
     } catch {
-      // keep text so user can retry
       toast.error(t('errors.commentFailed') ?? 'Failed to post comment');
-    } finally {
-      setSubmitting(false);
+      // Rollback on failure
+      setComments((prev) => prev.filter(c => c.id !== tempId));
+      setText(bodyText);
     }
   };
 
   const handleReply = async (parentId: number | string, content: string) => {
+    const bodyText = content.trim();
+    if (!bodyText) return;
+
+    // Optimistic UI update
+    const tempId = `local-${Date.now()}`;
+    const newReply: Comment = {
+      id: tempId,
+      user: {
+        id: currentUser?.id ?? 0,
+        full_name: currentUser?.full_name ?? (t('common.you') ?? 'You'),
+        avatar_url: currentUser?.avatar_url,
+      },
+      content: bodyText,
+      created_at: new Date().toISOString(),
+    };
+    
+    setComments((prev) =>
+      prev.map((c) =>
+        c.id === parentId
+          ? { ...c, replies: [...(c.replies ?? []), newReply] }
+          : c
+      )
+    );
+    
+    // Background API call
     try {
       const { listingsApi } = await import('@/lib/api/listings');
-      const created = await listingsApi.createComment(listingId, content, String(parentId));
-      const newReply: Comment = {
-        id: created?.id ?? `local-${Date.now()}`,
-        user: {
-          id: currentUser?.id ?? 0,
-          full_name: currentUser?.full_name ?? (t('common.you') ?? 'You'),
-          avatar_url: currentUser?.avatar_url,
-        },
-        content,
-        created_at: created?.created_at ?? new Date().toISOString(),
-      };
+      const created = await listingsApi.createComment(listingId, bodyText, String(parentId));
+      const topLevelParentId = created?.parent ?? parentId;
       setComments((prev) =>
         prev.map((c) =>
-          c.id === parentId
-            ? { ...c, replies: [...(c.replies ?? []), newReply] }
+          c.id === topLevelParentId
+            ? { ...c, replies: c.replies?.map(r => r.id === tempId ? { ...r, id: created.id, created_at: created.created_at } : r) }
             : c
         )
       );
     } catch {
       toast.error(t('errors.replyFailed') ?? 'Failed to post reply');
+      // Rollback on failure
+      setComments((prev) =>
+        prev.map((c) =>
+          c.id === parentId
+            ? { ...c, replies: c.replies?.filter(r => r.id !== tempId) }
+            : c
+        )
+      );
     }
   };
 

@@ -89,12 +89,12 @@ function MobileDrawer({
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 320 }}
-            className="fixed inset-y-0 left-0 w-72 bg-bg-elevated border-r border-border shadow-lift overflow-y-auto md:hidden pt-[env(safe-area-inset-top)]"
+            className="fixed inset-y-0 left-0 w-72 bg-bg-elevated border-r border-border shadow-lift overflow-y-auto md:hidden flex flex-col pt-safe pb-safe"
             style={{ zIndex: 9999 }}
             role="dialog"
             aria-modal="true"
           >
-            <div className="flex h-16 items-center justify-between border-b border-border px-4">
+            <div className="flex h-16 shrink-0 items-center justify-between border-b border-border px-4">
               <Logo size="sm" href={null} />
               <button
                 type="button"
@@ -108,7 +108,7 @@ function MobileDrawer({
 
             {/* User header - mobile app like */}
             {user && (
-              <div className="px-4 py-3 border-b border-border bg-bg-subtle/50">
+              <div className="px-4 py-3 shrink-0 border-b border-border bg-bg-subtle/50">
                 <div className="flex items-center gap-3">
                   <Avatar src={user.avatar_url ?? user.avatar ?? null} name={user.full_name} size="md" />
                   <div className="min-w-0 flex-1">

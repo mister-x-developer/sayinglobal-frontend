@@ -12,7 +12,7 @@ import { formatPrice, formatRelativeTime, getLocalizedListingTitle } from '@/lib
 import { cn } from '@/lib/utils/cn';
 
 export interface ListingCardData {
-  public_id: number;
+  id: number;
   title: string;
   title_uz?: string;
   title_uz_cyrl?: string;
@@ -26,7 +26,7 @@ export interface ListingCardData {
   district?: string;
   images: Array<{ id: string | number; image: string; is_primary?: boolean }>;
   seller: {
-    public_id: number;
+    id: number;
     full_name: string;
     avatar_url?: string;
     trust_score?: number;
@@ -73,13 +73,13 @@ export function ListingCard({ listing, onFavorite }: Props) {
     setIsFavorited((v) => !v);
     setFavAnimating(true);
     setTimeout(() => setFavAnimating(false), 400);
-    onFavorite?.(listing.public_id);
+    onFavorite?.(listing.id);
   };
 
   return (
     <article className="group relative surface-elevated rounded-2xl overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-1.5 hover:shadow-[0_12px_32px_-12px_rgb(var(--shadow-color)/0.25)] border border-border/50 hover:border-border">
       <Link 
-        href={`/listings/detail?id=${listing.public_id}`} 
+        href={`/listings/detail?id=${listing.id}`} 
         className="absolute inset-0 z-10 outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-inset rounded-2xl"
         aria-label={`${t('common.viewDetails' as any) || 'Batafsil'}: ${localizedTitle}`}
       />

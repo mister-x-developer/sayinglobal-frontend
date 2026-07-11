@@ -69,51 +69,71 @@ export function SellerRatingsThread({ sellerPublicId, listingPublicId }: ThreadP
   const isSelfSeller = me?.public_id === sellerPublicId;
 
   const ownReview = useMemo(
-    () => items.find((r) => r.buyer?.public_id === me?.public_id && !r.parent),
+    () => items.find((r) => r.buyer?.id === me?.public_id && !r.parent),
     [items, me?.public_id],
   );
 
-  const reload = useCallback(async () => {
-    setLoading(true);
+  const reload = useCallback(async (silent = false) => {
+    if (!silent) setLoading(true);
     try {
       const data = await ratingsApi.list(sellerPublicId, { sort, pageSize: 50 });
       setItems(data.results);
       setCount(data.count);
       setAverage(data.average_score);
     } catch {
-      setItems([]);
-      setCount(0);
-      setAverage(0);
+      if (!silent) {
+        setItems([]);
+        setCount(0);
+        setAverage(0);
+      }
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   }, [sellerPublicId, sort]);
 
   useEffect(() => { reload(); }, [reload]);
 
-  const handleSubmit = async () => {
-    if (!composeBody.trim() && !editingId) {
-      toast.error(t('errors.required'));
-      return;
-    }
+  const handleComposeSubmit = async () => {
+    if (!composeScore) return;
     setSubmitting(true);
+    
+    // Optimistic UI Update
+    const tempId = `local-${Date.now()}`;
+    const draftReview = composeBody.trim();
+    
+    if (editingId) {
+      setItems(prev => prev.map(it => it.id === editingId ? { ...it, score: composeScore, review: draftReview } : it));
+    } else {
+      const newRating: RatingRecord = {
+        id: tempId as any,
+        buyer: { id: me?.public_id || 0, full_name: me?.full_name || 'You', avatar_url: me?.avatar_url },
+        score: composeScore,
+        review: draftReview,
+        created_at: new Date().toISOString(),
+        is_helpful: false,
+        helpful_count: 0,
+      };
+      setItems(prev => [newRating, ...prev]);
+    }
+    
+    setShowCompose(false);
+    
     try {
       if (editingId) {
-        await ratingsApi.update(editingId, { score: composeScore, review: composeBody.trim(), locale });
+        await ratingsApi.update(editingId, { score: composeScore, review: draftReview, locale });
       } else {
         await ratingsApi.create({
           seller: sellerPublicId,
           listing: listingPublicId,
           score: composeScore,
-          review: composeBody.trim(),
+          review: draftReview,
           locale,
         });
       }
-      setShowCompose(false);
       setEditingId(null);
       setComposeBody('');
       setComposeScore(5);
-      await reload();
+      await reload(true); // silent reload to fetch real IDs & recalculate averages without flash
       toast.success(t('reviews.posted' as any) ?? 'Review posted');
     } catch (err: any) {
       const code = err?.response?.data?.error || '';
@@ -122,6 +142,8 @@ export function SellerRatingsThread({ sellerPublicId, listingPublicId }: ThreadP
       } else {
         toast.error(t('errors.generic'));
       }
+      // Rollback optimistic
+      await reload(true);
     } finally {
       setSubmitting(false);
     }
@@ -170,14 +192,29 @@ export function SellerRatingsThread({ sellerPublicId, listingPublicId }: ThreadP
   const handleReply = async (r: RatingRecord) => {
     const body = window.prompt(t('reviews.replyPrompt' as any) ?? 'Your reply');
     if (!body || !body.trim()) return;
+    
+    const replyBody = body.trim();
+    
+    // Optimistic UI update
+    setItems((prev) => prev.map((it) => 
+      it.id === r.id 
+        ? { ...it, seller_reply: replyBody, reply_created_at: new Date().toISOString() } 
+        : it
+    ));
+
     try {
-      await ratingsApi.reply(r.id, { review: body.trim(), locale });
-      await reload();
+      await ratingsApi.reply(r.id, { review: replyBody, locale });
+      // No need to reload the whole thread, which caused a flash and spinner
     } catch {
       toast.error(t('errors.generic'));
+      // Rollback on failure
+      setItems((prev) => prev.map((it) => 
+        it.id === r.id 
+          ? { ...it, seller_reply: r.seller_reply, reply_created_at: r.reply_created_at } 
+          : it
+      ));
     }
   };
-
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -293,8 +330,8 @@ export function SellerRatingsThread({ sellerPublicId, listingPublicId }: ThreadP
             </button>
             <button
               type="button"
-              onClick={handleSubmit}
-              disabled={submitting}
+              disabled={submitting || !composeScore}
+              onClick={handleComposeSubmit}
               className="btn btn-primary btn-sm"
             >
               {submitting
@@ -368,7 +405,7 @@ function RatingCard({
 }) {
   const t = useTranslations();
   const me = useAuthStore((s) => s.user);
-  const isAuthor = rating.buyer?.public_id === myPublicId;
+  const isAuthor = rating.buyer?.id === myPublicId;
   const isAdmin = me?.is_admin || me?.is_staff;
 
   // Always feed the original review text to TranslatableText so the
@@ -495,7 +532,7 @@ function RatingCard({
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <p className="text-xs font-semibold text-fg">{rep.buyer?.full_name}</p>
-                      {rep.buyer?.public_id === rating.seller?.public_id && (
+                      {rep.buyer?.id === rating.seller?.id && (
                         <span className="inline-flex items-center gap-0.5 rounded-full bg-brand-accent/12 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-brand-accent">
                           <CheckCircle2 className="h-2.5 w-2.5" strokeWidth={2.5} />
                           {t('reviews.sellerBadge' as any) ?? 'Seller'}

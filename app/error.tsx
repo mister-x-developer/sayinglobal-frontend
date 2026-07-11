@@ -38,7 +38,7 @@ export default function GlobalError({
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="border-b border-border bg-bg-elevated/60 backdrop-blur">
+      <header className="border-b border-border bg-bg-elevated/60 backdrop-blur pt-safe">
         <div className="container-page flex h-16 items-center">
           <Logo size="sm" href={homeHref} />
         </div>

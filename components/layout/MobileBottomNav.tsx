@@ -22,6 +22,7 @@ export function MobileBottomNav() {
   // Hide entirely on auth pages, chat detail, or admin routes
   if (
     pathname === '/' ||
+    pathname === '/index.html' ||
     pathname.startsWith('/auth') ||
     pathname.startsWith('/admin') ||
     /^\/chat\/[^/]+$/.test(pathname)

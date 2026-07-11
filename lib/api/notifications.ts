@@ -15,7 +15,13 @@ export type NotificationType =
   | 'complaint_update'
   | 'admin_message'
   | 'broadcast'
-  | 'system';
+  | 'system'
+  | 'system_alert'
+  | 'listing_status'
+  | 'listing_approved'
+  | 'listing_rejected'
+  | 'listing_expiring_soon'
+  | 'new_listing_from_followed';
 
 export interface Notification {
   id: number;

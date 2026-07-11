@@ -7,8 +7,8 @@ import apiClient, { handleApiError } from './client';
 import type { User } from '../store/auth';
 
 export interface SellerSummary {
-  public_id: number;
-  id?: number;
+  
+  id: number;
   full_name: string;
   avatar_url?: string;
   bio?: string;
@@ -40,12 +40,10 @@ export const usersApi = {
   },
 
   async updateProfile(data: Partial<User> | FormData): Promise<User> {
-    const isForm = typeof FormData !== 'undefined' && data instanceof FormData;
     try {
       const res = await apiClient.put<User>(
         '/users/profile/update/',
-        data,
-        isForm ? { headers: { 'Content-Type': 'multipart/form-data' } } : undefined
+        data
       );
       return res.data;
     } catch (e) {
@@ -153,11 +151,10 @@ export const usersApi = {
         const map = new Map<number, SellerSummary>();
         for (const item of items) {
           const seller = item?.seller;
-          if (!seller || typeof (seller.public_id || seller.id) !== 'number') continue;
-          if (!map.has((seller.public_id || seller.id))) {
-            map.set((seller.public_id || seller.id), {
-              public_id: (seller.public_id || seller.id),
-              id: (seller.public_id || seller.id),
+          if (!seller || typeof seller.id !== 'number') continue;
+          if (!map.has(seller.id)) {
+            map.set(seller.id, {
+              id: seller.id,
               full_name: seller.full_name,
               avatar_url: seller.avatar_url,
               bio: seller.bio,

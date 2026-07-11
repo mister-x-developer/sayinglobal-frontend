@@ -89,15 +89,15 @@ function AdminUserDetailPageContent() {
       const [u, l, r] = await Promise.all([
         apiClient.get(`/users/profile/${id}/`).then((r) => r.data).catch(() => null),
         apiClient.get('/listings/', { params: { page_size: 100 } })
-          .then((r) => (r.data?.results ?? []).filter((x: any) => x.seller?.public_id === id))
+          .then((r) => (r.data?.results ?? []).filter((x: any) => x.seller?.id === id))
           .catch(() => []),
         moderationApi.adminList({ page_size: 200 }).catch(() => ({ results: [] })),
       ]);
       setUser(u);
       setListings(l);
       const allReports: any[] = (r as any)?.results ?? [];
-      setFiledReports(allReports.filter((rp) => rp.complainant?.public_id === id));
-      setReceivedReports(allReports.filter((rp) => rp.reported_user?.public_id === id || rp.listing?.seller?.public_id === id));
+      setFiledReports(allReports.filter((rp) => rp.complainant?.id === id));
+      setReceivedReports(allReports.filter((rp) => rp.reported_user?.id === id || rp.listing?.seller?.id === id));
     } catch {
       setUser(null);
       setListings([]);
@@ -117,10 +117,10 @@ function AdminUserDetailPageContent() {
     if (!user) return;
     setActionLoading(true);
     const endpointMap: Record<string, string> = {
-      warn: `/moderation/users/${user.public_id}/warn/`,
-      restrict: `/moderation/users/${user.public_id}/restrict/`,
-      block: `/moderation/users/${user.public_id}/block/`,
-      unblock: `/moderation/users/${user.public_id}/unblock/`,
+      warn: `/moderation/users/${user.id}/warn/`,
+      restrict: `/moderation/users/${user.id}/restrict/`,
+      block: `/moderation/users/${user.id}/block/`,
+      unblock: `/moderation/users/${user.id}/unblock/`,
     };
     const statusMap: Record<string, AdminUserRecord['status']> = {
       warn: 'warning',
@@ -189,7 +189,7 @@ function AdminUserDetailPageContent() {
                 <div className="min-w-0 flex-1">
                   <h1 className="display-sm">{user.full_name}</h1>
                   <p className="mt-1 text-sm text-fg-muted">
-                    #{user.public_id} · {user.phone}
+                    #{user.id} · {user.phone}
                   </p>
                   <div className="mt-2 flex flex-wrap gap-2">
                     <Badge variant={STATUS_BADGE[user.status]} size="sm">
@@ -243,7 +243,7 @@ function AdminUserDetailPageContent() {
                 <h2 className="display-sm mb-4">{t('listings.title')}</h2>
                 <div className="grid gap-4 sm:grid-cols-2">
                   {listings.slice(0, 6).map((l) => (
-                    <ListingCard key={l.public_id} listing={l} />
+                    <ListingCard key={l.id} listing={l} />
                   ))}
                 </div>
               </div>
@@ -286,7 +286,7 @@ function AdminUserDetailPageContent() {
                 <Star className="h-4 w-4" strokeWidth={1.75} />
                 {t('sellers.reviews')}
               </h2>
-              <SellerRatingsThread sellerPublicId={user.public_id} />
+              <SellerRatingsThread sellerPublicId={user.id} />
             </div>
           </div>
 

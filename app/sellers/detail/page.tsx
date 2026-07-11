@@ -61,7 +61,7 @@ function SellerDetailPageContent() {
 
       setSeller(apiSeller ?? null);
 
-      const real = (apiListings ?? []).filter((l: any) => l.seller?.public_id === id);
+      const real = (apiListings ?? []).filter((l: any) => l.seller?.id === id);
       setSellerListings(real);
       setLoading(false);
     })();
@@ -179,9 +179,9 @@ function SellerDetailPageContent() {
                       </div>
 
                       <div className="flex flex-wrap gap-2">
-                        {user?.public_id !== seller.public_id && !(user?.is_admin || user?.is_staff) && (
+                        {user?.public_id !== seller.id && !(user?.is_admin || user?.is_staff) && (
                           <Link
-                            href={`/chat?with=${seller.public_id}`}
+                            href={`/chat?with=${seller.id}`}
                             className="btn btn-secondary btn-sm"
                           >
                             <MessageSquareText className="h-4 w-4" strokeWidth={1.75} />
@@ -189,7 +189,7 @@ function SellerDetailPageContent() {
                           </Link>
                         )}
                         {!(user?.is_admin || user?.is_staff) && (
-                        <FollowButton sellerId={seller.public_id} size="sm" />
+                        <FollowButton sellerId={seller.id} size="sm" />
                         )}
                         {!(user?.is_admin || user?.is_staff) && (
                         <button
@@ -282,7 +282,7 @@ function SellerDetailPageContent() {
                   ) : (
                     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                       {sellerListings.map((l) => (
-                        <ListingCard key={l.public_id} listing={l as any} />
+                        <ListingCard key={l.id} listing={l as any} />
                       ))}
                     </div>
                   ))}
@@ -298,7 +298,7 @@ function SellerDetailPageContent() {
 
       <ReportDialog
         open={reportOpen}
-        target={seller ? { kind: 'seller', publicId: seller.public_id, fullName: seller.full_name } : null}
+        target={seller ? { kind: 'seller', publicId: seller.id, fullName: seller.full_name } : null}
         onClose={() => setReportOpen(false)}
       />
     </div>

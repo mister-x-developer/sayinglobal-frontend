@@ -194,7 +194,7 @@ export default function NewListingPage() {
       let uploadedCount = 0;
       for (const img of images) {
         try {
-          await listingsApi.uploadImage(String(listing.public_id), img.file, img.isPrimary);
+          await listingsApi.uploadImage(String(listing.id), img.file, img.isPrimary);
           uploadedCount++;
         } catch (uploadErr) {
           console.error('Image upload failed:', uploadErr);
@@ -208,7 +208,7 @@ export default function NewListingPage() {
       
       // Submit for admin review — listing goes from draft → pending_review
       try {
-        await listingsApi.submitForReview(String(listing.public_id));
+        await listingsApi.submitForReview(String(listing.id));
       } catch (reviewErr) {
         // If submit fails (e.g. < 3 images uploaded), inform user but still navigate
         console.warn('Submit for review failed:', reviewErr);
