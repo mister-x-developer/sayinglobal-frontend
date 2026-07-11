@@ -124,6 +124,7 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
                   >
                     <X className="h-6 w-6" />
                   </button>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={src!}
                     alt={alt || name || 'Avatar Enlarge'}

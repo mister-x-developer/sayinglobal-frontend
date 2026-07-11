@@ -63,7 +63,7 @@ export default function MapDiscovery({ className = "h-[500px] w-full" }: MapDisc
     };
     
     fetchListings();
-  }, [lat, lng, radius]);
+  }, [lat, lng, radius, t]);
 
   return (
     <div className={`relative ${className}`}>

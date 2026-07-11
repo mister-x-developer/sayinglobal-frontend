@@ -104,7 +104,7 @@ export function SellerRatingsThread({ sellerPublicId, listingPublicId }: ThreadP
     if (editingId) {
       setItems(prev => prev.map(it => it.id === editingId ? { ...it, score: composeScore, review: draftReview } : it));
     } else {
-      const newRating: RatingRecord = {
+      const newRating = {
         id: tempId as any,
         buyer: { id: me?.public_id || 0, full_name: me?.full_name || 'You', avatar_url: me?.avatar_url },
         score: composeScore,
@@ -112,7 +112,7 @@ export function SellerRatingsThread({ sellerPublicId, listingPublicId }: ThreadP
         created_at: new Date().toISOString(),
         is_helpful: false,
         helpful_count: 0,
-      };
+      } as unknown as RatingRecord;
       setItems(prev => [newRating, ...prev]);
     }
     
@@ -195,22 +195,31 @@ export function SellerRatingsThread({ sellerPublicId, listingPublicId }: ThreadP
     
     const replyBody = body.trim();
     
+    const tempReplyId = `local-reply-${Date.now()}` as any;
+    const optimisticReply = {
+      id: tempReplyId,
+      buyer: { id: me?.public_id || 0, full_name: me?.full_name || 'Seller', avatar_url: me?.avatar_url },
+      review: replyBody,
+      created_at: new Date().toISOString(),
+      original_locale: locale || 'uz',
+    } as unknown as RatingRecord;
+
     // Optimistic UI update
     setItems((prev) => prev.map((it) => 
       it.id === r.id 
-        ? { ...it, seller_reply: replyBody, reply_created_at: new Date().toISOString() } 
+        ? { ...it, replies: [...(it.replies || []), optimisticReply] } 
         : it
     ));
 
     try {
       await ratingsApi.reply(r.id, { review: replyBody, locale });
-      // No need to reload the whole thread, which caused a flash and spinner
+      await reload(true);
     } catch {
       toast.error(t('errors.generic'));
       // Rollback on failure
       setItems((prev) => prev.map((it) => 
         it.id === r.id 
-          ? { ...it, seller_reply: r.seller_reply, reply_created_at: r.reply_created_at } 
+          ? { ...it, replies: (it.replies || []).filter(rep => rep.id !== tempReplyId) } 
           : it
       ));
     }
