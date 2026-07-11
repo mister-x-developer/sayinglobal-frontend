@@ -57,3 +57,4 @@ ios/
 ios-admin/
 capacitor.config.ts
 .capacitor/
+env.txt
