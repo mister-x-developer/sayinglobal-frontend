@@ -105,7 +105,7 @@ export default async function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className="antialiased min-h-[100dvh] bg-bg text-fg pb-[calc(72px+env(safe-area-inset-bottom))] md:pb-0">
+      <body className="antialiased min-h-[100dvh] bg-bg text-fg pb-nav-safe md:pb-0">
         <HydrationReady />
         <ThemeProvider>
           <IntlClientProvider messages={messages} locale={locale} timeZone="Asia/Tashkent">
