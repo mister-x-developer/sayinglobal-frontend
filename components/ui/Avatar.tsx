@@ -47,7 +47,12 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
   ({ className, src, alt, name, size = 'md', ring = false, enlargeable = false, onClick, ...props }, ref) => {
     const [errored, setErrored] = useState(false);
     const [isEnlarged, setIsEnlarged] = useState(false);
+    const [mounted, setMounted] = useState(false);
     const showImage = !!src && !errored;
+
+    useEffect(() => {
+      setMounted(true);
+    }, []);
 
     useEffect(() => {
       if (isEnlarged) document.body.style.overflow = 'hidden';
@@ -99,39 +104,40 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
           )}
         </div>
 
-        {typeof window !== 'undefined' && createPortal(
+        {mounted && createPortal(
           <AnimatePresence>
             {isEnlarged && showImage && (
-              <div className="fixed inset-0 z-[1500] flex items-center justify-center p-4">
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  onClick={() => setIsEnlarged(false)}
-                  className="fixed inset-0 bg-black/80 backdrop-blur-sm cursor-zoom-out"
-                />
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                  className="relative z-[1501] max-w-[90vw] max-h-[90vh]"
-                >
-                  <button
-                    onClick={() => setIsEnlarged(false)}
-                    className="absolute -top-12 right-0 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
-                  >
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                onClick={() => setIsEnlarged(false)}
+                className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm cursor-zoom-out"
+              >
+                <div className="absolute right-4 top-4 md:right-8 md:top-8 z-10">
+                  <button className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20 transition-colors">
                     <X className="h-6 w-6" />
                   </button>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                </div>
+                <motion.div
+                  initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                  animate={{ scale: 1, opacity: 1, y: 0 }}
+                  exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                  transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                  className="relative h-full w-full max-h-[85vh] max-w-4xl overflow-hidden rounded-2xl shadow-2xl"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Image
                     src={src!}
-                    alt={alt || name || 'Avatar Enlarge'}
-                    className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+                    alt={alt || name || 'Avatar Enalrged'}
+                    fill
+                    className="object-contain"
+                    sizes="100vw"
+                    priority
                   />
                 </motion.div>
-              </div>
+              </motion.div>
             )}
           </AnimatePresence>,
           document.body

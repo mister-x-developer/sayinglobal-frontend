@@ -223,7 +223,9 @@ export default function AdminDashboardPage() {
                 <h1 className="text-xl md:text-3xl font-black leading-none text-fg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-fg to-fg-muted truncate">{t('Admin.commandCenter')}</h1>
                 <p className="mt-1.5 text-[10px] md:text-xs font-bold text-fg-subtle uppercase tracking-widest flex items-center gap-1.5 md:gap-2">
                   <span className="w-1.5 h-1.5 md:w-2 md:h-2 shrink-0 rounded-full bg-success animate-pulse" />
-                  <span className="truncate">SYS_TIME: {new Date().toISOString().replace('T', ' ').slice(0, 19)} UTC</span>
+                  <span className="truncate">
+                    SYS_TIME: <span suppressHydrationWarning>{new Date().toISOString().replace('T', ' ').slice(0, 19)} UTC</span>
+                  </span>
                 </p>
               </div>
             </div>

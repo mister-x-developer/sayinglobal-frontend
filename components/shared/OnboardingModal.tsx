@@ -106,13 +106,19 @@ export function OnboardingModal() {
   const [step, setStep] = useState(0);
 
   useEffect(() => {
-    if (!isAuthenticated || !user?.terms_accepted_at) return;
+    // Check auth, terms, and admin flags
+    if (!isAuthenticated) return;
     if (user?.is_admin || user?.is_staff || user?.is_admin_account || window.location.pathname.startsWith('/admin')) return;
+    if (!user?.terms_accepted_at) return;
 
     const done = localStorage.getItem(STORAGE_KEY);
     if (!done) {
       // Small delay so the page loads first
-      const t = setTimeout(() => setVisible(true), 800);
+      const t = setTimeout(() => {
+        setVisible(true);
+        // Set immediately so native back button exits don't cause it to show again
+        localStorage.setItem(STORAGE_KEY, '1');
+      }, 800);
       return () => clearTimeout(t);
     }
   }, [isAuthenticated, user?.terms_accepted_at, user?.is_admin, user?.is_staff, user?.is_admin_account]);
