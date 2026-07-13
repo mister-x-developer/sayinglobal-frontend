@@ -42,15 +42,20 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Sync React state with the actual data-theme attribute set by the inline script
-    const attr = document.documentElement.getAttribute('data-theme');
-    const actualMode = (attr === 'day' || attr === 'night') ? attr : 'day';
+    // Read from localStorage directly so if React wipes the DOM attribute during a re-mount, we can restore it.
+    let actualMode: ThemeMode = 'day';
+    try {
+      const stored = window.localStorage.getItem(STORAGE_KEY);
+      if (stored === 'day' || stored === 'night') actualMode = stored;
+    } catch {}
+
     if (actualMode !== mode) {
       setModeState(actualMode);
     }
+    // Re-apply to DOM just in case React wiped it during hydration
+    applyMode(actualMode);
     setMounted(true);
-    // Enable smooth theme transitions only after first hydration so the
-    // initial paint is instant (no transition flash).
+
     if (typeof document !== 'undefined') {
       requestAnimationFrame(() => {
         document.body.classList.add('theme-ready');
