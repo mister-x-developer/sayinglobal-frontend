@@ -51,6 +51,7 @@ function isPlatformAdmin(req: NextRequest): boolean {
 function isPublicPath(pathname: string): boolean {
   // Per strict requirement: Loginsiz hech narsa ko'rinmasin!
   // Only auth flows and legal pages are public.
+  if (pathname === '/') return true;
   if (pathname.startsWith('/auth')) return true;
   if (pathname === '/terms' || pathname === '/privacy') return true;
   return false;

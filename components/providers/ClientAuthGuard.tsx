@@ -83,6 +83,7 @@ function AuthLoadingScreen() {
 
 function isPublicPath(pathname: string): boolean {
   if (!pathname) return true;
+  if (pathname === '/' || pathname === '/index.html') return true;
   if (pathname.startsWith('/auth') || pathname.startsWith('/admin/login')) return true;
   if (pathname === '/terms' || pathname === '/privacy') return true;
   return false;
