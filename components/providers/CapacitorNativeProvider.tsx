@@ -32,9 +32,8 @@ export function CapacitorNativeProvider() {
     // 1. Hide Splash Screen after React has mounted, hydrated, and any redirects have fired
     // This is handled in a separate useEffect below that tracks hasHydrated and pathname.
 
-    // 2. Configure Keyboard behavior (resize body to avoid overlapping inputs)
-    Keyboard.setResizeMode({ mode: 'body' as any }).catch(() => {});
-    Keyboard.setScroll({ isDisabled: false }).catch(() => {});
+    // 2. Configure Keyboard behavior
+    // (Removed manual resizeMode: 'body' to let Android use default 'Native' resize, preventing the grey block bug)
 
     // 3. Status Bar configuration
     const setStatusBar = async () => {
