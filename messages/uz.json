@@ -1203,7 +1203,8 @@
     "adminGreeting": "Salom! Platforma boshqaruvida qanday yordam bera olaman?",
     "title": "SAYIN AI",
     "adminTitle": "AI Yordamchi",
-    "adminSubtitle": "Moderatsiya va Tahlil"
+    "adminSubtitle": "Moderatsiya va Tahlil",
+    "comingSoon": "Tez kunda"
   },
   "privacy": {
     "title": "SAYIN GLOBAL - Maxfiylik siyosati",

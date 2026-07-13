@@ -1203,7 +1203,8 @@
     "adminGreeting": "Салом! Платформа бошқарувида қандай ёрдам бера оламан?",
     "title": "SAYIN AI",
     "adminTitle": "AI Ёрдамчи",
-    "adminSubtitle": "Модерация ва Таҳлил"
+    "adminSubtitle": "Модерация ва Таҳлил",
+    "comingSoon": "Тез кунда"
   },
   "privacy": {
     "title": "SAYIN GLOBAL - Махфийлик сиёсати",

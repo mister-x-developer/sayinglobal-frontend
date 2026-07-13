@@ -1203,7 +1203,8 @@
     "adminGreeting": "Hello! How can I help you manage the platform?",
     "title": "SAYIN AI",
     "adminTitle": "AI Co-pilot",
-    "adminSubtitle": "Moderation & Analytics"
+    "adminSubtitle": "Moderation & Analytics",
+    "comingSoon": "Coming soon"
   },
   "privacy": {
     "title": "SAYIN GLOBAL - Privacy Policy",

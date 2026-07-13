@@ -1203,7 +1203,8 @@
     "adminGreeting": "Привет! Как я могу помочь в управлении платформой?",
     "title": "SAYIN AI",
     "adminTitle": "AI Ассистент",
-    "adminSubtitle": "Модерация и Аналитика"
+    "adminSubtitle": "Модерация и Аналитика",
+    "comingSoon": "Скоро будет"
   },
   "privacy": {
     "title": "SAYIN GLOBAL - Политика конфиденциальности",
