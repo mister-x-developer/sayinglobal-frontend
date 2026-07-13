@@ -144,7 +144,6 @@ export default function SellersDirectoryPage() {
               { key: 'all', label: t('common.all') },
               { key: 'top', label: t('sellers.topSellers') },
               { key: 'new', label: t('sellers.newSellers') },
-              { key: 'nearby', label: t('nav.nearby' as any) ?? 'Nearby' },
             ].map((tt) => {
               const active = tab === (tt.key as any);
               return (
@@ -170,20 +169,6 @@ export default function SellersDirectoryPage() {
 
           {/* Grid */}
           <div className="mt-6">
-            {tab === 'nearby' && geo.kind !== 'granted' && (
-              <div className="mb-4 surface-elevated p-5 flex flex-wrap items-center gap-3">
-                <MapPin className="h-4 w-4 text-fg-muted" strokeWidth={1.75} />
-                <p className="flex-1 text-sm text-fg-muted">
-                  {geo.kind === 'requesting'
-                    ? (t('nearby.requesting' as any) ?? 'Locating...')
-                    : (t('nearby.permissionDenied' as any) ?? 'Location not available.')}
-                </p>
-                <button type="button" onClick={requestLocation} className="btn btn-secondary btn-sm">
-                  <Compass className="h-3.5 w-3.5" strokeWidth={2} />
-                  {t('nearby.tryAgain' as any) ?? 'Try again'}
-                </button>
-              </div>
-            )}
             {loading || !hydrated ? (
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {Array.from({ length: 6 }).map((_, i) => (
