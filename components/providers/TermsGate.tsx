@@ -31,12 +31,12 @@ export function TermsGate() {
   const [referralMsg, setReferralMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
   const shouldEvaluate = useMemo(() => {
-    if (!isAuthenticated) return false;
+    if (!isAuthenticated || !user) return false;
     if (SKIP_PATHS.includes(pathname)) return false;
     if (pathname.startsWith('/admin')) return false;
-    if (user?.is_admin) return false;
+    if (user.is_admin || user.is_staff || user.is_admin_account) return false;
     return true;
-  }, [isAuthenticated, pathname, user?.is_admin]);
+  }, [isAuthenticated, pathname, user, user?.is_admin, user?.is_staff, user?.is_admin_account]);
 
   useEffect(() => {
     if (!shouldEvaluate) { setOpen(false); return; }

@@ -19,7 +19,7 @@ export default function LandingPage() {
     if (typeof window !== 'undefined' && window.location.pathname !== '/' && window.location.pathname !== '/index.html') return;
     import('@capacitor/core').then(({ Capacitor }) => {
       if (Capacitor.isNativePlatform()) {
-        window.location.replace('/dashboard');
+        router.replace('/dashboard');
       }
     });
   }, [router]);

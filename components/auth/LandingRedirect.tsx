@@ -21,7 +21,7 @@ export function LandingRedirect() {
 
     if (hydrated && isAuthenticated) {
       const target = user?.is_admin ? '/admin' : '/dashboard';
-      window.location.replace(target);
+      router.replace(target);
     }
   }, [hydrated, isAuthenticated, user, router]);
 

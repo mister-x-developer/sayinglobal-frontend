@@ -40,10 +40,16 @@ export default function ChatAIPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (hydrated && !isAuthenticated) {
+    if (!hydrated) return;
+    if (!isAuthenticated) {
       router.replace('/auth/login');
+      return;
     }
-  }, [hydrated, isAuthenticated, router]);
+    const isAdmin = user?.is_staff || user?.is_admin || user?.is_admin_account;
+    if (isAdmin) {
+      router.replace('/dashboard');
+    }
+  }, [hydrated, isAuthenticated, user, router]);
 
   useEffect(() => {
     if (!showHistory) {

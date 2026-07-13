@@ -80,7 +80,7 @@ export function AIAssistantButton() {
   if (!mounted) return null;
   if (!isAuthenticated || !user?.terms_accepted_at) return null;
   
-  const isAdmin = user?.is_staff || user?.is_admin;
+  const isAdmin = user?.is_staff || user?.is_admin || user?.is_admin_account;
   if (isAdmin || pathname.startsWith('/admin') || pathname.startsWith('/chat-ai')) return null;
   if (hidden) return null;
 

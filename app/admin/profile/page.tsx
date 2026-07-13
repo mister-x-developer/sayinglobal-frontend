@@ -47,7 +47,15 @@ export default function AdminProfilePage() {
       
       // Bypass browser cache for the new avatar
       if (updated.avatar_url) {
-        updated.avatar_url = `${updated.avatar_url.split('?')[0]}?t=${Date.now()}`;
+        try {
+          const urlObj = new URL(updated.avatar_url);
+          urlObj.searchParams.set('t', Date.now().toString());
+          updated.avatar_url = urlObj.toString();
+        } catch {
+          // Fallback if somehow it's a relative URL or not parsable
+          const sep = updated.avatar_url.includes('?') ? '&' : '?';
+          updated.avatar_url = `${updated.avatar_url}${sep}t=${Date.now()}`;
+        }
       }
       
       updateUser(updated);
