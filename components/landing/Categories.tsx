@@ -33,16 +33,17 @@ export function Categories() {
             >
               {/* Image */}
               <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-105 bg-bg-muted">
-                {cat.image && (
-                  <Image
-                    src={cat.image}
-                    alt={cat.name}
-                    fill
-                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 17vw"
-                    className="object-cover"
-                    priority={index < 3}
-                  />
-                )}
+                <Image
+                  src={`/categories_images/${cat.slug}.webp`}
+                  alt={cat.name}
+                  fill
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 17vw"
+                  className="object-cover"
+                  priority={index < 3}
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
               </div>
 
               {/* Gradient overlay for text readability */}
