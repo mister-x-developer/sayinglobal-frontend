@@ -110,9 +110,26 @@ export function ClientAuthGuard({ children }: { children: React.ReactNode }) {
       (pathname.startsWith('/auth') || pathname.startsWith('/admin/login')) &&
       isAuthenticated
     ) {
+      // Allow AuthPageContent to handle the redirect for /auth so it preserves the ?next= parameter
+      if (pathname.startsWith('/auth')) return;
+
       const target = isPlatformAdmin ? '/admin' : '/dashboard';
       router.replace(target);
       return;
+    }
+
+    // Proactively re-sync the cookie on every route change if authenticated.
+    // This fixes the issue where the 7-day cookie expires but the localStorage Zustand store
+    // remains hydrated, causing middleware to bounce the user to /auth.
+    if (isAuthenticated) {
+      const auth = require('@/lib/store/auth');
+      if (auth.writeAuthCookie) {
+        auth.writeAuthCookie({
+          isAuthenticated: true,
+          accessToken: useAuthStore.getState().accessToken,
+          user: useAuthStore.getState().user,
+        });
+      }
     }
 
     // Unauthenticated user trying to access private page
