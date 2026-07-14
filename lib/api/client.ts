@@ -215,10 +215,7 @@ apiClient.interceptors.response.use(
         useAuthStore.getState().logout();
         if (typeof window !== 'undefined') {
           const pathname = window.location.pathname;
-          const isPublic = pathname === '/' || pathname === '/index.html' || pathname === '/index' || 
-                           pathname.startsWith('/discovery') || pathname.startsWith('/search') || 
-                           (pathname.startsWith('/listings') && !pathname.startsWith('/listings/my') && !pathname.startsWith('/listings/new') && !pathname.includes('/edit')) ||
-                           (pathname.startsWith('/sellers') && !pathname.startsWith('/sellers/following'));
+          const isPublic = pathname === '/' || pathname === '/index.html' || pathname === '/index' || pathname.startsWith('/auth') || pathname === '/terms' || pathname === '/privacy';
           
           if (!isPublic && !pathname.startsWith('/auth')) {
             window.location.href = `/auth?next=${encodeURIComponent(pathname)}`;

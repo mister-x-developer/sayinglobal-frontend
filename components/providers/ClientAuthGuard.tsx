@@ -12,22 +12,6 @@ function isPublicPath(pathname: string): boolean {
   if (pathname === '/' || pathname === '/index.html' || pathname === '/index') return true;
   if (pathname.startsWith('/auth') || pathname.startsWith('/admin/login')) return true;
   if (pathname === '/terms' || pathname === '/privacy') return true;
-  
-  // Public marketplace routes
-  if (pathname.startsWith('/discovery') || pathname.startsWith('/search') || pathname === '/listings/nearby') return true;
-  
-  // Listings details are public, but NOT /my, /new, /edit
-  if (pathname.startsWith('/listings')) {
-    if (pathname.startsWith('/listings/my') || pathname.startsWith('/listings/new') || pathname.includes('/edit')) return false;
-    return true;
-  }
-  
-  // Sellers profiles are public, but NOT /following
-  if (pathname.startsWith('/sellers')) {
-    if (pathname.startsWith('/sellers/following')) return false;
-    return true;
-  }
-  
   return false;
 }
 
@@ -77,17 +61,13 @@ export function ClientAuthGuard({ children }: { children: React.ReactNode }) {
     // Unauthenticated user trying to access private page
     if (!isPublicPath(pathname) && !isAuthenticated) {
       const target = pathname.startsWith('/admin') ? '/admin/login' : '/auth';
-      const isRoot = pathname === '/' || pathname === '/index.html';
+      const isRoot = pathname === '/' || pathname === '/index.html' || pathname === '/index';
       const url = isRoot ? target : `${target}?next=${encodeURIComponent(pathname)}`;
       router.replace(url);
       return;
     }
 
-    // Native apps do not use the landing page. Redirect unauthenticated users directly to /auth.
-    if ((pathname === '/' || pathname === '/index.html') && Capacitor.isNativePlatform() && !isAuthenticated) {
-      router.replace('/auth');
-      return;
-    }
+
 
     // Non-admin trying to access admin route
     if (isAdminPath(pathname) && isAuthenticated && !isPlatformAdmin) {
@@ -113,11 +93,7 @@ export function ClientAuthGuard({ children }: { children: React.ReactNode }) {
     return null;
   }
 
-  // Native apps do not have a landing page; unauthenticated users should see Auth page.
-  // Returning null here prevents the LandingPage HTML from flashing before redirecting.
-  if (hasHydrated && Capacitor.isNativePlatform() && (pathname === '/' || pathname === '/index.html') && !isAuthenticated) {
-    return null;
-  }
+
 
   return <>{children}</>;
 }
