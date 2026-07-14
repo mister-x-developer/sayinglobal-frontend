@@ -68,7 +68,7 @@ export function ClientAuthGuard({ children }: { children: React.ReactNode }) {
     }
 
     // Native apps do not use the landing page. Redirect unauthenticated users directly to /auth.
-    if ((pathname === '/' || pathname === '/index.html') && Capacitor.isNativePlatform() && !isAuthenticated) {
+    if ((pathname === '/' || pathname === '/index.html') && process.env.NEXT_PUBLIC_IS_NATIVE === 'true' && !isAuthenticated) {
       router.replace('/auth');
       return;
     }
@@ -79,6 +79,18 @@ export function ClientAuthGuard({ children }: { children: React.ReactNode }) {
       return;
     }
   }, [hasHydrated, pathname, isAuthenticated, user, router]);
+
+  if (!hasHydrated && !isPublicPath(pathname || '')) {
+    const { Logo } = require('@/components/shared/Logo');
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-bg">
+        <div className="flex flex-col items-center gap-6">
+          <Logo size="lg" href={null} />
+          <div className="spinner" aria-hidden="true" />
+        </div>
+      </div>
+    );
+  }
 
   // Prevent flash of protected content while redirecting
   if (hasHydrated && !isPublicPath(pathname || '') && !isAuthenticated) {

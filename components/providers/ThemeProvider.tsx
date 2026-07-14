@@ -64,6 +64,18 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Listen for changes from other tabs
+  useEffect(() => {
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === STORAGE_KEY && (e.newValue === 'day' || e.newValue === 'night')) {
+        setModeState(e.newValue);
+        applyMode(e.newValue);
+      }
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, []);
+
   const setMode = (m: ThemeMode) => {
     setModeState(m);
     applyMode(m);

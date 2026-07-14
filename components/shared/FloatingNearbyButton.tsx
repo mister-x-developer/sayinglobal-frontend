@@ -79,12 +79,13 @@ export function FloatingNearbyButton() {
     setOverDelete(false);
   };
 
-  // Hide on auth pages, landing, admin, chat detail
+  // Hide on auth pages, landing, admin, chat detail, sellers
   if (
     pathname === '/' ||
     pathname === '/index.html' ||
     pathname.startsWith('/auth') ||
     pathname.startsWith('/admin') ||
+    pathname.startsWith('/sellers') ||
     /^\/chat\/[^/]+$/.test(pathname)
   ) {
     return null;
