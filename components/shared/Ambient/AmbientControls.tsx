@@ -42,7 +42,7 @@ export function AmbientControls() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`relative flex h-9 w-9 items-center justify-center rounded-full transition-colors ${
-          isPlaying ? 'bg-brand-accent/10 text-brand-accent' : 'text-fg-subtle hover:bg-bg-subtle hover:text-fgʻ
+          isPlaying ? 'bg-brand-accent/10 text-brand-accent' : 'text-fg-subtle hover:bg-bg-subtle hover:text-fg'
         }`}
         title={t('ambient.zenMode' as any) ?? 'Zen Mode (Tabiat tovushlari)'}
       >
@@ -90,7 +90,7 @@ export function AmbientControls() {
                   className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm transition-colors ${
                     trackId === track.id
                       ? 'bg-brand-accent/10 font-medium text-brand-accent'
-                      : 'text-fg-muted hover:bg-bg-subtle hover:text-fgʻ
+                      : 'text-fg-muted hover:bg-bg-subtle hover:text-fg'
                   }`}
                 >
                   <span className="text-lg">{track.icon}</span>

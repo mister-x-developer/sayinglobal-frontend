@@ -254,7 +254,7 @@ function SellerDetailPageContent() {
                         type="button"
                         onClick={() => setTab(tt.key as Tab)}
                         className={`relative h-11 flex-shrink-0 snap-start px-3 text-xs font-semibold transition-colors sm:px-4 sm:text-sm ${
-                          active ? 'text-brand-primary' : 'text-fg-muted hover:text-fgʻ
+                          active ? 'text-brand-primary' : 'text-fg-muted hover:text-fg'
                         }`}
                       >
                         {tt.label}

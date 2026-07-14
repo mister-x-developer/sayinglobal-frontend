@@ -288,7 +288,7 @@ function SearchPageContent() {
                         type="button"
                         onClick={() => setTab('listings')}
                         className={`relative h-10 px-4 text-sm font-semibold transition-colors ${
-                          tab === 'listings' ? 'text-brand-primary' : 'text-fg-muted hover:text-fgʻ
+                          tab === 'listings' ? 'text-brand-primary' : 'text-fg-muted hover:text-fg'
                         }`}
                       >
                         {t('listings.title')}
@@ -300,7 +300,7 @@ function SearchPageContent() {
                         type="button"
                         onClick={() => setTab('sellers')}
                         className={`relative h-10 px-4 text-sm font-semibold transition-colors ${
-                          tab === 'sellers' ? 'text-brand-primary' : 'text-fg-muted hover:text-fgʻ
+                          tab === 'sellers' ? 'text-brand-primary' : 'text-fg-muted hover:text-fg'
                         }`}
                       >
                         {t('sellers.title')}

@@ -186,7 +186,7 @@ export default function NotificationsPage() {
               type="button"
               onClick={() => setFilter(f.key)}
               className={`relative h-11 flex-shrink-0 px-4 text-sm font-semibold transition-colors ${
-                active ? 'text-brand-primary' : 'text-fg-muted hover:text-fgʻ
+                active ? 'text-brand-primary' : 'text-fg-muted hover:text-fg'
               }`}
             >
               {f.label}
@@ -323,7 +323,7 @@ function NotificationRow({
 
       {/* Content */}
       <div className="min-w-0 flex-1">
-        <p className={`text-sm font-semibold ${n.is_read ? 'text-fgʻ : 'text-fgʻ}`}>
+        <p className={`text-sm font-semibold ${n.is_read ? 'text-fg' : 'text-fg'}`}>
           {title}
         </p>
         <p className="mt-0.5 text-sm leading-relaxed text-fg-muted">{message}</p>

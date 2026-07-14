@@ -81,7 +81,7 @@ export default function FavoritesPage() {
                   type="button"
                   onClick={() => setView('grid')}
                   className={`inline-flex h-8 w-8 items-center justify-center rounded-lg transition-colors ${
-                    view === 'grid' ? 'bg-bg-subtle text-fgʻ : 'text-fg-muted hover:text-fgʻ
+                    view === 'grid' ? 'bg-bg-subtle text-fg' : 'text-fg-muted hover:text-fg'
                   }`}
                   aria-label="Grid view"
                 >
@@ -91,7 +91,7 @@ export default function FavoritesPage() {
                   type="button"
                   onClick={() => setView('list')}
                   className={`inline-flex h-8 w-8 items-center justify-center rounded-lg transition-colors ${
-                    view === 'list' ? 'bg-bg-subtle text-fgʻ : 'text-fg-muted hover:text-fgʻ
+                    view === 'list' ? 'bg-bg-subtle text-fg' : 'text-fg-muted hover:text-fg'
                   }`}
                   aria-label="List view"
                 >

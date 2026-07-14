@@ -49,7 +49,7 @@ export function TranslateButton({
           ? 'bg-brand-primary/10 text-brand-primary hover:bg-brand-primary/15'
           : state === 'error'
           ? 'bg-danger/10 text-danger'
-          : 'bg-bg-subtle text-fg-muted hover:bg-bg-elevated hover:text-fgʻ
+          : 'bg-bg-subtle text-fg-muted hover:bg-bg-elevated hover:text-fg'
       } ${className}`}
       aria-label={isTranslated ? t('common.showOriginal' as any) : t('common.translate' as any)}
       aria-pressed={isTranslated}
@@ -128,7 +128,7 @@ export function TranslatableText({
               ? 'bg-brand-primary/10 text-brand-primary hover:bg-brand-primary/15'
               : state === 'error'
               ? 'bg-danger/10 text-danger'
-              : 'bg-bg-subtle text-fg-muted hover:bg-bg-elevated hover:text-fgʻ
+              : 'bg-bg-subtle text-fg-muted hover:bg-bg-elevated hover:text-fg'
           }`}
           aria-pressed={isTranslated}
         >

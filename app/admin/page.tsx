@@ -415,7 +415,7 @@ export default function AdminDashboardPage() {
                         className="flex items-center justify-between rounded-2xl px-5 py-4 bg-bg hover:bg-bg-subtle border border-transparent hover:border-border transition-all duration-300 group"
                       >
                         <div className="flex items-center gap-4">
-                          <div className={`p-2 rounded-xl bg-bg-subtle group-hover:bg-bg-elevated transition-colors ${isOk ? 'text-fgʻ : 'text-danger'}`}>
+                          <div className={`p-2 rounded-xl bg-bg-subtle group-hover:bg-bg-elevated transition-colors ${isOk ? 'text-fg' : 'text-danger'}`}>
                             <item.icon className="h-5 w-5" />
                           </div>
                           <span className="text-base font-bold text-fg">{item.label}</span>

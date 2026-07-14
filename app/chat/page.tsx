@@ -377,7 +377,7 @@ export default function ChatPage() {
                       onClick={() => openConversation(conv)}
                       className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-colors ${
                         isActive
-                          ? 'bg-brand-primary/10 text-fgʻ
+                          ? 'bg-brand-primary/10 text-fg'
                           : 'hover:bg-bg-subtle'
                       }`}
                     >
@@ -387,7 +387,7 @@ export default function ChatPage() {
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2">
-                          <span className={`truncate text-sm font-semibold ${isActive ? 'text-brand-primary' : 'text-fgʻ}`}>
+                          <span className={`truncate text-sm font-semibold ${isActive ? 'text-brand-primary' : 'text-fg'}`}>
                             {other.full_name}
                           </span>
                           {conv.last_message_time && (

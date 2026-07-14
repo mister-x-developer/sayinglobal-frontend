@@ -126,7 +126,7 @@ export default function AdminRatingsPage() {
                           {[1, 2, 3, 4, 5].map((n) => (
                             <Star
                               key={n}
-                              className={`h-3 w-3 ${n <= r.score ? 'fill-warning text-warningʻ : 'text-border-strongʻ}`}
+                              className={`h-3 w-3 ${n <= r.score ? 'fill-warning text-warning' : 'text-border-strong'}`}
                               strokeWidth={1.75}
                             />
                           ))}

@@ -580,7 +580,7 @@ export default function NewListingPage() {
                       tabIndex={0}
                       onClick={() => set('is_negotiable', !form.is_negotiable)}
                       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); set('is_negotiable', !form.is_negotiable); } }}
-                      className={`relative inline-flex h-6 w-11 flex-shrink-0 rounded-full transition-colors ${form.is_negotiable ? 'bg-brand-primary' : 'bg-border-strongʻ}`}
+                      className={`relative inline-flex h-6 w-11 flex-shrink-0 rounded-full transition-colors ${form.is_negotiable ? 'bg-brand-primary' : 'bg-border-strong'}`}
                     >
                       <span className={`pointer-events-none inline-block h-5 w-5 translate-y-0.5 rounded-full bg-white shadow-sm transition-transform ${form.is_negotiable ? 'translate-x-5' : 'translate-x-0.5'}`} />
                     </div>

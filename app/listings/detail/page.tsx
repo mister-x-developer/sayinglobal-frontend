@@ -488,7 +488,7 @@ function ListingDetailPageContent() {
                           <SpecItem
                             icon={Weight}
                             label={t('animal.weight')}
-                            value={`${listing.weight_kg} ${t('animal.kgʻ)}`}
+                            value={`${listing.weight_kg} ${t('animal.kg')}`}
                           />
                         )}
                         {listing.gender && (

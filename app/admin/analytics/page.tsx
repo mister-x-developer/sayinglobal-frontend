@@ -225,7 +225,7 @@ export default function AdminAnalyticsPage() {
     {
       label: t('admin.activeListings'),
       value: stats.listings.active,
-      sub: `${formatNumber(stats.listings.pending ?? 0)} ${t('admin.pendingʻ).toLowerCase()}`,
+      sub: `${formatNumber(stats.listings.pending ?? 0)} ${t('admin.pending').toLowerCase()}`,
       icon: Package, color: 'text-brand-primary', bg: 'bg-brand-primary/10',
       href: '/admin/listings', delay: 0.05,
       chartData: growth?.listings_by_day?.slice(-14),

@@ -17,7 +17,7 @@ interface AtmosphericBackgroundProps {
  * SCOPING (WS-C, R7.3): This component renders the heavy atmosphere effects
  * (sun/moon orb, stars, hills). It MUST only be mounted on the landing page
  * (`app/page.tsx` via `Heroʻ) and the auth pages (`app/auth/*`). Functional
- * and admin pages use the calm, low-contrast `bgʻ/`surface-subtle` background
+ * and admin pages use the calm, low-contrast `bg'/`surface-subtle` background
  * instead — do NOT mount this on listings, chat, profile, dashboard or admin.
  */
 export function AtmosphericBackground({

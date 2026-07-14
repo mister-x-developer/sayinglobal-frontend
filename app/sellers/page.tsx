@@ -152,7 +152,7 @@ export default function SellersDirectoryPage() {
                   type="button"
                   onClick={() => setTab(tt.key as any)}
                   className={`relative h-11 px-4 text-sm font-semibold transition-colors ${
-                    active ? 'text-brand-primary' : 'text-fg-muted hover:text-fgʻ
+                    active ? 'text-brand-primary' : 'text-fg-muted hover:text-fg'
                   }`}
                 >
                   {tt.label}

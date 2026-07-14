@@ -317,7 +317,7 @@ export function AppNav() {
                     className={`group inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3 text-sm font-medium transition-colors lg:px-4 ${
                       active
                         ? 'bg-brand-primary/10 text-brand-primary'
-                        : 'text-fg-muted hover:bg-bg-subtle hover:text-fgʻ
+                        : 'text-fg-muted hover:bg-bg-subtle hover:text-fg'
                     }`}
                   >
                     <Icon className="h-[15px] w-[15px] shrink-0" strokeWidth={1.75} />

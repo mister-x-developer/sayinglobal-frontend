@@ -148,7 +148,7 @@ export function AdminLayout({ children, noPadding = false }: { children: React.R
           <button
             type="button"
             onClick={toggleCollapsed}
-            className={`inline-flex h-8 w-8 items-center justify-center rounded-lg text-fg-subtle hover:bg-bg-subtle hover:text-fg transition-colors ${collapsed ? '' : 'ml-autoʻ}`}
+            className={`inline-flex h-8 w-8 items-center justify-center rounded-lg text-fg-subtle hover:bg-bg-subtle hover:text-fg transition-colors ${collapsed ? '' : 'ml-auto'}`}
             aria-label={collapsed ? t('common.showAll') : t('common.less')}
           >
             {collapsed ? <PanelLeftOpen className="h-4 w-4" strokeWidth={2} /> : <PanelLeftClose className="h-4 w-4" strokeWidth={2} />}
@@ -199,7 +199,7 @@ export function AdminLayout({ children, noPadding = false }: { children: React.R
                     } ${
                       active
                         ? 'bg-brand-primary text-white shadow-md shadow-brand-primary/20'
-                        : 'text-fg-muted hover:bg-bg-subtle hover:text-fgʻ
+                        : 'text-fg-muted hover:bg-bg-subtle hover:text-fg'
                     }`}
                   >
                     <Icon className="h-5 w-5 flex-shrink-0" strokeWidth={active ? 2 : 1.75} />
