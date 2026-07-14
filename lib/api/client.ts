@@ -213,7 +213,19 @@ apiClient.interceptors.response.use(
         || (typeof window !== 'undefined' && localStorage.getItem('sayin-auth-store'));
       if (looksHydrated) {
         useAuthStore.getState().logout();
-        if (typeof window !== 'undefined') window.location.href = '/auth';
+        if (typeof window !== 'undefined') {
+          const pathname = window.location.pathname;
+          const isPublic = pathname === '/' || pathname === '/index.html' || pathname === '/index' || 
+                           pathname.startsWith('/discovery') || pathname.startsWith('/search') || 
+                           (pathname.startsWith('/listings') && !pathname.startsWith('/listings/my') && !pathname.startsWith('/listings/new') && !pathname.includes('/edit')) ||
+                           (pathname.startsWith('/sellers') && !pathname.startsWith('/sellers/following'));
+          
+          if (!isPublic && !pathname.startsWith('/auth')) {
+            window.location.href = `/auth?next=${encodeURIComponent(pathname)}`;
+          } else {
+            window.location.reload();
+          }
+        }
       }
       return Promise.reject(error);
     }
@@ -224,7 +236,20 @@ apiClient.interceptors.response.use(
       return apiClient(original);
     } catch (refreshError) {
       useAuthStore.getState().logout();
-      if (typeof window !== 'undefined') window.location.href = '/auth';
+      if (typeof window !== 'undefined') {
+        const pathname = window.location.pathname;
+        const isPublic = pathname === '/' || pathname === '/index.html' || pathname === '/index' || 
+                         pathname.startsWith('/discovery') || pathname.startsWith('/search') || 
+                         (pathname.startsWith('/listings') && !pathname.startsWith('/listings/my') && !pathname.startsWith('/listings/new') && !pathname.includes('/edit')) ||
+                         (pathname.startsWith('/sellers') && !pathname.startsWith('/sellers/following'));
+        
+        if (!isPublic && !pathname.startsWith('/auth')) {
+          window.location.href = `/auth?next=${encodeURIComponent(pathname)}`;
+        } else {
+          // If they are on a public page, just reload to fetch as unauthenticated
+          window.location.reload();
+        }
+      }
       return Promise.reject(refreshError);
     }
   }
