@@ -68,7 +68,7 @@ export function ClientAuthGuard({ children }: { children: React.ReactNode }) {
     }
 
     // Native apps do not use the landing page. Redirect unauthenticated users directly to /auth.
-    if ((pathname === '/' || pathname === '/index.html') && process.env.NEXT_PUBLIC_IS_NATIVE === 'true' && !isAuthenticated) {
+    if ((pathname === '/' || pathname === '/index.html') && Capacitor.isNativePlatform() && !isAuthenticated) {
       router.replace('/auth');
       return;
     }
