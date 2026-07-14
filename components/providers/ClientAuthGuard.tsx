@@ -67,6 +67,12 @@ export function ClientAuthGuard({ children }: { children: React.ReactNode }) {
       return;
     }
 
+    // Native apps do not use the landing page. Redirect unauthenticated users directly to /auth.
+    if ((pathname === '/' || pathname === '/index.html') && Capacitor.isNativePlatform() && !isAuthenticated) {
+      router.replace('/auth');
+      return;
+    }
+
     // Non-admin trying to access admin route
     if (isAdminPath(pathname) && isAuthenticated && !isPlatformAdmin) {
       router.replace('/dashboard');
@@ -76,6 +82,12 @@ export function ClientAuthGuard({ children }: { children: React.ReactNode }) {
 
   // Prevent flash of protected content while redirecting
   if (hasHydrated && !isPublicPath(pathname || '') && !isAuthenticated) {
+    return null;
+  }
+
+  // Native apps do not have a landing page; unauthenticated users should see Auth page.
+  // Returning null here prevents the LandingPage HTML from flashing before redirecting.
+  if (hasHydrated && Capacitor.isNativePlatform() && (pathname === '/' || pathname === '/index.html') && !isAuthenticated) {
     return null;
   }
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Capacitor } from '@capacitor/core';
 import { LandingNav } from '@/components/layout/LandingNav';
@@ -13,17 +13,6 @@ import { FinalCTA } from '@/components/landing/FinalCTA';
 import { LandingRedirect } from '@/components/auth/LandingRedirect';
 
 export default function LandingPage() {
-  const router = useRouter();
-
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.location.pathname !== '/' && window.location.pathname !== '/index.html') return;
-    import('@capacitor/core').then(({ Capacitor }) => {
-      if (Capacitor.isNativePlatform()) {
-        router.replace('/dashboard');
-      }
-    });
-  }, [router]);
-
   return (
     <div className="min-h-screen flex flex-col">
       <LandingRedirect />
