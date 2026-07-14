@@ -47,14 +47,14 @@ const fixCyrillic = (str) => {
   
   // They might have used "йа" instead of "я"
   res = res.replace(/йа/g, 'я').replace(/Йа/g, 'Я').replace(/ЙА/g, 'Я');
-  res = res.replace(/йў/g, 'йў'); // wait, йў is valid sometimes? No, yo'q -> йўқ
+  res = res.replace(/йў/g, 'йў'); // wait, йў is valid sometimes? No, yoʻq -> йўқ
   // Wait, let's just log what seems wrong first.
   
   // mechanical cyrillic combinations
   res = res.replace(/йу/g, 'ю').replace(/Йу/g, 'Ю').replace(/ЙУ/g, 'Ю');
   res = res.replace(/йе/g, 'е').replace(/Йе/g, 'Е').replace(/ЙЕ/g, 'Е');
   res = res.replace(/йо/g, 'ё').replace(/Йо/g, 'Ё').replace(/ЙО/g, 'Ё');
-  // Also fix o' -> ў, g' -> ғ in cyrillic? If any exist.
+  // Also fix oʻ -> ў, gʻ -> ғ in cyrillic? If any exist.
   res = res.replace(/o'/g, 'ў').replace(/O'/g, 'Ў');
   res = res.replace(/g'/g, 'ғ').replace(/G'/g, 'Ғ');
   res = res.replace(/sh/g, 'ш').replace(/Sh/g, 'Ш').replace(/SH/g, 'Ш');

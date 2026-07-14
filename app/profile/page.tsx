@@ -244,7 +244,7 @@ export default function ProfilePage() {
                         type="button"
                         onClick={() => setTab(tt.key)}
                         className={`relative h-11 flex-shrink-0 snap-start px-3 text-xs font-semibold transition-colors sm:px-4 sm:text-sm ${
-                          active ? 'text-brand-primary' : 'text-fg-muted hover:text-fg'
+                          active ? 'text-brand-primary' : 'text-fg-muted hover:text-fgʻ
                         }`}
                       >
                         {tt.label}

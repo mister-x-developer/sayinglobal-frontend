@@ -23,9 +23,9 @@ npm run generate:assets
 
 Bu buyruq quyidagilarni yaratadi:
 - User app ikoner (yashil rang, #10b981)
-- Admin app ikoner (ko'k rang, #3b82f6)
+- Admin app ikoner (koʻk rang, #3b82f6)
 - PWA ikoner
-- Barcha o'lchamdagi splash screenlar
+- Barcha oʻlchamdagi splash screenlar
 
 ### 2. User App sozlash (Sayin Global)
 
@@ -36,7 +36,7 @@ npm run setup:user-app
 Bu buyruq:
 - Next.js dasturini export rejimida build qiladi
 - Capacitor'ni sozlaydi
-- Android va iOS platformalarini qo'shadi
+- Android va iOS platformalarini qoʻshadi
 - Barcha resurslarni (ikonlar, splash) nusxalaydi
 
 ### 3. Admin App sozlash (Admin SA)
@@ -48,12 +48,12 @@ npm run setup:admin-app
 Bu buyruq:
 - Next.js dasturini admin rejimida build qiladi
 - Capacitor'ni alohida sozlaydi
-- Android va iOS platformalarini alohida papkalarga qo'shadi
+- Android va iOS platformalarini alohida papkalarga qoʻshadi
 - Admin app resurslarini nusxalaydi
 
 ## 🛠️ Ishlab chiqish
 
-### Android Studio'da ochish
+### Android Studioʻda ochish
 
 **User App:**
 ```bash
@@ -81,7 +81,7 @@ npm run ios:admin
 
 ### User App
 
-1. Frontend o'zgarishlarini build qilish:
+1. Frontend oʻzgarishlarini build qilish:
 ```bash
 npm run build:user
 ```
@@ -95,12 +95,12 @@ npx cap sync
 
 ### Admin App
 
-1. Frontend o'zgarishlarini build qilish:
+1. Frontend oʻzgarishlarini build qilish:
 ```bash
 npm run build:admin
 ```
 
-2. Capacitor config'ni almashtirish:
+2. Capacitor configʻni almashtirish:
 ```bash
 cp capacitor.config.admin.ts capacitor.config.ts
 ```
@@ -123,7 +123,7 @@ npx cap sync
 ### Admin App (Admin SA)
 - **App ID:** com.sayinglobal.admin
 - **App Nomi:** Admin SA
-- **Rang:** Ko'k (#3b82f6)
+- **Rang:** Koʻk (#3b82f6)
 - **Maqsad:** Administratorlar uchun boshqaruv paneli
 
 ## 🔧 Muhim fayllar
@@ -142,15 +142,15 @@ npx cap sync
 ✅ Back button boshqaruvi (Android)
 ✅ Deep linking support
 ✅ Hardware acceleration
-✅ Pull-to-refresh o'chirilgan
+✅ Pull-to-refresh oʻchirilgan
 ✅ Touch optimizatsiyasi
 ✅ Native transitions
 
 ## 🎨 Dizayn
 
-- Logo: `/logo.png` (1024x1024)
+- Logo: `/logo.pngʻ (1024x1024)
 - User app ranglar: Yashil gradient
-- Admin app ranglar: Ko'k gradient
+- Admin app ranglar: Koʻk gradient
 - Responsive dizayn barcha qurilmalarda
 - Dark mode support
 
@@ -159,7 +159,7 @@ npx cap sync
 ### Android
 
 ```bash
-# Logcat ko'rish
+# Logcat koʻrish
 adb logcat | grep -i capacitor
 
 # Chrome DevTools
@@ -173,7 +173,7 @@ chrome://inspect
 # Safari > Develop > [Qurilma nomi] > [App]
 ```
 
-## 📚 Qo'shimcha
+## 📚 Qoʻshimcha
 
 - [Capacitor Documentation](https://capacitorjs.com/docs)
 - [Android Studio Guide](https://developer.android.com/studio)
@@ -181,23 +181,23 @@ chrome://inspect
 
 ## ⚠️ E'tibor bering
 
-1. Har safar frontend o'zgarganda `npm run build:user` yoki `npm run build:admin` ishlatish kerak
-2. Yangi plugin qo'shganda `npx cap sync` bajarish kerak
-3. Native kod o'zgarganda Android Studio/Xcode'da qayta build qilish kerak
-4. Logo o'zgarganda `npm run generate:assets` qayta ishga tushirish kerak
+1. Har safar frontend oʻzgarganda `npm run build:user` yoki `npm run build:admin` ishlatish kerak
+2. Yangi plugin qoʻshganda `npx cap sync` bajarish kerak
+3. Native kod oʻzgarganda Android Studio/Xcode'da qayta build qilish kerak
+4. Logo oʻzgarganda `npm run generate:assets` qayta ishga tushirish kerak
 
 ## 🎯 Production uchun tayyorlash
 
 1. ✅ Barcha assetlar yaratildi
 2. ✅ Ikkala app sozlandi
-3. ✅ Mobil optimizatsiyalar qo'shildi
+3. ✅ Mobil optimizatsiyalar qoʻshildi
 4. ✅ Safe area support
 5. ✅ Splash screens
 6. ✅ App ikonlar
 
 ### Keyingi qadamlar:
 
-1. Android Studio'da signed APK/AAB yaratish
+1. Android Studioʻda signed APK/AAB yaratish
 2. Google Play Console'ga yuklash
 3. iOS uchun App Store Connect'ga yuklash
 4. Testing va QA
@@ -205,8 +205,8 @@ chrome://inspect
 
 ## 📞 Muammolar
 
-Agar muammo bo'lsa:
-1. `node_modules` va `out` papkalarini o'chiring
+Agar muammo boʻlsa:
+1. `node_modules` va `out` papkalarini oʻchiring
 2. `npm install` qiling
 3. `npm run generate:assets` qiling
 4. Setup scriptlarni qayta ishga tushiring

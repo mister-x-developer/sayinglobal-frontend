@@ -27,12 +27,12 @@ for (const file of files) {
   const lines = content.split('\n');
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
-    // Find o' or g' followed by space, punctuation, etc. BUT NOT followed by a quote to avoid matching "pending'"
-    // Wait, if it's "pending'", the quote IS the quote we are checking, so what follows the quote is e.g. a comma or parenthesis.
-    // We want to avoid things like 'pending' or 'long'. So the preceding character MUST NOT be an English word character if it's g'.
-    // Actually, only sog', bog', tog' end in g'. o' is a letter itself, usually at the beginning or middle, rarely at the end (ma'no, a'lo, etc., but those are a'). 
-    // Is there any Uzbek word ending in o'? No.
-    // Uzbek words ending in g': sog', bog', tog', tug', yug', dog', zog', chog'
+    // Find oʻ or gʻ followed by space, punctuation, etc. BUT NOT followed by a quote to avoid matching "pendingʻ"
+    // Wait, if it's "pendingʻ", the quote IS the quote we are checking, so what follows the quote is e.g. a comma or parenthesis.
+    // We want to avoid things like 'pendingʻ or 'longʻ. So the preceding character MUST NOT be an English word character if it's gʻ.
+    // Actually, only sogʻ, bogʻ, togʻ end in gʻ. oʻ is a letter itself, usually at the beginning or middle, rarely at the end (ma'no, a'lo, etc., but those are a'). 
+    // Is there any Uzbek word ending in oʻ? No.
+    // Uzbek words ending in gʻ: sogʻ, bogʻ, togʻ, tugʻ, yugʻ, dogʻ, zogʻ, chogʻ
     const match = line.match(/(sog|bog|tog|tug|yug|dog|zog|chog)['`‘’]/i);
     if (match) {
       matches.push(`${file.replace(__dirname, '')}:${i+1}: ${line.trim()}`);

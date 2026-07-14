@@ -207,7 +207,7 @@ export default function MyListingsPage() {
                   type="button"
                   onClick={() => setFilter(f.key)}
                   className={`relative h-11 flex-shrink-0 px-4 text-sm font-semibold transition-colors ${
-                    active ? 'text-brand-primary' : 'text-fg-muted hover:text-fg'
+                    active ? 'text-brand-primary' : 'text-fg-muted hover:text-fgʻ
                   }`}
                 >
                   {t(f.labelKey as any)}

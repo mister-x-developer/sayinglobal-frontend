@@ -4,7 +4,7 @@ const ROOT = path.join(__dirname, '..', 'messages');
 const CATS = {
   uz: {
     cattle: 'Qoramollar',
-    sheep: "Qo'ylar",
+    sheep: "Qoʻylar",
     goats: 'Echkilar',
     horses: 'Otlar',
     camels: 'Tuyalar',

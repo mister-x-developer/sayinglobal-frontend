@@ -115,7 +115,7 @@ export const useAmbientStore = create<AmbientState>()(
         trackId: state.trackId,
         volume: state.volume,
         showVideo: state.showVideo,
-      }), // Don't persist `isPlaying` to prevent unexpected sound on refresh/startup
+      }), // Don't persist `isPlayingʻ to prevent unexpected sound on refresh/startup
     }
   )
 );

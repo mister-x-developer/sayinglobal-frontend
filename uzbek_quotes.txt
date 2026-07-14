@@ -1,386 +1,386 @@
-/app/admin/analytics/page.tsx:228: sub: `${formatNumber(stats.listings.pending ?? 0)} ${t('admin.pending').toLowerCase()}`,
-/app/admin/analytics/page.tsx:253: { status: 'pending', count: 234 },
-/app/admin/analytics/page.tsx:302: {new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-/app/admin/analytics/page.tsx:331: <p className="text-sm text-fg-muted">{t('common.loading')}</p>
-/app/admin/analytics/page.tsx:403: const translatedName = name === 'active' ? t('listings.active') : name === 'pending' ? t('listings.pending') : name === 'sold' ? t('listings.sold') : name === 'rejected' ? t('listings.rejected') : name === 'draft' ? t('listings.draft') : name;
-/app/admin/analytics/page.tsx:414: pending: 'bg-warning',
-/app/admin/analytics/page.tsx:424: s.status === 'pending' ? t('listings.pending') :
-/app/admin/analytics/page.tsx:466: <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-fg-subtle">{t('Analytics.createListing')}</p>
-/app/admin/analytics/page.tsx:527: labelFormatter={(label) => typeof label === 'string' ? label.replace(/_/g, ' ') : label}
-/app/admin/audit/page.tsx:35: user_warned: 'bg-warning/12 text-warning',
-/app/admin/audit/page.tsx:41: comment_removed: 'bg-info/12 text-info',
-/app/admin/broadcasts/detail/page.tsx:193: variant={isSent ? 'success' : b.status === 'draft' ? 'default' : 'warning'}
-/app/admin/broadcasts/page.tsx:53: scheduled: 'warning',
-/app/admin/broadcasts/page.tsx:56: sending: 'warning',
-/app/admin/broadcasts/page.tsx:94: toast.error(t('validation.messageTooLong'));
-/app/admin/broadcasts/page.tsx:98: toast.error(t('validation.titleTooLong'));
-/app/admin/broadcasts/page.tsx:171: animate={{ opacity: 1, height: 'auto' }}
-/app/admin/health/page.tsx:117: { icon: Package, label: t('AdminHealth.activeListings'),     value: ops.platform.listings_active, sub: `${ops.platform.listings_pending} ${t('AdminHealth.pending')}`, tone: 'bg-success/12 text-success' },
-/app/admin/health/page.tsx:118: { icon: Bell,    label: t('AdminHealth.unreadNotifications'), value: ops.notifications.unread_total, sub: `${ops.notifications.created_24h} ${t('AdminHealth.today')}`, tone: 'bg-info/12 text-info' },
-/app/admin/health/page.tsx:187: {loading ? t('AdminHealth.checking') : t('AdminHealth.endpointError')}
-/app/admin/listings/detail/edit/page.tsx:162: else if (form.title.trim().length > 100) e.title = t('validation.titleTooLong');
-/app/admin/listings/detail/edit/page.tsx:164: else if (form.description.trim().length > 2000) e.description = t('validation.descriptionTooLong');
-/app/admin/listings/detail/edit/page.tsx:303: <p className="text-eyebrow">{t('listings.editListing')}</p>
-/app/admin/listings/detail/edit/page.tsx:352: {t('listings.primaryPhoto')}
-/app/admin/listings/detail/edit/page.tsx:421: {t('create.publishing')}
-/app/admin/listings/detail/page.tsx:66: .adminList({ report_type: 'listing', page_size: 50 })
-/app/admin/listings/detail/page.tsx:195: : listing.status === 'sold' ? 'info'
-/app/admin/listings/detail/page.tsx:196: : 'warning'
-/app/admin/listings/detail/page.tsx:318: variant={r.status === 'pending' ? 'warning' : r.status === 'resolved_valid' ? 'success' : 'default'}
-/app/admin/listings/detail/page.tsx:412: {(listing.status === 'pending' || listing.status === 'pending_review') && (
-/app/admin/listings/detail/page.tsx:424: {(listing.status === 'pending' || listing.status === 'pending_review' || listing.status === 'active') && (
-/app/admin/listings/page.tsx:24: const STATUS_OPTIONS = ['all', 'pending', 'active', 'rejected', 'sold', 'archived'] as const;
-/app/admin/listings/page.tsx:29: pending: 'warning',
-/app/admin/listings/page.tsx:40: const [statusFilter, setStatusFilter] = useState<StatusOption>('pending');
-/app/admin/listings/page.tsx:235: : 'bg-bg-subtle text-fg-muted hover:bg-bg-elevated hover:text-fg',
-/app/admin/listings/page.tsx:364: <EmptyState icon={LayoutGrid} title={t('marketplace.noResults')} description={t('marketplace.tryAdjusting')} />
-/app/admin/listings/page.tsx:390: t('admin.pending'),
-/app/admin/listings/page.tsx:477: {l.status === 'pending' && (
-/app/admin/listings/page.tsx:547: : 'Reject listing'}
-/app/admin/moderation/detail/page.tsx:47: pending: 'warning',
-/app/admin/moderation/detail/page.tsx:48: under_review: 'info',
-/app/admin/moderation/detail/page.tsx:186: {report.report_type === 'listing'
-/app/admin/moderation/detail/page.tsx:187: ? t('report.titleListing')
-/app/admin/moderation/detail/page.tsx:219: {report.report_type === 'listing' ? (
-/app/admin/moderation/detail/page.tsx:335: {report.status === 'pending' && (
-/app/admin/moderation/detail/page.tsx:348: {['pending', 'under_review'].includes(report.status) && (
-/app/admin/moderation/detail/page.tsx:396: <dt className="text-fg-muted">{t('adminMod.assignedTo')}</dt>
-/app/admin/moderation/detail/page.tsx:405: ['warning', 'restricted'].includes(report.reported_user.status ?? '') && (
-/app/admin/moderation/detail/page.tsx:439: currentStatus: 'warning' | 'restricted';
-/app/admin/moderation/detail/page.tsx:443: const [targetStatus, setTargetStatus] = useState<'good' | 'warning'>('good');
-/app/admin/moderation/detail/page.tsx:446: const options: { value: 'good' | 'warning'; label: string }[] =
-/app/admin/moderation/detail/page.tsx:448: ? [{ value: 'good', label: 'good' }, { value: 'warning', label: 'warning' }]
-/app/admin/moderation/page.tsx:22: const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'under_review' | 'resolved_valid' | 'resolved_invalid'>('pending');
-/app/admin/moderation/page.tsx:53: {(['all','pending','under_review','resolved_valid','resolved_invalid'] as const).map(s => (
-/app/admin/moderation/page.tsx:72: <Badge variant={r.status === 'pending' ? 'warning' : r.status.includes('valid') ? 'success' : 'default'} size="sm">
-/app/admin/page.tsx:313: <tr className="bg-bg hover:bg-bg-subtle transition-all duration-300 rounded-xl group shadow-sm hover:shadow-md cursor-pointer" onClick={() => router.push('/admin/listings?status=pending')}>
-/app/admin/page.tsx:408: const val = item.key === '_api' ? (Object.keys(healthStatus).length > 0 ? 'ok' : loading ? 'checking' : 'error') : (healthStatus[item.key] ?? (loading ? 'checking' : 'unknown'));
-/app/admin/page.tsx:410: const isChecking = val === 'checking';
-/app/admin/page.tsx:418: <div className={`p-2 rounded-xl bg-bg-subtle group-hover:bg-bg-elevated transition-colors ${isOk ? 'text-fg' : 'text-danger'}`}>
-/app/admin/page.tsx:425: {isOk ? t('Admin.nominal') : isChecking ? t('Admin.syncing') : t('Admin.fault')}
-/app/admin/profile/page.tsx:43: if (bio) fd.append('bio', bio);
-/app/admin/profile/page.tsx:144: <label className="mb-1.5 block text-sm font-medium text-fg">{t('profile.bio')}</label>
-/app/admin/ratings/page.tsx:129: className={`h-3 w-3 ${n <= r.score ? 'fill-warning text-warning' : 'text-border-strong'}`}
-/app/admin/security/page.tsx:62: .catch(() => setError(t('errors.somethingWrong')))
-/app/admin/users/detail/page.tsx:47: warning: 'warning',
-/app/admin/users/detail/page.tsx:59: status: 'good' | 'warning' | 'restricted' | 'blocked';
-/app/admin/users/detail/page.tsx:126: warn: 'warning',
-/app/admin/users/detail/page.tsx:227: <dt className="text-xs text-fg-subtle">{t('profile.following')}</dt>
-/app/admin/users/detail/page.tsx:273: <Badge variant={r.status === 'pending' ? 'warning' : 'default'} size="sm">
-/app/admin/users/detail/page.tsx:301: disabled={actionLoading || user.status === 'warning'}
-/app/admin/users/detail/page.tsx:346: <Badge variant={r.status === 'pending' ? 'warning' : 'default'} size="sm">
-/app/admin/users/page.tsx:36: status: 'good' | 'warning' | 'restricted' | 'blocked';
-/app/admin/users/page.tsx:49: warning: 'warning',
-/app/admin/users/page.tsx:98: warn: 'warning', restrict: 'restricted', block: 'blocked', unblock: 'good'
-/app/admin/users/page.tsx:164: <option value="warning">{t('userStatus.warning')}</option>
-/app/admin/users/page.tsx:204: t('admin.pending'),
-/app/admin/users/page.tsx:205: t('sellers.rating'),
-/app/admin/users/page.tsx:335: {formatDate(selectedUser.date_joined, 'long')}
-/app/auth/page.tsx:157: animate={{ opacity: 1, y: 0, height: 'auto' }}
-/app/auth/page.tsx:190: animate={{ opacity: 1, y: 0, height: 'auto' }}
-/app/auth/page.tsx:213: {t('auth.verifying')}
-/app/auth/page.tsx:248: <Suspense fallback={<div className="min-h-screen flex items-center justify-center">{t('common.loading') || 'Loading...'}</div>}>
-/app/chat/page.tsx:16: import { ReportDialog } from '@/components/shared/ReportDialog';
-/app/chat/page.tsx:380: ? 'bg-brand-primary/10 text-fg'
-/app/chat/page.tsx:390: <span className={`truncate text-sm font-semibold ${isActive ? 'text-brand-primary' : 'text-fg'}`}>
-/app/chat/page.tsx:530: {locale === 'ru' ? 'Начните разговор' : locale === 'en' ? 'Start the conversation' : 'Suhbatni boshlang'}
-/app/chat/page.tsx:554: : new Date(msg.created_at).toLocaleDateString(locale === 'ru' ? 'ru-RU' : locale === 'en' ? 'en-US' : 'uz-UZ', { day: 'numeric', month: 'long' });
-/app/chat/page.tsx:591: ? `bg-brand-primary text-white ${isFirstInGroup ? 'rounded-t-2xl' : 'rounded-t-lg'} ${isLastInGroup ? 'rounded-bl-2xl rounded-br-sm' : 'rounded-b-lg'}`
-/app/chat/page.tsx:592: : `bg-bg-elevated border border-border text-fg ${isFirstInGroup ? 'rounded-t-2xl' : 'rounded-t-lg'} ${isLastInGroup ? 'rounded-br-2xl rounded-bl-sm' : 'rounded-b-lg'}`
-/app/chat/page.tsx:693: e.target.style.height = 'auto';
-/app/dashboard/page.tsx:89: {t('nav.createListing')}
-/app/dashboard/page.tsx:113: tone: 'bg-warning/12 text-warning',
-/app/dashboard/page.tsx:119: tone: 'bg-info/12 text-info',
-/app/error.tsx:7: import { Logo } from '@/components/shared/Logo';
-/app/error.tsx:48: <p className="text-eyebrow">{t('errors.somethingWrong')}</p>
-/app/global-error.tsx:26: description: "Iltimos, keyinroq qaytadan urinib ko'ring",
-/app/global-error.tsx:43: title: 'Something went wrong',
-/app/layout.tsx:33: keywords: ['chorva', 'qoramol', "qo'y", 'echki', 'ot', 'tuya', 'parranda', 'bozor', 'savdo', 'sayin', 'livestock', 'marketplace'],
-/app/layout.tsx:51: { url: '/favicon.svg', type: 'image/svg+xml' },
-/app/layout.tsx:54: { url: '/favicon.svg', type: 'image/svg+xml' },
-/app/listings/detail/edit/page.tsx:163: else if (form.title.trim().length > 100) e.title = t('validation.titleTooLong');
-/app/listings/detail/edit/page.tsx:165: else if (form.description.trim().length > 2000) e.description = t('validation.descriptionTooLong');
-/app/listings/detail/edit/page.tsx:169: else if (Number(form.weight_kg) > 9999) e.weight_kg = t('validation.maxWeight') || 'Maksimal 9999 kg';
-/app/listings/detail/edit/page.tsx:308: <p className="text-eyebrow">{t('listings.editListing')}</p>
-/app/listings/detail/edit/page.tsx:359: {t('listings.primaryPhoto')}
-/app/listings/detail/edit/page.tsx:428: {t('create.publishing')}
-/app/listings/detail/page.tsx:38: import { ReportDialog } from '@/components/shared/ReportDialog';
-/app/listings/detail/page.tsx:231: aria-label={`${t('common.viewImage' as any) || 'Rasmni ko`rish'} ${i + 1}`}
-/app/listings/detail/page.tsx:380: animate={{ opacity: 1, y: 0, height: 'auto' }}
-/app/listings/detail/page.tsx:491: value={`${listing.weight_kg} ${t('animal.kg')}`}
-/app/listings/detail/page.tsx:510: : typeof listing.breed === 'string'
-/app/listings/detail/page.tsx:716: animate={{ opacity: 1, y: 0, height: 'auto' }}
-/app/listings/detail/page.tsx:836: ? { kind: 'listing', publicId: listing.id as any, title: listing.title }
-/app/listings/detail/page.tsx:909: ? `https://yandex.uz/maps/?rtext=${userPos.lat},${userPos.lng}~${lat},${lng}&rtt=auto`
-/app/listings/detail/page.tsx:916: ? `https://yandex.uz/maps/?rtext=${userPos.lat},${userPos.lng}~${lat},${lng}&rtt=auto`
-/app/listings/my/page.tsx:38: type StatusFilter = 'all' | 'active' | 'pending' | 'sold' | 'rejected' | 'expired';
-/app/listings/my/page.tsx:42: pending:        { variant: 'warning',  labelKey: 'listings.pending',  icon: Clock },
-/app/listings/my/page.tsx:43: pending_review: { variant: 'warning',  labelKey: 'listings.pending',  icon: Clock },
-/app/listings/my/page.tsx:44: sold:           { variant: 'info',     labelKey: 'listings.sold',     icon: ShoppingCart },
-/app/listings/my/page.tsx:121: status: l.status === 'pending_review' ? 'pending' : l.status,
-/app/listings/my/page.tsx:138: { key: 'pending',  labelKey: 'listings.pending' },
-/app/listings/my/page.tsx:147: { icon: Eye,          labelKey: 'marketplace.trending',    value: items.reduce((s, l) => s + (l.view_count ?? 0), 0), tone: 'bg-info/12 text-info' },
-/app/listings/my/page.tsx:210: active ? 'text-brand-primary' : 'text-fg-muted hover:text-fg'
-/app/listings/my/page.tsx:237: animate={{ opacity: 1, height: 'auto' }}
-/app/listings/my/page.tsx:245: {filter === 'pending' && (
-/app/listings/my/page.tsx:248: animate={{ opacity: 1, height: 'auto' }}
-/app/listings/my/page.tsx:417: {['active', 'pending', 'pending_review', 'rejected', 'expired'].includes(l.status) && (
-/app/listings/my/page.tsx:438: toast.error(t('listings.bumpError' as any) || 'Failed to bump listing');
-/app/listings/my/page.tsx:455: toast.error(t('listings.renewError' as any) || 'Failed to renew listing');
-/app/listings/my/page.tsx:483: toast.error(t('listings.restoreError' as any) || 'Failed to restore listing');
-/app/listings/nearby/page.tsx:59: | { kind: 'requesting' }
-/app/listings/nearby/page.tsx:81: setGeo({ kind: 'requesting' });
-/app/listings/nearby/page.tsx:100: if (geo.kind === 'requesting' || geo.kind === 'idle') return;
-/app/listings/nearby/page.tsx:135: setGeo({ kind: 'requesting' });
-/app/listings/nearby/page.tsx:171: {geo.kind === 'requesting' && (
-/app/listings/nearby/page.tsx:174: {t('nearby.requesting')}
-/app/listings/nearby/page.tsx:291: {geo.kind === 'requesting' ? (
-/app/listings/nearby/page.tsx:306: <p className="text-sm text-fg-muted">{t('common.loading')}</p>
-/app/listings/new/page.tsx:32: const VACCINATION_KEYS = ['animal.vaccinatedYes', 'animal.vaccinatedPartial', 'animal.vaccinatedNo'] as const;
-/app/listings/new/page.tsx:97: else if (form.title.trim().length > 100) e.title = t('validation.titleTooLong');
-/app/listings/new/page.tsx:99: else if (form.description.trim().length > 2000) e.description = t('validation.descriptionTooLong');
-/app/listings/new/page.tsx:112: else if (Number(form.weight_kg) > 9999) e.weight_kg = t('validation.maxWeight') || 'Maksimal 9999 kg';
-/app/listings/new/page.tsx:235: else if (key === 'unknown') displayMsg = t('errors.somethingWrong');
-/app/listings/new/page.tsx:236: else displayMsg = t(`errors.${key}` as any) ?? t('errors.somethingWrong');
-/app/listings/new/page.tsx:332: {t('animal.weight')} ({t('animal.kg')}) <span className="text-danger">*</span>
-/app/listings/new/page.tsx:339: onChange={(e) => set('weight_kg', e.target.value)}
-/app/listings/new/page.tsx:431: {t('listings.primaryPhoto')}
-/app/listings/new/page.tsx:497: // Ko'cha nomini location'ga YOZMAYMIZ — faqat region/district match qilamiz
-/app/listings/new/page.tsx:583: className={`relative inline-flex h-6 w-11 flex-shrink-0 rounded-full transition-colors ${form.is_negotiable ? 'bg-brand-primary' : 'bg-border-strong'}`}
-/app/listings/new/page.tsx:600: <><Loader2 className="h-4 w-4 animate-spin" strokeWidth={2.25} />{t('create.publishing')}</>
-/app/listings/new/page.tsx:602: <><Save className="h-4 w-4" strokeWidth={1.75} />{t('create.publishListing')}</>
-/app/listings/page.tsx:222: animate={{ opacity: 1, height: 'auto' }}
-/app/listings/page.tsx:269: description={t('marketplace.tryAdjusting')}
-/app/loading.tsx:1: import { Logo } from '@/components/shared/Logo';
-/app/not-found.tsx:6: import { Logo } from '@/components/shared/Logo';
-/app/notifications/page.tsx:57: message_received: 'bg-info/12 text-info',
-/app/notifications/page.tsx:61: listing_expired: 'bg-warning/12 text-warning',
-/app/notifications/page.tsx:63: rating: 'bg-warning/12 text-warning',
-/app/notifications/page.tsx:68: system_alert: 'bg-warning/12 text-warning',
-/app/notifications/page.tsx:69: listing_status: 'bg-info/12 text-info',
-/app/notifications/page.tsx:72: listing_expiring_soon: 'bg-warning/12 text-warning',
-/app/notifications/page.tsx:81: if (filter === 'social') return ['follow', 'rating'].includes(n.notification_type);
-/app/notifications/page.tsx:189: active ? 'text-brand-primary' : 'text-fg-muted hover:text-fg'
-/app/notifications/page.tsx:326: <p className={`text-sm font-semibold ${n.is_read ? 'text-fg' : 'text-fg'}`}>
-/app/page.tsx:8: import { Hero } from '@/components/landing/Hero';
-/app/profile/edit/page.tsx:86: if (form.bio) fd.append('bio', form.bio);
-/app/profile/edit/page.tsx:121: else if (key === 'unknown') displayMsg = t('errors.somethingWrong');
-/app/profile/edit/page.tsx:122: else displayMsg = t(`errors.${key}` as any) ?? t('errors.somethingWrong');
-/app/profile/edit/page.tsx:222: {t('profile.bio')}
-/app/profile/edit/page.tsx:314: {t('common.loading')}
-/app/profile/favorites/page.tsx:84: view === 'grid' ? 'bg-bg-subtle text-fg' : 'text-fg-muted hover:text-fg'
-/app/profile/favorites/page.tsx:94: view === 'list' ? 'bg-bg-subtle text-fg' : 'text-fg-muted hover:text-fg'
-/app/profile/guide/page.tsx:20: desc: 'Hech qanday cheklovlar yo‘q. Barcha funksiyalardan to‘liq foydalanishingiz mumkin: e‘lon yaratish, chat, va boshqalar.'
-/app/profile/guide/page.tsx:26: en: 'Warning',
-/app/profile/guide/page.tsx:34: desc: 'E‘lon yaratish va chat faoliyati cheklanadi. Faqat mavjud e‘lonlarni ko‘ra olasiz.'
-/app/profile/guide/page.tsx:41: desc: 'Hisob to‘liq muzlatiladi. Barcha e‘lonlar yashiriladi, hech qanday amal bajarib bo‘lmaydi.'
-/app/profile/guide/page.tsx:156: {t('guidePage.goodRating')}
-/app/profile/page.tsx:91: { icon: Users, label: t('profile.followers'), value: profile.followers, tone: 'bg-info/12 text-info' },
-/app/profile/page.tsx:92: { icon: Eye, label: t('marketplace.trending'), value: profile.total_views, tone: 'bg-warning/12 text-warning' },
-/app/profile/page.tsx:136: {profile.status === 'warning' && (
-/app/profile/page.tsx:139: {t('userStatus.warning')}
-/app/profile/page.tsx:173: {t('nav.createListing')}
-/app/profile/page.tsx:197: <span>{t('profile.following')}</span>
-/app/profile/page.tsx:247: active ? 'text-brand-primary' : 'text-fg-muted hover:text-fg'
-/app/profile/page.tsx:315: <dt className="text-fg-muted">{t('profile.following')}</dt>
-/app/profile/page.tsx:330: { href: '/sellers/following', icon: Users, label: t('profile.followedSellers') },
-/app/profile/referral/page.tsx:141: placeholder="DO'STINGIZ KODI"
-/app/profile/reports/detail/page.tsx:37: pending: { variant: 'warning', key: 'adminMod.status_pending', icon: Clock },
-/app/profile/reports/detail/page.tsx:38: under_review: { variant: 'info', key: 'adminMod.status_under_review', icon: ShieldAlert },
-/app/profile/reports/detail/page.tsx:104: {report.report_type === 'listing'
-/app/profile/reports/detail/page.tsx:105: ? t('report.titleListing' as any)
-/app/profile/reports/detail/page.tsx:158: {report.report_type === 'listing' ? (
-/app/profile/reports/page.tsx:24: pending: { variant: 'warning', key: 'adminMod.status_pending' },
-/app/profile/reports/page.tsx:25: under_review: { variant: 'info', key: 'adminMod.status_under_review' },
-/app/profile/reports/page.tsx:91: {r.report_type === 'listing' ? (
-/app/profile/reports/page.tsx:100: {r.report_type === 'listing'
-/app/profile/security/page.tsx:47: variant: 'success' | 'info' | 'error';
-/app/profile/security/page.tsx:58: info: 'border-info/30 bg-info/10 text-info',
-/app/profile/security/page.tsx:61: const Icon = toast.variant === 'success' ? CheckCircle2 : toast.variant === 'info' ? Info : AlertTriangle;
-/app/profile/security/page.tsx:146: setToast({ message: t('errors.somethingWrong'), variant: 'error' });
-/app/profile/security/page.tsx:160: setToast({ message: ts('noOtherSessions'), variant: 'info' });
-/app/profile/security/page.tsx:163: setToast({ message: t('errors.somethingWrong'), variant: 'error' });
-/app/profile/security/page.tsx:255: animate={{ opacity: 1, height: 'auto' }}
-/app/profile/settings/page.tsx:35: on ? 'bg-brand-primary' : 'bg-border-strong'
-/app/search/page.tsx:291: tab === 'listings' ? 'text-brand-primary' : 'text-fg-muted hover:text-fg'
-/app/search/page.tsx:303: tab === 'sellers' ? 'text-brand-primary' : 'text-fg-muted hover:text-fg'
-/app/search/page.tsx:329: animate={{ opacity: 1, height: 'auto' }}
-/app/sellers/detail/page.tsx:27: import { ReportDialog } from '@/components/shared/ReportDialog';
-/app/sellers/detail/page.tsx:92: label: t('sellers.rating'),
-/app/sellers/detail/page.tsx:257: active ? 'text-brand-primary' : 'text-fg-muted hover:text-fg'
-/app/sellers/following/page.tsx:65: <h1 className="display-md mt-2">{t('profile.following')}</h1>
-/app/sellers/following/page.tsx:77: title={t('empty.noFollowing')}
-/app/sellers/following/page.tsx:166: animate={{ opacity: 1, height: 'auto' }}
-/app/sellers/page.tsx:18: | { kind: 'requesting' }
-/app/sellers/page.tsx:38: setGeo({ kind: 'requesting' });
-/app/sellers/page.tsx:155: active ? 'text-brand-primary' : 'text-fg-muted hover:text-fg'
-/app/sellers/page.tsx:182: description={t('sellers.tryAdjusting' as any) ?? 'Boshqa qidiruv so\'zlarini sinab ko\'ring yoki joylashuvni o\'zgartiring'}
-/app/terms/page.tsx:28: <p className="text-fg-muted leading-relaxed">{t('terms.intro')}</p>
-/components/auth/LandingRedirect.tsx:11: * va Landing yoxud Auth sahifasida tursa, avtomatik ravishda uni Dashboardga yo'naltiradi.
-/components/landing/TrustSection.tsx:31: tone: 'bg-warning/12 text-warning',
-/components/landing/TrustSection.tsx:43: tone: 'bg-info/12 text-info',
-/components/layout/AdminLayout.tsx:31: import { Logo } from '@/components/shared/Logo';
-/components/layout/AdminLayout.tsx:151: className={`inline-flex h-8 w-8 items-center justify-center rounded-lg text-fg-subtle hover:bg-bg-subtle hover:text-fg transition-colors ${collapsed ? '' : 'ml-auto'}`}
-/components/layout/AdminLayout.tsx:202: : 'text-fg-muted hover:bg-bg-subtle hover:text-fg'
-/components/layout/AdminLayout.tsx:273: transition={{ type: 'spring', damping: 30, stiffness: 320 }}
-/components/layout/AppNav.tsx:29: import { Logo } from '@/components/shared/Logo';
-/components/layout/AppNav.tsx:91: transition={{ type: 'spring', damping: 30, stiffness: 320 }}
-/components/layout/AppNav.tsx:169: {t('nav.createListing')}
-/components/layout/AppNav.tsx:320: : 'text-fg-muted hover:bg-bg-subtle hover:text-fg'
-/components/layout/AppNav.tsx:339: <span className="hidden lg:inline">{t('nav.createListing')}</span>
-/components/layout/LandingFooter.tsx:5: import { Logo } from '@/components/shared/Logo';
-/components/layout/LandingNav.tsx:7: import { Logo } from '@/components/shared/Logo';
-/components/layout/MobileBottomNav.tsx:45: ...(!(user?.is_admin || user?.is_staff) ? [{ href: '/listings/new', icon: Plus, label: t('nav.createListing'), primary: true }] : []),
-/components/listings/CommentThread.tsx:11: import { ReportDialog } from '@/components/shared/ReportDialog';
-/components/listings/CommentThread.tsx:149: animate={{ opacity: 1, height: 'auto' }}
-/components/listings/CommentThread.tsx:194: animate={{ opacity: 1, height: 'auto' }}
-/components/listings/CommentThread.tsx:380: {submitting ? t('common.loading') : t('comments.submit')}
-/components/listings/ListingCard.tsx:108: isFavorited ? 'text-danger' : 'text-fg',
-/components/listings/ListingGalleryViewer.tsx:78: src={visibleImage?.image && !visibleImage.image.startsWith('/placeholder') ? visibleImage.image : '/placeholder.jpg'}
-/components/map/MapDiscovery.tsx:59: toast.error(t('Map.errorFetching') || 'Failed to fetch nearby listings');
-/components/profile/MyListingsManager.tsx:14: type ListingStatus = 'active' | 'sold' | 'pending' | 'pending_review' | 'rejected' | 'draft' | 'archived' | 'expired';
-/components/profile/MyListingsManager.tsx:33: const [activeTab, setActiveTab] = useState<'all' | 'active' | 'sold' | 'pending' | 'rejected' | 'archived' | 'draft'>('all');
-/components/profile/MyListingsManager.tsx:53: { key: 'pending', label: hasKey('listings.statusPending') ? t('listings.statusPending' as any) : 'Tekshiruvda' },
-/components/profile/MyListingsManager.tsx:63: if (activeTab === 'pending') return l.status === 'pending' || l.status === 'pending_review';
-/components/profile/MyListingsManager.tsx:145: if (tb.key === 'pending') return l.status === 'pending' || l.status === 'pending_review';
-/components/profile/MyListingsManager.tsx:158: : 'bg-bg-subtle text-fg-muted hover:bg-bg-elevated hover:text-fg'
-/components/profile/MyListingsManager.tsx:186: {t('nav.createListing')}
-/components/profile/MyListingsManager.tsx:211: {(l.status === 'pending' || l.status === 'pending_review') && <span className="px-2 py-1 bg-warning text-white text-xs font-bold rounded-md shadow-sm uppercase tracking-wide">{t('listings.statusPending' as any)}</span>}
-/components/profile/MyListingsManager.tsx:232: {(l.status === 'pending' || l.status === 'pending_review') && (
-/components/profile/MyListingsManager.tsx:264: <button disabled={isMutatingThis} onClick={() => handleAction('delete', l.id)} className="btn btn-danger btn-sm px-3" aria-label="O'chirish">
-/components/providers/ClientAuthGuard.tsx:80: const { Logo } = require('@/components/shared/Logo');
-/components/providers/TermsGate.tsx:82: setReferralMsg({ ok: true, text: res.data?.message ?? "Referral kod qo'llanildi!" });
-/components/providers/TermsGate.tsx:119: <p className="text-fg-muted">{t('terms.intro')}</p>
-/components/providers/TermsGate.tsx:138: {submitting ? <><Loader2 className="h-4 w-4 animate-spin" strokeWidth={2.25} />{t('common.loading')}</> : <><CheckCircle2 className="h-4 w-4" strokeWidth={2.25} />{t('terms.accept')}</>}
-/components/sellers/FollowButton.tsx:66: {t('sellers.following')}
-/components/sellers/SellerRatingsThread.tsx:35: import { ReportDialog } from '@/components/shared/ReportDialog';
-/components/sellers/SellerRatingsThread.tsx:186: kind: 'rating',
-/components/sellers/SellerRatingsThread.tsx:248: n <= Math.round(average) ? 'fill-warning text-warning' : 'text-border-strong'
-/components/sellers/SellerRatingsThread.tsx:317: n <= composeScore ? 'fill-warning text-warning' : 'text-border-strong'
-/components/sellers/SellerRatingsThread.tsx:445: n <= rating.score ? 'fill-warning text-warning' : 'text-border-strong'
-/components/shared/Ambient/AmbientControls.tsx:45: isPlaying ? 'bg-brand-accent/10 text-brand-accent' : 'text-fg-subtle hover:bg-bg-subtle hover:text-fg'
-/components/shared/Ambient/AmbientControls.tsx:93: : 'text-fg-muted hover:bg-bg-subtle hover:text-fg'
-/components/shared/AtmosphericBackground.tsx:7: variant?: 'hero' | 'section' | 'subtle';
-/components/shared/AtmosphericBackground.tsx:19: * (`app/page.tsx` via `Hero`) and the auth pages (`app/auth/*`). Functional
-/components/shared/AtmosphericBackground.tsx:20: * and admin pages use the calm, low-contrast `bg`/`surface-subtle` background
-/components/shared/AtmosphericBackground.tsx:24: variant = 'hero',
-/components/shared/FloatingNearbyButton.tsx:112: transition={{ type: 'spring', stiffness: 380, damping: 28 }}
-/components/shared/FloatingNearbyButton.tsx:136: cursor: dragging ? 'grabbing' : 'grab',
-/components/shared/FloatingNearbyButton.tsx:145: transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-/components/shared/LocationPicker.tsx:256: : (t('marketplace.geolocationError' as any) ?? 'Joylashuvni aniqlab bo‘lmadi. Qayta urining.');
-/components/shared/LocationPicker.tsx:275: setLocationError(t('marketplace.geolocationUnsupported' as any) ?? 'Joylashuv aniqlash qo‘llab-quvvatlanmaydi');
-/components/shared/LocationPicker.tsx:294: // Status label: GPS belgisi qo'yilgan yoki yoʻqligini ko'rsatadi — ko'cha nomi emas
-/components/shared/LocationPicker.tsx:298: ? (t('marketplace.geocoding' as any) ?? 'Joylashuv aniqlanmoqda...')
-/components/shared/LocationPicker.tsx:301: : (t('marketplace.mapTapToSetPin' as any) ?? 'Xaritani bosib GPS belgisini qo\'ying');
-/components/shared/LocationSelector.tsx:156: districtDisabled ? 'text-fg-subtle' : 'text-fg'
-/components/shared/Logo.tsx:17: size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-/components/shared/OnboardingModal.tsx:54: uz: "Qoramol, qo'y, echki, ot, tuya, parrandalar va boshqa chorva mollarini soting yoki xarid qiling. Har bir eʼlon xaritada koʻrsatiladi.",
-/components/shared/OnboardingModal.tsx:70: uz: "GPS orqali yaqin atrofdagi eʼlonlarni ko'ring. Xaritada sotuvchilarning joylashuvini aniqlang va eng yaqinini toping.",
-/components/shared/OnboardingModal.tsx:78: color: 'bg-info/10 text-info',
-/components/shared/OnboardingModal.tsx:166: transition={{ type: 'spring', damping: 28, stiffness: 320 }}
-/components/shared/RatingDisplay.tsx:11: size?: 'sm' | 'md' | 'lg';
-/components/shared/RatingDisplay.tsx:50: const tone = hasRatings && warning ? 'text-warning' : 'text-fg-subtle';
-/components/shared/ReportDialog.tsx:29: | { kind: 'listing'; publicId: number; title?: string }
-/components/shared/ReportDialog.tsx:33: | { kind: 'rating'; publicId: number | string; fullName?: string };
-/components/shared/ReportDialog.tsx:77: if (target.kind === 'listing') setReasons(cat.listing_reasons);
-/components/shared/ReportDialog.tsx:101: if (target.kind === 'listing') {
-/components/shared/ReportDialog.tsx:107: } else if ((target as any).kind === 'rating') {
-/components/shared/ReportDialog.tsx:118: else if (code === 'cannot_report_own_listing') setError(t('report.errorOwn'));
-/components/shared/ReportDialog.tsx:130: target.kind === 'listing' ? 'report.titleListing' :
-/components/shared/ReportDialog.tsx:133: (target as any).kind === 'rating' ? 'report.titleRating' :
-/components/shared/ReportDialog.tsx:138: target.kind === 'listing' ? (target.title ?? `#${target.publicId}`) :
-/components/shared/ReportDialog.tsx:167: <p className="py-3 text-sm text-fg-muted">{t('common.loading')}</p>
-/components/shared/ThemeSwitcher.tsx:15: aria-label={mode === 'day' ? "Tungi rejimga o'tish" : "Kunduzgi rejimga o'tish"}
-/components/shared/TranslateButton.tsx:46: disabled={state === 'loading'}
-/components/shared/TranslateButton.tsx:52: : 'bg-bg-subtle text-fg-muted hover:bg-bg-elevated hover:text-fg'
-/components/shared/TranslateButton.tsx:58: {state === 'loading' ? (
-/components/shared/TranslateButton.tsx:75: {state === 'loading'
-/components/shared/TranslateButton.tsx:125: disabled={state === 'loading'}
-/components/shared/TranslateButton.tsx:131: : 'bg-bg-subtle text-fg-muted hover:bg-bg-elevated hover:text-fg'
-/components/shared/TranslateButton.tsx:135: {state === 'loading' ? (
-/components/shared/TranslateButton.tsx:143: {state === 'loading'
-/components/ui/Avatar.tsx:14: export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-/components/ui/Badge.tsx:18: warning: 'bg-warning/12 text-warning',
-/components/ui/Badge.tsx:20: info: 'bg-info/12 text-info',
-/components/ui/Badge.tsx:21: outline: 'border border-border bg-transparent text-fg',
-/components/ui/Button.tsx:26: 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
-/components/ui/Card.tsx:41: <h3 ref={ref} className={cn('font-display text-lg font-semibold text-fg', className)} {...props} />
-/components/ui/Chip.tsx:19: warning: 'chip-warning',
-/components/ui/Chip.tsx:21: info: 'chip-info',
-/components/ui/Modal.tsx:14: size?: 'sm' | 'md' | 'lg' | 'xl';
-/components/ui/Modal.tsx:22: md: 'max-w-lg',
-/components/ui/Toast.tsx:9: type ToastType = 'success' | 'error' | 'warning' | 'info';
-/components/ui/Toast.tsx:50: warning: 'toast-warning',
-/components/ui/Toast.tsx:51: info: 'toast-info',
-/components/ui/Toast.tsx:128: useToastStore.getState().add({ type: 'warning', title, message, href }),
-/components/ui/Toast.tsx:130: useToastStore.getState().add({ type: 'info', title, message, href }),
-/components/ui/Toast.tsx:133: type: 'info',
-/lib/api/auth.ts:81: typeof data.error === 'string'
-/lib/api/auth.ts:83: : typeof data.message === 'string'
-/lib/api/client.ts:62: if (typeof t === 'string' && t.length > 20) return t;
-/lib/api/client.ts:79: if (typeof t === 'string' && t.length > 20) return t;
-/lib/api/client.ts:88: // Replaces the old `isRefreshing` flag + `refreshQueue` array with a single
-/lib/api/client.ts:241: (pathname.startsWith('/sellers') && !pathname.startsWith('/sellers/following'));
-/lib/api/client.ts:259: if (typeof data?.error === 'string') return data.error;
-/lib/api/client.ts:260: if (typeof data?.message === 'string') return data.message;
-/lib/api/client.ts:261: if (typeof data?.detail === 'string') return data.detail;
-/lib/api/client.ts:268: } else if (firstKey && typeof data[firstKey] === 'string') {
-/lib/api/moderation.ts:16: | 'pending'
-/lib/api/moderation.ts:36: report_type: 'listing' | 'seller';
-/lib/api/moderation.ts:127: targetStatus: 'good' | 'warning' | 'restricted',
-/lib/api/moderation.ts:270: status?: 'good' | 'warning' | 'restricted' | 'blocked';
-/lib/api/moderation.ts:290: report_type?: 'listing' | 'seller';
-/lib/api/notifications.ts:14: | 'rating'
-/lib/hooks/useForm.ts:25: type FormState = 'idle' | 'saving' | 'saved' | 'error';
-/lib/hooks/useForm.ts:66: if (state === 'saving') return;
-/lib/hooks/useForm.ts:77: setState('saving');
-/lib/hooks/useForm.ts:117: saving: state === 'saving',
-/lib/i18n/runtime.ts:63: return typeof cursor === 'string' ? cursor : null;
-/lib/store/ambient.ts:22: nameUz: "O'chirilgan",
-/lib/store/ambient.ts:118: }), // Don't persist `isPlaying` to prevent unexpected sound on refresh/startup
-/lib/store/auth.ts:33: status?: 'good' | 'warning' | 'restricted' | 'blocked';
-/lib/translation/provider.ts:55: [/O'/g, 'Ў'], [/o'/gi, 'ў'],
-/lib/translation/provider.ts:56: [/G'/g, 'Ғ'], [/g'/gi, 'ғ'],
-/lib/translation/provider.ts:57: [/O'/g, 'Ў'], [/o'/gi, 'ў'],
-/lib/translation/provider.ts:58: [/G'/g, 'Ғ'], [/g'/gi, 'ғ'],
-/lib/translation/provider.ts:107: async translate(text, targetLocale, sourceLocale = 'auto') {
-/lib/translation/provider.ts:110: const key = cacheKey(text, 'uz-cyrl', sourceLocale ?? 'auto');
-/lib/translation/provider.ts:112: return { text: cache.get(key)!, fromLocale: sourceLocale ?? 'auto', toLocale: 'uz-cyrl', cached: true };
-/lib/translation/provider.ts:121: return { text: cyrl, fromLocale: sourceLocale ?? 'auto', toLocale: 'uz-cyrl', cached: false };
-/lib/translation/provider.ts:125: const source = sourceLocale === 'auto' ? 'auto' : (LOCALE_TO_ISO[sourceLocale] ?? 'auto');
-/lib/translation/provider.ts:129: if (target === source && source !== 'auto') {
-/lib/translation/useTranslation.ts:17: export type TranslationState = 'idle' | 'loading' | 'translated' | 'error';
-/lib/translation/useTranslation.ts:44: if (state === 'loading') return;
-/lib/translation/useTranslation.ts:52: setState('loading');
-/lib/utils/errors.ts:42: .filter((v): v is string => typeof v === 'string')
-/lib/utils/errors.ts:56: return 'errors.somethingWrong';
-/lib/utils/errors.ts:71: } else if (typeof messages === 'string') {
-/lib/utils/format.ts:80: if (isEn) return `${m}\u00A0minutes ago`;
-/lib/utils/format.ts:88: if (isEn) return `${h}\u00A0hours ago`;
-/lib/utils/format.ts:96: if (isEn) return `${d}\u00A0days ago`;
-/lib/utils/format.ts:104: if (isEn) return `${w}\u00A0weeks ago`;
-/lib/utils/format.ts:112: if (isEn) return `${mo}\u00A0months ago`;
-/lib/utils/format.ts:119: if (isEn) return `${y}\u00A0years ago`;
-/lib/utils/format.ts:123: export function formatDate(date: Date | string, format: 'short' | 'long' = 'short'): string {
-/lib/utils/format.ts:128: return d.toLocaleDateString('uz-UZ', { day: 'numeric', month: 'long', year: 'numeric' });
-/lib/utils/leaflet.ts:55: reject(new Error('leaflet_global_missing'));
-/lib/utils/leaflet.ts:67: export const TILE_URL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-/lib/utils/search.ts:15: а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ж: 'j', з: 'z',
-/lib/utils/search.ts:16: и: 'i', й: 'y', к: 'k', л: 'l', м: 'm', н: 'n', о: 'o', п: 'p',
-/lib/utils/search.ts:19: ё: 'yo', ғ: 'gh', қ: 'q', ҳ: 'h', ў: 'o',
-/lib/utils/search.ts:21: А: 'a', Б: 'b', В: 'v', Г: 'g', Д: 'd', Е: 'e', Ж: 'j', З: 'z',
-/lib/utils/search.ts:22: И: 'i', Й: 'y', К: 'k', Л: 'l', М: 'm', Н: 'n', О: 'o', П: 'p',
-/lib/utils/search.ts:25: Ё: 'yo', Ғ: 'gh', Қ: 'q', Ҳ: 'h', Ў: 'o',
-/lib/utils/search.ts:55: .replace(/gh/g, 'g')
-/lib/utils/search.ts:61: .replace(/yo/g, 'o')
-/lib/utils/validation.ts:33: const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
-/lib/ws/chatSocket.ts:122: } else if (data.type === 'typing' && this.onTypingCb) {
-/lib/ws/chatSocket.ts:181: this.ws.send(JSON.stringify({ type: 'typing', is_typing: isTyping }));
-/middleware.ts:8: // Per user request: Loginsiz hech narsa ko'rinmasin! (marketplace, listings, etc. require login)
-/middleware.ts:52: // Per strict requirement: Loginsiz hech narsa ko'rinmasin!
-/middleware.ts:91: // Auth guard — redirect unauthenticated users to /auth. Loginsiz hech narsa ko'rinmasin!
-/tailwind.config.ts:18: 'display-lg',
-/tailwind.config.ts:36: 'btn-lg',
-/tailwind.config.ts:42: 'chip-warning',
-/tailwind.config.ts:44: 'chip-info',
-/tailwind.config.ts:114: 'lg': '16px',
+/app/admin/analytics/page.tsx:228: sub: `${formatNumber(stats.listings.pending ?? 0)} ${t('admin.pendingʻ).toLowerCase()}`,
+/app/admin/analytics/page.tsx:253: { status: 'pendingʻ, count: 234 },
+/app/admin/analytics/page.tsx:302: {new Date().toLocaleDateString(undefined, { weekday: 'longʻ, year: 'numeric', month: 'longʻ, day: 'numeric' })}
+/app/admin/analytics/page.tsx:331: <p className="text-sm text-fg-muted">{t('common.loadingʻ)}</p>
+/app/admin/analytics/page.tsx:403: const translatedName = name === 'active' ? t('listings.active') : name === 'pendingʻ ? t('listings.pendingʻ) : name === 'sold' ? t('listings.sold') : name === 'rejected' ? t('listings.rejected') : name === 'draft' ? t('listings.draft') : name;
+/app/admin/analytics/page.tsx:414: pending: 'bg-warningʻ,
+/app/admin/analytics/page.tsx:424: s.status === 'pendingʻ ? t('listings.pendingʻ) :
+/app/admin/analytics/page.tsx:466: <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-fg-subtle">{t('Analytics.createListingʻ)}</p>
+/app/admin/analytics/page.tsx:527: labelFormatter={(label) => typeof label === 'stringʻ ? label.replace(/_/g, ' ') : label}
+/app/admin/audit/page.tsx:35: user_warned: 'bg-warning/12 text-warningʻ,
+/app/admin/audit/page.tsx:41: comment_removed: 'bg-info/12 text-infoʻ,
+/app/admin/broadcasts/detail/page.tsx:193: variant={isSent ? 'success' : b.status === 'draft' ? 'default' : 'warningʻ}
+/app/admin/broadcasts/page.tsx:53: scheduled: 'warningʻ,
+/app/admin/broadcasts/page.tsx:56: sending: 'warningʻ,
+/app/admin/broadcasts/page.tsx:94: toast.error(t('validation.messageTooLongʻ));
+/app/admin/broadcasts/page.tsx:98: toast.error(t('validation.titleTooLongʻ));
+/app/admin/broadcasts/page.tsx:171: animate={{ opacity: 1, height: 'autoʻ }}
+/app/admin/health/page.tsx:117: { icon: Package, label: t('AdminHealth.activeListings'),     value: ops.platform.listings_active, sub: `${ops.platform.listings_pending} ${t('AdminHealth.pendingʻ)}`, tone: 'bg-success/12 text-success' },
+/app/admin/health/page.tsx:118: { icon: Bell,    label: t('AdminHealth.unreadNotifications'), value: ops.notifications.unread_total, sub: `${ops.notifications.created_24h} ${t('AdminHealth.today')}`, tone: 'bg-info/12 text-infoʻ },
+/app/admin/health/page.tsx:187: {loading ? t('AdminHealth.checkingʻ) : t('AdminHealth.endpointError')}
+/app/admin/listings/detail/edit/page.tsx:162: else if (form.title.trim().length > 100) e.title = t('validation.titleTooLongʻ);
+/app/admin/listings/detail/edit/page.tsx:164: else if (form.description.trim().length > 2000) e.description = t('validation.descriptionTooLongʻ);
+/app/admin/listings/detail/edit/page.tsx:303: <p className="text-eyebrow">{t('listings.editListingʻ)}</p>
+/app/admin/listings/detail/edit/page.tsx:352: {t('listings.primaryPhotoʻ)}
+/app/admin/listings/detail/edit/page.tsx:421: {t('create.publishingʻ)}
+/app/admin/listings/detail/page.tsx:66: .adminList({ report_type: 'listingʻ, page_size: 50 })
+/app/admin/listings/detail/page.tsx:195: : listing.status === 'sold' ? 'infoʻ
+/app/admin/listings/detail/page.tsx:196: : 'warningʻ
+/app/admin/listings/detail/page.tsx:318: variant={r.status === 'pendingʻ ? 'warningʻ : r.status === 'resolved_valid' ? 'success' : 'default'}
+/app/admin/listings/detail/page.tsx:412: {(listing.status === 'pendingʻ || listing.status === 'pending_review') && (
+/app/admin/listings/detail/page.tsx:424: {(listing.status === 'pendingʻ || listing.status === 'pending_review' || listing.status === 'active') && (
+/app/admin/listings/page.tsx:24: const STATUS_OPTIONS = ['all', 'pendingʻ, 'active', 'rejected', 'sold', 'archived'] as const;
+/app/admin/listings/page.tsx:29: pending: 'warningʻ,
+/app/admin/listings/page.tsx:40: const [statusFilter, setStatusFilter] = useState<StatusOption>('pendingʻ);
+/app/admin/listings/page.tsx:235: : 'bg-bg-subtle text-fg-muted hover:bg-bg-elevated hover:text-fgʻ,
+/app/admin/listings/page.tsx:364: <EmptyState icon={LayoutGrid} title={t('marketplace.noResults')} description={t('marketplace.tryAdjustingʻ)} />
+/app/admin/listings/page.tsx:390: t('admin.pendingʻ),
+/app/admin/listings/page.tsx:477: {l.status === 'pendingʻ && (
+/app/admin/listings/page.tsx:547: : 'Reject listingʻ}
+/app/admin/moderation/detail/page.tsx:47: pending: 'warningʻ,
+/app/admin/moderation/detail/page.tsx:48: under_review: 'infoʻ,
+/app/admin/moderation/detail/page.tsx:186: {report.report_type === 'listingʻ
+/app/admin/moderation/detail/page.tsx:187: ? t('report.titleListingʻ)
+/app/admin/moderation/detail/page.tsx:219: {report.report_type === 'listingʻ ? (
+/app/admin/moderation/detail/page.tsx:335: {report.status === 'pendingʻ && (
+/app/admin/moderation/detail/page.tsx:348: {['pendingʻ, 'under_review'].includes(report.status) && (
+/app/admin/moderation/detail/page.tsx:396: <dt className="text-fg-muted">{t('adminMod.assignedToʻ)}</dt>
+/app/admin/moderation/detail/page.tsx:405: ['warningʻ, 'restricted'].includes(report.reported_user.status ?? '') && (
+/app/admin/moderation/detail/page.tsx:439: currentStatus: 'warningʻ | 'restricted';
+/app/admin/moderation/detail/page.tsx:443: const [targetStatus, setTargetStatus] = useState<'good' | 'warningʻ>('good');
+/app/admin/moderation/detail/page.tsx:446: const options: { value: 'good' | 'warningʻ; label: string }[] =
+/app/admin/moderation/detail/page.tsx:448: ? [{ value: 'good', label: 'good' }, { value: 'warningʻ, label: 'warningʻ }]
+/app/admin/moderation/page.tsx:22: const [statusFilter, setStatusFilter] = useState<'all' | 'pendingʻ | 'under_review' | 'resolved_valid' | 'resolved_invalid'>('pendingʻ);
+/app/admin/moderation/page.tsx:53: {(['all','pendingʻ,'under_review','resolved_valid','resolved_invalid'] as const).map(s => (
+/app/admin/moderation/page.tsx:72: <Badge variant={r.status === 'pendingʻ ? 'warningʻ : r.status.includes('valid') ? 'success' : 'default'} size="sm">
+/app/admin/page.tsx:313: <tr className="bg-bg hover:bg-bg-subtle transition-all duration-300 rounded-xl group shadow-sm hover:shadow-md cursor-pointer" onClick={() => router.push('/admin/listings?status=pendingʻ)}>
+/app/admin/page.tsx:408: const val = item.key === '_api' ? (Object.keys(healthStatus).length > 0 ? 'ok' : loading ? 'checkingʻ : 'error') : (healthStatus[item.key] ?? (loading ? 'checkingʻ : 'unknown'));
+/app/admin/page.tsx:410: const isChecking = val === 'checkingʻ;
+/app/admin/page.tsx:418: <div className={`p-2 rounded-xl bg-bg-subtle group-hover:bg-bg-elevated transition-colors ${isOk ? 'text-fgʻ : 'text-danger'}`}>
+/app/admin/page.tsx:425: {isOk ? t('Admin.nominal') : isChecking ? t('Admin.syncingʻ) : t('Admin.fault')}
+/app/admin/profile/page.tsx:43: if (bio) fd.append('bioʻ, bio);
+/app/admin/profile/page.tsx:144: <label className="mb-1.5 block text-sm font-medium text-fg">{t('profile.bioʻ)}</label>
+/app/admin/ratings/page.tsx:129: className={`h-3 w-3 ${n <= r.score ? 'fill-warning text-warningʻ : 'text-border-strongʻ}`}
+/app/admin/security/page.tsx:62: .catch(() => setError(t('errors.somethingWrongʻ)))
+/app/admin/users/detail/page.tsx:47: warning: 'warningʻ,
+/app/admin/users/detail/page.tsx:59: status: 'good' | 'warningʻ | 'restricted' | 'blocked';
+/app/admin/users/detail/page.tsx:126: warn: 'warningʻ,
+/app/admin/users/detail/page.tsx:227: <dt className="text-xs text-fg-subtle">{t('profile.followingʻ)}</dt>
+/app/admin/users/detail/page.tsx:273: <Badge variant={r.status === 'pendingʻ ? 'warningʻ : 'default'} size="sm">
+/app/admin/users/detail/page.tsx:301: disabled={actionLoading || user.status === 'warningʻ}
+/app/admin/users/detail/page.tsx:346: <Badge variant={r.status === 'pendingʻ ? 'warningʻ : 'default'} size="sm">
+/app/admin/users/page.tsx:36: status: 'good' | 'warningʻ | 'restricted' | 'blocked';
+/app/admin/users/page.tsx:49: warning: 'warningʻ,
+/app/admin/users/page.tsx:98: warn: 'warningʻ, restrict: 'restricted', block: 'blocked', unblock: 'good'
+/app/admin/users/page.tsx:164: <option value="warning">{t('userStatus.warningʻ)}</option>
+/app/admin/users/page.tsx:204: t('admin.pendingʻ),
+/app/admin/users/page.tsx:205: t('sellers.ratingʻ),
+/app/admin/users/page.tsx:335: {formatDate(selectedUser.date_joined, 'longʻ)}
+/app/auth/page.tsx:157: animate={{ opacity: 1, y: 0, height: 'autoʻ }}
+/app/auth/page.tsx:190: animate={{ opacity: 1, y: 0, height: 'autoʻ }}
+/app/auth/page.tsx:213: {t('auth.verifyingʻ)}
+/app/auth/page.tsx:248: <Suspense fallback={<div className="min-h-screen flex items-center justify-center">{t('common.loadingʻ) || 'Loading...'}</div>}>
+/app/chat/page.tsx:16: import { ReportDialog } from '@/components/shared/ReportDialogʻ;
+/app/chat/page.tsx:380: ? 'bg-brand-primary/10 text-fgʻ
+/app/chat/page.tsx:390: <span className={`truncate text-sm font-semibold ${isActive ? 'text-brand-primary' : 'text-fgʻ}`}>
+/app/chat/page.tsx:530: {locale === 'ru' ? 'Начните разговор' : locale === 'en' ? 'Start the conversation' : 'Suhbatni boshlangʻ}
+/app/chat/page.tsx:554: : new Date(msg.created_at).toLocaleDateString(locale === 'ru' ? 'ru-RU' : locale === 'en' ? 'en-US' : 'uz-UZ', { day: 'numeric', month: 'longʻ });
+/app/chat/page.tsx:591: ? `bg-brand-primary text-white ${isFirstInGroup ? 'rounded-t-2xl' : 'rounded-t-lgʻ} ${isLastInGroup ? 'rounded-bl-2xl rounded-br-sm' : 'rounded-b-lgʻ}`
+/app/chat/page.tsx:592: : `bg-bg-elevated border border-border text-fg ${isFirstInGroup ? 'rounded-t-2xl' : 'rounded-t-lgʻ} ${isLastInGroup ? 'rounded-br-2xl rounded-bl-sm' : 'rounded-b-lgʻ}`
+/app/chat/page.tsx:693: e.target.style.height = 'autoʻ;
+/app/dashboard/page.tsx:89: {t('nav.createListingʻ)}
+/app/dashboard/page.tsx:113: tone: 'bg-warning/12 text-warningʻ,
+/app/dashboard/page.tsx:119: tone: 'bg-info/12 text-infoʻ,
+/app/error.tsx:7: import { Logo } from '@/components/shared/Logoʻ;
+/app/error.tsx:48: <p className="text-eyebrow">{t('errors.somethingWrongʻ)}</p>
+/app/global-error.tsx:26: description: "Iltimos, keyinroq qaytadan urinib koʻring",
+/app/global-error.tsx:43: title: 'Something went wrongʻ,
+/app/layout.tsx:33: keywords: ['chorva', 'qoramol', "qoʻy", 'echki', 'ot', 'tuya', 'parranda', 'bozor', 'savdoʻ, 'sayin', 'livestock', 'marketplace'],
+/app/layout.tsx:51: { url: '/favicon.svgʻ, type: 'image/svg+xml' },
+/app/layout.tsx:54: { url: '/favicon.svgʻ, type: 'image/svg+xml' },
+/app/listings/detail/edit/page.tsx:163: else if (form.title.trim().length > 100) e.title = t('validation.titleTooLongʻ);
+/app/listings/detail/edit/page.tsx:165: else if (form.description.trim().length > 2000) e.description = t('validation.descriptionTooLongʻ);
+/app/listings/detail/edit/page.tsx:169: else if (Number(form.weight_kg) > 9999) e.weight_kg = t('validation.maxWeight') || 'Maksimal 9999 kgʻ;
+/app/listings/detail/edit/page.tsx:308: <p className="text-eyebrow">{t('listings.editListingʻ)}</p>
+/app/listings/detail/edit/page.tsx:359: {t('listings.primaryPhotoʻ)}
+/app/listings/detail/edit/page.tsx:428: {t('create.publishingʻ)}
+/app/listings/detail/page.tsx:38: import { ReportDialog } from '@/components/shared/ReportDialogʻ;
+/app/listings/detail/page.tsx:231: aria-label={`${t('common.viewImage' as any) || 'Rasmni koʻrish'} ${i + 1}`}
+/app/listings/detail/page.tsx:380: animate={{ opacity: 1, y: 0, height: 'autoʻ }}
+/app/listings/detail/page.tsx:491: value={`${listing.weight_kg} ${t('animal.kgʻ)}`}
+/app/listings/detail/page.tsx:510: : typeof listing.breed === 'stringʻ
+/app/listings/detail/page.tsx:716: animate={{ opacity: 1, y: 0, height: 'autoʻ }}
+/app/listings/detail/page.tsx:836: ? { kind: 'listingʻ, publicId: listing.id as any, title: listing.title }
+/app/listings/detail/page.tsx:909: ? `https://yandex.uz/maps/?rtext=${userPos.lat},${userPos.lng}~${lat},${lng}&rtt=autoʻ
+/app/listings/detail/page.tsx:916: ? `https://yandex.uz/maps/?rtext=${userPos.lat},${userPos.lng}~${lat},${lng}&rtt=autoʻ
+/app/listings/my/page.tsx:38: type StatusFilter = 'all' | 'active' | 'pendingʻ | 'sold' | 'rejected' | 'expired';
+/app/listings/my/page.tsx:42: pending:        { variant: 'warningʻ,  labelKey: 'listings.pendingʻ,  icon: Clock },
+/app/listings/my/page.tsx:43: pending_review: { variant: 'warningʻ,  labelKey: 'listings.pendingʻ,  icon: Clock },
+/app/listings/my/page.tsx:44: sold:           { variant: 'infoʻ,     labelKey: 'listings.sold',     icon: ShoppingCart },
+/app/listings/my/page.tsx:121: status: l.status === 'pending_review' ? 'pendingʻ : l.status,
+/app/listings/my/page.tsx:138: { key: 'pendingʻ,  labelKey: 'listings.pendingʻ },
+/app/listings/my/page.tsx:147: { icon: Eye,          labelKey: 'marketplace.trendingʻ,    value: items.reduce((s, l) => s + (l.view_count ?? 0), 0), tone: 'bg-info/12 text-infoʻ },
+/app/listings/my/page.tsx:210: active ? 'text-brand-primary' : 'text-fg-muted hover:text-fgʻ
+/app/listings/my/page.tsx:237: animate={{ opacity: 1, height: 'autoʻ }}
+/app/listings/my/page.tsx:245: {filter === 'pendingʻ && (
+/app/listings/my/page.tsx:248: animate={{ opacity: 1, height: 'autoʻ }}
+/app/listings/my/page.tsx:417: {['active', 'pendingʻ, 'pending_review', 'rejected', 'expired'].includes(l.status) && (
+/app/listings/my/page.tsx:438: toast.error(t('listings.bumpError' as any) || 'Failed to bump listingʻ);
+/app/listings/my/page.tsx:455: toast.error(t('listings.renewError' as any) || 'Failed to renew listingʻ);
+/app/listings/my/page.tsx:483: toast.error(t('listings.restoreError' as any) || 'Failed to restore listingʻ);
+/app/listings/nearby/page.tsx:59: | { kind: 'requestingʻ }
+/app/listings/nearby/page.tsx:81: setGeo({ kind: 'requestingʻ });
+/app/listings/nearby/page.tsx:100: if (geo.kind === 'requestingʻ || geo.kind === 'idle') return;
+/app/listings/nearby/page.tsx:135: setGeo({ kind: 'requestingʻ });
+/app/listings/nearby/page.tsx:171: {geo.kind === 'requestingʻ && (
+/app/listings/nearby/page.tsx:174: {t('nearby.requestingʻ)}
+/app/listings/nearby/page.tsx:291: {geo.kind === 'requestingʻ ? (
+/app/listings/nearby/page.tsx:306: <p className="text-sm text-fg-muted">{t('common.loadingʻ)}</p>
+/app/listings/new/page.tsx:32: const VACCINATION_KEYS = ['animal.vaccinatedYes', 'animal.vaccinatedPartial', 'animal.vaccinatedNoʻ] as const;
+/app/listings/new/page.tsx:97: else if (form.title.trim().length > 100) e.title = t('validation.titleTooLongʻ);
+/app/listings/new/page.tsx:99: else if (form.description.trim().length > 2000) e.description = t('validation.descriptionTooLongʻ);
+/app/listings/new/page.tsx:112: else if (Number(form.weight_kg) > 9999) e.weight_kg = t('validation.maxWeight') || 'Maksimal 9999 kgʻ;
+/app/listings/new/page.tsx:235: else if (key === 'unknown') displayMsg = t('errors.somethingWrongʻ);
+/app/listings/new/page.tsx:236: else displayMsg = t(`errors.${key}` as any) ?? t('errors.somethingWrongʻ);
+/app/listings/new/page.tsx:332: {t('animal.weight')} ({t('animal.kgʻ)}) <span className="text-danger">*</span>
+/app/listings/new/page.tsx:339: onChange={(e) => set('weight_kgʻ, e.target.value)}
+/app/listings/new/page.tsx:431: {t('listings.primaryPhotoʻ)}
+/app/listings/new/page.tsx:497: // Koʻcha nomini location'ga YOZMAYMIZ — faqat region/district match qilamiz
+/app/listings/new/page.tsx:583: className={`relative inline-flex h-6 w-11 flex-shrink-0 rounded-full transition-colors ${form.is_negotiable ? 'bg-brand-primary' : 'bg-border-strongʻ}`}
+/app/listings/new/page.tsx:600: <><Loader2 className="h-4 w-4 animate-spin" strokeWidth={2.25} />{t('create.publishingʻ)}</>
+/app/listings/new/page.tsx:602: <><Save className="h-4 w-4" strokeWidth={1.75} />{t('create.publishListingʻ)}</>
+/app/listings/page.tsx:222: animate={{ opacity: 1, height: 'autoʻ }}
+/app/listings/page.tsx:269: description={t('marketplace.tryAdjustingʻ)}
+/app/loading.tsx:1: import { Logo } from '@/components/shared/Logoʻ;
+/app/not-found.tsx:6: import { Logo } from '@/components/shared/Logoʻ;
+/app/notifications/page.tsx:57: message_received: 'bg-info/12 text-infoʻ,
+/app/notifications/page.tsx:61: listing_expired: 'bg-warning/12 text-warningʻ,
+/app/notifications/page.tsx:63: rating: 'bg-warning/12 text-warningʻ,
+/app/notifications/page.tsx:68: system_alert: 'bg-warning/12 text-warningʻ,
+/app/notifications/page.tsx:69: listing_status: 'bg-info/12 text-infoʻ,
+/app/notifications/page.tsx:72: listing_expiring_soon: 'bg-warning/12 text-warningʻ,
+/app/notifications/page.tsx:81: if (filter === 'social') return ['follow', 'ratingʻ].includes(n.notification_type);
+/app/notifications/page.tsx:189: active ? 'text-brand-primary' : 'text-fg-muted hover:text-fgʻ
+/app/notifications/page.tsx:326: <p className={`text-sm font-semibold ${n.is_read ? 'text-fgʻ : 'text-fgʻ}`}>
+/app/page.tsx:8: import { Hero } from '@/components/landing/Heroʻ;
+/app/profile/edit/page.tsx:86: if (form.bio) fd.append('bioʻ, form.bio);
+/app/profile/edit/page.tsx:121: else if (key === 'unknown') displayMsg = t('errors.somethingWrongʻ);
+/app/profile/edit/page.tsx:122: else displayMsg = t(`errors.${key}` as any) ?? t('errors.somethingWrongʻ);
+/app/profile/edit/page.tsx:222: {t('profile.bioʻ)}
+/app/profile/edit/page.tsx:314: {t('common.loadingʻ)}
+/app/profile/favorites/page.tsx:84: view === 'grid' ? 'bg-bg-subtle text-fgʻ : 'text-fg-muted hover:text-fgʻ
+/app/profile/favorites/page.tsx:94: view === 'list' ? 'bg-bg-subtle text-fgʻ : 'text-fg-muted hover:text-fgʻ
+/app/profile/guide/page.tsx:20: desc: 'Hech qanday cheklovlar yoʻq. Barcha funksiyalardan toʻliq foydalanishingiz mumkin: e'lon yaratish, chat, va boshqalar.'
+/app/profile/guide/page.tsx:26: en: 'Warningʻ,
+/app/profile/guide/page.tsx:34: desc: 'E'lon yaratish va chat faoliyati cheklanadi. Faqat mavjud e'lonlarni koʻra olasiz.'
+/app/profile/guide/page.tsx:41: desc: 'Hisob toʻliq muzlatiladi. Barcha e'lonlar yashiriladi, hech qanday amal bajarib boʻlmaydi.'
+/app/profile/guide/page.tsx:156: {t('guidePage.goodRatingʻ)}
+/app/profile/page.tsx:91: { icon: Users, label: t('profile.followers'), value: profile.followers, tone: 'bg-info/12 text-infoʻ },
+/app/profile/page.tsx:92: { icon: Eye, label: t('marketplace.trendingʻ), value: profile.total_views, tone: 'bg-warning/12 text-warningʻ },
+/app/profile/page.tsx:136: {profile.status === 'warningʻ && (
+/app/profile/page.tsx:139: {t('userStatus.warningʻ)}
+/app/profile/page.tsx:173: {t('nav.createListingʻ)}
+/app/profile/page.tsx:197: <span>{t('profile.followingʻ)}</span>
+/app/profile/page.tsx:247: active ? 'text-brand-primary' : 'text-fg-muted hover:text-fgʻ
+/app/profile/page.tsx:315: <dt className="text-fg-muted">{t('profile.followingʻ)}</dt>
+/app/profile/page.tsx:330: { href: '/sellers/followingʻ, icon: Users, label: t('profile.followedSellers') },
+/app/profile/referral/page.tsx:141: placeholder="DOʻSTINGIZ KODI"
+/app/profile/reports/detail/page.tsx:37: pending: { variant: 'warningʻ, key: 'adminMod.status_pendingʻ, icon: Clock },
+/app/profile/reports/detail/page.tsx:38: under_review: { variant: 'infoʻ, key: 'adminMod.status_under_review', icon: ShieldAlert },
+/app/profile/reports/detail/page.tsx:104: {report.report_type === 'listingʻ
+/app/profile/reports/detail/page.tsx:105: ? t('report.titleListingʻ as any)
+/app/profile/reports/detail/page.tsx:158: {report.report_type === 'listingʻ ? (
+/app/profile/reports/page.tsx:24: pending: { variant: 'warningʻ, key: 'adminMod.status_pendingʻ },
+/app/profile/reports/page.tsx:25: under_review: { variant: 'infoʻ, key: 'adminMod.status_under_review' },
+/app/profile/reports/page.tsx:91: {r.report_type === 'listingʻ ? (
+/app/profile/reports/page.tsx:100: {r.report_type === 'listingʻ
+/app/profile/security/page.tsx:47: variant: 'success' | 'infoʻ | 'error';
+/app/profile/security/page.tsx:58: info: 'border-info/30 bg-info/10 text-infoʻ,
+/app/profile/security/page.tsx:61: const Icon = toast.variant === 'success' ? CheckCircle2 : toast.variant === 'infoʻ ? Info : AlertTriangle;
+/app/profile/security/page.tsx:146: setToast({ message: t('errors.somethingWrongʻ), variant: 'error' });
+/app/profile/security/page.tsx:160: setToast({ message: ts('noOtherSessions'), variant: 'infoʻ });
+/app/profile/security/page.tsx:163: setToast({ message: t('errors.somethingWrongʻ), variant: 'error' });
+/app/profile/security/page.tsx:255: animate={{ opacity: 1, height: 'autoʻ }}
+/app/profile/settings/page.tsx:35: on ? 'bg-brand-primary' : 'bg-border-strongʻ
+/app/search/page.tsx:291: tab === 'listings' ? 'text-brand-primary' : 'text-fg-muted hover:text-fgʻ
+/app/search/page.tsx:303: tab === 'sellers' ? 'text-brand-primary' : 'text-fg-muted hover:text-fgʻ
+/app/search/page.tsx:329: animate={{ opacity: 1, height: 'autoʻ }}
+/app/sellers/detail/page.tsx:27: import { ReportDialog } from '@/components/shared/ReportDialogʻ;
+/app/sellers/detail/page.tsx:92: label: t('sellers.ratingʻ),
+/app/sellers/detail/page.tsx:257: active ? 'text-brand-primary' : 'text-fg-muted hover:text-fgʻ
+/app/sellers/following/page.tsx:65: <h1 className="display-md mt-2">{t('profile.followingʻ)}</h1>
+/app/sellers/following/page.tsx:77: title={t('empty.noFollowingʻ)}
+/app/sellers/following/page.tsx:166: animate={{ opacity: 1, height: 'autoʻ }}
+/app/sellers/page.tsx:18: | { kind: 'requestingʻ }
+/app/sellers/page.tsx:38: setGeo({ kind: 'requestingʻ });
+/app/sellers/page.tsx:155: active ? 'text-brand-primary' : 'text-fg-muted hover:text-fgʻ
+/app/sellers/page.tsx:182: description={t('sellers.tryAdjustingʻ as any) ?? 'Boshqa qidiruv so\'zlarini sinab ko\'ring yoki joylashuvni o\'zgartiringʻ}
+/app/terms/page.tsx:28: <p className="text-fg-muted leading-relaxed">{t('terms.introʻ)}</p>
+/components/auth/LandingRedirect.tsx:11: * va Landing yoxud Auth sahifasida tursa, avtomatik ravishda uni Dashboardga yoʻnaltiradi.
+/components/landing/TrustSection.tsx:31: tone: 'bg-warning/12 text-warningʻ,
+/components/landing/TrustSection.tsx:43: tone: 'bg-info/12 text-infoʻ,
+/components/layout/AdminLayout.tsx:31: import { Logo } from '@/components/shared/Logoʻ;
+/components/layout/AdminLayout.tsx:151: className={`inline-flex h-8 w-8 items-center justify-center rounded-lg text-fg-subtle hover:bg-bg-subtle hover:text-fg transition-colors ${collapsed ? '' : 'ml-autoʻ}`}
+/components/layout/AdminLayout.tsx:202: : 'text-fg-muted hover:bg-bg-subtle hover:text-fgʻ
+/components/layout/AdminLayout.tsx:273: transition={{ type: 'springʻ, damping: 30, stiffness: 320 }}
+/components/layout/AppNav.tsx:29: import { Logo } from '@/components/shared/Logoʻ;
+/components/layout/AppNav.tsx:91: transition={{ type: 'springʻ, damping: 30, stiffness: 320 }}
+/components/layout/AppNav.tsx:169: {t('nav.createListingʻ)}
+/components/layout/AppNav.tsx:320: : 'text-fg-muted hover:bg-bg-subtle hover:text-fgʻ
+/components/layout/AppNav.tsx:339: <span className="hidden lg:inline">{t('nav.createListingʻ)}</span>
+/components/layout/LandingFooter.tsx:5: import { Logo } from '@/components/shared/Logoʻ;
+/components/layout/LandingNav.tsx:7: import { Logo } from '@/components/shared/Logoʻ;
+/components/layout/MobileBottomNav.tsx:45: ...(!(user?.is_admin || user?.is_staff) ? [{ href: '/listings/new', icon: Plus, label: t('nav.createListingʻ), primary: true }] : []),
+/components/listings/CommentThread.tsx:11: import { ReportDialog } from '@/components/shared/ReportDialogʻ;
+/components/listings/CommentThread.tsx:149: animate={{ opacity: 1, height: 'autoʻ }}
+/components/listings/CommentThread.tsx:194: animate={{ opacity: 1, height: 'autoʻ }}
+/components/listings/CommentThread.tsx:380: {submitting ? t('common.loadingʻ) : t('comments.submit')}
+/components/listings/ListingCard.tsx:108: isFavorited ? 'text-danger' : 'text-fgʻ,
+/components/listings/ListingGalleryViewer.tsx:78: src={visibleImage?.image && !visibleImage.image.startsWith('/placeholder') ? visibleImage.image : '/placeholder.jpgʻ}
+/components/map/MapDiscovery.tsx:59: toast.error(t('Map.errorFetchingʻ) || 'Failed to fetch nearby listings');
+/components/profile/MyListingsManager.tsx:14: type ListingStatus = 'active' | 'sold' | 'pendingʻ | 'pending_review' | 'rejected' | 'draft' | 'archived' | 'expired';
+/components/profile/MyListingsManager.tsx:33: const [activeTab, setActiveTab] = useState<'all' | 'active' | 'sold' | 'pendingʻ | 'rejected' | 'archived' | 'draft'>('all');
+/components/profile/MyListingsManager.tsx:53: { key: 'pendingʻ, label: hasKey('listings.statusPendingʻ) ? t('listings.statusPendingʻ as any) : 'Tekshiruvda' },
+/components/profile/MyListingsManager.tsx:63: if (activeTab === 'pendingʻ) return l.status === 'pendingʻ || l.status === 'pending_review';
+/components/profile/MyListingsManager.tsx:145: if (tb.key === 'pendingʻ) return l.status === 'pendingʻ || l.status === 'pending_review';
+/components/profile/MyListingsManager.tsx:158: : 'bg-bg-subtle text-fg-muted hover:bg-bg-elevated hover:text-fgʻ
+/components/profile/MyListingsManager.tsx:186: {t('nav.createListingʻ)}
+/components/profile/MyListingsManager.tsx:211: {(l.status === 'pendingʻ || l.status === 'pending_review') && <span className="px-2 py-1 bg-warning text-white text-xs font-bold rounded-md shadow-sm uppercase tracking-wide">{t('listings.statusPendingʻ as any)}</span>}
+/components/profile/MyListingsManager.tsx:232: {(l.status === 'pendingʻ || l.status === 'pending_review') && (
+/components/profile/MyListingsManager.tsx:264: <button disabled={isMutatingThis} onClick={() => handleAction('delete', l.id)} className="btn btn-danger btn-sm px-3" aria-label="Oʻchirish">
+/components/providers/ClientAuthGuard.tsx:80: const { Logo } = require('@/components/shared/Logoʻ);
+/components/providers/TermsGate.tsx:82: setReferralMsg({ ok: true, text: res.data?.message ?? "Referral kod qoʻllanildi!" });
+/components/providers/TermsGate.tsx:119: <p className="text-fg-muted">{t('terms.introʻ)}</p>
+/components/providers/TermsGate.tsx:138: {submitting ? <><Loader2 className="h-4 w-4 animate-spin" strokeWidth={2.25} />{t('common.loadingʻ)}</> : <><CheckCircle2 className="h-4 w-4" strokeWidth={2.25} />{t('terms.accept')}</>}
+/components/sellers/FollowButton.tsx:66: {t('sellers.followingʻ)}
+/components/sellers/SellerRatingsThread.tsx:35: import { ReportDialog } from '@/components/shared/ReportDialogʻ;
+/components/sellers/SellerRatingsThread.tsx:186: kind: 'ratingʻ,
+/components/sellers/SellerRatingsThread.tsx:248: n <= Math.round(average) ? 'fill-warning text-warningʻ : 'text-border-strongʻ
+/components/sellers/SellerRatingsThread.tsx:317: n <= composeScore ? 'fill-warning text-warningʻ : 'text-border-strongʻ
+/components/sellers/SellerRatingsThread.tsx:445: n <= rating.score ? 'fill-warning text-warningʻ : 'text-border-strongʻ
+/components/shared/Ambient/AmbientControls.tsx:45: isPlaying ? 'bg-brand-accent/10 text-brand-accent' : 'text-fg-subtle hover:bg-bg-subtle hover:text-fgʻ
+/components/shared/Ambient/AmbientControls.tsx:93: : 'text-fg-muted hover:bg-bg-subtle hover:text-fgʻ
+/components/shared/AtmosphericBackground.tsx:7: variant?: 'heroʻ | 'section' | 'subtle';
+/components/shared/AtmosphericBackground.tsx:19: * (`app/page.tsx` via `Heroʻ) and the auth pages (`app/auth/*`). Functional
+/components/shared/AtmosphericBackground.tsx:20: * and admin pages use the calm, low-contrast `bgʻ/`surface-subtle` background
+/components/shared/AtmosphericBackground.tsx:24: variant = 'heroʻ,
+/components/shared/FloatingNearbyButton.tsx:112: transition={{ type: 'springʻ, stiffness: 380, damping: 28 }}
+/components/shared/FloatingNearbyButton.tsx:136: cursor: dragging ? 'grabbingʻ : 'grab',
+/components/shared/FloatingNearbyButton.tsx:145: transition={{ type: 'springʻ, stiffness: 400, damping: 20 }}
+/components/shared/LocationPicker.tsx:256: : (t('marketplace.geolocationError' as any) ?? 'Joylashuvni aniqlab boʻlmadi. Qayta urining.');
+/components/shared/LocationPicker.tsx:275: setLocationError(t('marketplace.geolocationUnsupported' as any) ?? 'Joylashuv aniqlash qoʻllab-quvvatlanmaydi');
+/components/shared/LocationPicker.tsx:294: // Status label: GPS belgisi qoʻyilgan yoki yoʻqligini koʻrsatadi — koʻcha nomi emas
+/components/shared/LocationPicker.tsx:298: ? (t('marketplace.geocodingʻ as any) ?? 'Joylashuv aniqlanmoqda...')
+/components/shared/LocationPicker.tsx:301: : (t('marketplace.mapTapToSetPin' as any) ?? 'Xaritani bosib GPS belgisini qo\'yingʻ);
+/components/shared/LocationSelector.tsx:156: districtDisabled ? 'text-fg-subtle' : 'text-fgʻ
+/components/shared/Logo.tsx:17: size?: 'xs' | 'sm' | 'md' | 'lgʻ | 'xl';
+/components/shared/OnboardingModal.tsx:54: uz: "Qoramol, qoʻy, echki, ot, tuya, parrandalar va boshqa chorva mollarini soting yoki xarid qiling. Har bir eʼlon xaritada koʻrsatiladi.",
+/components/shared/OnboardingModal.tsx:70: uz: "GPS orqali yaqin atrofdagi eʼlonlarni koʻring. Xaritada sotuvchilarning joylashuvini aniqlang va eng yaqinini toping.",
+/components/shared/OnboardingModal.tsx:78: color: 'bg-info/10 text-infoʻ,
+/components/shared/OnboardingModal.tsx:166: transition={{ type: 'springʻ, damping: 28, stiffness: 320 }}
+/components/shared/RatingDisplay.tsx:11: size?: 'sm' | 'md' | 'lgʻ;
+/components/shared/RatingDisplay.tsx:50: const tone = hasRatings && warning ? 'text-warningʻ : 'text-fg-subtle';
+/components/shared/ReportDialog.tsx:29: | { kind: 'listingʻ; publicId: number; title?: string }
+/components/shared/ReportDialog.tsx:33: | { kind: 'ratingʻ; publicId: number | string; fullName?: string };
+/components/shared/ReportDialog.tsx:77: if (target.kind === 'listingʻ) setReasons(cat.listing_reasons);
+/components/shared/ReportDialog.tsx:101: if (target.kind === 'listingʻ) {
+/components/shared/ReportDialog.tsx:107: } else if ((target as any).kind === 'ratingʻ) {
+/components/shared/ReportDialog.tsx:118: else if (code === 'cannot_report_own_listingʻ) setError(t('report.errorOwn'));
+/components/shared/ReportDialog.tsx:130: target.kind === 'listingʻ ? 'report.titleListingʻ :
+/components/shared/ReportDialog.tsx:133: (target as any).kind === 'ratingʻ ? 'report.titleRatingʻ :
+/components/shared/ReportDialog.tsx:138: target.kind === 'listingʻ ? (target.title ?? `#${target.publicId}`) :
+/components/shared/ReportDialog.tsx:167: <p className="py-3 text-sm text-fg-muted">{t('common.loadingʻ)}</p>
+/components/shared/ThemeSwitcher.tsx:15: aria-label={mode === 'day' ? "Tungi rejimga oʻtish" : "Kunduzgi rejimga oʻtish"}
+/components/shared/TranslateButton.tsx:46: disabled={state === 'loadingʻ}
+/components/shared/TranslateButton.tsx:52: : 'bg-bg-subtle text-fg-muted hover:bg-bg-elevated hover:text-fgʻ
+/components/shared/TranslateButton.tsx:58: {state === 'loadingʻ ? (
+/components/shared/TranslateButton.tsx:75: {state === 'loadingʻ
+/components/shared/TranslateButton.tsx:125: disabled={state === 'loadingʻ}
+/components/shared/TranslateButton.tsx:131: : 'bg-bg-subtle text-fg-muted hover:bg-bg-elevated hover:text-fgʻ
+/components/shared/TranslateButton.tsx:135: {state === 'loadingʻ ? (
+/components/shared/TranslateButton.tsx:143: {state === 'loadingʻ
+/components/ui/Avatar.tsx:14: export type AvatarSize = 'xs' | 'sm' | 'md' | 'lgʻ | 'xl' | '2xl';
+/components/ui/Badge.tsx:18: warning: 'bg-warning/12 text-warningʻ,
+/components/ui/Badge.tsx:20: info: 'bg-info/12 text-infoʻ,
+/components/ui/Badge.tsx:21: outline: 'border border-border bg-transparent text-fgʻ,
+/components/ui/Button.tsx:26: 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bgʻ,
+/components/ui/Card.tsx:41: <h3 ref={ref} className={cn('font-display text-lg font-semibold text-fgʻ, className)} {...props} />
+/components/ui/Chip.tsx:19: warning: 'chip-warningʻ,
+/components/ui/Chip.tsx:21: info: 'chip-infoʻ,
+/components/ui/Modal.tsx:14: size?: 'sm' | 'md' | 'lgʻ | 'xl';
+/components/ui/Modal.tsx:22: md: 'max-w-lgʻ,
+/components/ui/Toast.tsx:9: type ToastType = 'success' | 'error' | 'warningʻ | 'infoʻ;
+/components/ui/Toast.tsx:50: warning: 'toast-warningʻ,
+/components/ui/Toast.tsx:51: info: 'toast-infoʻ,
+/components/ui/Toast.tsx:128: useToastStore.getState().add({ type: 'warningʻ, title, message, href }),
+/components/ui/Toast.tsx:130: useToastStore.getState().add({ type: 'infoʻ, title, message, href }),
+/components/ui/Toast.tsx:133: type: 'infoʻ,
+/lib/api/auth.ts:81: typeof data.error === 'stringʻ
+/lib/api/auth.ts:83: : typeof data.message === 'stringʻ
+/lib/api/client.ts:62: if (typeof t === 'stringʻ && t.length > 20) return t;
+/lib/api/client.ts:79: if (typeof t === 'stringʻ && t.length > 20) return t;
+/lib/api/client.ts:88: // Replaces the old `isRefreshingʻ flag + `refreshQueue` array with a single
+/lib/api/client.ts:241: (pathname.startsWith('/sellers') && !pathname.startsWith('/sellers/followingʻ));
+/lib/api/client.ts:259: if (typeof data?.error === 'stringʻ) return data.error;
+/lib/api/client.ts:260: if (typeof data?.message === 'stringʻ) return data.message;
+/lib/api/client.ts:261: if (typeof data?.detail === 'stringʻ) return data.detail;
+/lib/api/client.ts:268: } else if (firstKey && typeof data[firstKey] === 'stringʻ) {
+/lib/api/moderation.ts:16: | 'pendingʻ
+/lib/api/moderation.ts:36: report_type: 'listingʻ | 'seller';
+/lib/api/moderation.ts:127: targetStatus: 'good' | 'warningʻ | 'restricted',
+/lib/api/moderation.ts:270: status?: 'good' | 'warningʻ | 'restricted' | 'blocked';
+/lib/api/moderation.ts:290: report_type?: 'listingʻ | 'seller';
+/lib/api/notifications.ts:14: | 'ratingʻ
+/lib/hooks/useForm.ts:25: type FormState = 'idle' | 'savingʻ | 'saved' | 'error';
+/lib/hooks/useForm.ts:66: if (state === 'savingʻ) return;
+/lib/hooks/useForm.ts:77: setState('savingʻ);
+/lib/hooks/useForm.ts:117: saving: state === 'savingʻ,
+/lib/i18n/runtime.ts:63: return typeof cursor === 'stringʻ ? cursor : null;
+/lib/store/ambient.ts:22: nameUz: "Oʻchirilgan",
+/lib/store/ambient.ts:118: }), // Don't persist `isPlayingʻ to prevent unexpected sound on refresh/startup
+/lib/store/auth.ts:33: status?: 'good' | 'warningʻ | 'restricted' | 'blocked';
+/lib/translation/provider.ts:55: [/Oʻ/g, 'Ў'], [/oʻ/gi, 'ў'],
+/lib/translation/provider.ts:56: [/Gʻ/g, 'Ғ'], [/gʻ/gi, 'ғ'],
+/lib/translation/provider.ts:57: [/Oʻ/g, 'Ў'], [/oʻ/gi, 'ў'],
+/lib/translation/provider.ts:58: [/Gʻ/g, 'Ғ'], [/gʻ/gi, 'ғ'],
+/lib/translation/provider.ts:107: async translate(text, targetLocale, sourceLocale = 'autoʻ) {
+/lib/translation/provider.ts:110: const key = cacheKey(text, 'uz-cyrl', sourceLocale ?? 'autoʻ);
+/lib/translation/provider.ts:112: return { text: cache.get(key)!, fromLocale: sourceLocale ?? 'autoʻ, toLocale: 'uz-cyrl', cached: true };
+/lib/translation/provider.ts:121: return { text: cyrl, fromLocale: sourceLocale ?? 'autoʻ, toLocale: 'uz-cyrl', cached: false };
+/lib/translation/provider.ts:125: const source = sourceLocale === 'autoʻ ? 'autoʻ : (LOCALE_TO_ISO[sourceLocale] ?? 'autoʻ);
+/lib/translation/provider.ts:129: if (target === source && source !== 'autoʻ) {
+/lib/translation/useTranslation.ts:17: export type TranslationState = 'idle' | 'loadingʻ | 'translated' | 'error';
+/lib/translation/useTranslation.ts:44: if (state === 'loadingʻ) return;
+/lib/translation/useTranslation.ts:52: setState('loadingʻ);
+/lib/utils/errors.ts:42: .filter((v): v is string => typeof v === 'stringʻ)
+/lib/utils/errors.ts:56: return 'errors.somethingWrongʻ;
+/lib/utils/errors.ts:71: } else if (typeof messages === 'stringʻ) {
+/lib/utils/format.ts:80: if (isEn) return `${m}\u00A0minutes agoʻ;
+/lib/utils/format.ts:88: if (isEn) return `${h}\u00A0hours agoʻ;
+/lib/utils/format.ts:96: if (isEn) return `${d}\u00A0days agoʻ;
+/lib/utils/format.ts:104: if (isEn) return `${w}\u00A0weeks agoʻ;
+/lib/utils/format.ts:112: if (isEn) return `${mo}\u00A0months agoʻ;
+/lib/utils/format.ts:119: if (isEn) return `${y}\u00A0years agoʻ;
+/lib/utils/format.ts:123: export function formatDate(date: Date | string, format: 'short' | 'longʻ = 'short'): string {
+/lib/utils/format.ts:128: return d.toLocaleDateString('uz-UZ', { day: 'numeric', month: 'longʻ, year: 'numeric' });
+/lib/utils/leaflet.ts:55: reject(new Error('leaflet_global_missingʻ));
+/lib/utils/leaflet.ts:67: export const TILE_URL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.pngʻ;
+/lib/utils/search.ts:15: а: 'a', б: 'b', в: 'v', г: 'gʻ, д: 'd', е: 'e', ж: 'j', з: 'z',
+/lib/utils/search.ts:16: и: 'i', й: 'y', к: 'k', л: 'l', м: 'm', н: 'n', о: 'oʻ, п: 'p',
+/lib/utils/search.ts:19: ё: 'yoʻ, ғ: 'gh', қ: 'q', ҳ: 'h', ў: 'oʻ,
+/lib/utils/search.ts:21: А: 'a', Б: 'b', В: 'v', Г: 'gʻ, Д: 'd', Е: 'e', Ж: 'j', З: 'z',
+/lib/utils/search.ts:22: И: 'i', Й: 'y', К: 'k', Л: 'l', М: 'm', Н: 'n', О: 'oʻ, П: 'p',
+/lib/utils/search.ts:25: Ё: 'yoʻ, Ғ: 'gh', Қ: 'q', Ҳ: 'h', Ў: 'oʻ,
+/lib/utils/search.ts:55: .replace(/gh/g, 'gʻ)
+/lib/utils/search.ts:61: .replace(/yo/g, 'oʻ)
+/lib/utils/validation.ts:33: const allowedTypes = ['image/jpegʻ, 'image/jpgʻ, 'image/pngʻ, 'image/webp']
+/lib/ws/chatSocket.ts:122: } else if (data.type === 'typingʻ && this.onTypingCb) {
+/lib/ws/chatSocket.ts:181: this.ws.send(JSON.stringify({ type: 'typingʻ, is_typing: isTyping }));
+/middleware.ts:8: // Per user request: Loginsiz hech narsa koʻrinmasin! (marketplace, listings, etc. require login)
+/middleware.ts:52: // Per strict requirement: Loginsiz hech narsa koʻrinmasin!
+/middleware.ts:91: // Auth guard — redirect unauthenticated users to /auth. Loginsiz hech narsa koʻrinmasin!
+/tailwind.config.ts:18: 'display-lgʻ,
+/tailwind.config.ts:36: 'btn-lgʻ,
+/tailwind.config.ts:42: 'chip-warningʻ,
+/tailwind.config.ts:44: 'chip-infoʻ,
+/tailwind.config.ts:114: 'lgʻ: '16px',

@@ -114,7 +114,7 @@ export default function AdminHealthPage() {
 
   const kpis = ops ? [
     { icon: Users,   label: t('AdminHealth.totalUsers'),        value: ops.platform.users_total,    sub: `+${ops.platform.users_new_24h} ${t('AdminHealth.today')}`, tone: 'bg-brand-primary/10 text-brand-primary' },
-    { icon: Package, label: t('AdminHealth.activeListings'),     value: ops.platform.listings_active, sub: `${ops.platform.listings_pending} ${t('AdminHealth.pending')}`, tone: 'bg-success/12 text-success' },
+    { icon: Package, label: t('AdminHealth.activeListings'),     value: ops.platform.listings_active, sub: `${ops.platform.listings_pending} ${t('AdminHealth.pendingʻ)}`, tone: 'bg-success/12 text-success' },
     { icon: Bell,    label: t('AdminHealth.unreadNotifications'), value: ops.notifications.unread_total, sub: `${ops.notifications.created_24h} ${t('AdminHealth.today')}`, tone: 'bg-info/12 text-info' },
     { icon: Flag,    label: t('AdminHealth.openComplaints'),     value: ops.moderation.open_complaints, sub: ops.moderation.open_complaints > 0 ? t('AdminHealth.needsAttention') : t('AdminHealth.allClear'), tone: ops.moderation.open_complaints > 0 ? 'bg-danger/12 text-danger' : 'bg-success/12 text-success' },
   ] : [];

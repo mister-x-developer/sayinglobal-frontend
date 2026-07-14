@@ -1,17 +1,17 @@
 # 🚀 BOSHLASH - Mobil Ilovalar Uchun
 
-## BIRINCHI QADAM: BU FAYLNI O'QING! ⚠️
+## BIRINCHI QADAM: BU FAYLNI OʻQING! ⚠️
 
 Sizda **2ta alohida mobil ilova** mavjud:
 1. **Sayin Global** - Foydalanuvchilar uchun (yashil rang)
-2. **Admin SA** - Administratorlar uchun (ko'k rang)
+2. **Admin SA** - Administratorlar uchun (koʻk rang)
 
 ---
 
 ## ⚡ TEZ BOSHLASH (5 DAQIQA)
 
 ```bash
-# 1. Frontendga o'tish
+# 1. Frontendga oʻtish
 cd frontend
 
 # 2. Barcha ilovalarni yaratish
@@ -38,12 +38,12 @@ npm run ios:admin       # Xcode (macOS)
 
 ---
 
-## 📚 TO'LIQ QOLLANMALAR
+## 📚 TOʻLIQ QOLLANMALAR
 
 Har bir bosqich uchun batafsil ma'lumot:
 
-1. **MOBILE_APPS.md** - Ishlab chiqish qo'llanmasi
-2. **../MOBILE_DEPLOYMENT_GUIDE.md** - Deploy qilish qo'llanmasi
+1. **MOBILE_APPS.md** - Ishlab chiqish qoʻllanmasi
+2. **../MOBILE_DEPLOYMENT_GUIDE.md** - Deploy qilish qoʻllanmasi
 3. **../MOBILE_APPS_README.md** - Umumiy ma'lumot
 4. **../FINAL_MOBILE_SUMMARY.md** - Yakuniy summary
 
@@ -57,7 +57,7 @@ Har bir bosqich uchun batafsil ma'lumot:
 # Hamma narsani tozalash
 rm -rf node_modules out .next android android-admin ios ios-admin
 
-# Qaytadan o'rnatish
+# Qaytadan oʻrnatish
 npm install
 
 # Assetlarni qayta yaratish
@@ -89,7 +89,7 @@ npm run setup:admin-app
 
 **Admin SA (Admin):**
 - Package: com.sayinglobal.admin
-- Rang: Ko'k (#3b82f6)
+- Rang: Koʻk (#3b82f6)
 - Logo: /logo.png
 
 ---

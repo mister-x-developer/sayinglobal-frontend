@@ -155,7 +155,7 @@ export function MyListingsManager({ initialListings, loading }: Props) {
                 className={`relative px-4 py-2 text-sm font-medium rounded-full transition-colors ${
                   isActive
                     ? 'bg-brand-primary text-white shadow-md'
-                    : 'bg-bg-subtle text-fg-muted hover:bg-bg-elevated hover:text-fg'
+                    : 'bg-bg-subtle text-fg-muted hover:bg-bg-elevated hover:text-fgʻ
                 }`}
               >
                 {tb.label}

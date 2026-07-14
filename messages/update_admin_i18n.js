@@ -10,7 +10,7 @@ const updates = {
     "syncing": "SYNC...", "degraded": "DEGRADED", "optimal": "OPTIMAL"
   },
   'uz.json': {
-    "activeUsers": "Faol Foydalanuvchilar", "newToday": "Bugun qo'shilgan", "marketplaceVolume": "Bozor Hajmi",
+    "activeUsers": "Faol Foydalanuvchilar", "newToday": "Bugun qoʻshilgan", "marketplaceVolume": "Bozor Hajmi",
     "listingsCreated": "Yaratilgan E'lonlar", "operationsQueue": "Operatsiyalar Navbati", "systemTelemetry": "Tizim Telemetriyasi",
     "apiGateway": "API Shlyuzi", "primaryDb": "Asosiy Ma'lumotlar Bazasi", "redisCache": "Redis Kesh", "celeryWorkers": "Celery Ishchilari",
     "syncData": "MA'LUMOTLARNI SINXRONLASH", "critical": "KRITIK", "high": "YUQORI", "nominal": "NORMAL", "fault": "XATO",

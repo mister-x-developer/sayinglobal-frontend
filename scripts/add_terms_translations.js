@@ -49,7 +49,7 @@ const TERMS = {
     subtitle: 'Accept the terms to continue',
     intro: 'To use the SAYIN GLOBAL platform you must accept the following terms.',
     point1: 'SAYIN GLOBAL is a livestock-listings marketplace. Any transaction between seller and buyer is the personal responsibility of both parties.',
-    point2: 'The platform is not responsible for the seller’s honesty, the quality of the animal, or the outcome of the transaction.',
+    point2: 'The platform is not responsible for the seller's honesty, the quality of the animal, or the outcome of the transaction.',
     point3: 'The platform and its administration bear no legal responsibility for fraud, false listings, or substandard goods.',
     point4: 'Users must exercise their own caution, verify the seller, and take their own safety measures.',
     disclaimer: 'The platform serves only as a communication channel between sellers and buyers. No transactions are processed through the platform.',

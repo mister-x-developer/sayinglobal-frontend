@@ -5,10 +5,10 @@ const files = {
   'uz.json': {
     "ai.newChat": "Yangi chat ochish",
     "ai.chatHistory": "Suhbatlar tarixi",
-    "ai.noChats": "Hali hech qanday chat yo'q.",
-    "ai.adminGreeting": "👋 Assalomu alaykum! Platformani boshqarish bo'yicha savollaringiz bormi?",
+    "ai.noChats": "Hali hech qanday chat yoʻq.",
+    "ai.adminGreeting": "👋 Assalomu alaykum! Platformani boshqarish boʻyicha savollaringiz bormi?",
     "ai.prompt.adminCheckNew": "Yangi e'lonlarni tekshirish",
-    "ai.prompt.adminComplaints": "Shikoyatlarni ko'rib chiqish",
+    "ai.prompt.adminComplaints": "Shikoyatlarni koʻrib chiqish",
     "ai.prompt.adminStats": "Tizim statistikasi",
     "ai.prompt.adminSpam": "Spam va shubhali e'lonlar",
     "ai.prompt.findCattle": "Qoramol topish",

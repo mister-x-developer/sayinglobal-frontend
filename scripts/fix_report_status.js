@@ -2,7 +2,7 @@ const fs = require('fs'), path = require('path');
 const ROOT = path.join(__dirname, '..', 'messages');
 
 const STATUS = {
-  uz: { pending: 'Kutilmoqda', under_review: "Ko'rib chiqilmoqda", resolved_valid: 'Tasdiqlandi', resolved_invalid: 'Rad etildi' },
+  uz: { pending: 'Kutilmoqda', under_review: "Koʻrib chiqilmoqda", resolved_valid: 'Tasdiqlandi', resolved_invalid: 'Rad etildi' },
   'uz-cyrl': { pending: 'Кутилмоқда', under_review: 'Кўриб чиқилмоқда', resolved_valid: 'Тасдиқланди', resolved_invalid: 'Рад этилди' },
   ru: { pending: 'Ожидает', under_review: 'На рассмотрении', resolved_valid: 'Подтверждена', resolved_invalid: 'Отклонена' },
   en: { pending: 'Pending', under_review: 'Under review', resolved_valid: 'Confirmed', resolved_invalid: 'Dismissed' },

@@ -153,7 +153,7 @@ export function LocationSelector({
       <div>
         <label
           className={`mb-1.5 block text-sm font-medium ${
-            districtDisabled ? 'text-fg-subtle' : 'text-fg'
+            districtDisabled ? 'text-fg-subtle' : 'text-fgʻ
           }`}
         >
           {t('listings.district')}

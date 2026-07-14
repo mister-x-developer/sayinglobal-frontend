@@ -65,7 +65,7 @@ Modern browser-native selectors reduce the need for preprocessors and complex st
 
 ### Prefer CSS selectors over JS for complex element targeting
 
-- **DO** use `:has()` to style parents based on child state instead of managing classes in JS (e.g. `label:has(:checked)` instead of a manual `label.has-checked` class) For more information, see the guides at `child-state-based-styling` (via `npx -y modern-web-guidance@latest retrieve "child-state-based-styling"`) and `content-based-styling` (via `npx -y modern-web-guidance@latest retrieve "content-based-styling"`).
+- **DO** use `:has()` to style parents based on child state instead of managing classes in JS (e.g. `label:has(:checked)` instead of a manual `label.has-checked` class) For more information, see the guides at `child-state-based-stylingʻ (via `npx -y modern-web-guidance@latest retrieve "child-state-based-styling"`) and `content-based-stylingʻ (via `npx -y modern-web-guidance@latest retrieve "content-based-styling"`).
 - **DO NOT** nest `:has()` or use pseudo-elements inside it (browser API limitation)
 - Use `:nth-child(<An+B> of <selector>)` when you need to style every n-th element of a certain type. E.g. `details:nth-child(1 of [open])` will style the first open `<details>` element it finds, whereas `details[open]:first-child` would style only the first child if and only if it was open.
 
@@ -111,7 +111,7 @@ For example, to apply bottom borders between list items, don't do this:
 ```
 
 This can unintentionally overwrite a desirable `border-bottom` set from another rule.
-The actual intent was to only apply the bottom border to the non-last `li`s. The code above is a workaround that poorly expresses this intent. Instead, this expresses intent more clearly:
+The actual intent was to only apply the bottom border to the non-last `li's. The code above is a workaround that poorly expresses this intent. Instead, this expresses intent more clearly:
 
 ```css
 .fancy-list li:not(:last-child) {
@@ -228,7 +228,7 @@ One exception is use cases where keeping code small and simple is far more impor
 
 Typically these are organized in tiers, with each tier building upon the previous one. For example:
 1. Tier 1: Literal design tokens (e.g. `--color-blue-10`, `--color-gray-90`, `--font-sans-serif`, `--size-xl` etc)
-2. Tier 2: Semantic design tokens (e.g. `--color-accent`, `--color-neutral`, `--font-body`, `--font-heading` etc)
+2. Tier 2: Semantic design tokens (e.g. `--color-accent`, `--color-neutral`, `--font-body`, `--font-headingʻ etc)
 3. Tier 3: General UI design tokens (e.g. `--ui-border`, `--surface-bg-subtle` etc)
 4. Tier 4: Component-specific design tokens (e.g. `--button-bg-primary-hover`, `--button-border-color-secondary` etc)
 
@@ -291,7 +291,7 @@ For most styling purposes (e.g. colors, borders, backgrounds, typography, etc) t
 
 #### Multiple choice controls (select, radios, checkboxes)
 
-- To select one among many options presented in a dropdown: Use a `<select>` + `appearance: base-select` + `::picker(select)`. For more info see `branded-select-styling` (via `npx -y modern-web-guidance@latest retrieve "branded-select-styling"`)
+- To select one among many options presented in a dropdown: Use a `<select>` + `appearance: base-select` + `::picker(select)`. For more info see `branded-select-stylingʻ (via `npx -y modern-web-guidance@latest retrieve "branded-select-styling"`)
 - Selecting one or more among multiple options laid out inline in the page: Use a `<input type=checkbox>` or `<input type=radio>` inside a `<label>` for each option. Style via `label:has(:checked)`.
 - Style checkboxes, radios and switches via `appearance: none` + generated content (`::before`/`::after`) or background images to draw the checked state.
 <!-- Customizable select listbox version currently buggy + this has much better browser support -->
@@ -306,7 +306,7 @@ For most styling purposes (e.g. colors, borders, backgrounds, typography, etc) t
 
 - Use `@container` queries to create component-driven responsive layouts that adapt to their parent container's size rather than the viewport.
 - Use dynamic viewport units (`dvh`, `dvw`) instead of `vh`/`vw` to prevent layout breakage when mobile browser UI elements (like address bars) appear or disappear.
-- Use `aspect-ratio` for media elements (like `<img>` and `<video>`) to reserve space during loading and prevent Cumulative Layout Shift (CLS).
+- Use `aspect-ratioʻ for media elements (like `<img>` and `<video>`) to reserve space during loading and prevent Cumulative Layout Shift (CLS).
 
 ### Responsive Typography
 
@@ -336,7 +336,7 @@ For most styling purposes (e.g. colors, borders, backgrounds, typography, etc) t
 
 ```css
 .hero {
-  background-image: url('texture.png'), linear-gradient(to bottom, #fff, #eee);
+  background-image: url('texture.pngʻ), linear-gradient(to bottom, #fff, #eee);
   background-blend-mode: soft-light;
 }
 ```
@@ -445,7 +445,7 @@ Rendering performance is critical for smooth user experiences, especially in hea
 - Prefer to animate `opacity` and `transform` (including individual transform properties, e.g. `translate` instead of `left/right/top/bottom`) to ensure animations stay on the compositor thread.
 - Use `transition-behavior: allow-discrete` + `@starting-style` to animate layout properties like `display` or `<dialog>` state natively.
 - Always pair `content-visibility` with `contain-intrinsic-size` to prevent scrollbar jumps (CLS).
-- When setting `contain-intrinsic-size` use the `auto` keyword and a value that’s derived from what is known about the contents (i.e. text size, spacing, size of graphics, character count). Preferably use units such as `rem`, `lh`, `cap`, or `ch` that match values used for the elements within the contents rather than `px`. If the content for items in a group is not consistently sized, then use an average size.
+- When setting `contain-intrinsic-size` use the `autoʻ keyword and a value that's derived from what is known about the contents (i.e. text size, spacing, size of graphics, character count). Preferably use units such as `rem`, `lh`, `cap`, or `ch` that match values used for the elements within the contents rather than `px`. If the content for items in a group is not consistently sized, then use an average size.
 - Use `contain: layout style paint` to isolate component rendering updates.
 
 #### Code Example: Render Optimization

@@ -1521,7 +1521,7 @@
         "title": "Xabarlar"
       },
       "categories": {
-        "content": "Eʻlonlar uchun toifalar yaratish, ularni tahrirlash va tuzilmani foydalanuvchilar uchun qulaylashtirish.",
+        "content": "E'lonlar uchun toifalar yaratish, ularni tahrirlash va tuzilmani foydalanuvchilar uchun qulaylashtirish.",
         "title": "Kategoriyalar"
       },
       "dashboard": {
@@ -1529,7 +1529,7 @@
         "title": "Boshqaruv paneli"
       },
       "moderation": {
-        "content": "Yangi kelib tushgan eʻlonlarni tekshirish, tasdiqlash yoki qoidalarga zid boʻlsa rad etish boʻlimi.",
+        "content": "Yangi kelib tushgan e'lonlarni tekshirish, tasdiqlash yoki qoidalarga zid boʻlsa rad etish boʻlimi.",
         "title": "Moderatsiya"
       },
       "security": {
@@ -1537,11 +1537,11 @@
         "title": "Xavfsizlik"
       },
       "users": {
-        "content": "Tizimdagi barcha aʻzolarni boshqarish, ularning holatini kuzatish va kerak boʻlganda cheklovlar oʻrnatish.",
+        "content": "Tizimdagi barcha a'zolarni boshqarish, ularning holatini kuzatish va kerak boʻlganda cheklovlar oʻrnatish.",
         "title": "Foydalanuvchilar"
       }
     },
-    "subtitle": "Platformani boshqarish boʻyicha qisqacha maʻlumotlar",
+    "subtitle": "Platformani boshqarish boʻyicha qisqacha ma'lumotlar",
     "title": "Admin Qoʻllanma"
   },
   "Guide": {
@@ -1560,11 +1560,11 @@
         "title": "Qanday kirish mumkin?"
       },
       "post": {
-        "content": "Eʻlon berish uchun kerakli maʻlumotlarni toʻldiring va rasmlar yuklang.",
-        "title": "Eʻlon berish"
+        "content": "E'lon berish uchun kerakli ma'lumotlarni toʻldiring va rasmlar yuklang.",
+        "title": "E'lon berish"
       },
       "report": {
-        "content": "Shubhali eʻlonlar yoki foydalanuvchilar haqida administratorlarga xabar bering.",
+        "content": "Shubhali e'lonlar yoki foydalanuvchilar haqida administratorlarga xabar bering.",
         "title": "Shikoyat qilish"
       },
       "search": {

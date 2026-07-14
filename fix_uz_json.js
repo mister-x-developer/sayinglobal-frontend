@@ -5,12 +5,12 @@ function fixText(text) {
   if (typeof text !== 'string') return text;
   // Replace standard apostrophe, backtick, left single quote, right single quote
   // ONLY when following or preceding O/o/G/g for Uzbek letters.
-  // Actually, O' and G' are letters.
+  // Actually, Oʻ and Gʻ are letters.
   // Let's replace:
-  // o', o`, o‘, o’ -> oʻ
-  // O', O`, O‘, O’ -> Oʻ
-  // g', g`, g‘, g’ -> gʻ
-  // G', G`, G‘, G’ -> Gʻ
+  // oʻ, oʻ, oʻ, oʻ -> oʻ
+  // Oʻ, Oʻ, Oʻ, Oʻ -> Oʻ
+  // gʻ, gʻ, gʻ, gʻ -> gʻ
+  // Gʻ, Gʻ, Gʻ, Gʻ -> Gʻ
   
   return text
     .replace(/o['`‘’]/g, 'oʻ')

@@ -4,7 +4,7 @@
  * `admin.stats`, `admin.restore`, `admin.rejectionReason`, `admin.confirmReject`,
  * `admin.rejectionReasonPlaceholder`, `admin.rejectionReasonRequired`,
  * `marketplace.shares`, `comments.title`, `sellers.followers`, `sellers.followersLabel`,
- * `animal.years`, `adminMod.status_pending`, `adminMod.status_under_review`,
+ * `animal.years`, `adminMod.status_pendingʻ, `adminMod.status_under_review`,
  * `adminMod.status_resolved_valid`, `adminMod.status_resolved_invalid`,
  * `common.refresh`, `common.translate`, `common.showOriginal`, `common.confirm`
  * to all 4 message files. Idempotent.

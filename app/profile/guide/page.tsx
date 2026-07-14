@@ -17,28 +17,28 @@ export default function GuidePage() {
       'uz-cyrl': 'Яхши',
       ru: 'Хорошо',
       en: 'Good',
-      desc: 'Hech qanday cheklovlar yoʻq. Barcha funksiyalardan toʻliq foydalanishingiz mumkin: e‘lon yaratish, chat, va boshqalar.'
+      desc: 'Hech qanday cheklovlar yoʻq. Barcha funksiyalardan toʻliq foydalanishingiz mumkin: e'lon yaratish, chat, va boshqalar.'
     },
     warning: {
       uz: 'Ogohlantirish',
       'uz-cyrl': 'Огоҳлантириш',
       ru: 'Предупреждение',
       en: 'Warning',
-      desc: 'Kichik cheklovlar: e‘lonlar soni cheklanishi mumkin, chat faoliyati nazorat qilinadi.'
+      desc: 'Kichik cheklovlar: e'lonlar soni cheklanishi mumkin, chat faoliyati nazorat qilinadi.'
     },
     restricted: {
       uz: 'Cheklangan',
       'uz-cyrl': 'Чекланган',
       ru: 'Ограничен',
       en: 'Restricted',
-      desc: 'E‘lon yaratish va chat faoliyati cheklanadi. Faqat mavjud e‘lonlarni koʻra olasiz.'
+      desc: 'E'lon yaratish va chat faoliyati cheklanadi. Faqat mavjud e'lonlarni koʻra olasiz.'
     },
     blocked: {
       uz: 'Bloklangan',
       'uz-cyrl': 'Блокланган',
       ru: 'Заблокирован',
       en: 'Blocked',
-      desc: 'Hisob toʻliq muzlatiladi. Barcha e‘lonlar yashiriladi, hech qanday amal bajarib boʻlmaydi.'
+      desc: 'Hisob toʻliq muzlatiladi. Barcha e'lonlar yashiriladi, hech qanday amal bajarib boʻlmaydi.'
     }
   };
 

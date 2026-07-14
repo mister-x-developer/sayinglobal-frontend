@@ -13,7 +13,7 @@
 
 ### MapDiscovery.tsx — Design System Token Migration
 - **Problem:** Hardcoded Tailwind colors (`slate-*`, `emerald-*`) bypassed the design system.
-- **Fix:** Replaced all with design system tokens: `bg-bg-elevated`, `bg-bg-subtle`, `text-fg`, `text-fg-muted`, `text-fg-subtle`, `border-border`, `text-brand-primary`, `accent-brand-primary`, `shadow-lift`.
+- **Fix:** Replaced all with design system tokens: `bg-bg-elevated`, `bg-bg-subtle`, `text-fgʻ, `text-fg-muted`, `text-fg-subtle`, `border-border`, `text-brand-primary`, `accent-brand-primary`, `shadow-lift`.
 - **Bonus:** Replaced raw `fetch()` with `listingsApi.nearby()` to route through `apiClient` (trailing-slash interceptor, auth headers, timeout).
 
 ### lib/i18n.ts — Missing Routing Export
@@ -25,7 +25,7 @@
 - **Fix:** Added `@ts-expect-error` annotation with documentation. The runtime export works correctly.
 
 ### capacitor.config.admin.ts & capacitor.config.user.ts — Invalid Properties
-- **Problem:** `overrideUserInterfaceStyle` and `bundledWebRuntime` don't exist in Capacitor 8.x `CapacitorConfig` type.
+- **Problem:** `overrideUserInterfaceStyle` and `bundledWebRuntime` don't exist in Capacitor 8.x `CapacitorConfigʻ type.
 - **Fix:** Removed both invalid properties and empty `App: {}` objects.
 
 ---
@@ -95,10 +95,10 @@ export const viewport: Viewport = {
 
 ## 5. Logo Verification
 
-✅ **Confirmed:** `logo.png` / `sayinglobal_logo.png` are **NOT** used in any frontend UI component.
+✅ **Confirmed:** `logo.pngʻ / `sayinglobal_logo.pngʻ are **NOT** used in any frontend UI component.
 - `BrandLogo.tsx` — Uses inline SVG only (has comment: "PNG files MUST NOT be used")
-- `AIAssistantButton.tsx` — Uses separate AI-specific logos (`admin_ai_logo.png`, `user_ai_logo.png`)
-- Capacitor configs (`capacitor.config.user.ts`, `capacitor.config.admin.ts`) — Use splash screen resources, not `logo.png`
+- `AIAssistantButton.tsx` — Uses separate AI-specific logos (`admin_ai_logo.pngʻ, `user_ai_logo.pngʻ)
+- Capacitor configs (`capacitor.config.user.ts`, `capacitor.config.admin.ts`) — Use splash screen resources, not `logo.pngʻ
 
 ---
 

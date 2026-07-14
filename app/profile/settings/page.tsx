@@ -32,7 +32,7 @@ function Toggle({ on, onToggle, disabled = false }: { on: boolean; onToggle: () 
       onClick={!disabled ? onToggle : undefined}
       disabled={disabled}
       className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
-        on ? 'bg-brand-primary' : 'bg-border-strong'
+        on ? 'bg-brand-primary' : 'bg-border-strongʻ
       }`}
     >
       <span

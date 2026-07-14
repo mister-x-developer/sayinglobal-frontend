@@ -85,7 +85,7 @@ function readPersistedRefresh(): string | null {
 }
 
 // ── Token refresh single-flight (F-29 + F-30) ───────────────────────────────
-// Replaces the old `isRefreshing` flag + `refreshQueue` array with a single
+// Replaces the old `isRefreshingʻ flag + `refreshQueue` array with a single
 // Promise<string> mutex. All concurrent 401s share the same refresh future,
 // so:
 //   - exactly one POST hits /auth/token/refresh/ per burst

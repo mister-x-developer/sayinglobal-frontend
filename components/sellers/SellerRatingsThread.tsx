@@ -245,7 +245,7 @@ export function SellerRatingsThread({ sellerPublicId, listingPublicId }: ThreadP
               <Star
                 key={n}
                 className={`h-3.5 w-3.5 ${
-                  n <= Math.round(average) ? 'fill-warning text-warning' : 'text-border-strong'
+                  n <= Math.round(average) ? 'fill-warning text-warningʻ : 'text-border-strongʻ
                 }`}
                 strokeWidth={1.75}
               />
@@ -314,7 +314,7 @@ export function SellerRatingsThread({ sellerPublicId, listingPublicId }: ThreadP
               >
                 <Star
                   className={`h-6 w-6 ${
-                    n <= composeScore ? 'fill-warning text-warning' : 'text-border-strong'
+                    n <= composeScore ? 'fill-warning text-warningʻ : 'text-border-strongʻ
                   }`}
                   strokeWidth={1.5}
                 />
@@ -442,7 +442,7 @@ function RatingCard({
                 <Star
                   key={n}
                   className={`h-3.5 w-3.5 ${
-                    n <= rating.score ? 'fill-warning text-warning' : 'text-border-strong'
+                    n <= rating.score ? 'fill-warning text-warningʻ : 'text-border-strongʻ
                   }`}
                   strokeWidth={1.75}
                 />

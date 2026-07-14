@@ -1,21 +1,21 @@
-/app/global-error.tsx:26: description: "Iltimos, keyinroq qaytadan urinib ko'ring",
-/app/layout.tsx:33: keywords: ['chorva', 'qoramol', "qo'y", 'echki', 'ot', 'tuya', 'parranda', 'bozor', 'savdo', 'sayin', 'livestock', 'marketplace'],
-/app/listings/detail/page.tsx:231: aria-label={`${t('common.viewImage' as any) || 'Rasmni ko`rish'} ${i + 1}`}
-/app/listings/new/page.tsx:497: // Ko'cha nomini location'ga YOZMAYMIZ — faqat region/district match qilamiz
-/app/profile/guide/page.tsx:20: desc: 'Hech qanday cheklovlar yo‘q. Barcha funksiyalardan to‘liq foydalanishingiz mumkin: e‘lon yaratish, chat, va boshqalar.'
-/app/profile/guide/page.tsx:34: desc: 'E‘lon yaratish va chat faoliyati cheklanadi. Faqat mavjud e‘lonlarni ko‘ra olasiz.'
-/app/profile/guide/page.tsx:41: desc: 'Hisob to‘liq muzlatiladi. Barcha e‘lonlar yashiriladi, hech qanday amal bajarib bo‘lmaydi.'
-/app/profile/referral/page.tsx:141: placeholder="DO'STINGIZ KODI"
-/components/auth/LandingRedirect.tsx:11: * va Landing yoxud Auth sahifasida tursa, avtomatik ravishda uni Dashboardga yo'naltiradi.
-/components/profile/MyListingsManager.tsx:264: <button disabled={isMutatingThis} onClick={() => handleAction('delete', l.id)} className="btn btn-danger btn-sm px-3" aria-label="O'chirish">
-/components/providers/TermsGate.tsx:82: setReferralMsg({ ok: true, text: res.data?.message ?? "Referral kod qo'llanildi!" });
-/components/shared/LocationPicker.tsx:256: : (t('marketplace.geolocationError' as any) ?? 'Joylashuvni aniqlab bo‘lmadi. Qayta urining.');
-/components/shared/LocationPicker.tsx:275: setLocationError(t('marketplace.geolocationUnsupported' as any) ?? 'Joylashuv aniqlash qo‘llab-quvvatlanmaydi');
-/components/shared/LocationPicker.tsx:294: // Status label: GPS belgisi qo'yilgan yoki yoʻqligini ko'rsatadi — ko'cha nomi emas
-/components/shared/OnboardingModal.tsx:54: uz: "Qoramol, qo'y, echki, ot, tuya, parrandalar va boshqa chorva mollarini soting yoki xarid qiling. Har bir eʼlon xaritada koʻrsatiladi.",
-/components/shared/OnboardingModal.tsx:70: uz: "GPS orqali yaqin atrofdagi eʼlonlarni ko'ring. Xaritada sotuvchilarning joylashuvini aniqlang va eng yaqinini toping.",
-/components/shared/ThemeSwitcher.tsx:15: aria-label={mode === 'day' ? "Tungi rejimga o'tish" : "Kunduzgi rejimga o'tish"}
-/lib/store/ambient.ts:22: nameUz: "O'chirilgan",
-/middleware.ts:8: // Per user request: Loginsiz hech narsa ko'rinmasin! (marketplace, listings, etc. require login)
-/middleware.ts:52: // Per strict requirement: Loginsiz hech narsa ko'rinmasin!
-/middleware.ts:91: // Auth guard — redirect unauthenticated users to /auth. Loginsiz hech narsa ko'rinmasin!
+/app/global-error.tsx:26: description: "Iltimos, keyinroq qaytadan urinib koʻring",
+/app/layout.tsx:33: keywords: ['chorva', 'qoramol', "qoʻy", 'echki', 'ot', 'tuya', 'parranda', 'bozor', 'savdoʻ, 'sayin', 'livestock', 'marketplace'],
+/app/listings/detail/page.tsx:231: aria-label={`${t('common.viewImage' as any) || 'Rasmni koʻrish'} ${i + 1}`}
+/app/listings/new/page.tsx:497: // Koʻcha nomini location'ga YOZMAYMIZ — faqat region/district match qilamiz
+/app/profile/guide/page.tsx:20: desc: 'Hech qanday cheklovlar yoʻq. Barcha funksiyalardan toʻliq foydalanishingiz mumkin: e'lon yaratish, chat, va boshqalar.'
+/app/profile/guide/page.tsx:34: desc: 'E'lon yaratish va chat faoliyati cheklanadi. Faqat mavjud e'lonlarni koʻra olasiz.'
+/app/profile/guide/page.tsx:41: desc: 'Hisob toʻliq muzlatiladi. Barcha e'lonlar yashiriladi, hech qanday amal bajarib boʻlmaydi.'
+/app/profile/referral/page.tsx:141: placeholder="DOʻSTINGIZ KODI"
+/components/auth/LandingRedirect.tsx:11: * va Landing yoxud Auth sahifasida tursa, avtomatik ravishda uni Dashboardga yoʻnaltiradi.
+/components/profile/MyListingsManager.tsx:264: <button disabled={isMutatingThis} onClick={() => handleAction('delete', l.id)} className="btn btn-danger btn-sm px-3" aria-label="Oʻchirish">
+/components/providers/TermsGate.tsx:82: setReferralMsg({ ok: true, text: res.data?.message ?? "Referral kod qoʻllanildi!" });
+/components/shared/LocationPicker.tsx:256: : (t('marketplace.geolocationError' as any) ?? 'Joylashuvni aniqlab boʻlmadi. Qayta urining.');
+/components/shared/LocationPicker.tsx:275: setLocationError(t('marketplace.geolocationUnsupported' as any) ?? 'Joylashuv aniqlash qoʻllab-quvvatlanmaydi');
+/components/shared/LocationPicker.tsx:294: // Status label: GPS belgisi qoʻyilgan yoki yoʻqligini koʻrsatadi — koʻcha nomi emas
+/components/shared/OnboardingModal.tsx:54: uz: "Qoramol, qoʻy, echki, ot, tuya, parrandalar va boshqa chorva mollarini soting yoki xarid qiling. Har bir eʼlon xaritada koʻrsatiladi.",
+/components/shared/OnboardingModal.tsx:70: uz: "GPS orqali yaqin atrofdagi eʼlonlarni koʻring. Xaritada sotuvchilarning joylashuvini aniqlang va eng yaqinini toping.",
+/components/shared/ThemeSwitcher.tsx:15: aria-label={mode === 'day' ? "Tungi rejimga oʻtish" : "Kunduzgi rejimga oʻtish"}
+/lib/store/ambient.ts:22: nameUz: "Oʻchirilgan",
+/middleware.ts:8: // Per user request: Loginsiz hech narsa koʻrinmasin! (marketplace, listings, etc. require login)
+/middleware.ts:52: // Per strict requirement: Loginsiz hech narsa koʻrinmasin!
+/middleware.ts:91: // Auth guard — redirect unauthenticated users to /auth. Loginsiz hech narsa koʻrinmasin!

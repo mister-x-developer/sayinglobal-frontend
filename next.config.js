@@ -89,7 +89,7 @@ const nextConfig = {
   }),
 };
 
-// IMPORTANT: We intentionally do NOT wrap the config with `withSentryConfig`.
+// IMPORTANT: We intentionally do NOT wrap the config with `withSentryConfigʻ.
 // The Sentry build plugin runs `sentry-cli releases new ...` during
 // `next build`, which crashes the whole Vercel build with "Project not found"
 // when the org/project slug or auth token is missing. We removed it so the
