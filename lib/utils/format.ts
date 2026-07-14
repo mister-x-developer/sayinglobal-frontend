@@ -12,7 +12,7 @@ export function formatPrice(price: number, currency: string = 'UZS', locale: str
   }).format(price);
 
   if (currency === 'UZS' || !currency) {
-    const suffix = locale === 'ru' ? 'сум' : locale === 'uz-cyrl' ? 'сўм' : locale === 'en' ? 'UZS' : "soʼm";
+    const suffix = locale === 'ru' ? 'сум' : locale === 'uz-cyrl' ? 'сўм' : locale === 'en' ? 'UZS' : "soʻm";
     return `${formatted}${NBSP}${suffix}`;
   }
   
