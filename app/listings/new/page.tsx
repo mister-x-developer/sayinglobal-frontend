@@ -494,7 +494,7 @@ export default function NewListingPage() {
                       longitude: next?.lng ?? null,
                     }))}
                     onAddress={async (addr) => {
-                      // Ko'cha nomini location'ga YOZMAYMIZ — faqat region/district match qilamiz
+                      // Koʻcha nomini location'ga YOZMAYMIZ — faqat region/district match qilamiz
                       // location = "Viloyat, Tuman" formatida avtomatik quriladi
 
                       // Try to match region name → slug from backend

@@ -51,7 +51,7 @@ const SLIDES: Slide[] = [
       en: 'Listings',
     },
     body: {
-      uz: "Qoramol, qo'y, echki, ot, tuya, parrandalar va boshqa chorva mollarini soting yoki xarid qiling. Har bir eʼlon xaritada koʻrsatiladi.",
+      uz: "Qoramol, qoʻy, echki, ot, tuya, parrandalar va boshqa chorva mollarini soting yoki xarid qiling. Har bir eʼlon xaritada koʻrsatiladi.",
       'uz-cyrl': "Қорамол, қўй, эчки, от, туя, паррандалар ва бошқа чорва молларини сотинг ёки харид қилинг. Ҳар бир эълон харитада кўрсатилади.",
       ru: 'Продавайте или покупайте КРС, овец, коз, лошадей, верблюдов, птицу и другой скот. Каждое объявление отображается на карте.',
       en: 'Sell or buy cattle, sheep, goats, horses, camels, poultry and more. Every listing is shown on the map.',
@@ -67,7 +67,7 @@ const SLIDES: Slide[] = [
       en: 'Nearby listings',
     },
     body: {
-      uz: "GPS orqali yaqin atrofdagi eʼlonlarni ko'ring. Xaritada sotuvchilarning joylashuvini aniqlang va eng yaqinini toping.",
+      uz: "GPS orqali yaqin atrofdagi eʼlonlarni koʻring. Xaritada sotuvchilarning joylashuvini aniqlang va eng yaqinini toping.",
       'uz-cyrl': "GPS орқали яқин атрофдаги эълонларни кўринг. Харитада сотувчиларнинг жойлашувини аниқланг.",
       ru: 'Смотрите объявления рядом с вами через GPS. Найдите ближайших продавцов на карте.',
       en: 'See listings near you via GPS. Find the closest sellers on the map.',

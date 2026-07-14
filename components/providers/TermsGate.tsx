@@ -79,7 +79,7 @@ export function TermsGate() {
     setReferralLoading(true);
     try {
       const res = await apiClient.post('/plans/referral/use/', { code });
-      setReferralMsg({ ok: true, text: res.data?.message ?? "Referral kod qo'llanildi!" });
+      setReferralMsg({ ok: true, text: res.data?.message ?? "Referral kod qoʻllanildi!" });
       setTimeout(() => setOpen(false), 1500);
     } catch (e: any) {
       const err = e?.response?.data?.error ?? 'error';

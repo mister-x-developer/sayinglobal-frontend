@@ -687,8 +687,8 @@
     "selected": "tanlandi",
     "clearSelection": "Tanlovni tozalash",
     "noReportsInFilter": "Bu filtrda shikoyatlar yoʻq",
-    "visitSite": "Saytga o'tish (Kuzatuv)",
-    "overallViewDesc": "Barcha e'lonlar bo'yicha platformada ko'rishlar soni.",
+    "visitSite": "Saytga oʻtish (Kuzatuv)",
+    "overallViewDesc": "Barcha e'lonlar boʻyicha platformada koʻrishlar soni.",
     "searchTitle": "Global Qidiruv",
     "searchDesc": "Foydalanuvchilar, e'lonlar yoki shikoyatlarni qidirish.",
     "admin": "Admin"
@@ -1021,7 +1021,7 @@
       "blocked": "Bloklangan"
     },
     "status_pending": "Kutilmoqda",
-    "status_under_review": "Ko'rib chiqilmoqda",
+    "status_under_review": "Koʻrib chiqilmoqda",
     "status_resolved_valid": "Tasdiqlangan",
     "status_resolved_invalid": "Rad etilgan",
     "severity": "Darajasi",
@@ -1040,7 +1040,7 @@
     "reason_repeated_violations": "Qayta-qayta qoidabuzarlik",
     "reason_aggressive_behavior": "Tajovuzkor xulq",
     "reason_scam_attempt": "Firibgarlik urinishi",
-    "reason_no_show_after_deal": "Kelishuvdan so'ng kelmaslik",
+    "reason_no_show_after_deal": "Kelishuvdan soʻng kelmaslik",
     "reason_false_identity": "Soxta shaxsiyat",
     "reason_repeated_fake_listings": "Qayta soxta eʼlonlar",
     "reason_demanding_prepayment_scam": "Oldindan toʻlov firibgarlik",

@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   },
   description:
     "Raqamli chorva bozori. Toʻgʻridan-toʻgʻri sotuvchilar bilan bogʻlaning. Tasdiqlangan profillar, ishonchli eʼlonlar, xavfsiz savdo.",
-  keywords: ['chorva', 'qoramol', "qo'y", 'echki', 'ot', 'tuya', 'parranda', 'bozor', 'savdo', 'sayin', 'livestock', 'marketplace'],
+  keywords: ['chorva', 'qoramol', "qoʻy", 'echki', 'ot', 'tuya', 'parranda', 'bozor', 'savdo', 'sayin', 'livestock', 'marketplace'],
   authors: [{ name: 'SAYIN GLOBAL' }],
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
   openGraph: {

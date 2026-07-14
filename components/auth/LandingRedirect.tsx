@@ -8,7 +8,7 @@ import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
  * LandingRedirect
  * 
  * Ushbu komponent foydalanuvchi tizimga kirgan boʻlsa (Zustand auth store boʻyicha)
- * va Landing yoxud Auth sahifasida tursa, avtomatik ravishda uni Dashboardga yo'naltiradi.
+ * va Landing yoxud Auth sahifasida tursa, avtomatik ravishda uni Dashboardga yoʻnaltiradi.
  */
 export function LandingRedirect() {
   const router = useRouter();

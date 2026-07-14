@@ -138,7 +138,7 @@ export default function ReferralPage() {
                     <input
                       value={useCode}
                       onChange={(e) => setUseCode(e.target.value.toUpperCase())}
-                      placeholder="DO'STINGIZ KODI"
+                      placeholder="DOʻSTINGIZ KODI"
                       className="input-base flex-1 font-mono tracking-widest"
                       onKeyDown={(e) => e.key === 'Enter' && handleUseCode()}
                     />

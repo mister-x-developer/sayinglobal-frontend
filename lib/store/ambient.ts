@@ -19,7 +19,7 @@ export const AMBIENT_TRACKS: Record<AmbientTrackId, AmbientTrack> = {
   none: {
     id: 'none',
     name: 'None',
-    nameUz: "O'chirilgan",
+    nameUz: "Oʻchirilgan",
     nameRu: 'Выключено',
     icon: '🔇',
     audioUrl: '',

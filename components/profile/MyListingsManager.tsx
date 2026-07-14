@@ -261,7 +261,7 @@ export function MyListingsManager({ initialListings, loading }: Props) {
                     )}
 
                     {/* Common Delete Action */}
-                    <button disabled={isMutatingThis} onClick={() => handleAction('delete', l.id)} className="btn btn-danger btn-sm px-3" aria-label="O'chirish">
+                    <button disabled={isMutatingThis} onClick={() => handleAction('delete', l.id)} className="btn btn-danger btn-sm px-3" aria-label="Oʻchirish">
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>

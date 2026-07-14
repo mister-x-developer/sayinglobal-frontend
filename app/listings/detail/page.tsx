@@ -228,7 +228,7 @@ function ListingDetailPageContent() {
                           <button
                             key={img.id}
                             type="button"
-                            aria-label={`${t('common.viewImage' as any) || 'Rasmni ko`rish'} ${i + 1}`}
+                            aria-label={`${t('common.viewImage' as any) || 'Rasmni koʻrish'} ${i + 1}`}
                             onClick={() => setImgIndex(i)}
                             className={`relative aspect-square overflow-hidden rounded-xl border-2 transition-all ${
                               i === imgIndex
@@ -584,7 +584,7 @@ function ListingDetailPageContent() {
                           lat: Number(listing.latitude),
                           lng: Number(listing.longitude),
                           label: listing.title,
-                          price: listing.price ? new Intl.NumberFormat('uz-UZ').format(Number(listing.price)) + " so'm" : undefined,
+                          price: listing.price ? new Intl.NumberFormat('uz-UZ').format(Number(listing.price)) + " soʻm" : undefined,
                           imageUrl: listing.primary_image?.image ?? listing.images?.[0]?.image ?? undefined,
                         }]}
                         className="h-72 w-full"

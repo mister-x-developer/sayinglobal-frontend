@@ -124,7 +124,7 @@ export default function NearbyListingsPage() {
       label: r.title,
       href: `/listings/detail?id=${r.id}`,
       imageUrl: r.primary_image?.image ?? r.images?.[0]?.image ?? undefined,
-      price: r.price ? new Intl.NumberFormat('uz-UZ').format(Number(r.price)) + " so'm" : undefined,
+      price: r.price ? new Intl.NumberFormat('uz-UZ').format(Number(r.price)) + " soʻm" : undefined,
       distanceKm: typeof r.distance_km === 'number' ? r.distance_km : undefined,
     })), [results]);
 

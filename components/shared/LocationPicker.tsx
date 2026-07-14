@@ -253,7 +253,7 @@ export function LocationPicker({
           setLocating(false);
           const msg = err.code === 1
             ? (t('marketplace.geolocationPermission' as any) ?? 'Joylashuv ruxsati berilmadi. Ilova sozlamalaridan yoqing.')
-            : (t('marketplace.geolocationError' as any) ?? 'Joylashuvni aniqlab bo‘lmadi. Qayta urining.');
+            : (t('marketplace.geolocationError' as any) ?? 'Joylashuvni aniqlab boʻlmadi. Qayta urining.');
           setLocationError(msg);
           setTimeout(() => setLocationError(''), 4000);
         };
@@ -272,7 +272,7 @@ export function LocationPicker({
         );
       } else {
         setLocating(false);
-        setLocationError(t('marketplace.geolocationUnsupported' as any) ?? 'Joylashuv aniqlash qo‘llab-quvvatlanmaydi');
+        setLocationError(t('marketplace.geolocationUnsupported' as any) ?? 'Joylashuv aniqlash qoʻllab-quvvatlanmaydi');
         setTimeout(() => setLocationError(''), 4000);
       }
     }
@@ -291,7 +291,7 @@ export function LocationPicker({
     );
   }
 
-  // Status label: GPS belgisi qo'yilgan yoki yoʻqligini ko'rsatadi — ko'cha nomi emas
+  // Status label: GPS belgisi qoʻyilgan yoki yoʻqligini koʻrsatadi — koʻcha nomi emas
   const statusLabel = locationError
     ? locationError
     : geocoding

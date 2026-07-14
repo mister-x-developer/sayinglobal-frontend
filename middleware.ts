@@ -5,7 +5,7 @@ const LOCALE_COOKIE = 'sayin-locale';
 const AUTH_COOKIE = 'sayin-auth';
 
 // Routes accessible without authentication — ONLY landing, auth, and legal pages.
-// Per user request: Loginsiz hech narsa ko'rinmasin! (marketplace, listings, etc. require login)
+// Per user request: Loginsiz hech narsa koʻrinmasin! (marketplace, listings, etc. require login)
 const PUBLIC_PREFIXES = [
   '/auth',
 ];
@@ -49,7 +49,7 @@ function isPlatformAdmin(req: NextRequest): boolean {
 }
 
 function isPublicPath(pathname: string): boolean {
-  // Per strict requirement: Loginsiz hech narsa ko'rinmasin!
+  // Per strict requirement: Loginsiz hech narsa koʻrinmasin!
   // Only auth flows and legal pages are public.
   if (pathname === '/' || pathname === '/index.html' || pathname === '/index') return true;
   if (pathname.startsWith('/auth')) return true;
@@ -88,7 +88,7 @@ export function middleware(req: NextRequest) {
     return redirectRes;
   }
 
-  // Auth guard — redirect unauthenticated users to /auth. Loginsiz hech narsa ko'rinmasin!
+  // Auth guard — redirect unauthenticated users to /auth. Loginsiz hech narsa koʻrinmasin!
   if (!isPublicPath(pathname) && !isAuthenticated(req)) {
     const loginUrl = req.nextUrl.clone();
     loginUrl.pathname = '/auth';
