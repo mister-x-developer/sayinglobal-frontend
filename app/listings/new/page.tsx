@@ -244,7 +244,7 @@ export default function NewListingPage() {
     <div className="min-h-screen flex flex-col">
       <AppNav />
       <main className="flex-1">
-        <div className="container-page py-6 pb-40 sm:py-8 sm:pb-10"> {/* generous mobile bottom padding so the full form (incl. map pin + price + submit) is visible above bottom nav + AI button */}
+        <div className="container-page py-6 pb-40 sm:py-8 sm:pb-10"> {/* generous mobile bottom padding so the full form (incl. map pin + price + submit) is visible above bottom nav */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}

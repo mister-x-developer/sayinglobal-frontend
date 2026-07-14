@@ -87,11 +87,11 @@ export default function UserGuidePage() {
         >
           <h4 className="text-xl font-bold text-fg mb-2">{t('Guide.footer.title')}</h4>
           <p className="text-fg-muted mb-6">{t('Guide.footer.subtitle')}</p>
-          <Link href="/chat-ai">
+          <a href="https://t.me/sayinglobal_support" target="_blank" rel="noopener noreferrer">
             <button className="px-8 py-3 bg-brand-primary text-white font-bold rounded-xl hover:bg-brand-primary-hover transition-colors shadow-lg shadow-brand-primary/25">
               {t('Guide.footer.button')}
             </button>
-          </Link>
+          </a>
         </motion.div>
       </div>
       </main>

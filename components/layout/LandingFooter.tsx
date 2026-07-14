@@ -10,7 +10,7 @@ export function LandingFooter() {
 
   return (
     <footer className="border-t border-border bg-bg-subtle pb-safe">
-      <div className="container-page py-8 pb-24 sm:py-10 sm:pb-10"> {/* extra bottom padding on mobile for bottom nav + AI button clearance; tighter but comfortable spacing */}
+      <div className="container-page py-8 pb-24 sm:py-10 sm:pb-10"> {/* extra bottom padding on mobile for bottom nav clearance; tighter but comfortable spacing */}
         <div className="grid gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="flex flex-col gap-3">

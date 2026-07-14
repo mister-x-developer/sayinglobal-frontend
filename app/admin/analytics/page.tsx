@@ -544,7 +544,7 @@ export default function AdminAnalyticsPage() {
                 { href: '/admin/users', icon: Users, label: t('admin.users'), color: 'text-blue-500 bg-blue-500/10' },
                 { href: '/admin/listings', icon: Package, label: t('admin.listings'), color: 'text-brand-primary bg-brand-primary/10' },
                 { href: '/admin/moderation', icon: Flag, label: t('admin.complaints'), color: 'text-danger bg-danger/10' },
-                { href: '/admin/ai-moderation', icon: BarChart3, label: t('admin.aiModeration'), color: 'text-purple-500 bg-purple-500/10' },
+
                 { href: '/admin/ratings', icon: Star, label: t('admin.ratings'), color: 'text-warning bg-warning/10' },
                 { href: '/admin/health', icon: Activity, label: t('admin.systemHealth'), color: 'text-success bg-success/10' },
               ].map((item) => (

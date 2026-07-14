@@ -16,7 +16,6 @@ import { CapacitorNativeProvider } from '@/components/providers/CapacitorNativeP
 import { MotionProvider } from '@/components/providers/MotionProvider';
 import { OnboardingModal } from '@/components/shared/OnboardingModal';
 import { FloatingNearbyButton } from '@/components/shared/FloatingNearbyButton';
-import { AIAssistantButton } from '@/components/ai/AIAssistantButton';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { ReCaptchaProvider } from '@/components/providers/ReCaptchaProvider';
 import { ClientAuthGuard } from '@/components/providers/ClientAuthGuard';
@@ -120,7 +119,6 @@ export default async function RootLayout({
                 <MobileBottomNav />
                 <OnboardingModal />
                 <FloatingNearbyButton />
-                <AIAssistantButton />
                 <ToastContainer />
               </ReCaptchaProvider>
             </MotionProvider>
