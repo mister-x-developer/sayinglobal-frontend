@@ -219,8 +219,6 @@ apiClient.interceptors.response.use(
           
           if (!isPublic && !pathname.startsWith('/auth')) {
             window.location.href = `/auth?next=${encodeURIComponent(pathname)}`;
-          } else {
-            window.location.reload();
           }
         }
       }
@@ -242,9 +240,6 @@ apiClient.interceptors.response.use(
         
         if (!isPublic && !pathname.startsWith('/auth')) {
           window.location.href = `/auth?next=${encodeURIComponent(pathname)}`;
-        } else {
-          // If they are on a public page, just reload to fetch as unauthenticated
-          window.location.reload();
         }
       }
       return Promise.reject(refreshError);

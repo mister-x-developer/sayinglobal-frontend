@@ -8,8 +8,9 @@ import { Capacitor } from '@capacitor/core';
 
 
 function isPublicPath(pathname: string): boolean {
-  if (!pathname) return true;
-  if (pathname === '/' || pathname === '/index.html' || pathname === '/index') return true;
+  if (!pathname || pathname === '/' || pathname === '/index.html' || pathname === '/index') return true;
+  // Handle capacitor paths like /android_asset/.../index.html
+  if (pathname.endsWith('/index.html') || pathname.endsWith('/index')) return true;
   if (pathname.startsWith('/auth') || pathname.startsWith('/admin/login')) return true;
   if (pathname === '/terms' || pathname === '/privacy') return true;
   return false;
