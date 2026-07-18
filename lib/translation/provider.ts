@@ -10,6 +10,8 @@
  *   const result = await translationProvider.translate(text, 'ru', 'uz');
  */
 
+import apiClient from '@/lib/api/client';
+
 export type SupportedLocale = 'uz' | 'uz-cyrl' | 'ru' | 'en';
 
 export interface TranslationResult {
@@ -135,20 +137,12 @@ const backendProvider: TranslationProvider = {
       return { text: cache.get(key)!, fromLocale: source, toLocale: target, cached: true };
     }
 
-    // Call backend proxy via the same origin rewrite that apiClient uses.
-    // NEXT_PUBLIC_API_URL already contains the /api suffix (e.g. http://localhost:8000/api
-    // or https://sayinglobal.up.railway.app/api), so we must NOT append /api again.
-    const apiBase = (process.env.NEXT_PUBLIC_API_URL || 'https://sayinglobal.up.railway.app')
-      .replace(/\/api\/?$/, '');
-    const res = await fetch(`${apiBase}/api/listings/translate/`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text, target_lang: target }),
-      signal: AbortSignal.timeout(15000),
+    // Call backend proxy via apiClient to include the Authorization header automatically.
+    const data = await apiClient.post('/listings/translate/', {
+      text,
+      target_lang: target,
     });
 
-    if (!res.ok) throw new Error(`Translation HTTP ${res.status}`);
-    const data = await res.json();
     const translated = data.translated_text ?? text;
 
     cache.set(key, translated);
