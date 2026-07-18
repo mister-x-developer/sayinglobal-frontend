@@ -10,12 +10,10 @@ import { HowItWorks } from '@/components/landing/HowItWorks';
 import { Categories } from '@/components/landing/Categories';
 import { TrustSection } from '@/components/landing/TrustSection';
 import { FinalCTA } from '@/components/landing/FinalCTA';
-import { LandingRedirect } from '@/components/auth/LandingRedirect';
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen flex flex-col">
-      <LandingRedirect />
       <LandingNav />
       <main className="flex-1">
         <Hero />
