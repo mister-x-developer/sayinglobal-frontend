@@ -37,6 +37,7 @@ import { toast } from '@/components/ui/Toast';
 import { TranslatableText, TranslateButton } from '@/components/shared/TranslateButton';
 import { MapView } from '@/components/shared/MapView';
 import { CommentSection } from '@/components/listings/CommentThread';
+import { ListingImage } from '@/components/listings/ListingImage';
 import { SellerRatingsThread } from '@/components/sellers/SellerRatingsThread';
 import { listingsApi, type ListingDetail } from '@/lib/api/listings';
 import { moderationApi, type AdminReportRecord } from '@/lib/api/moderation';
@@ -174,8 +175,13 @@ function AdminListingDetailPageContent() {
               <div className="surface-elevated overflow-hidden">
                 {heroImage ? (
                   <div className="relative aspect-[16/9] w-full bg-bg-subtle">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <Image src={heroImage} alt={listing.title} width={800} height={400} className="h-full w-full object-cover" />
+                    <ListingImage
+                      src={heroImage}
+                      alt={listing.title}
+                      category={listing.category?.slug || listing.category?.name}
+                      fill
+                      className="h-full w-full object-cover"
+                    />
                   </div>
                 ) : (
                   <div className="aspect-[16/9] w-full bg-bg-subtle" />
@@ -198,7 +204,7 @@ function AdminListingDetailPageContent() {
                       }
                       size="md"
                     >
-                      {t(`listings.${listing.status}` as any)}
+                      {t(`admin.status.${listing.status}` as any) || listing.status}
                     </Badge>
                   </div>
 

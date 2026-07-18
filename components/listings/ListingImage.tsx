@@ -46,10 +46,16 @@ export function ListingImage({
   const [errored, setErrored] = useState(false);
   const showImage = !!src && !errored;
 
+  let finalSrc = src;
+  if (finalSrc && finalSrc.startsWith('/')) {
+    const apiOrigin = (process.env.NEXT_PUBLIC_API_URL || 'https://sayinglobal.up.railway.app').replace(/\/api\/?$/, '');
+    finalSrc = `${apiOrigin}${finalSrc}`;
+  }
+
   if (showImage) {
     return (
       <Image
-        src={src!}
+        src={finalSrc!}
         alt={alt}
         fill={fill}
         sizes={sizes ?? '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'}

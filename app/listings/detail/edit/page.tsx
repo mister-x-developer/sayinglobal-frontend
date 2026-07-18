@@ -39,6 +39,8 @@ import { LocationSelector } from '@/components/shared/LocationSelector';
 import { LocationPicker } from '@/components/shared/LocationPicker';
 import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
 import { listingsApi, type Listing } from '@/lib/api/listings';
+import { getMediaUrl } from '@/lib/utils/format';
+import Image from 'next/image';
 
 interface EditForm {
   category: string;
@@ -353,7 +355,7 @@ function EditListingPageContent() {
                   {existingImages.map((img) => (
                     <div key={img.id} className="group relative aspect-square overflow-hidden rounded-xl border-2 border-border">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={img.image} alt="" className="h-full w-full object-cover" />
+                      <Image src={getMediaUrl(img.image) || ''} alt="" width={80} height={80} className="h-full w-full object-cover" />
                       {img.is_primary && (
                         <div className="absolute bottom-1 left-1 rounded-md bg-brand-primary px-1.5 py-0.5 text-[10px] font-bold text-white">
                           {t('listings.primaryPhoto')}

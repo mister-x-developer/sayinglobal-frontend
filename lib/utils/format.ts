@@ -151,3 +151,12 @@ export function formatFileSize(bytes: number): string {
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
 }
+
+export function getMediaUrl(url: string | null | undefined): string | null {
+  if (!url) return null;
+  if (url.startsWith('/')) {
+    const apiOrigin = (process.env.NEXT_PUBLIC_API_URL || 'https://sayinglobal.up.railway.app').replace(/\/api\/?$/, '');
+    return `${apiOrigin}${url}`;
+  }
+  return url;
+}
