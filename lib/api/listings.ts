@@ -136,8 +136,8 @@ export const listingsApi = {
 
   async my(): Promise<Listing[]> {
     try {
-      const res = await apiClient.get<Listing[]>('/listings/my/');
-      return res.data ?? [];
+      const res = await apiClient.get<any>('/listings/my/');
+      return Array.isArray(res.data) ? res.data : (res.data?.results ?? []);
     } catch {
       return [];
     }
@@ -145,8 +145,8 @@ export const listingsApi = {
 
   async favorites(): Promise<Listing[]> {
     try {
-      const res = await apiClient.get<Listing[]>('/listings/favorites/');
-      return res.data ?? [];
+      const res = await apiClient.get<any>('/listings/favorites/');
+      return Array.isArray(res.data) ? res.data : (res.data?.results ?? []);
     } catch {
       return [];
     }
@@ -210,9 +210,10 @@ export const listingsApi = {
       }>>('/listings/categories/');
       
       const order = ['cattle', 'sheep', 'goats', 'horses', 'camels', 'poultry'];
-      const data = res.data ?? [];
+      const rawData = res.data ?? [];
+      const data = Array.isArray(rawData) ? rawData : (rawData as any).results ?? [];
       
-      return data.sort((a, b) => {
+      return data.sort((a: any, b: any) => {
         const indexA = order.indexOf(a.slug);
         const indexB = order.indexOf(b.slug);
         
@@ -229,8 +230,8 @@ export const listingsApi = {
 
   async byCategory(category: string): Promise<Listing[]> {
     try {
-      const res = await apiClient.get<Listing[]>(`/listings/category/${category}/`);
-      return res.data ?? [];
+      const res = await apiClient.get<any>(`/listings/category/${category}/`);
+      return Array.isArray(res.data) ? res.data : (res.data?.results ?? []);
     } catch {
       return [];
     }
@@ -238,8 +239,8 @@ export const listingsApi = {
 
   async search(query: string): Promise<Listing[]> {
     try {
-      const res = await apiClient.get<Listing[]>('/listings/search/', { params: { q: query } });
-      return res.data ?? [];
+      const res = await apiClient.get<any>('/listings/search/', { params: { q: query } });
+      return Array.isArray(res.data) ? res.data : (res.data?.results ?? []);
     } catch {
       return [];
     }

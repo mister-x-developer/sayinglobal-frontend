@@ -70,7 +70,8 @@ function AdminListingDetailPageContent() {
       setListing(detail ?? null);
       setComments(commentsData ?? []);
       // Filter on the client to those reports targeting THIS listing id.
-      const all = (reportsResp as any)?.results ?? [];
+      const rawAll = reportsResp as any;
+      const all = Array.isArray(rawAll) ? rawAll : (rawAll?.results ?? []);
       const filtered = all.filter((r: any) => r?.listing?.id === id);
       setReports(filtered);
     } catch {
