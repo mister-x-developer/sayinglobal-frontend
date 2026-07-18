@@ -19,6 +19,7 @@ const isCapacitor = process.env.CAPACITOR_BUILD === 'true';
 const nextConfig = {
   ...(isCapacitor ? { output: 'export' } : {}),
   reactStrictMode: true,
+  trailingSlash: true,
 
   eslint: {
     // ESLint runs in CI separately; don't let it block the build
