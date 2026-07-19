@@ -38,6 +38,23 @@ export function FollowButton({
   const handle = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    let isAuth = false;
+    try {
+      const authRaw = localStorage.getItem('sayin-auth-store');
+      if (authRaw) {
+        const parsed = JSON.parse(authRaw);
+        isAuth = !!(parsed?.state?.isAuthenticated || parsed?.isAuthenticated);
+      }
+    } catch {}
+
+    if (!isAuth) {
+      if (typeof window !== 'undefined') {
+        window.location.href = `/auth?next=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+      }
+      return;
+    }
+
     if (busy || disabled) return;
     setBusy(true);
     try {

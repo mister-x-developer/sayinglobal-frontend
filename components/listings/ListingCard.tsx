@@ -67,9 +67,31 @@ export function ListingCard({ listing, onFavorite }: Props) {
     ? (t(`categories.${categorySlug}` as any) || (listing.category as any)?.[locKey] || listing.category?.name_uz || '')
     : ((listing.category as any)?.[locKey] || listing.category?.name_uz || '');
 
+  const router = import('next/navigation').then(mod => mod.useRouter).catch(() => null);
+  const pathname = import('next/navigation').then(mod => mod.usePathname).catch(() => null);
+
   const handleFav = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    // Use a direct localStorage check to avoid hook execution order issues,
+    // or just rely on global auth store if we can import it.
+    let isAuth = false;
+    try {
+      const authRaw = localStorage.getItem('sayin-auth-store');
+      if (authRaw) {
+        const parsed = JSON.parse(authRaw);
+        isAuth = !!(parsed?.state?.isAuthenticated || parsed?.isAuthenticated);
+      }
+    } catch {}
+
+    if (!isAuth) {
+      if (typeof window !== 'undefined') {
+        window.location.href = `/auth?next=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+      }
+      return;
+    }
+
     setIsFavorited((v) => !v);
     setFavAnimating(true);
     setTimeout(() => setFavAnimating(false), 400);
