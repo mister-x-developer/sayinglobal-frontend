@@ -64,11 +64,11 @@
     "telegram": "Телеграм",
     "instagram": "Инстаграм",
     "youtube": "Ютуб",
-    "clear": "Clear",
-    "quickView": "Quick View",
-    "viewDetails": "View Details",
-    "viewGallery": "View Gallery",
-    "viewImage": "View Image"
+    "clear": "Тозалаш",
+    "quickView": "Тезкор кўриш",
+    "viewDetails": "Батафсил",
+    "viewGallery": "Галерея",
+    "viewImage": "Расмни кўриш"
   },
   "landing": {
     "heroTitle": "Рақамли Чорва Бозори",
@@ -146,7 +146,10 @@
     "requestCooldown": "Янги код сўрашдан олдин {time} кутинг.",
     "resendIn": "{time} дан кейин қайта юбориш",
     "otpLocked": "Жуда кўп уриниш. {time} дан кейин қайта уриниб кўринг.",
-    "otpLockedUntil": "Ҳисоб {time} гача вақтинча блокланган"
+    "otpLockedUntil": "Ҳисоб {time} гача вақтинча блокланган",
+    "loginToViewPrice": "Нархни кўриш учун киринг",
+    "loginToViewSeller": "Сотувчини кўриш учун киринг",
+    "loginToContact": "Боғланиш учун киринг"
   },
   "nav": {
     "home": "Бош саҳифа",
@@ -272,16 +275,17 @@
     "bump": "Эълонни кўтариш",
     "soldSuccessTitle": "Сотилган деб белгиланди!",
     "markSoldSuccess": "Сотилди деб белгиланди!",
-    "cancelReviewConfirm": "Cancel Review Confirm",
-    "deletesIn": "Deletes In",
-    "markSoldConfirm": "Mark Sold Confirm",
-    "rejectedOn": "Rejected On",
-    "restoreConfirm": "Restore Confirm",
-    "statusDraft": "Status Draft",
-    "statusPending": "Status Pending",
-    "statusRejected": "Status Rejected",
-    "statusSold": "Status Sold",
-    "submitReviewConfirm": "Submit Review Confirm"
+    "cancelReviewConfirm": "Кўриб чиқишни бекор қилишни тасдиқлайсизми?",
+    "deletesIn": "Ўчирилади:",
+    "markSoldConfirm": "Сотилганлигини тасдиқлайсизми?",
+    "rejectedOn": "Рад этилган сана:",
+    "restoreConfirm": "Тиклашни тасдиқлайсизми?",
+    "statusDraft": "Қоралама",
+    "statusPending": "Кутилмоқда",
+    "statusRejected": "Рад этилди",
+    "statusSold": "Сотилган",
+    "submitReviewConfirm": "Кўриб чиқишга юборишни тасдиқлайсизми?",
+    "statusArchived": "Olib tashlangan"
   },
   "categories": {
     "all": "Барчаси",
@@ -376,8 +380,8 @@
     "security": "Хавфсизлик",
     "phoneCannotBeChanged": "Телефон рақамини ўзгартириб бўлмайди",
     "subscriptions": "Тарифлар ва Лимитлар",
-    "allListings": "All Listings",
-    "fullNameRequired": "Full Name Required"
+    "allListings": "Барча эълонлар",
+    "fullNameRequired": "Тўлиқ исм киритиш мажбурий"
   },
   "userStatus": {
     "good": "Яхши",
@@ -625,7 +629,7 @@
     "rejectionReason": "Рад этиш сабаби",
     "confirmReject": "Рад этишни тасдиқлаш",
     "rejectionReasonPlaceholder": "Рад этиш сабаби",
-    "rejectionReasonRequired": "Сабабни киритиш мажбурий",
+    "rejectionReasonRequired": "Рад этиш сабаби (Мажбурий)",
     "ratingsModeration": "Шарҳларни модерация",
     "broadcastTitle": "Сарлавҳа",
     "broadcastSent": "Хабар юборилди",
@@ -790,7 +794,7 @@
     "network": "Тармоқ хатоси",
     "commentFailed": "Шарҳ қўшиб бўлмади",
     "replyFailed": "Жавоб қўшиб бўлмади",
-    "submitReviewFailed": "Submit Review Failed"
+    "submitReviewFailed": "Кўриб чиқишга юборишда хатолик"
   },
   "success": {
     "saved": "Муваффақиятли сақланди",
@@ -848,7 +852,7 @@
     "titleTooLong": "Сарлавҳа 100 белгидан ошмаслиги керак",
     "descriptionTooLong": "Тавсиф 2000 белгидан ошмаслиги керак",
     "messageTooLong": "Хабар 1000 белгидан ошмаслиги керак",
-    "maxWeight": "Max Weight"
+    "maxWeight": "Максимал вазн"
   },
   "profileInfo": {
     "title": "Муҳим маълумот",
@@ -1055,7 +1059,7 @@
     "reason_harassment_in_chat": "Чатда таъқиб",
     "reason_impersonation": "Сохта шахсият",
     "reason_listing_already_sold": "Сотилган лекин ҳали сотувда",
-    "bulkAiCheck": "Барча янгиларини сунъий интеллект орқали текшириш",
+    "bulkAiCheck": "Барча янгиларини AI орқали текшириш",
     "loading": "Юкланмоқда...",
     "status_all": "Барчаси"
   },
@@ -1164,22 +1168,22 @@
     "monthlyLimit": "Ойлик эълон бериш лимити",
     "upgrade": "Тарифни янгилаш",
     "wholesale": "Улгуржи савдога рухсат",
-    "bumpLimit": "Bump Limit",
-    "buySoon": "Buy Soon",
-    "current": "Current",
-    "durationDays": "Duration Days",
-    "expiresOn": "Expires On",
-    "featureActiveLimit": "Feature Active Limit",
-    "featureBump": "Feature Bump",
-    "featureMonthlyLimit": "Feature Monthly Limit",
-    "featureWholesale": "Feature Wholesale",
-    "max": "Max",
-    "noPlanData": "No Plan Data",
-    "promoPlaceholder": "Promo Placeholder",
-    "statusActive": "Status Active",
-    "statusInactive": "Status Inactive",
-    "unlimitedTime": "Unlimited Time",
-    "yourCurrentPlan": "Your Current Plan"
+    "bumpLimit": "Кўтариш лимити",
+    "buySoon": "Тез орада сотиш",
+    "current": "Жорий",
+    "durationDays": "Давомийлиги (кун)",
+    "expiresOn": "Амал қилиш муддати",
+    "featureActiveLimit": "Фаол эълонлар лимити",
+    "featureBump": "Кўтариш",
+    "featureMonthlyLimit": "Ойлик лимит",
+    "featureWholesale": "Улгуржи",
+    "max": "Макс.",
+    "noPlanData": "Тариф йўқ",
+    "promoPlaceholder": "Промо код",
+    "statusActive": "Фаол",
+    "statusInactive": "Нофаол",
+    "unlimitedTime": "Чексиз",
+    "yourCurrentPlan": "Жорий тарифингиз"
   },
   "ai": {
     "openAssistant": "AI Ёрдамчи",
@@ -1197,10 +1201,10 @@
       "adminStats": "Тизим статистикаси",
       "adminSpam": "Спам ва шубҳали эълонлар"
     },
-    "newChat": "Янги чат",
-    "chatHistory": "Чатлар тарихи",
-    "noChats": "Суҳбатлар топилмади",
-    "adminGreeting": "Салом! Платформа бошқарувида қандай ёрдам бера оламан?",
+    "newChat": "Янги чат очиш",
+    "chatHistory": "Суҳбатлар тарихи",
+    "noChats": "Ҳали ҳеч қандай чат йўқ.",
+    "adminGreeting": "👋 Ассалому алайкум! Платформани бошқариш бўйича саволларингиз борми?",
     "title": "SAYIN AI",
     "adminTitle": "AI Ёрдамчи",
     "adminSubtitle": "Модерация ва Таҳлил",
@@ -1417,8 +1421,8 @@
     "advice": "AI маслаҳати:",
     "moderation": "AI Модерация",
     "loading": "Юкланмоқда...",
-    "allChecked": "Ҳамма нарса текширилган",
-    "noResults": "Кўриб чиқилиши керак бўлган натижалар йўқ"
+    "allChecked": "Ҳаммаси текширилган",
+    "noResults": "Натижалар йўқ"
   },
   "Analytics": {
     "notEnoughData": "Етарли маълумот йўқ",
@@ -1491,8 +1495,8 @@
     "edited": "таҳрирланган",
     "infrastructure": "Инфратузилма",
     "responseTime": "Жавоб вақти",
-    "hide": "Hide",
-    "unhide": "Unhide"
+    "hide": "Яшириш",
+    "unhide": "Кўрсатиш"
   },
   "AdminHealth": {
     "totalUsers": "Жами фойдаланувчилар",
@@ -1580,10 +1584,10 @@
     "title": "Title"
   },
   "actions": {
-    "cancel": "Cancel",
-    "edit": "Edit",
-    "markSold": "Mark Sold",
-    "restore": "Restore",
-    "submitReview": "Submit Review"
+    "cancel": "Бекор қилиш",
+    "edit": "Таҳрирлаш",
+    "markSold": "Сотилди",
+    "restore": "Тиклаш",
+    "submitReview": "Текширишга юбориш"
   }
 }

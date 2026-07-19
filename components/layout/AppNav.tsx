@@ -266,7 +266,7 @@ export function AppNav() {
     return () => document.removeEventListener('mousedown', onClick);
   }, [profileOpen]);
 
-  const links = user?.is_admin || user?.is_staff ? [
+  const links = user?.is_admin || user?.is_staff || user?.is_admin_account ? [
     { href: '/admin', icon: ShieldCheck, label: t('nav.admin') },
     { href: '/listings', icon: LayoutGrid, label: t('nav.listings') },
     { href: '/sellers', icon: ShieldCheck, label: t('nav.sellers') },
@@ -330,7 +330,7 @@ export function AppNav() {
             <div className="flex-1" />
 
             <div className="flex shrink-0 items-center gap-1 sm:gap-1.5">
-              {!(user?.is_admin || user?.is_staff) && (
+              {!(user?.is_admin || user?.is_staff || user?.is_admin_account) && (
               <Link
                 href="/listings/new"
                 className="hidden md:inline-flex btn btn-primary btn-sm gap-1.5"
@@ -396,7 +396,7 @@ export function AppNav() {
                           </div>
                         </div>
                         <div className="p-1.5">
-                          {!(user.is_admin || user.is_staff) && (
+                          {!(user.is_admin || user.is_staff || user.is_admin_account) && (
                             <>
                               <Link
                                 href="/profile"
@@ -421,7 +421,7 @@ export function AppNav() {
                               </Link>
                             </>
                           )}
-                          {(user.is_staff || user.is_admin) && (
+                          {(user.is_staff || user.is_admin || user.is_admin_account) && (
                             <Link
                               href="/admin"
                               className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-fg hover:bg-bg-subtle"

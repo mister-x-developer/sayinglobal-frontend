@@ -13,7 +13,9 @@ function getApiBaseUrl(): string {
   // Use explicit backend URL to bypass Next.js proxy trailing-slash bugs.
   // For static export (APK), we MUST hardcode the production URL because
   // rewrites are unsupported and local env vars might be missing.
-  return (process.env.NEXT_PUBLIC_API_URL || 'https://sayinglobal.up.railway.app/api').replace(/\/api\/?$/, '');
+  if (process.env.NEXT_PUBLIC_API_URL) return process.env.NEXT_PUBLIC_API_URL.replace(/\/api\/?$/, '');
+  if (process.env.NODE_ENV === 'development') return 'http://127.0.0.1:8000';
+  return 'https://sayinglobal.up.railway.app';
 }
 
 // API_BASE_URL is computed at module load time.

@@ -111,7 +111,7 @@ export function AdminLayout({ children, noPadding = false }: { children: React.R
     if (hydrated) {
       if (!isAuthenticated) {
         router.replace('/');
-      } else if (!user?.is_staff && !user?.is_admin) {
+      } else if (!user?.is_staff && !user?.is_admin && !user?.is_admin_account) {
         router.replace('/dashboard');
       }
     }

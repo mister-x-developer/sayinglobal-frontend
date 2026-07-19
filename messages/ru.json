@@ -64,11 +64,11 @@
     "telegram": "Телеграм",
     "instagram": "Инстаграм",
     "youtube": "Ютуб",
-    "clear": "Clear",
-    "quickView": "Quick View",
-    "viewDetails": "View Details",
-    "viewGallery": "View Gallery",
-    "viewImage": "View Image"
+    "clear": "Очистить",
+    "quickView": "Быстрый просмотр",
+    "viewDetails": "Подробнее",
+    "viewGallery": "Галерея",
+    "viewImage": "Посмотреть фото"
   },
   "landing": {
     "heroTitle": "Цифровой рынок скота",
@@ -146,7 +146,10 @@
     "requestCooldown": "Подождите {time} перед запросом нового кода.",
     "resendIn": "Повторить через {time}",
     "otpLocked": "Слишком много попыток. Повторите через {time}.",
-    "otpLockedUntil": "Аккаунт временно заблокирован до {time}"
+    "otpLockedUntil": "Аккаунт временно заблокирован до {time}",
+    "loginToViewPrice": "Войдите, чтобы увидеть цену",
+    "loginToViewSeller": "Войдите, чтобы увидеть продавца",
+    "loginToContact": "Войдите, чтобы связаться"
   },
   "nav": {
     "home": "Главная",
@@ -272,16 +275,17 @@
     "bump": "Поднять объявление",
     "soldSuccessTitle": "Отмечено как проданное!",
     "markSoldSuccess": "Успешно отмечено как проданное!",
-    "cancelReviewConfirm": "Cancel Review Confirm",
-    "deletesIn": "Deletes In",
-    "markSoldConfirm": "Mark Sold Confirm",
-    "rejectedOn": "Rejected On",
-    "restoreConfirm": "Restore Confirm",
-    "statusDraft": "Status Draft",
-    "statusPending": "Status Pending",
-    "statusRejected": "Status Rejected",
-    "statusSold": "Status Sold",
-    "submitReviewConfirm": "Submit Review Confirm"
+    "cancelReviewConfirm": "Отменить проверку?",
+    "deletesIn": "Удалится через:",
+    "markSoldConfirm": "Отметить как проданное?",
+    "rejectedOn": "Отклонено:",
+    "restoreConfirm": "Восстановить?",
+    "statusDraft": "Черновик",
+    "statusPending": "Ожидается",
+    "statusRejected": "Отклонено",
+    "statusSold": "Продано",
+    "submitReviewConfirm": "Отправить на проверку?",
+    "statusArchived": "Olib tashlangan"
   },
   "categories": {
     "all": "Все",
@@ -376,8 +380,8 @@
     "security": "Безопасность",
     "phoneCannotBeChanged": "Номер телефона не может быть изменен",
     "subscriptions": "Тарифы и лимиты",
-    "allListings": "All Listings",
-    "fullNameRequired": "Full Name Required"
+    "allListings": "Все объявления",
+    "fullNameRequired": "Введите полное имя"
   },
   "userStatus": {
     "good": "Хорошо",
@@ -622,10 +626,10 @@
     "actions": "Действия",
     "stats": "Статистика",
     "restore": "Восстановить",
-    "rejectionReason": "Причина отклонения",
+    "rejectionReason": "Причина отказа",
     "confirmReject": "Подтвердить отклонение",
     "rejectionReasonPlaceholder": "Причина отклонения",
-    "rejectionReasonRequired": "Обязательно указать причину",
+    "rejectionReasonRequired": "Причина отказа (Обязательно)",
     "ratingsModeration": "Модерация отзывов",
     "broadcastTitle": "Заголовок",
     "broadcastSent": "Рассылка отправлена",
@@ -790,7 +794,7 @@
     "network": "Ошибка сети",
     "commentFailed": "Не удалось добавить комментарий",
     "replyFailed": "Не удалось добавить ответ",
-    "submitReviewFailed": "Submit Review Failed"
+    "submitReviewFailed": "Ошибка отправки на проверку"
   },
   "success": {
     "saved": "Успешно сохранено",
@@ -848,7 +852,7 @@
     "titleTooLong": "Заголовок не должен превышать 100 символов",
     "descriptionTooLong": "Описание не должно превышать 2000 символов",
     "messageTooLong": "Сообщение не должно превышать 1000 символов",
-    "maxWeight": "Max Weight"
+    "maxWeight": "Максимальный вес"
   },
   "profileInfo": {
     "title": "Важная информация",
@@ -1164,22 +1168,22 @@
     "monthlyLimit": "Ежемесячный лимит объявлений",
     "upgrade": "Обновить тариф",
     "wholesale": "Разрешена оптовая продажа",
-    "bumpLimit": "Bump Limit",
-    "buySoon": "Buy Soon",
-    "current": "Current",
-    "durationDays": "Duration Days",
-    "expiresOn": "Expires On",
-    "featureActiveLimit": "Feature Active Limit",
-    "featureBump": "Feature Bump",
-    "featureMonthlyLimit": "Feature Monthly Limit",
-    "featureWholesale": "Feature Wholesale",
-    "max": "Max",
-    "noPlanData": "No Plan Data",
-    "promoPlaceholder": "Promo Placeholder",
-    "statusActive": "Status Active",
-    "statusInactive": "Status Inactive",
-    "unlimitedTime": "Unlimited Time",
-    "yourCurrentPlan": "Your Current Plan"
+    "bumpLimit": "Лимит поднятий",
+    "buySoon": "Скоро купить",
+    "current": "Текущий",
+    "durationDays": "Длительность (дней)",
+    "expiresOn": "Истекает",
+    "featureActiveLimit": "Лимит активных",
+    "featureBump": "Поднятие",
+    "featureMonthlyLimit": "Месячный лимит",
+    "featureWholesale": "Опт",
+    "max": "Макс.",
+    "noPlanData": "Нет тарифа",
+    "promoPlaceholder": "Промокод",
+    "statusActive": "Активен",
+    "statusInactive": "Неактивен",
+    "unlimitedTime": "Неограничено",
+    "yourCurrentPlan": "Ваш тариф"
   },
   "ai": {
     "openAssistant": "AI Помощник",
@@ -1199,8 +1203,8 @@
     },
     "newChat": "Новый чат",
     "chatHistory": "История чатов",
-    "noChats": "Беседы не найдены",
-    "adminGreeting": "Привет! Как я могу помочь в управлении платформой?",
+    "noChats": "Пока нет чатов.",
+    "adminGreeting": "👋 Здравствуйте! Есть ли у вас вопросы по управлению платформой?",
     "title": "SAYIN AI",
     "adminTitle": "AI Ассистент",
     "adminSubtitle": "Модерация и Аналитика",
@@ -1415,10 +1419,10 @@
   },
   "AI": {
     "advice": "Совет ИИ:",
-    "moderation": "Модерация ИИ",
+    "moderation": "ИИ Модерация",
     "loading": "Загрузка...",
-    "allChecked": "Все проверено",
-    "noResults": "Нет результатов для рассмотрения"
+    "allChecked": "Всё проверено",
+    "noResults": "Нет результатов"
   },
   "Analytics": {
     "notEnoughData": "Недостаточно данных",
@@ -1447,8 +1451,8 @@
   },
   "Map": {
     "geoDiscovery": "Гео-Поиск",
-    "loadingMap": "Карта загружается...",
-    "mapFailed": "Карта не загружена",
+    "loadingMap": "Загрузка карты...",
+    "mapFailed": "Ошибка карты",
     "searchRadius": "Радиус поиска (км)"
   },
   "Errors": {
@@ -1484,15 +1488,15 @@
   },
   "General": {
     "telegramOtp": "Телеграм OTP",
-    "secureLoginActive": "Безопасный вход активен",
+    "secureLoginActive": "Безопасный вход",
     "uzbek": "Узбекский",
     "english": "Английский",
     "hidden": "скрытый",
     "edited": "отредактировано",
     "infrastructure": "Инфраструктура",
     "responseTime": "Время отклика",
-    "hide": "Hide",
-    "unhide": "Unhide"
+    "hide": "Скрыть",
+    "unhide": "Показать"
   },
   "AdminHealth": {
     "totalUsers": "Всего пользователей",
@@ -1580,10 +1584,10 @@
     "title": "Руководство и правила"
   },
   "actions": {
-    "cancel": "Cancel",
-    "edit": "Edit",
-    "markSold": "Mark Sold",
-    "restore": "Restore",
-    "submitReview": "Submit Review"
+    "cancel": "Отмена",
+    "edit": "Изменить",
+    "markSold": "Продано",
+    "restore": "Восстановить",
+    "submitReview": "Отправить на проверку"
   }
 }

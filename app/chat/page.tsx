@@ -448,7 +448,7 @@ export default function ChatPage() {
                   <div className="min-w-0">
                     <p className="truncate text-sm font-bold text-fg">{getOther(activeConv).full_name}</p>
                     <p className="text-xs text-fg-muted">
-                      {locale === 'ru' ? 'Продавец' : locale === 'en' ? 'Seller' : 'Sotuvchi'}
+                      {locale === 'ru' ? 'Продавец' : locale === 'en' ? 'Seller' : locale === 'uz-cyrl' ? 'Сотувчи' : 'Sotuvchi'}
                     </p>
                   </div>
                 </Link>
@@ -527,7 +527,7 @@ export default function ChatPage() {
                       <MessageSquareText className="h-6 w-6" strokeWidth={1.5} />
                     </div>
                     <p className="text-sm text-fg-muted">
-                      {locale === 'ru' ? 'Начните разговор' : locale === 'en' ? 'Start the conversation' : 'Suhbatni boshlang'}
+                      {locale === 'ru' ? 'Начните разговор' : locale === 'en' ? 'Start the conversation' : locale === 'uz-cyrl' ? 'Суҳбатни бошланг' : 'Suhbatni boshlang'}
                     </p>
                   </div>
                 )}
@@ -548,9 +548,9 @@ export default function ChatPage() {
                   const today = new Date().toLocaleDateString();
                   const yesterday = new Date(Date.now() - 86400000).toLocaleDateString();
                   const dateSepLabel = msgDate === today
-                    ? (locale === 'ru' ? 'Сегодня' : locale === 'en' ? 'Today' : 'Bugun')
+                    ? (locale === 'ru' ? 'Сегодня' : locale === 'en' ? 'Today' : locale === 'uz-cyrl' ? 'Бугун' : 'Bugun')
                     : msgDate === yesterday
-                      ? (locale === 'ru' ? 'Вчера' : locale === 'en' ? 'Yesterday' : 'Kecha')
+                      ? (locale === 'ru' ? 'Вчера' : locale === 'en' ? 'Yesterday' : locale === 'uz-cyrl' ? 'Кеча' : 'Kecha')
                       : new Date(msg.created_at).toLocaleDateString(locale === 'ru' ? 'ru-RU' : locale === 'en' ? 'en-US' : 'uz-UZ', { day: 'numeric', month: 'long' });
 
                   return (
@@ -623,8 +623,8 @@ export default function ChatPage() {
                               {msg.translating
                                 ? '...'
                                 : msg.translated
-                                  ? (locale === 'ru' ? 'Оригинал' : locale === 'en' ? 'Original' : 'Asl')
-                                  : (locale === 'ru' ? 'Перевести' : locale === 'en' ? 'Translate' : 'Tarjima')}
+                                  ? (locale === 'ru' ? 'Оригинал' : locale === 'en' ? 'Original' : locale === 'uz-cyrl' ? 'Асл' : 'Asl')
+                                  : (locale === 'ru' ? 'Перевести' : locale === 'en' ? 'Translate' : locale === 'uz-cyrl' ? 'Таржима' : 'Tarjima')}
                             </button>
                             {/* Report message button */}
                             {!isMe && (
@@ -638,7 +638,7 @@ export default function ChatPage() {
                                 title={t('chat.reportUser')}
                               >
                                 <Flag className="h-3 w-3" strokeWidth={2} />
-                                {locale === 'ru' ? 'Пожаловаться' : locale === 'en' ? 'Report' : 'Shikoyat'}
+                                {locale === 'ru' ? 'Пожаловаться' : locale === 'en' ? 'Report' : locale === 'uz-cyrl' ? 'Шикоят' : 'Shikoyat'}
                               </button>
                             )}
                           </div>

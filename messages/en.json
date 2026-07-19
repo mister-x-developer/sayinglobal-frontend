@@ -146,7 +146,10 @@
     "requestCooldown": "Please wait {time} before requesting a new code.",
     "resendIn": "Resend in {time}",
     "otpLocked": "Too many attempts. Try again in {time}",
-    "otpLockedUntil": "Account temporarily locked until {time}"
+    "otpLockedUntil": "Account temporarily locked until {time}",
+    "loginToViewPrice": "Log in to view price",
+    "loginToViewSeller": "Log in to view seller",
+    "loginToContact": "Log in to contact"
   },
   "nav": {
     "home": "Home",
@@ -211,7 +214,7 @@
     "favorites": "Favorites",
     "category": "Category",
     "statusActive": "Active",
-    "statusPending": "Pending Review",
+    "statusPending": "Pending",
     "statusRejected": "Rejected",
     "statusArchived": "Archived",
     "statusSold": "Sold",
@@ -273,21 +276,16 @@
     "weight": "Weight",
     "breed": "Breed",
     "healthStatus": "Health status",
-    "statusActive": "Active",
     "quantity": "Quantity",
     "bump": "Bump Listing",
     "soldSuccessTitle": "Marked as sold!",
     "markSoldSuccess": "Successfully marked as sold!",
-    "cancelReviewConfirm": "Cancel Review Confirm",
-    "deletesIn": "Deletes In",
-    "markSoldConfirm": "Mark Sold Confirm",
-    "rejectedOn": "Rejected On",
-    "restoreConfirm": "Restore Confirm",
-    "statusDraft": "Status Draft",
-    "statusPending": "Status Pending",
-    "statusRejected": "Status Rejected",
-    "statusSold": "Status Sold",
-    "submitReviewConfirm": "Submit Review Confirm"
+    "cancelReviewConfirm": "Confirm cancel review?",
+    "deletesIn": "Deletes in:",
+    "markSoldConfirm": "Confirm mark as sold?",
+    "rejectedOn": "Rejected on:",
+    "restoreConfirm": "Confirm restore?",
+    "submitReviewConfirm": "Confirm submit review?"
   },
   "categories": {
     "all": "All",
@@ -341,7 +339,7 @@
     "settings": "Settings",
     "myListings": "My listings",
     "allListings": "All Listings",
-    "activeListings": "Active",
+    "activeListings": "Active listings",
     "soldListings": "Sold",
     "favorites": "Favorites",
     "activity": "Activity",
@@ -368,8 +366,6 @@
     "noFavorites": "No favorites",
     "noFollowers": "No followers",
     "noFollowing": "No following",
-    "activeListings": "Active listings",
-    "soldListings": "Sold",
     "totalListings": "Total listings",
     "joinedDate": "Joined date",
     "verifiedSeller": "Verified seller",
@@ -385,8 +381,7 @@
     "security": "Security",
     "phoneCannotBeChanged": "Phone number cannot be changed",
     "subscriptions": "Plans & Limits",
-    "allListings": "All Listings",
-    "fullNameRequired": "Full Name Required"
+    "fullNameRequired": "Full Name is required"
   },
   "userStatus": {
     "good": "Good",
@@ -634,7 +629,7 @@
     "rejectionReason": "Rejection reason",
     "confirmReject": "Confirm rejection",
     "rejectionReasonPlaceholder": "Rejection reason",
-    "rejectionReasonRequired": "Reason is required",
+    "rejectionReasonRequired": "Rejection reason (Required)",
     "ratingsModeration": "Reviews Moderation",
     "broadcastTitle": "Title",
     "broadcastSent": "Broadcast sent",
@@ -799,7 +794,7 @@
     "network": "Network error",
     "commentFailed": "Failed to add comment",
     "replyFailed": "Failed to add reply",
-    "submitReviewFailed": "Submit Review Failed"
+    "submitReviewFailed": "Failed to submit for review"
   },
   "success": {
     "saved": "Saved successfully",
@@ -1178,23 +1173,23 @@
     "current": "Current",
     "durationDays": "Duration Days",
     "expiresOn": "Expires On",
-    "featureActiveLimit": "Feature Active Limit",
-    "featureBump": "Feature Bump",
-    "featureMonthlyLimit": "Feature Monthly Limit",
-    "featureWholesale": "Feature Wholesale",
+    "featureActiveLimit": "Active Listings Limit",
+    "featureBump": "Bump Feature",
+    "featureMonthlyLimit": "Monthly Limit",
+    "featureWholesale": "Wholesale Feature",
     "max": "Max",
     "noPlanData": "No Plan Data",
-    "promoPlaceholder": "Promo Placeholder",
-    "statusActive": "Status Active",
-    "statusInactive": "Status Inactive",
-    "unlimitedTime": "Unlimited Time",
+    "promoPlaceholder": "Promo Code",
+    "statusActive": "Active",
+    "statusInactive": "Inactive",
+    "unlimitedTime": "Unlimited",
     "yourCurrentPlan": "Your Current Plan"
   },
   "ai": {
     "openAssistant": "AI Assistant",
     "subtitle": "Livestock Market Assistant",
     "greeting": "👋 Hello! Do you have any questions about the livestock market?",
-    "inputPlaceholder": "Type your question...",
+    "inputPlaceholder": "Type a question...",
     "errorReply": "An error occurred.",
     "prompt": {
       "findCattle": "Find cattle",
@@ -1208,8 +1203,8 @@
     },
     "newChat": "New Chat",
     "chatHistory": "Chat History",
-    "noChats": "No conversations found",
-    "adminGreeting": "Hello! How can I help you manage the platform?",
+    "noChats": "No chats yet.",
+    "adminGreeting": "👋 Hello! Do you have any questions about managing the platform?",
     "title": "SAYIN AI",
     "adminTitle": "AI Co-pilot",
     "adminSubtitle": "Moderation & Analytics",
@@ -1419,15 +1414,15 @@
     "newChat": "New Chat",
     "historyEmpty": "History is empty",
     "systemManagement": "System Management & Analysis",
-    "welcomeSystem": "Tizimga xush kelibsiz",
-    "history": "Tarix"
+    "welcomeSystem": "Welcome to the system",
+    "history": "History"
   },
   "AI": {
-    "advice": "AI maslahati:",
-    "moderation": "AI Moderatsiya",
-    "loading": "Yuklanmoqda...",
-    "allChecked": "Hamma narsa tekshirilgan",
-    "noResults": "Koʻrib chiqilishi kerak boʻlgan natijalar yoʻq"
+    "advice": "AI advice:",
+    "moderation": "AI Moderation",
+    "loading": "Loading...",
+    "allChecked": "Everything checked",
+    "noResults": "No results"
   },
   "Analytics": {
     "notEnoughData": "Not enough data",
@@ -1456,9 +1451,9 @@
   },
   "Map": {
     "geoDiscovery": "Geo-Discovery",
-    "loadingMap": "Xarita yuklanmoqda...",
-    "mapFailed": "Xarita yuklanmadi",
-    "searchRadius": "Qidiruv radiusi (km)"
+    "loadingMap": "Loading map...",
+    "mapFailed": "Map failed to load",
+    "searchRadius": "Search radius (km)"
   },
   "Errors": {
     "connectionLost": "Connection Lost",
@@ -1493,7 +1488,7 @@
   },
   "General": {
     "telegramOtp": "Telegram OTP",
-    "secureLoginActive": "Xavfsiz kirish faol",
+    "secureLoginActive": "Secure login active",
     "uzbek": "Uzbek",
     "english": "English",
     "hidden": "hidden",
@@ -1501,7 +1496,7 @@
     "infrastructure": "Infrastructure",
     "responseTime": "Response time",
     "hide": "Hide",
-    "unhide": "Unhide"
+    "unhide": "Show"
   },
   "AdminHealth": {
     "totalUsers": "Total users",

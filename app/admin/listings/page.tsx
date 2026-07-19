@@ -18,7 +18,7 @@ import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
 import apiClient from '@/lib/api/client';
 import { moderationApi } from '@/lib/api/moderation';
-import { formatPrice, formatRelativeTime } from '@/lib/utils/format';
+import { formatPrice, formatRelativeTime, getLocalizedListingTitle } from '@/lib/utils/format';
 import { cn } from '@/lib/utils/cn';
 
 const STATUS_OPTIONS = ['all', 'pending', 'active', 'rejected', 'sold', 'archived'] as const;
@@ -439,7 +439,7 @@ export default function AdminListingsPage() {
                               </div>
                             )}
                             <div className="min-w-0">
-                              <p className="cell-title line-clamp-1">{l.title}</p>
+                              <p className="cell-title line-clamp-1">{getLocalizedListingTitle(l as any, locale)}</p>
                               <p className="cell-subtle">{formatRelativeTime(l.created_at)}</p>
                             </div>
                           </div>

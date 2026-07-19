@@ -20,7 +20,7 @@ export function LandingRedirect() {
     if (typeof window !== 'undefined' && window.location.pathname !== '/' && window.location.pathname !== '/index.html') return;
 
     if (hydrated && isAuthenticated) {
-      const target = user?.is_admin ? '/admin' : '/dashboard';
+      const target = (user?.is_admin || user?.is_staff || user?.is_admin_account) ? '/admin/' : '/dashboard/';
       router.replace(target);
     }
   }, [hydrated, isAuthenticated, user, router]);

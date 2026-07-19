@@ -43,7 +43,7 @@ function AuthPageContent() {
   // NOTE: Only redirect after hydration to avoid false redirects on cold start.
   useEffect(() => {
     if (!isAuthenticated) return;
-    const target = nextPath || (currentUser?.is_admin || currentUser?.is_admin_account ? '/admin' : '/dashboard');
+    const target = nextPath || (currentUser?.is_admin || currentUser?.is_admin_account ? '/admin/' : '/dashboard/');
     router.replace(target);
   }, [isAuthenticated, currentUser?.is_admin, currentUser?.is_admin_account, nextPath, router]);
 
@@ -82,7 +82,7 @@ function AuthPageContent() {
       // Decide destination. is_admin → /admin, otherwise honour ?next=, fall
       // back to /dashboard.
       const target =
-        nextPath || (result.user?.is_admin || result.user?.is_admin_account ? '/admin' : '/dashboard');
+        nextPath || (result.user?.is_admin || result.user?.is_admin_account ? '/admin/' : '/dashboard/');
 
       router.replace(target);
     } catch (err: unknown) {

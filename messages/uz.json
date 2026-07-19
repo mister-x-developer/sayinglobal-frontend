@@ -64,11 +64,11 @@
     "telegram": "Telegram",
     "instagram": "Instagram",
     "youtube": "YouTube",
-    "clear": "Clear",
-    "quickView": "Quick View",
-    "viewDetails": "View Details",
-    "viewGallery": "View Gallery",
-    "viewImage": "View Image"
+    "clear": "Tozalash",
+    "quickView": "Tezkor ko'rish",
+    "viewDetails": "Batafsil",
+    "viewGallery": "Galereya",
+    "viewImage": "Rasmni ko'rish"
   },
   "landing": {
     "heroTitle": "Raqamli Chorva Bozori",
@@ -146,7 +146,10 @@
     "requestCooldown": "Yangi kod soʻrashdan oldin {time} kuting.",
     "resendIn": "{time} dan keyin qayta yuborish",
     "otpLocked": "Juda koʻp urinish. {time} dan keyin qayta urinib koʻring.",
-    "otpLockedUntil": "Hisob {time} gacha vaqtincha bloklangan"
+    "otpLockedUntil": "Hisob {time} gacha vaqtincha bloklangan",
+    "loginToViewPrice": "Narxni ko'rish uchun kiring",
+    "loginToViewSeller": "Sotuvchini ko'rish uchun kiring",
+    "loginToContact": "Bog'lanish uchun kiring"
   },
   "nav": {
     "home": "Bosh sahifa",
@@ -211,8 +214,8 @@
     "favorites": "Saralangan",
     "category": "Kategoriya",
     "statusActive": "Faol",
-    "statusPending": "Tekshiruvda",
-    "statusRejected": "Rad etilgan",
+    "statusPending": "Kutilmoqda",
+    "statusRejected": "Rad etildi",
     "statusArchived": "Olib tashlangan",
     "statusSold": "Sotilgan",
     "statusDraft": "Qoralama",
@@ -273,21 +276,16 @@
     "weight": "Vazni",
     "breed": "Zot",
     "healthStatus": "Sogʻliq holati",
-    "statusActive": "Faol",
     "quantity": "Soni / Miqdori",
     "bump": "Eʼlonni koʻtarish",
     "soldSuccessTitle": "Sotilgan deb belgilandi!",
     "markSoldSuccess": "Sotildi deb belgilandi!",
-    "cancelReviewConfirm": "Cancel Review Confirm",
-    "deletesIn": "Deletes In",
-    "markSoldConfirm": "Mark Sold Confirm",
-    "rejectedOn": "Rejected On",
-    "restoreConfirm": "Restore Confirm",
-    "statusDraft": "Status Draft",
-    "statusPending": "Status Pending",
-    "statusRejected": "Status Rejected",
-    "statusSold": "Status Sold",
-    "submitReviewConfirm": "Submit Review Confirm"
+    "cancelReviewConfirm": "Ko'rib chiqishni bekor qilishni tasdiqlaysizmi?",
+    "deletesIn": "O'chiriladi:",
+    "markSoldConfirm": "Sotilganligini tasdiqlaysizmi?",
+    "rejectedOn": "Rad etilgan sana:",
+    "restoreConfirm": "Tiklashni tasdiqlaysizmi?",
+    "submitReviewConfirm": "Ko'rib chiqishga yuborishni tasdiqlaysizmi?"
   },
   "categories": {
     "all": "Barchasi",
@@ -340,9 +338,9 @@
     "editProfile": "Profilni tahrirlash",
     "settings": "Sozlamalar",
     "myListings": "Mening eʼlonlarim",
-    "allListings": "Barchasi",
-    "activeListings": "Sotuvdagi",
-    "soldListings": "Sotilgan",
+    "allListings": "Barcha e'lonlar",
+    "activeListings": "Faol eʼlonlar",
+    "soldListings": "Sotilganlar",
     "favorites": "Saralangan",
     "activity": "Faoliyat",
     "followers": "Obunachilar",
@@ -368,8 +366,6 @@
     "noFavorites": "Saralangan eʼlonlar yoʻq",
     "noFollowers": "Obunachilar yoʻq",
     "noFollowing": "Obunalar yoʻq",
-    "activeListings": "Faol eʼlonlar",
-    "soldListings": "Sotilganlar",
     "totalListings": "Jami eʼlonlar",
     "joinedDate": "Qoʻshilgan sana",
     "verifiedSeller": "Tasdiqlangan sotuvchi",
@@ -385,8 +381,7 @@
     "security": "Xavfsizlik",
     "phoneCannotBeChanged": "Telefon raqamini oʻzgartirib boʻlmaydi",
     "subscriptions": "Tariflar va Limitlar",
-    "allListings": "All Listings",
-    "fullNameRequired": "Full Name Required"
+    "fullNameRequired": "To'liq ism kiritish majburiy"
   },
   "userStatus": {
     "good": "Yaxshi",
@@ -634,7 +629,7 @@
     "rejectionReason": "Rad etish sababi",
     "confirmReject": "Rad etishni tasdiqlash",
     "rejectionReasonPlaceholder": "Rad etish sababi",
-    "rejectionReasonRequired": "Sababni kiritish majburiy",
+    "rejectionReasonRequired": "Rad etish sababi (Majburiy)",
     "ratingsModeration": "Shikoyatlar",
     "broadcastTitle": "Sarlavha",
     "broadcastSent": "Xabar yuborildi",
@@ -799,7 +794,7 @@
     "network": "Tarmoq xatosi",
     "commentFailed": "Sharh qoʻshib boʻlmadi",
     "replyFailed": "Javob qoʻshib boʻlmadi",
-    "submitReviewFailed": "Submit Review Failed"
+    "submitReviewFailed": "Ko'rib chiqishga yuborishda xatolik"
   },
   "success": {
     "saved": "Muvaffaqiyatli saqlandi",
@@ -857,7 +852,7 @@
     "titleTooLong": "Sarlavha 100 belgidan oshmasligi kerak",
     "descriptionTooLong": "Tavsif 2000 belgidan oshmasligi kerak",
     "messageTooLong": "Xabar 2000 belgidan oshmasligi kerak",
-    "maxWeight": "Max Weight"
+    "maxWeight": "Maksimal vazn"
   },
   "profileInfo": {
     "title": "Muhim maʼlumot",
@@ -1064,7 +1059,7 @@
     "reason_harassment_in_chat": "Chatda taʼqib",
     "reason_impersonation": "Soxta shaxsiyat",
     "reason_listing_already_sold": "Sotilgan lekin hali sotuvda",
-    "bulkAiCheck": "Barcha yangilarini sunʼiy intellekt orqali tekshirish",
+    "bulkAiCheck": "Barcha yangilarini AI orqali tekshirish",
     "loading": "Yuklanmoqda...",
     "status_all": "Barchasi"
   },
@@ -1173,22 +1168,22 @@
     "monthlyLimit": "Oylik eʼlon berish limiti",
     "upgrade": "Tarifni yangilash",
     "wholesale": "Ulgurji savdoga ruxsat",
-    "bumpLimit": "Bump Limit",
-    "buySoon": "Buy Soon",
-    "current": "Current",
-    "durationDays": "Duration Days",
-    "expiresOn": "Expires On",
-    "featureActiveLimit": "Feature Active Limit",
-    "featureBump": "Feature Bump",
-    "featureMonthlyLimit": "Feature Monthly Limit",
-    "featureWholesale": "Feature Wholesale",
-    "max": "Max",
-    "noPlanData": "No Plan Data",
-    "promoPlaceholder": "Promo Placeholder",
-    "statusActive": "Status Active",
-    "statusInactive": "Status Inactive",
-    "unlimitedTime": "Unlimited Time",
-    "yourCurrentPlan": "Your Current Plan"
+    "bumpLimit": "Ko'tarish limiti",
+    "buySoon": "Tez orada sotish",
+    "current": "Joriy",
+    "durationDays": "Davomiyligi (kun)",
+    "expiresOn": "Amal qilish muddati",
+    "featureActiveLimit": "Faol e'lonlar limiti",
+    "featureBump": "Ko'tarish",
+    "featureMonthlyLimit": "Oylik limit",
+    "featureWholesale": "Ulgurji",
+    "max": "Maks.",
+    "noPlanData": "Tarif yo'q",
+    "promoPlaceholder": "Promo kod",
+    "statusActive": "Faol",
+    "statusInactive": "Nofaol",
+    "unlimitedTime": "Cheksiz",
+    "yourCurrentPlan": "Joriy tarifingiz"
   },
   "ai": {
     "openAssistant": "AI Yordamchi",
@@ -1200,16 +1195,16 @@
       "findCattle": "Qoramol topish",
       "findHorse": "Ot topish",
       "priceCheck": "Narx tekshirish",
-      "nearbyListings": "Yaqin eʼlonlar",
-      "adminCheckNew": "Yangi eʼlonlarni tekshirish",
+      "nearbyListings": "Yaqin e'lonlar",
+      "adminCheckNew": "Yangi e'lonlarni tekshirish",
       "adminComplaints": "Shikoyatlarni koʻrib chiqish",
       "adminStats": "Tizim statistikasi",
-      "adminSpam": "Spam va shubhali eʼlonlar"
+      "adminSpam": "Spam va shubhali e'lonlar"
     },
-    "newChat": "Yangi chat",
-    "chatHistory": "Chatlar tarixi",
-    "noChats": "Suhbatlar topilmadi",
-    "adminGreeting": "Salom! Platforma boshqaruvida qanday yordam bera olaman?",
+    "newChat": "Yangi chat ochish",
+    "chatHistory": "Suhbatlar tarixi",
+    "noChats": "Hali hech qanday chat yoʻq.",
+    "adminGreeting": "👋 Assalomu alaykum! Platformani boshqarish boʻyicha savollaringiz bormi?",
     "title": "SAYIN AI",
     "adminTitle": "AI Yordamchi",
     "adminSubtitle": "Moderatsiya va Tahlil",
@@ -1426,8 +1421,8 @@
     "advice": "AI maslahati:",
     "moderation": "AI Moderatsiya",
     "loading": "Yuklanmoqda...",
-    "allChecked": "Hamma narsa tekshirilgan",
-    "noResults": "Koʻrib chiqilishi kerak boʻlgan natijalar yoʻq"
+    "allChecked": "Hammasi tekshirilgan",
+    "noResults": "Natijalar yo'q"
   },
   "Analytics": {
     "notEnoughData": "Yetarli maʼlumot yoʻq",
@@ -1500,8 +1495,8 @@
     "edited": "tahrirlangan",
     "infrastructure": "Infratuzilma",
     "responseTime": "Javob vaqti",
-    "hide": "Hide",
-    "unhide": "Unhide"
+    "hide": "Yashirish",
+    "unhide": "Ko'rsatish"
   },
   "AdminHealth": {
     "totalUsers": "Jami foydalanuvchilar",
@@ -1589,10 +1584,10 @@
     "title": "Qoʻllanma va Qoidalar"
   },
   "actions": {
-    "cancel": "Cancel",
-    "edit": "Edit",
-    "markSold": "Mark Sold",
-    "restore": "Restore",
-    "submitReview": "Submit Review"
+    "cancel": "Bekor qilish",
+    "edit": "Tahrirlash",
+    "markSold": "Sotildi",
+    "restore": "Tiklash",
+    "submitReview": "Tekshirishga yuborish"
   }
 }

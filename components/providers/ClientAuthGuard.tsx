@@ -30,7 +30,7 @@ export function ClientAuthGuard({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!hasHydrated || !pathname) return;
 
-    const isPlatformAdmin = !!(user?.is_admin || user?.is_staff);
+    const isPlatformAdmin = !!(user?.is_admin || user?.is_staff || user?.is_admin_account);
 
     // If authenticated and on an auth page
     if (
@@ -40,7 +40,7 @@ export function ClientAuthGuard({ children }: { children: React.ReactNode }) {
       // Allow AuthPageContent to handle the redirect for /auth so it preserves the ?next= parameter
       if (pathname.startsWith('/auth')) return;
 
-      const target = isPlatformAdmin ? '/admin' : '/dashboard';
+      const target = isPlatformAdmin ? '/admin/' : '/dashboard/';
       router.replace(target);
       return;
     }
@@ -72,7 +72,7 @@ export function ClientAuthGuard({ children }: { children: React.ReactNode }) {
 
     // Non-admin trying to access admin route
     if (isAdminPath(pathname) && isAuthenticated && !isPlatformAdmin) {
-      router.replace('/dashboard');
+      router.replace('/dashboard/');
       return;
     }
   }, [hasHydrated, pathname, isAuthenticated, user, router]);

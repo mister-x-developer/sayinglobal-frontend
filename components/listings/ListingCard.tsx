@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Heart, MapPin, Eye, Clock } from 'lucide-react';
+import { Heart, MapPin, Eye, Clock, Lock } from 'lucide-react';
 import { useTranslations, useLocale } from 'next-intl';
 
 import { Avatar } from '@/components/ui/Avatar';
@@ -19,8 +19,8 @@ export interface ListingCardData {
   title_ru?: string;
   title_en?: string;
   description?: string;
-  price: number;
-  currency: string;
+  price: number | null;
+  currency: string | null;
   location: string;
   region?: string;
   district?: string;
@@ -31,7 +31,7 @@ export interface ListingCardData {
     avatar_url?: string;
     trust_score?: number;
     rating_count?: number;
-  };
+  } | null;
   category?: { name?: string; name_uz?: string };
   view_count?: number;
   favorite_count?: number;
@@ -161,16 +161,25 @@ export function ListingCard({ listing, onFavorite }: Props) {
           {/* Price row */}
           <div className="flex items-end justify-between gap-3">
             <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 min-w-0">
-              <p className="font-display text-xl sm:text-2xl font-bold text-fg leading-none tracking-tight">
-                {formatPrice(listing.price, listing.currency, locale)}
-              </p>
-              {listing.is_negotiable && (
-                <span
-                  className="inline-flex items-center gap-1 rounded-md bg-brand-primary/10 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-brand-primary"
-                  aria-label={t('listings.negotiable')}
-                >
-                  {t('listings.negotiable')}
-                </span>
+              {listing.price != null ? (
+                <>
+                  <p className="font-display text-xl sm:text-2xl font-bold text-fg leading-none tracking-tight">
+                    {formatPrice(listing.price, listing.currency || 'UZS', locale)}
+                  </p>
+                  {listing.is_negotiable && (
+                    <span
+                      className="inline-flex items-center gap-1 rounded-md bg-brand-primary/10 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-brand-primary"
+                      aria-label={t('listings.negotiable')}
+                    >
+                      {t('listings.negotiable')}
+                    </span>
+                  )}
+                </>
+              ) : (
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-bg-muted px-2.5 py-1 text-[13px] font-medium text-fg-subtle">
+                  <Lock className="h-3.5 w-3.5" />
+                  <span>{t('auth.loginToViewPrice' as any) || "Narxni ko'rish uchun kiring"}</span>
+                </div>
               )}
             </div>
             {typeof listing.view_count === 'number' && listing.view_count > 0 && (
@@ -183,19 +192,28 @@ export function ListingCard({ listing, onFavorite }: Props) {
 
           {/* Seller row */}
           <div className="mt-4 flex items-center gap-3 border-t border-border pt-4">
-            <Avatar
-              src={listing.seller.avatar_url}
-              name={listing.seller.full_name}
-              size="xs"
-            />
-            <span className="flex-1 line-clamp-1 text-[13px] font-medium text-fg-muted">
-              {listing.seller.full_name || (t('sellers.anonymous' as any) ?? 'Sotuvchi')}
-            </span>
-            <RatingDisplay
-              score={listing.seller.trust_score}
-              count={listing.seller.rating_count}
-              size="sm"
-            />
+            {listing.seller ? (
+              <>
+                <Avatar
+                  src={listing.seller.avatar_url}
+                  name={listing.seller.full_name}
+                  size="xs"
+                />
+                <span className="flex-1 line-clamp-1 text-[13px] font-medium text-fg-muted">
+                  {listing.seller.full_name || (t('sellers.anonymous' as any) ?? 'Sotuvchi')}
+                </span>
+                <RatingDisplay
+                  score={listing.seller.trust_score}
+                  count={listing.seller.rating_count}
+                  size="sm"
+                />
+              </>
+            ) : (
+              <div className="flex w-full items-center gap-2 rounded-lg bg-bg-subtle py-1.5 px-3 text-[13px] font-medium text-brand-primary">
+                <Lock className="h-3.5 w-3.5" />
+                <span>{t('auth.loginToViewSeller' as any) || "Sotuvchini ko'rish uchun kiring"}</span>
+              </div>
+            )}
           </div>
         </div>
       </div>

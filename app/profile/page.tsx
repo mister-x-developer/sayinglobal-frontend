@@ -29,21 +29,19 @@ import { EmptyState } from '@/components/shared/EmptyState';
 import { RatingDisplay } from '@/components/shared/RatingDisplay';
 import { SellerRatingsThread } from '@/components/sellers/SellerRatingsThread';
 import { TranslatableText } from '@/components/shared/TranslateButton';
-import { MyListingsManager, type MyListing } from '@/components/profile/MyListingsManager';
 import { useAuthStore } from '@/lib/store/auth';
 import { listingsApi } from '@/lib/api/listings';
 import type { Listing } from '@/lib/api/listings';
 import { formatPrice, formatRelativeTime, getLocalizedListingTitle } from '@/lib/utils/format';
 
-type Tab = 'listings' | 'favorites' | 'reviews';
+type Tab = 'reviews' | 'favorites';
 
 export default function ProfilePage() {
   const t = useTranslations();
   const router = useRouter();
   const { user, isAuthenticated } = useAuthStore();
   const [hydrated, setHydrated] = useState(false);
-  const [tab, setTab] = useState<Tab>('listings');
-  const [myListings, setMyListings] = useState<MyListing[]>([]);
+  const [tab, setTab] = useState<Tab>('reviews');
   const [favorites, setFavorites] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -55,15 +53,13 @@ export default function ProfilePage() {
     if (!isAuthenticated) return;
     let alive = true;
     setLoading(true);
-    Promise.all([listingsApi.my(), listingsApi.favorites()])
-      .then(([mine, favs]) => {
+    Promise.all([listingsApi.favorites()])
+      .then(([favs]) => {
         if (!alive) return;
-        setMyListings((mine ?? []) as MyListing[]);
         setFavorites(favs ?? []);
       })
       .catch(() => {
         if (!alive) return;
-        setMyListings([]);
         setFavorites([]);
       })
       .finally(() => alive && setLoading(false));
@@ -77,12 +73,12 @@ export default function ProfilePage() {
     phone: user?.phone ?? '',
     trust_score: user?.trust_score ?? 0,
     status: user?.status ?? 'good',
-    active_listings: myListings.filter((l) => l.status === 'active').length,
-    sold_listings: myListings.filter((l) => l.status === 'sold').length,
+    active_listings: (user as any)?.active_listings_count ?? 0,
+    sold_listings: (user as any)?.sold_listings_count ?? 0,
     followers: (user as any)?.followers_count ?? 0,
     following: (user as any)?.following_count ?? 0,
-    total_views: myListings.reduce((s, l) => s + (l.view_count ?? 0), 0),
-    total_favorites: myListings.reduce((s, l) => s + (l.favorite_count ?? 0), 0),
+    total_views: (user as any)?.total_views_count ?? 0,
+    total_favorites: (user as any)?.total_favorites_count ?? 0,
   };
 
   const stats = [
@@ -93,9 +89,8 @@ export default function ProfilePage() {
   ];
 
   const TABS: { key: Tab; label: string }[] = [
-    { key: 'listings', label: t('profile.myListings') },
-    { key: 'favorites', label: t('profile.favorites') },
     { key: 'reviews', label: t('sellers.reviews') },
+    { key: 'favorites', label: t('profile.favorites') },
   ];
 
   return (
@@ -261,9 +256,6 @@ export default function ProfilePage() {
               </div>
 
               <div className="mt-6 pb-24 md:pb-0">
-                {tab === 'listings' && (
-                  <MyListingsManager initialListings={myListings} loading={loading} />
-                )}
 
                 {tab === 'favorites' && (
                   favorites.length === 0 ? (
@@ -323,6 +315,7 @@ export default function ProfilePage() {
                 <h3 className="display-sm mb-3">{t('common.settings')}</h3>
                 <div className="space-y-1">
                   {[
+                    { href: '/listings/my', icon: Package, label: t('profile.myListings' as any) },
                     { href: '/profile/edit', icon: Edit, label: t('profile.editProfile') },
                     { href: '/profile/settings', icon: Settings, label: t('nav.settings') },
                     { href: '/profile/security', icon: ShieldCheck, label: t('security.title') },

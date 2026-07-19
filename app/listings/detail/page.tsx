@@ -23,6 +23,7 @@ import {
   Weight,
   Dna,
   Syringe,
+  Lock,
 } from 'lucide-react';
 
 import { AppNav } from '@/components/layout/AppNav';
@@ -313,9 +314,20 @@ function ListingDetailPageContent() {
                       {t('listings.price')}
                     </p>
                     <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                      <p className="font-display text-3xl font-bold text-fg leading-none">
-                        {formatPrice(listing.price, listing.currency, locale)}
-                      </p>
+                      {listing.price != null ? (
+                        <p className="font-display text-3xl font-bold text-fg leading-none">
+                          {formatPrice(listing.price, listing.currency || 'UZS', locale)}
+                        </p>
+                      ) : (
+                        <div className="inline-flex items-center gap-2 rounded-2xl bg-bg-muted/50 px-4 py-2.5 backdrop-blur-sm">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-bg-elevated shadow-sm border border-border">
+                            <Lock className="h-4 w-4 text-brand-primary" />
+                          </div>
+                          <span className="text-sm font-semibold text-fg">
+                            {t('auth.loginToViewPrice' as any) || "Narxni ko'rish uchun kiring"}
+                          </span>
+                        </div>
+                      )}
                     </div>
                     {listing.is_negotiable && (
                       <div className="mt-3 inline-flex items-center gap-2 rounded-xl border border-brand-primary/20 bg-brand-primary/5 px-3.5 py-2">
@@ -329,13 +341,20 @@ function ListingDetailPageContent() {
                     )}
 
                     <div className="mt-6 space-y-2.5">
-                      {user?.public_id !== listing.seller.id && !(user?.is_admin || user?.is_staff) && (
-                        <Link
-                          href={`/chat?with=${listing.seller.id}`}
-                          className="btn btn-primary w-full"
-                        >
-                          <MessageSquareText className="h-4 w-4" strokeWidth={2.25} />
-                          {t('listings.contactSeller')}
+                      {listing.seller ? (
+                        user?.public_id !== listing.seller.id && !(user?.is_admin || user?.is_staff) && (
+                          <Link
+                            href={`/chat?with=${listing.seller.id}`}
+                            className="btn btn-primary w-full"
+                          >
+                            <MessageSquareText className="h-4 w-4" strokeWidth={2.25} />
+                            {t('listings.contactSeller')}
+                          </Link>
+                        )
+                      ) : (
+                        <Link href="/auth/login" className="btn btn-primary w-full">
+                          <Lock className="h-4 w-4" strokeWidth={2.25} />
+                          {t('auth.loginToContact' as any) || "Bog'lanish uchun kiring"}
                         </Link>
                       )}
 
@@ -402,63 +421,79 @@ function ListingDetailPageContent() {
                     </div>
 
                     <div className="p-5">
-                      <Link
-                        href={user?.public_id === listing.seller.id ? '/profile' : `/sellers/detail?id=${listing.seller.id}`}
-                        className="flex items-start gap-3 group"
-                      >
-                        <Avatar
-                          src={listing.seller.avatar_url}
-                          name={listing.seller.full_name}
-                          size="lg"
-                          ring
-                        />
-                        <div className="min-w-0 flex-1">
-                          <p className="font-display text-base font-semibold text-fg group-hover:text-brand-primary transition-colors">
-                            {listing.seller.full_name}
-                          </p>
-                          <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-fg-muted">
-                            <RatingDisplay
-                              score={listing.seller.trust_score}
-                              count={(listing.seller as any).rating_count}
-                              size="sm"
+                      {listing.seller ? (
+                        <>
+                          <Link
+                            href={user?.public_id === listing.seller.id ? '/profile' : `/sellers/detail?id=${listing.seller.id}`}
+                            className="flex items-start gap-3 group"
+                          >
+                            <Avatar
+                              src={listing.seller.avatar_url}
+                              name={listing.seller.full_name}
+                              size="lg"
+                              ring
                             />
+                            <div className="min-w-0 flex-1">
+                              <p className="font-display text-base font-semibold text-fg group-hover:text-brand-primary transition-colors">
+                                {listing.seller.full_name}
+                              </p>
+                              <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-fg-muted">
+                                <RatingDisplay
+                                  score={listing.seller.trust_score}
+                                  count={(listing.seller as any).rating_count}
+                                  size="sm"
+                                />
+                              </div>
+                            </div>
+                          </Link>
+
+                          {/* Trust indicators (real data only) */}
+                          <div className="mt-4 grid grid-cols-2 gap-2 rounded-xl bg-bg-subtle p-3">
+                            <div className="text-center">
+                              <p className="font-display text-lg font-bold text-fg">
+                                {listing.seller.active_listings_count ?? 0}
+                              </p>
+                              <p className="text-[11px] text-fg-subtle">{t('profile.activeListings')}</p>
+                            </div>
+                            <div className="text-center">
+                              <p className="font-display text-lg font-bold text-fg">
+                                {listing.seller.sold_listings_count ?? 0}
+                              </p>
+                              <p className="text-[11px] text-fg-subtle">{t('listings.sold')}</p>
+                            </div>
                           </div>
-                        </div>
-                      </Link>
 
-                      {/* Trust indicators (real data only) */}
-                      <div className="mt-4 grid grid-cols-2 gap-2 rounded-xl bg-bg-subtle p-3">
-                        <div className="text-center">
-                          <p className="font-display text-lg font-bold text-fg">
-                            {listing.seller.active_listings_count ?? 0}
+                          <div className="mt-4 grid grid-cols-2 gap-2">
+                            <Link
+                              href={user?.public_id === listing.seller.id ? '/profile' : `/sellers/detail?id=${listing.seller.id}`}
+                              className="btn btn-secondary btn-sm"
+                            >
+                              {t('common.view')}
+                            </Link>
+                            {!(user?.is_admin || user?.is_staff) && (
+                            <FollowButton sellerId={listing.seller.id} size="sm" initialIsFollowing={(listing.seller as any).is_following} />
+                            )}
+                          </div>
+                          <Link
+                            href={user?.public_id === listing.seller.id ? '/profile' : `/sellers/${listing.seller.id}?tab=reviews`}
+                            className="mt-2 block w-full rounded-xl border border-border bg-bg-subtle/60 px-3 py-2 text-center text-xs font-semibold text-fg-muted hover:bg-bg-subtle"
+                          >
+                            {t('reviews.viewAll')}
+                          </Link>
+                        </>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center gap-3 py-6">
+                          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-primary/10">
+                            <Lock className="h-5 w-5 text-brand-primary" />
+                          </div>
+                          <p className="text-center text-sm font-medium text-fg-muted">
+                            {t('auth.loginToViewSeller' as any) || "Sotuvchini ko'rish uchun kiring"}
                           </p>
-                          <p className="text-[11px] text-fg-subtle">{t('profile.activeListings')}</p>
+                          <Link href="/auth/login" className="btn btn-primary btn-sm mt-2">
+                            {t('auth.signIn' as any) || "Kirish"}
+                          </Link>
                         </div>
-                        <div className="text-center">
-                          <p className="font-display text-lg font-bold text-fg">
-                            {listing.seller.sold_listings_count ?? 0}
-                          </p>
-                          <p className="text-[11px] text-fg-subtle">{t('listings.sold')}</p>
-                        </div>
-                      </div>
-
-                      <div className="mt-4 grid grid-cols-2 gap-2">
-                        <Link
-                          href={user?.public_id === listing.seller.id ? '/profile' : `/sellers/detail?id=${listing.seller.id}`}
-                          className="btn btn-secondary btn-sm"
-                        >
-                          {t('common.view')}
-                        </Link>
-                        {!(user?.is_admin || user?.is_staff) && (
-                        <FollowButton sellerId={listing.seller.id} size="sm" initialIsFollowing={(listing.seller as any).is_following} />
-                        )}
-                      </div>
-                      <Link
-                        href={user?.public_id === listing.seller.id ? '/profile' : `/sellers/${listing.seller.id}?tab=reviews`}
-                        className="mt-2 block w-full rounded-xl border border-border bg-bg-subtle/60 px-3 py-2 text-center text-xs font-semibold text-fg-muted hover:bg-bg-subtle"
-                      >
-                        {t('reviews.viewAll')}
-                      </Link>
+                      )}
                     </div>
                   </motion.div>
                   </div>
@@ -651,9 +686,20 @@ function ListingDetailPageContent() {
                       {t('listings.price')}
                     </p>
                     <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                      <p className="font-display text-3xl font-bold text-fg leading-none">
-                        {formatPrice(listing.price, listing.currency, locale)}
-                      </p>
+                      {listing.price != null ? (
+                        <p className="font-display text-3xl font-bold text-fg leading-none">
+                          {formatPrice(listing.price, listing.currency || 'UZS', locale)}
+                        </p>
+                      ) : (
+                        <div className="inline-flex items-center gap-2 rounded-2xl bg-bg-muted/50 px-4 py-2.5 backdrop-blur-sm">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-bg-elevated shadow-sm border border-border">
+                            <Lock className="h-4 w-4 text-brand-primary" />
+                          </div>
+                          <span className="text-sm font-semibold text-fg">
+                            {t('auth.loginToViewPrice' as any) || "Narxni ko'rish uchun kiring"}
+                          </span>
+                        </div>
+                      )}
                     </div>
                     {listing.is_negotiable && (
                       <div className="mt-3 inline-flex items-center gap-2 rounded-xl border border-brand-primary/20 bg-brand-primary/5 px-3.5 py-2">
@@ -667,13 +713,20 @@ function ListingDetailPageContent() {
                     )}
 
                     <div className="mt-6 space-y-2.5">
-                      {user?.public_id !== listing.seller.id && !(user?.is_admin || user?.is_staff) && (
-                        <Link
-                          href={`/chat?with=${listing.seller.id}`}
-                          className="btn btn-primary w-full"
-                        >
-                          <MessageSquareText className="h-4 w-4" strokeWidth={2.25} />
-                          {t('listings.contactSeller')}
+                      {listing.seller ? (
+                        user?.public_id !== listing.seller.id && !(user?.is_admin || user?.is_staff) && (
+                          <Link
+                            href={`/chat?with=${listing.seller.id}`}
+                            className="btn btn-primary w-full"
+                          >
+                            <MessageSquareText className="h-4 w-4" strokeWidth={2.25} />
+                            {t('listings.contactSeller')}
+                          </Link>
+                        )
+                      ) : (
+                        <Link href="/auth/login" className="btn btn-primary w-full">
+                          <Lock className="h-4 w-4" strokeWidth={2.25} />
+                          {t('auth.loginToContact' as any) || "Bog'lanish uchun kiring"}
                         </Link>
                       )}
 
@@ -738,63 +791,79 @@ function ListingDetailPageContent() {
                     </div>
 
                     <div className="p-5">
-                      <Link
-                        href={user?.public_id === listing.seller.id ? '/profile' : `/sellers/detail?id=${listing.seller.id}`}
-                        className="flex items-start gap-3 group"
-                      >
-                        <Avatar
-                          src={listing.seller.avatar_url}
-                          name={listing.seller.full_name}
-                          size="lg"
-                          ring
-                        />
-                        <div className="min-w-0 flex-1">
-                          <p className="font-display text-base font-semibold text-fg group-hover:text-brand-primary transition-colors">
-                            {listing.seller.full_name}
-                          </p>
-                          <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-fg-muted">
-                            <RatingDisplay
-                              score={listing.seller.trust_score}
-                              count={(listing.seller as any).rating_count}
-                              size="sm"
+                      {listing.seller ? (
+                        <>
+                          <Link
+                            href={user?.public_id === listing.seller.id ? '/profile' : `/sellers/detail?id=${listing.seller.id}`}
+                            className="flex items-start gap-3 group"
+                          >
+                            <Avatar
+                              src={listing.seller.avatar_url}
+                              name={listing.seller.full_name}
+                              size="lg"
+                              ring
                             />
+                            <div className="min-w-0 flex-1">
+                              <p className="font-display text-base font-semibold text-fg group-hover:text-brand-primary transition-colors">
+                                {listing.seller.full_name}
+                              </p>
+                              <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-fg-muted">
+                                <RatingDisplay
+                                  score={listing.seller.trust_score}
+                                  count={(listing.seller as any).rating_count}
+                                  size="sm"
+                                />
+                              </div>
+                            </div>
+                          </Link>
+
+                          {/* Trust indicators (real data only) */}
+                          <div className="mt-4 grid grid-cols-2 gap-2 rounded-xl bg-bg-subtle p-3">
+                            <div className="text-center">
+                              <p className="font-display text-lg font-bold text-fg">
+                                {listing.seller.active_listings_count ?? 0}
+                              </p>
+                              <p className="text-[11px] text-fg-subtle">{t('profile.activeListings')}</p>
+                            </div>
+                            <div className="text-center">
+                              <p className="font-display text-lg font-bold text-fg">
+                                {listing.seller.sold_listings_count ?? 0}
+                              </p>
+                              <p className="text-[11px] text-fg-subtle">{t('listings.sold')}</p>
+                            </div>
                           </div>
-                        </div>
-                      </Link>
 
-                      {/* Trust indicators (real data only) */}
-                      <div className="mt-4 grid grid-cols-2 gap-2 rounded-xl bg-bg-subtle p-3">
-                        <div className="text-center">
-                          <p className="font-display text-lg font-bold text-fg">
-                            {listing.seller.active_listings_count ?? 0}
+                          <div className="mt-4 grid grid-cols-2 gap-2">
+                            <Link
+                              href={user?.public_id === listing.seller.id ? '/profile' : `/sellers/detail?id=${listing.seller.id}`}
+                              className="btn btn-secondary btn-sm"
+                            >
+                              {t('common.view')}
+                            </Link>
+                            {!(user?.is_admin || user?.is_staff) && (
+                            <FollowButton sellerId={listing.seller.id} size="sm" initialIsFollowing={(listing.seller as any).is_following} />
+                            )}
+                          </div>
+                          <Link
+                            href={user?.public_id === listing.seller.id ? '/profile' : `/sellers/${listing.seller.id}?tab=reviews`}
+                            className="mt-2 block w-full rounded-xl border border-border bg-bg-subtle/60 px-3 py-2 text-center text-xs font-semibold text-fg-muted hover:bg-bg-subtle"
+                          >
+                            {t('reviews.viewAll')}
+                          </Link>
+                        </>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center gap-3 py-6">
+                          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-primary/10">
+                            <Lock className="h-5 w-5 text-brand-primary" />
+                          </div>
+                          <p className="text-center text-sm font-medium text-fg-muted">
+                            {t('auth.loginToViewSeller' as any) || "Sotuvchini ko'rish uchun kiring"}
                           </p>
-                          <p className="text-[11px] text-fg-subtle">{t('profile.activeListings')}</p>
+                          <Link href="/auth/login" className="btn btn-primary btn-sm mt-2">
+                            {t('auth.signIn' as any) || "Kirish"}
+                          </Link>
                         </div>
-                        <div className="text-center">
-                          <p className="font-display text-lg font-bold text-fg">
-                            {listing.seller.sold_listings_count ?? 0}
-                          </p>
-                          <p className="text-[11px] text-fg-subtle">{t('listings.sold')}</p>
-                        </div>
-                      </div>
-
-                      <div className="mt-4 grid grid-cols-2 gap-2">
-                        <Link
-                          href={user?.public_id === listing.seller.id ? '/profile' : `/sellers/detail?id=${listing.seller.id}`}
-                          className="btn btn-secondary btn-sm"
-                        >
-                          {t('common.view')}
-                        </Link>
-                        {!(user?.is_admin || user?.is_staff) && (
-                        <FollowButton sellerId={listing.seller.id} size="sm" initialIsFollowing={(listing.seller as any).is_following} />
-                        )}
-                      </div>
-                      <Link
-                        href={user?.public_id === listing.seller.id ? '/profile' : `/sellers/${listing.seller.id}?tab=reviews`}
-                        className="mt-2 block w-full rounded-xl border border-border bg-bg-subtle/60 px-3 py-2 text-center text-xs font-semibold text-fg-muted hover:bg-bg-subtle"
-                      >
-                        {t('reviews.viewAll')}
-                      </Link>
+                      )}
                     </div>
                   </motion.div>
 

@@ -178,7 +178,7 @@ function AdminListingDetailPageContent() {
                     <ListingImage
                       src={heroImage}
                       alt={listing.title}
-                      category={listing.category?.slug || listing.category?.name}
+                      category={listing.category?.id || listing.category?.name}
                       fill
                       className="h-full w-full object-cover"
                     />

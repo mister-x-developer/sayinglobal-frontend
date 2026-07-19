@@ -138,12 +138,12 @@ const backendProvider: TranslationProvider = {
     }
 
     // Call backend proxy via apiClient to include the Authorization header automatically.
-    const data = await apiClient.post('/listings/translate/', {
+    const response = await apiClient.post('/listings/translate/', {
       text,
       target_lang: target,
     });
 
-    const translated = data.translated_text ?? text;
+    const translated = response.data?.translated_text ?? text;
 
     cache.set(key, translated);
     return { text: translated, fromLocale: source, toLocale: target, cached: false };

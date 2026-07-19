@@ -49,11 +49,15 @@ function isPlatformAdmin(req: NextRequest): boolean {
 }
 
 function isPublicPath(pathname: string): boolean {
-  // Per strict requirement: Loginsiz hech narsa koʻrinmasin!
-  // Only auth flows and legal pages are public.
   if (pathname === '/' || pathname === '/index.html' || pathname === '/index') return true;
   if (pathname.startsWith('/auth')) return true;
   if (pathname === '/terms' || pathname === '/privacy') return true;
+  
+  // Allow guests to view marketplace (with hidden prices/sellers enforced by backend/frontend logic)
+  if (pathname === '/listings' || pathname === '/listings/') return true;
+  if (pathname.startsWith('/listings/detail')) return true;
+  if (pathname.startsWith('/sellers/detail') || pathname.match(/^\/sellers\/[^/]+$/)) return true;
+
   return false;
 }
 
