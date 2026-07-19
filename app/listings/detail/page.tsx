@@ -73,7 +73,7 @@ function ListingDetailPageContent() {
   const [related, setRelated] = useState<Listing[]>([]);
   const [reportOpen, setReportOpen] = useState(false);
   const [galleryOpen, setGalleryOpen] = useState(false);
-  const { user } = useAuthStore();
+  const { user, isAuthenticated } = useAuthStore();
 
   useEffect(() => {
     if (!id) return;
@@ -314,10 +314,16 @@ function ListingDetailPageContent() {
                       {t('listings.price')}
                     </p>
                     <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                      {listing.price != null ? (
-                        <p className="font-display text-3xl font-bold text-fg leading-none">
-                          {formatPrice(listing.price, listing.currency || 'UZS', locale)}
-                        </p>
+                      {isAuthenticated ? (
+                        listing.price != null ? (
+                          <p className="font-display text-3xl font-bold text-fg leading-none">
+                            {formatPrice(listing.price, listing.currency || 'UZS', locale)}
+                          </p>
+                        ) : (
+                          <p className="font-display text-xl font-bold text-fg leading-none">
+                            {t('listings.negotiable')}
+                          </p>
+                        )
                       ) : (
                         <div className="inline-flex items-center gap-2 rounded-2xl bg-bg-muted/50 px-4 py-2.5 backdrop-blur-sm">
                           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-bg-elevated shadow-sm border border-border">
@@ -421,7 +427,7 @@ function ListingDetailPageContent() {
                     </div>
 
                     <div className="p-5">
-                      {listing.seller ? (
+                      {isAuthenticated && listing.seller ? (
                         <>
                           <Link
                             href={user?.public_id === listing.seller.id ? '/profile' : `/sellers/detail?id=${listing.seller.id}`}
@@ -649,11 +655,28 @@ function ListingDetailPageContent() {
                     transition={{ duration: 0.5, delay: 0.18 }}
                     className="surface-elevated p-4 sm:p-6"
                   >
-                    <CommentSection
-                      listingId={listing.id}
-                      sellerId={listing.seller.id}
-                      initialComments={comments}
-                    />
+                    {isAuthenticated ? (
+                      <CommentSection
+                        listingId={listing.id}
+                        sellerId={listing.seller.id}
+                        initialComments={comments}
+                      />
+                    ) : (
+                      <div className="text-center space-y-4 py-6">
+                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-brand-primary/10">
+                          <MessageSquareText className="h-5 w-5 text-brand-primary" />
+                        </div>
+                        <div>
+                          <h3 className="text-base font-semibold text-fg">Fikrlar va sharhlar</h3>
+                          <p className="mt-1 text-sm text-fg-muted max-w-xs mx-auto">
+                            Izohlarni ko&apos;rish va yozish uchun tizimga kiring
+                          </p>
+                        </div>
+                        <Link href="/auth/login" className="btn btn-primary btn-sm mt-2">
+                          Kirish
+                        </Link>
+                      </div>
+                    )}
                   </motion.div>
 
                   {/* Public seller reviews — full thread, same as profile */}
@@ -663,10 +686,27 @@ function ListingDetailPageContent() {
                     transition={{ duration: 0.5, delay: 0.20 }}
                   >
                     <h2 className="display-sm mb-4">{t('sellers.reviews')}</h2>
-                    <SellerRatingsThread
-                      sellerPublicId={listing.seller.id}
-                      listingPublicId={listing.id}
-                    />
+                    {isAuthenticated ? (
+                      <SellerRatingsThread
+                        sellerPublicId={listing.seller.id}
+                        listingPublicId={listing.id}
+                      />
+                    ) : (
+                      <div className="text-center space-y-4 py-6 border border-border rounded-2xl bg-bg-subtle/50">
+                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-brand-primary/10">
+                          <ShieldCheck className="h-5 w-5 text-brand-primary" />
+                        </div>
+                        <div>
+                          <h3 className="text-base font-semibold text-fg">Sotuvchi reytingi</h3>
+                          <p className="mt-1 text-sm text-fg-muted max-w-xs mx-auto">
+                            Sotuvchining barcha baholari va sharhlarini ko&apos;rish uchun kiring
+                          </p>
+                        </div>
+                        <Link href="/auth/login" className="btn btn-primary btn-sm mt-2">
+                          Kirish
+                        </Link>
+                      </div>
+                    )}
                   </motion.div>
 
                   {/* Nearby listings — same region/category */}
@@ -686,10 +726,16 @@ function ListingDetailPageContent() {
                       {t('listings.price')}
                     </p>
                     <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                      {listing.price != null ? (
-                        <p className="font-display text-3xl font-bold text-fg leading-none">
-                          {formatPrice(listing.price, listing.currency || 'UZS', locale)}
-                        </p>
+                      {isAuthenticated ? (
+                        listing.price != null ? (
+                          <p className="font-display text-3xl font-bold text-fg leading-none">
+                            {formatPrice(listing.price, listing.currency || 'UZS', locale)}
+                          </p>
+                        ) : (
+                          <p className="font-display text-xl font-bold text-fg leading-none">
+                            {t('listings.negotiable')}
+                          </p>
+                        )
                       ) : (
                         <div className="inline-flex items-center gap-2 rounded-2xl bg-bg-muted/50 px-4 py-2.5 backdrop-blur-sm">
                           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-bg-elevated shadow-sm border border-border">
@@ -791,7 +837,7 @@ function ListingDetailPageContent() {
                     </div>
 
                     <div className="p-5">
-                      {listing.seller ? (
+                      {isAuthenticated && listing.seller ? (
                         <>
                           <Link
                             href={user?.public_id === listing.seller.id ? '/profile' : `/sellers/detail?id=${listing.seller.id}`}
