@@ -11,6 +11,7 @@
 import { useEffect, useState } from 'react';
 import { useLocale } from 'next-intl';
 import { referenceApi, type Category, type Region, type Breed } from '../api/reference';
+import { FALLBACK_CATEGORIES } from './fallbackCategories';
 
 // Module-level cache — survives component remounts
 const _cache: {
@@ -25,7 +26,7 @@ const _cache: {
 
 export function useCategories() {
   const locale = useLocale();
-  const [categories, setCategories] = useState<Category[]>(_cache.categories.get(locale) ?? []);
+  const [categories, setCategories] = useState<Category[]>(_cache.categories.get(locale) ?? FALLBACK_CATEGORIES);
   const [loading, setLoading] = useState(!_cache.categories.has(locale));
 
   useEffect(() => {
@@ -38,10 +39,9 @@ export function useCategories() {
     setLoading(true);
     referenceApi.getCategories(locale).then((data) => {
       if (!alive) return;
-      if (data.length > 0) {
-        _cache.categories.set(locale, data);
-        setCategories(data);
-      }
+      const finalData = data && data.length > 0 ? data : FALLBACK_CATEGORIES;
+      _cache.categories.set(locale, finalData);
+      setCategories(finalData);
       setLoading(false);
     });
     return () => { alive = false; };
