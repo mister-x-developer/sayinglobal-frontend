@@ -40,9 +40,6 @@ export function Categories() {
                   sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 17vw"
                   className="object-cover"
                   priority={index < 3}
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                  }}
                 />
               </div>
 
