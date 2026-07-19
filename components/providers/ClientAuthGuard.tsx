@@ -8,16 +8,13 @@ import { Capacitor } from '@capacitor/core';
 
 
 function isPublicPath(pathname: string): boolean {
-  if (!pathname || pathname === '/' || pathname === '/index.html' || pathname === '/index') return true;
-  // Handle capacitor paths like /android_asset/.../index.html
-  if (pathname.endsWith('/index.html') || pathname.endsWith('/index')) return true;
   if (pathname.startsWith('/auth') || pathname.startsWith('/admin/login')) return true;
   if (pathname === '/terms' || pathname === '/privacy') return true;
 
-  // Allow guests to view marketplace (with hidden prices/sellers enforced by backend/frontend logic)
-  if (pathname === '/listings' || pathname === '/listings/') return true;
-  if (pathname.startsWith('/listings/detail')) return true;
-  if (pathname.startsWith('/sellers/detail') || pathname.match(/^\/sellers\/[^/]+$/)) return true;
+  // On Web, allow landing page. On APK, only login is allowed.
+  if (!Capacitor.isNativePlatform()) {
+    if (!pathname || pathname === '/' || pathname.endsWith('/index.html') || pathname.endsWith('/index')) return true;
+  }
 
   return false;
 }
@@ -38,15 +35,17 @@ export function ClientAuthGuard({ children }: { children: React.ReactNode }) {
 
     const isPlatformAdmin = !!(user?.is_admin || user?.is_staff || user?.is_admin_account);
 
-    // If authenticated and on an auth page
+    const isLanding = !pathname || pathname === '/' || pathname.endsWith('/index.html') || pathname.endsWith('/index');
+
+    // If authenticated and on an auth page OR landing page
     if (
-      (pathname.startsWith('/auth') || pathname.startsWith('/admin/login')) &&
+      (pathname.startsWith('/auth') || pathname.startsWith('/admin/login') || isLanding) &&
       isAuthenticated
     ) {
       // Allow AuthPageContent to handle the redirect for /auth so it preserves the ?next= parameter
       if (pathname.startsWith('/auth')) return;
 
-      const target = isPlatformAdmin ? '/admin/' : '/dashboard/';
+      const target = isPlatformAdmin ? '/admin/' : '/listings/';
       router.replace(target);
       return;
     }
