@@ -21,6 +21,7 @@ import type { Conversation } from '@/lib/api/chat';
 import { chatSocket } from '@/lib/ws/chatSocket';
 import { formatRelativeTime } from '@/lib/utils/format';
 import apiClient from '@/lib/api/client';
+import { useLayoutStore } from '@/lib/store/layout';
 
 interface Message {
   id: string;
@@ -157,6 +158,8 @@ export default function ChatPage() {
   // Disconnect when no active conversation
   useEffect(() => {
     if (!activeConv) chatSocket.disconnect();
+    useLayoutStore.getState().setMobileChatOpen(!!activeConv);
+    return () => useLayoutStore.getState().setMobileChatOpen(false);
   }, [activeConv]);
 
   const openConversation = (conv: Conversation) => {

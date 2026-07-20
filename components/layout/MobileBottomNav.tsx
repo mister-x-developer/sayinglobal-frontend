@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { Home, LayoutGrid, Plus, MessageSquareText, User } from 'lucide-react';
 import { useNotificationsStore } from '@/lib/store/notifications';
 import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
+import { useLayoutStore } from '@/lib/store/layout';
 
 /**
  * Mobile bottom navigation bar.
@@ -18,6 +19,7 @@ export function MobileBottomNav() {
   const unreadCount = useNotificationsStore((s) => s.unreadCount);
   const { isAuthenticated, user } = useAuthStore();
   const hydrated = useAuthHydrated();
+  const isMobileChatOpen = useLayoutStore((s) => s.isMobileChatOpen);
 
   // Hide entirely on auth pages, chat detail, or admin routes
   if (
@@ -29,6 +31,9 @@ export function MobileBottomNav() {
   ) {
     return null;
   }
+
+  // Also hide if the mobile chat detail view is open
+  if (isMobileChatOpen) return null;
 
   // Wait for hydration to avoid flashing on public pages
   if (!hydrated) return null;

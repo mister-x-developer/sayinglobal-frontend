@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useAuthStore, useAuthHydrated } from '@/lib/store/auth';
+import { useLayoutStore } from '@/lib/store/layout';
 
 const STORAGE_KEY = 'sayin_nearby_btn_hidden';
 
@@ -15,6 +16,7 @@ export function FloatingNearbyButton() {
   const t = useTranslations('nearby');
   const { isAuthenticated } = useAuthStore();
   const hydrated = useAuthHydrated();
+  const isMobileChatOpen = useLayoutStore((s) => s.isMobileChatOpen);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const [hidden, setHidden] = useState(false);
   const [dragging, setDragging] = useState(false);
@@ -90,6 +92,9 @@ export function FloatingNearbyButton() {
   ) {
     return null;
   }
+
+  // Also hide if the mobile chat detail view is open
+  if (isMobileChatOpen) return null;
 
   if (!hydrated) return null;
   if (!isAuthenticated) return null;
