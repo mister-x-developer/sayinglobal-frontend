@@ -87,7 +87,7 @@ function AuthPageContent() {
       router.replace(target);
     } catch (err: unknown) {
       if (err instanceof AuthApiError) {
-        if (err.message === 'invalid_or_expired_code' || err.status === 400) {
+        if (err.data?.error === 'recaptcha_failed') { setErrorMessage("ReCAPTCHA xatosi: " + err.data.message); } else if (err.message === 'invalid_or_expired_code' || err.status === 400) {
           setErrorMessage(t('auth.errorInvalidOrExpiredCode'));
         } else if (err.message === 'admin_blocked' || err.status === 403) {
           setErrorMessage(t('auth.errorInvalidCode'));
