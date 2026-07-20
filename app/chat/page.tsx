@@ -109,6 +109,7 @@ export default function ChatPage() {
       if (!alive) return;
       const normalized = data.map((c: any) => ({
         ...c,
+        id: c.public_id ?? c.id,
         last_message: typeof c.last_message === 'object' && c.last_message !== null
           ? c.last_message.content ?? '' : c.last_message ?? '',
         last_message_time: c.last_message_time
@@ -139,6 +140,7 @@ export default function ChatPage() {
         if (!conv) return;
         const norm: Conversation = {
           ...conv,
+          id: (conv as any).public_id ?? conv.id,
           last_message: typeof (conv as any).last_message === 'object'
             ? (conv as any).last_message?.content ?? '' : (conv as any).last_message ?? '',
         };
@@ -168,7 +170,7 @@ export default function ChatPage() {
     setMessagesLoading(true);
     setMoreOpen(false);
     setTypingUserId(null);
-    chatApi.getMessages(conv.id ?? conv.id).then((msgs: any) => {
+    chatApi.getMessages(conv.id).then((msgs: any) => {
       const list = Array.isArray(msgs) ? msgs : msgs?.results ?? [];
       const mapped: Message[] = list.map(normalizeChatMessage).reverse();
       setMessages(mapped);
@@ -177,8 +179,8 @@ export default function ChatPage() {
 
     // Connect WebSocket for real-time messages
     const token = useAuthStore.getState().accessToken;
-    if (token && (conv.id ?? conv.id)) {
-      chatSocket.connect(String(conv.id ?? conv.id), token, {
+    if (token && conv.id) {
+      chatSocket.connect(String(conv.id), token, {
         onMessage: (msg) => {
           setMessages((prev) => {
             const incoming = normalizeChatMessage(msg);
@@ -236,7 +238,7 @@ export default function ChatPage() {
       setSending(false);
     } else {
       try {
-        const sent = await chatApi.sendMessage(activeConv.id ?? activeConv.id, content);
+        const sent = await chatApi.sendMessage(activeConv.id, content);
         if (sent) {
           const sentId = String((sent as any).id ?? (sent as any).id ?? optimistic.id);
           pendingOptimisticIds.current.delete(optimistic.id);
@@ -268,7 +270,7 @@ export default function ChatPage() {
       m.id === msgId ? { ...m, failed: false } : m
     ));
     try {
-      const sent = await chatApi.sendMessage(activeConv.id ?? activeConv.id, content);
+      const sent = await chatApi.sendMessage(activeConv.id, content);
       if (sent) {
         const sentId = String((sent as any).id ?? (sent as any).id ?? msgId);
         setMessages((prev) => prev.map((m) =>

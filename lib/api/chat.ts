@@ -21,6 +21,7 @@ export interface ChatMessage {
 
 export interface Conversation {
   id: number;
+  public_id?: number;
   participants: ChatUser[];
   last_message?: string;
   last_message_time?: string;
