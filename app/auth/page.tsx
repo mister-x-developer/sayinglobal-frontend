@@ -122,10 +122,10 @@ function AuthPageContent() {
     <div className="min-h-screen flex flex-col">
       <LandingNav />
 
-      <main className="relative flex-1 flex items-center justify-center isolate overflow-y-auto overflow-x-hidden">
+      <main className="relative flex-1 flex isolate overflow-y-auto overflow-x-hidden">
         <AtmosphericBackground variant="hero" showHills />
 
-        <div className="container-page relative z-10 py-12 sm:py-20">
+        <div className="container-page relative z-10 py-12 sm:py-20 my-auto">
           <div className="mx-auto w-full max-w-md">
             <div className="surface-elevated p-8 sm:p-10">
               <div className="text-center">
