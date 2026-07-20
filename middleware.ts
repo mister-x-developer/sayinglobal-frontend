@@ -68,6 +68,8 @@ function isAdminPath(pathname: string): boolean {
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
+  const isCapacitor = req.headers.get('x-requested-with') === 'com.sayinglobal.user';
+
   const res = NextResponse.next();
   // Always sync the locale cookie so changes from LanguageSwitcher propagate
   // to server components on the very next request.
@@ -77,6 +79,12 @@ export function middleware(req: NextRequest) {
     sameSite: 'lax',
     maxAge: 60 * 60 * 24 * 365,
   });
+
+  // If the request comes from the Capacitor APK, bypass middleware auth blocking
+  // to avoid Android WebView cookie flush race conditions. ClientAuthGuard will handle it.
+  if (isCapacitor) {
+    return res;
+  }
 
   // If the user is already authenticated, redirect away from auth.
   // Normal users are also redirected from the landing page to /dashboard.
