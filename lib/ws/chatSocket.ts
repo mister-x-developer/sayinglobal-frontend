@@ -135,14 +135,19 @@ class ChatSocketService {
       // user is not left staring at a stale conversation list while
       // their session is revoked server-side.
       if (
-        event.code === 4001 || event.code === 4401 ||
-        event.code === 4003 || event.code === 4403
+        event.code === 4001 || event.code === 4401
       ) {
         this.shouldReconnect = false;
         useAuthStore.getState().logout();
         if (typeof window !== 'undefined') {
           window.location.href = '/auth';
         }
+        return;
+      }
+      
+      // 4003 / 4403 means "Forbidden" (e.g. non-participant). Stop reconnecting but do NOT logout.
+      if (event.code === 4003 || event.code === 4403) {
+        this.shouldReconnect = false;
         return;
       }
       if (this.shouldReconnect) {

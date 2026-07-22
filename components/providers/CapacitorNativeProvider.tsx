@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { App } from '@capacitor/app';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
-import { Keyboard } from '@capacitor/keyboard';
+import { Keyboard, KeyboardResize } from '@capacitor/keyboard';
 import { Network } from '@capacitor/network';
 import { Toast } from '@capacitor/toast';
 import { Capacitor } from '@capacitor/core';
@@ -29,13 +29,12 @@ export function CapacitorNativeProvider() {
       return;
     }
 
-    // 1. Hide Splash Screen after React has mounted, hydrated, and any redirects have fired
-    // This is handled in a separate useEffect below that tracks hasHydrated and pathname.
+    // 1. Configure Keyboard behavior
+    try {
+      Keyboard.setResizeMode({ mode: KeyboardResize.Body }).catch(() => {});
+    } catch {}
 
-    // 2. Configure Keyboard behavior
-    // (Removed manual resizeMode: 'body' to let Android use default 'Native' resize, preventing the grey block bug)
-
-    // 3. Status Bar configuration
+    // 2. Status Bar configuration
     const setStatusBar = async () => {
       try {
         const isNight = document.documentElement.getAttribute('data-theme') === 'night';
@@ -61,7 +60,7 @@ export function CapacitorNativeProvider() {
     });
     observer.observe(document.documentElement, { attributes: true });
 
-    // 4. Hardware Back Button Handling
+    // 3. Hardware Back Button Handling
     const backButtonListener = App.addListener('backButton', ({ canGoBack }) => {
       // If the user is on the primary "root" views, exit the app instead of navigating back
       const isRootView =
@@ -80,7 +79,7 @@ export function CapacitorNativeProvider() {
       }
     });
 
-    // 5. Network (Offline) Detection
+    // 4. Network (Offline) Detection
     let wasOffline = false;
     const setupNetwork = async () => {
       const status = await Network.getStatus();
@@ -107,15 +106,14 @@ export function CapacitorNativeProvider() {
   useEffect(() => {
     if (!Capacitor.isNativePlatform()) return;
     
-    // We want to hide the splash screen only AFTER we are fully hydrated.
-    // Also, if the user opens the app and starts on the landing page ('/'), 
-    // ClientAuthGuard will redirect them to '/auth' or '/dashboard'.
-    // We wait until they are no longer on '/' before hiding the splash screen 
-    // so they don't see the landing page flash.
-    if (hasHydrated && pathname !== '/') {
-      SplashScreen.hide().catch(() => {});
+    // Hide splash screen once hydrated
+    if (hasHydrated) {
+      const timer = setTimeout(() => {
+        SplashScreen.hide().catch(() => {});
+      }, 100);
+      return () => clearTimeout(timer);
     }
-  }, [hasHydrated, pathname]);
+  }, [hasHydrated]);
 
   const t = useTranslations();
   // If offline, render a full-screen native-feeling overlay

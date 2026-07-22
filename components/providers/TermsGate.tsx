@@ -55,7 +55,9 @@ export function TermsGate() {
     if (open) {
       const prev = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
-      return () => { document.body.style.overflow = prev; };
+      return () => { document.body.style.overflow = prev || ''; };
+    } else {
+      document.body.style.overflow = '';
     }
   }, [open]);
 
@@ -97,9 +99,9 @@ export function TermsGate() {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/50 px-4 pb-4 pt-10 sm:items-center sm:pb-10"
+    <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/60 backdrop-blur-sm p-4 pt-safe pb-safe overflow-y-auto sm:items-center"
       role="dialog" aria-modal="true">
-      <div className="surface-elevated w-full max-w-lg overflow-hidden">
+      <div className="surface-elevated w-full max-w-lg max-h-[85vh] flex flex-col overflow-hidden my-auto">
 
         {/* STEP 1: Terms */}
         {step === 'terms' && (

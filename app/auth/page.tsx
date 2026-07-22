@@ -67,8 +67,14 @@ function AuthPageContent() {
 
     try {
       let recaptchaToken = undefined;
-      if (executeRecaptcha && process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY) {
-        recaptchaToken = await executeRecaptcha('verify_code');
+      if (!Capacitor.isNativePlatform() && executeRecaptcha && process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY) {
+        try {
+          const recaptchaPromise = executeRecaptcha('verify_code');
+          const timeoutPromise = new Promise<undefined>((resolve) => setTimeout(() => resolve(undefined), 3000));
+          recaptchaToken = await Promise.race([recaptchaPromise, timeoutPromise]);
+        } catch {
+          recaptchaToken = undefined;
+        }
       }
       
       const result = await authApi.verifyCode({ code, recaptcha_token: recaptchaToken });

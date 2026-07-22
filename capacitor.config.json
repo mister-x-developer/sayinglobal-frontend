@@ -23,7 +23,7 @@
       "backgroundColor": "#10b981"
     },
     "Keyboard": {
-      "resize": "none",
+      "resize": "body",
       "style": "dark"
     }
   }

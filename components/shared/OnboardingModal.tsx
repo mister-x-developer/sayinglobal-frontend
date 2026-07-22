@@ -164,7 +164,7 @@ export function OnboardingModal() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: 24 }}
             transition={{ type: 'spring', damping: 28, stiffness: 320 }}
-            className="fixed inset-x-4 bottom-4 z-[201] mx-auto max-w-sm sm:inset-auto sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2"
+            className="fixed inset-x-4 bottom-4 z-[201] mx-auto max-w-sm max-h-[85vh] overflow-y-auto sm:inset-auto sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2"
           >
             <div className="overflow-hidden rounded-2xl border border-border/60 bg-bg-elevated shadow-[0_32px_80px_rgba(0,0,0,0.22)]">
               {/* Header */}
